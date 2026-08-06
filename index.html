@@ -767,16 +767,7 @@
                     <div class="space-y-2" id="cart-items-container"></div>
                 </div>
 
-                <!-- FREQUENTLY ADDED TOGETHER / RECOMMENDED ADD-ONS -->
-                <div class="pt-3 border-t border-gray-200">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="font-bold text-xs text-onyx flex items-center gap-1.5">
-                            <i class="fa-solid fa-wand-magic-sparkles text-gold-600"></i> Recommended Add-ons
-                        </h4>
-                        <span class="text-[9px] text-gold-700 font-bold uppercase tracking-wider">1-Tap Add</span>
-                    </div>
-                    <div class="space-y-1.5" id="cart-recommendations-container"></div>
-                </div>
+
 
                 <!-- SHIPROCKET COMPATIBLE ADDRESS FORM -->
                 <div class="pt-3 border-t border-gray-200">
@@ -1043,27 +1034,7 @@
             subtotalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
             totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
 
-            // Render recommendations
-            const recContainer = document.getElementById('cart-recommendations-container');
-            if (recContainer) {
-                const unadded = products.filter(p => !cart.some(c => c.id === p.id)).slice(0, 3);
-                if (unadded.length > 0) {
-                    recContainer.parentElement.style.display = 'block';
-                    recContainer.innerHTML = unadded.map(p => `
-                        <div class="flex items-center justify-between p-2 bg-pearl/90 rounded-xl border border-gold-300/50 text-xs shadow-xs hover:border-gold-400 transition-colors">
-                            <div class="truncate mr-2">
-                                <div class="font-bold text-onyx truncate text-[11px]">${p.name}</div>
-                                <div class="text-[10px] text-gold-600 font-bold">Rs. ${p.price} <span class="text-gray-400 line-through font-normal">Rs. ${p.oldPrice}</span></div>
-                            </div>
-                            <button onclick="addToCart(${p.id})" class="gold-bg-gradient text-onyx font-extrabold text-[10px] px-2.5 py-1 rounded-lg flex items-center gap-1 whitespace-nowrap shadow-xs active:scale-95 transition-transform">
-                                <i class="fa-solid fa-plus text-[8px]"></i> Add
-                            </button>
-                        </div>
-                    `).join('');
-                } else {
-                    recContainer.parentElement.style.display = 'none';
-                }
-            }
+
 
             if (cart.length === 0) {
                 container.innerHTML = `
