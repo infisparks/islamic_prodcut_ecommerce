@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Authentic Umrah Dua Cards & Companion Kit | Fatima Calligrapher</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome & Tailwind CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FFFDF5',
+                            100: '#FFF7DA',
+                            200: '#FFECA2',
+                            300: '#FFDF6A',
+                            400: '#F5C832',
+                            500: '#D4AF37', // Pure Royal Gold
+                            600: '#AA8518',
+                            700: '#805E0D',
+                            800: '#5A4006',
+                            900: '#382601',
+                        },
+                        onyx: '#0A0A0B',
+                        obsidian: '#121214',
+                        charcoal: '#1A1A1E',
+                        pearl: '#FAF8F5',
+                        sand: '#F3EFEA'
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    boxShadow: {
+                        'gold-glow': '0 4px 25px -2px rgba(212, 175, 55, 0.35)',
+                        'gold-glow-lg': '0 10px 40px -5px rgba(212, 175, 55, 0.5)',
+                        'inner-luxury': 'inset 0 1px 1px rgba(255, 255, 255, 0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F5;
+            color: #121214;
+            -webkit-tap-highlight-color: transparent;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+
+        /* Gold Metallic Gradient Effects */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF1B0 0%, #D4AF37 40%, #AA8518 70%, #F5C832 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-bg-gradient {
+            background: linear-gradient(135deg, #F5C832 0%, #D4AF37 50%, #B8860B 100%);
+        }
+
+        .gold-btn-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .gold-btn-shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                transparent 70%
+            );
+            transform: rotate(30deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        /* Card Flip Effect */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-charcoal">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-onyx text-pearl text-[11px] font-semibold py-2 px-3 text-center border-b border-gold-500/30 flex items-center justify-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>🕋 <b>UMRAH SEASON OFFER</b>: Free Shipping + Free Tawaf Counter Tasbih</span>
+        <span class="hidden sm:inline-block bg-gold-500/20 text-gold-300 px-2 py-0.5 rounded text-[10px] font-mono border border-gold-500/30" id="top-timer">Ends in 14:28</span>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-onyx/95 backdrop-blur-md border-b border-gold-500/25 text-white">
+        <div class="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full gold-bg-gradient flex items-center justify-center text-onyx font-cinzel font-bold text-sm shadow-gold-glow">
+                    FC
+                </div>
+                <div>
+                    <span class="font-cinzel text-base font-bold tracking-wider gold-gradient-text block leading-none">FATIMA CALLIGRAPHER</span>
+                    <span class="text-[8px] uppercase tracking-widest text-gray-400 block font-medium">Authentic Umrah Companions</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-3">
+                <a href="#reviews" class="hidden sm:flex items-center gap-1 text-amber-400 text-xs font-semibold bg-white/5 px-2.5 py-1 rounded-full border border-gold-500/20">
+                    <i class="fa-solid fa-star text-[10px]"></i> 4.9 (2,800+ Pilgrims)
+                </a>
+                <button onclick="toggleCartDrawer()" class="relative p-2 text-gold-400 hover:text-white transition-colors" aria-label="Open Cart">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="cart-count" class="absolute -top-0.5 -right-0.5 bg-red-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-onyx">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO HOOK SECTION (Clean, Minimal, High-Converting) -->
+    <section class="relative bg-onyx text-white pt-10 pb-14 sm:pt-14 sm:pb-16 px-4 overflow-hidden border-b border-gold-500/30">
+        <!-- Background Image with Clear Visibility & Soft Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="hero.png" alt="Hero Background" class="w-full h-full object-cover object-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-onyx/90"></div>
+        </div>
+
+        <!-- Glow accents -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-gold-500/10 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+        <div class="max-w-md mx-auto text-center relative z-10">
+            
+            <!-- Social Proof Hook Badge -->
+            <div class="inline-flex items-center gap-2 bg-black/60 backdrop-blur-md border border-gold-500/40 px-3.5 py-1.5 rounded-full text-[11px] text-gold-300 font-medium mb-4 shadow-lg">
+                <div class="flex text-amber-400 text-[9px] gap-0.5">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <span><b>4.9/5</b> Rating</span>
+                <span class="text-gray-300">• 2,800+ Pilgrims Approved</span>
+            </div>
+
+            <!-- Main Punchy Headline Hook -->
+            <h1 class="font-cinzel text-2xl sm:text-3xl font-bold leading-tight mb-6 tracking-wide drop-shadow-md">
+                Never Forget A Dua During <span class="gold-gradient-text italic">Tawaf & Sa'i</span>
+            </h1>
+
+            <!-- Direct Action CTA Button -->
+            <a href="#products-grid" class="gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-xs sm:text-sm py-3.5 px-6 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-transform w-full">
+                <span>SHOP 6 BESTSELLER BUNDLES (UP TO 50% OFF)</span>
+                <i class="fa-solid fa-arrow-down text-xs"></i>
+            </a>
+
+            <!-- Urgency Micro Text -->
+            <div class="flex items-center justify-center gap-4 mt-3.5 text-[10px] text-gray-200 font-medium drop-shadow">
+                <span><i class="fa-solid fa-truck-fast text-gold-400 mr-1"></i> Dispatch in 24h</span>
+                <span><i class="fa-solid fa-money-bill-wave text-gold-400 mr-1"></i> Cash on Delivery</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION TITLE: 6 PRODUCTS -->
+    <section id="products-grid" class="pt-6 pb-2 px-4 max-w-5xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-gold-200 pb-2.5 mb-3">
+            <div>
+                <span class="text-[10px] uppercase tracking-widest text-gold-700 font-extrabold block">Limited Availability</span>
+                <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">6 Luxury Umrah Products</h2>
+            </div>
+            <span class="text-[11px] text-gray-500 mt-1 sm:mt-0">Select your preferred bundle. Fits thobe pocket or purse.</span>
+        </div>
+    </section>
+
+    <!-- PRODUCT CATALOG (STRICT 2 COLUMNS ON MOBILE / 3 ON DESKTOP) -->
+    <section class="px-3 sm:px-4 max-w-5xl mx-auto pb-10">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
+            
+            <!-- PRODUCT 1: Royal Gold Deluxe Kit -->
+            <div class="bg-white rounded-2xl overflow-hidden border border-gold-500/40 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
+                <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gold-100">
+                    <span class="absolute top-2 left-2 z-10 bg-onyx text-gold-400 text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded border border-gold-500/40 uppercase">
+                        #1 BESTSELLER
+                    </span>
+                    <button onclick="quickView(1)" class="absolute top-2 right-2 z-10 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-onyx hover:bg-onyx hover:text-gold-400 transition-colors shadow-sm" title="Quick View">
+                        <i class="fa-solid fa-eye text-[10px]"></i>
+                    </button>
+                    <!-- Styled Visual Representation -->
+                    <div class="aspect-square rounded-xl bg-gradient-to-br from-neutral-900 via-obsidian to-black p-2.5 text-white flex flex-col items-center justify-between border border-gold-500/30 my-1 group-hover:scale-[1.02] transition-transform shadow-inner">
+                        <div class="text-[8px] uppercase tracking-widest text-gold-400 border-b border-gold-500/30 pb-0.5 w-full text-center font-cinzel">
+                            FATIMA CALLIGRAPHER
+                        </div>
+                        <div class="my-auto text-center">
+                            <i class="fa-solid fa-kaaba text-gold-400 text-2xl mb-1"></i>
+                            <div class="font-cinzel text-xs font-bold text-amber-200">Royal Gold Deluxe</div>
+                            <div class="text-[8px] text-gray-300 font-arabic mt-0.5">العُمْرَةُ المُبَارَكَة</div>
+                        </div>
+                        <div class="flex items-center gap-1 text-[7px] text-gold-300 font-semibold">
+                            <span>📿 Tasbih</span> • <span>💳 35+ Cards</span> • <span>💼 Pouch</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
+                            <span>★★★★★ (1,420)</span>
+                            <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">In Stock</span>
+                        </div>
+                        <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
+                            Royal Gold Deluxe Kit
+                        </h3>
+                        <p class="text-[10px] text-gray-500 line-clamp-2 mt-0.5">
+                            Full set with 35+ Cards, Tawaf Counter, Gold Lanyard & Velvet Potli.
+                        </p>
+                    </div>
+
+                    <div class="mt-2.5 pt-2 border-t border-gray-100">
+                        <div class="flex items-baseline gap-1 mb-2">
+                            <span class="font-bold text-sm sm:text-base text-onyx">Rs. 39.99</span>
+                            <span class="text-[10px] text-gray-400 line-through">Rs. 79.99</span>
+                            <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded">-50%</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button onclick="addToCart(1)" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
+                            </button>
+                            <button onclick="buyNow(1)" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
+                                <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 2: Pocket Companion Set -->
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
+                <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100">
+                    <span class="absolute top-2 left-2 z-10 bg-amber-600 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">
+                        POPULAR
+                    </span>
+                    <button onclick="quickView(2)" class="absolute top-2 right-2 z-10 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-onyx hover:bg-onyx hover:text-gold-400 transition-colors shadow-sm" title="Quick View">
+                        <i class="fa-solid fa-eye text-[10px]"></i>
+                    </button>
+                    <div class="aspect-square rounded-xl bg-gradient-to-br from-amber-950 via-neutral-900 to-black p-2.5 text-white flex flex-col items-center justify-between border border-amber-500/30 my-1 group-hover:scale-[1.02] transition-transform shadow-inner">
+                        <div class="text-[8px] uppercase tracking-widest text-amber-300 border-b border-amber-500/30 pb-0.5 w-full text-center font-cinzel">
+                            FATIMA CALLIGRAPHER
+                        </div>
+                        <div class="my-auto text-center">
+                            <i class="fa-solid fa-book-open text-amber-300 text-2xl mb-1"></i>
+                            <div class="font-cinzel text-xs font-bold text-amber-100">Pocket Companion</div>
+                            <div class="text-[8px] text-gray-300">English + Transliteration</div>
+                        </div>
+                        <div class="flex items-center gap-1 text-[7px] text-amber-300 font-semibold">
+                            <span>💳 35+ Cards</span> • <span>⭕ Ring Binder</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
+                            <span>★★★★★ (890)</span>
+                            <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">In Stock</span>
+                        </div>
+                        <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
+                            Pocket Companion Cards
+                        </h3>
+                        <p class="text-[10px] text-gray-500 line-clamp-2 mt-0.5">
+                            Compact 6x4" size. Fits thobe pocket or purse easily with stainless ring.
+                        </p>
+                    </div>
+
+                    <div class="mt-2.5 pt-2 border-t border-gray-100">
+                        <div class="flex items-baseline gap-1 mb-2">
+                            <span class="font-bold text-sm sm:text-base text-onyx">Rs. 24.99</span>
+                            <span class="text-[10px] text-gray-400 line-through">Rs. 49.99</span>
+                            <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded">-50%</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button onclick="addToCart(2)" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
+                            </button>
+                            <button onclick="buyNow(2)" class="bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all active:scale-95">
+                                <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 3: Urdu Special Edition -->
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
+                <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100">
+                    <span class="absolute top-2 left-2 z-10 bg-emerald-800 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">
+                        URDU SPECIAL
+                    </span>
+                    <button onclick="quickView(3)" class="absolute top-2 right-2 z-10 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-onyx hover:bg-onyx hover:text-gold-400 transition-colors shadow-sm" title="Quick View">
+                        <i class="fa-solid fa-eye text-[10px]"></i>
+                    </button>
+                    <div class="aspect-square rounded-xl bg-gradient-to-br from-emerald-950 via-neutral-900 to-black p-2.5 text-white flex flex-col items-center justify-between border border-emerald-500/30 my-1 group-hover:scale-[1.02] transition-transform shadow-inner">
+                        <div class="text-[8px] uppercase tracking-widest text-emerald-300 border-b border-emerald-500/30 pb-0.5 w-full text-center font-cinzel">
+                            FATIMA CALLIGRAPHER
+                        </div>
+                        <div class="my-auto text-center">
+                            <i class="fa-solid fa-mosque text-emerald-300 text-2xl mb-1"></i>
+                            <div class="font-cinzel text-xs font-bold text-emerald-100">Urdu & English Kit</div>
+                            <div class="text-[8px] text-emerald-200 font-arabic mt-0.5">اردو ترجمہ کے ساتھ</div>
+                        </div>
+                        <div class="flex items-center gap-1 text-[7px] text-emerald-300 font-semibold">
+                            <span>🇵🇰 Urdu Text</span> • <span>📿 Tasbih</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
+                            <span>★★★★★ (650)</span>
+                            <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">In Stock</span>
+                        </div>
+                        <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
+                            Urdu Transliteration Kit
+                        </h3>
+                        <p class="text-[10px] text-gray-500 line-clamp-2 mt-0.5">
+                            Full Urdu & English translations with pronunciation guide & black tasbih.
+                        </p>
+                    </div>
+
+                    <div class="mt-2.5 pt-2 border-t border-gray-100">
+                        <div class="flex items-baseline gap-1 mb-2">
+                            <span class="font-bold text-sm sm:text-base text-onyx">Rs. 34.99</span>
+                            <span class="text-[10px] text-gray-400 line-through">Rs. 65.99</span>
+                            <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded">-47%</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button onclick="addToCart(3)" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
+                            </button>
+                            <button onclick="buyNow(3)" class="bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all active:scale-95">
+                                <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 4: Family Pack of 3 -->
+            <div class="bg-white rounded-2xl overflow-hidden border border-gold-500/40 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
+                <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gold-100">
+                    <span class="absolute top-2 left-2 z-10 bg-red-600 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">
+                        BEST VALUE (3 SETS)
+                    </span>
+                    <button onclick="quickView(4)" class="absolute top-2 right-2 z-10 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-onyx hover:bg-onyx hover:text-gold-400 transition-colors shadow-sm" title="Quick View">
+                        <i class="fa-solid fa-eye text-[10px]"></i>
+                    </button>
+                    <div class="aspect-square rounded-xl bg-gradient-to-br from-purple-950 via-onyx to-black p-2.5 text-white flex flex-col items-center justify-between border border-gold-500/30 my-1 group-hover:scale-[1.02] transition-transform shadow-inner">
+                        <div class="text-[8px] uppercase tracking-widest text-gold-300 border-b border-gold-500/30 pb-0.5 w-full text-center font-cinzel">
+                            FATIMA CALLIGRAPHER
+                        </div>
+                        <div class="my-auto text-center">
+                            <i class="fa-solid fa-users-rays text-gold-400 text-2xl mb-1"></i>
+                            <div class="font-cinzel text-xs font-bold text-amber-200">Family Pilgrim Bundle</div>
+                            <div class="text-[8px] text-gray-300">3 Complete Sets</div>
+                        </div>
+                        <div class="flex items-center gap-1 text-[7px] text-gold-300 font-semibold">
+                            <span>🎁 Free Express Ship</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
+                            <span>★★★★★ (410)</span>
+                            <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">In Stock</span>
+                        </div>
+                        <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
+                            Family Pack (Set of 3)
+                        </h3>
+                        <p class="text-[10px] text-gray-500 line-clamp-2 mt-0.5">
+                            3 Full Deluxe Sets (Cards + Tasbih + Potli + Lanyards). Perfect family gift.
+                        </p>
+                    </div>
+
+                    <div class="mt-2.5 pt-2 border-t border-gray-100">
+                        <div class="flex items-baseline gap-1 mb-2">
+                            <span class="font-bold text-sm sm:text-base text-onyx">Rs. 89.99</span>
+                            <span class="text-[10px] text-gray-400 line-through">Rs. 199.99</span>
+                            <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded">SAVE Rs. 110</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button onclick="addToCart(4)" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
+                            </button>
+                            <button onclick="buyNow(4)" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 hover:opacity-95 transition-all shadow-sm active:scale-95">
+                                <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 5: Master Gift Hardbox -->
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
+                <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100">
+                    <span class="absolute top-2 left-2 z-10 bg-gold-600 text-onyx font-bold text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded uppercase">
+                        LUXURY GIFT
+                    </span>
+                    <button onclick="quickView(5)" class="absolute top-2 right-2 z-10 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-onyx hover:bg-onyx hover:text-gold-400 transition-colors shadow-sm" title="Quick View">
+                        <i class="fa-solid fa-eye text-[10px]"></i>
+                    </button>
+                    <div class="aspect-square rounded-xl bg-gradient-to-br from-neutral-900 via-amber-950 to-black p-2.5 text-white flex flex-col items-center justify-between border border-gold-500/30 my-1 group-hover:scale-[1.02] transition-transform shadow-inner">
+                        <div class="text-[8px] uppercase tracking-widest text-gold-300 border-b border-gold-500/30 pb-0.5 w-full text-center font-cinzel">
+                            FATIMA CALLIGRAPHER
+                        </div>
+                        <div class="my-auto text-center">
+                            <i class="fa-solid fa-gift text-gold-400 text-2xl mb-1"></i>
+                            <div class="font-cinzel text-xs font-bold text-amber-100">Master Gift Hardbox</div>
+                            <div class="text-[8px] text-gray-300">Gold Foil Embossed</div>
+                        </div>
+                        <div class="flex items-center gap-1 text-[7px] text-gold-300 font-semibold">
+                            <span>📦 Gift Packaging</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
+                            <span>★★★★★ (320)</span>
+                            <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">In Stock</span>
+                        </div>
+                        <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
+                            Master Hajj & Umrah Box
+                        </h3>
+                        <p class="text-[10px] text-gray-500 line-clamp-2 mt-0.5">
+                            Rigid gold foil gift packaging + 40 cards covering Hajj, Umrah & Ziyarat.
+                        </p>
+                    </div>
+
+                    <div class="mt-2.5 pt-2 border-t border-gray-100">
+                        <div class="flex items-baseline gap-1 mb-2">
+                            <span class="font-bold text-sm sm:text-base text-onyx">Rs. 49.99</span>
+                            <span class="text-[10px] text-gray-400 line-through">Rs. 99.99</span>
+                            <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded">-50%</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button onclick="addToCart(5)" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
+                            </button>
+                            <button onclick="buyNow(5)" class="bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all active:scale-95">
+                                <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT 6: Minimalist Tawaf Essential -->
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
+                <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100">
+                    <span class="absolute top-2 left-2 z-10 bg-slate-800 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">
+                        ESSENTIAL
+                    </span>
+                    <button onclick="quickView(6)" class="absolute top-2 right-2 z-10 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-onyx hover:bg-onyx hover:text-gold-400 transition-colors shadow-sm" title="Quick View">
+                        <i class="fa-solid fa-eye text-[10px]"></i>
+                    </button>
+                    <div class="aspect-square rounded-xl bg-gradient-to-br from-neutral-800 to-black p-2.5 text-white flex flex-col items-center justify-between border border-gray-700 my-1 group-hover:scale-[1.02] transition-transform shadow-inner">
+                        <div class="text-[8px] uppercase tracking-widest text-gray-400 border-b border-gray-700 pb-0.5 w-full text-center font-cinzel">
+                            FATIMA CALLIGRAPHER
+                        </div>
+                        <div class="my-auto text-center">
+                            <i class="fa-solid fa-dhikr text-gold-400 text-2xl mb-1"></i>
+                            <div class="font-cinzel text-xs font-bold text-gray-100">Minimalist Tawaf Set</div>
+                            <div class="text-[8px] text-gray-400">Lightweight Starter</div>
+                        </div>
+                        <div class="flex items-center gap-1 text-[7px] text-gold-300 font-semibold">
+                            <span>📿 Tasbih</span> • <span>💳 15 Cards</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
+                            <span>★★★★★ (280)</span>
+                            <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">In Stock</span>
+                        </div>
+                        <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
+                            Minimalist Tawaf Pocket Set
+                        </h3>
+                        <p class="text-[10px] text-gray-500 line-clamp-2 mt-0.5">
+                            Ultra-lightweight kit with core Tawaf & Sa'i prayers + mini tasbih.
+                        </p>
+                    </div>
+
+                    <div class="mt-2.5 pt-2 border-t border-gray-100">
+                        <div class="flex items-baseline gap-1 mb-2">
+                            <span class="font-bold text-sm sm:text-base text-onyx">Rs. 19.99</span>
+                            <span class="text-[10px] text-gray-400 line-through">Rs. 39.99</span>
+                            <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded">-50%</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <button onclick="addToCart(6)" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
+                            </button>
+                            <button onclick="buyNow(6)" class="bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all active:scale-95">
+                                <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- POCKET & TRAVEL FRIENDLY SHOWCASE -->
+    <section class="bg-sand/80 py-8 px-4 border-y border-gold-200">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-6">
+                <span class="text-[10px] uppercase tracking-widest text-gold-700 font-bold block mb-0.5">Ultra Portable Design</span>
+                <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">Pocket Friendly & Easy To Carry</h2>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                <div class="bg-white p-3 rounded-xl border border-gold-200 shadow-sm flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center text-gold-600 text-lg mb-2">
+                        <i class="fa-solid fa-vest"></i>
+                    </div>
+                    <h4 class="font-bold text-xs text-onyx">Fits Any Pocket</h4>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Thobe pocket or shirt</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl border border-gold-200 shadow-sm flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center text-gold-600 text-lg mb-2">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <h4 class="font-bold text-xs text-onyx">Handbag Ready</h4>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Compact for purse</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl border border-gold-200 shadow-sm flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center text-gold-600 text-lg mb-2">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+                    <h4 class="font-bold text-xs text-onyx">Semi-Waterproof</h4>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Resists Zamzam water</p>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl border border-gold-200 shadow-sm flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center text-gold-600 text-lg mb-2">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h4 class="font-bold text-xs text-onyx">Anti-Glare Matte</h4>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Comfortable sun reading</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE INTERACTIVE DUA CARD FLIP PREVIEWER -->
+    <section class="py-10 px-4 max-w-2xl mx-auto">
+        <div class="text-center mb-5">
+            <span class="text-[10px] uppercase tracking-widest text-gold-600 font-bold block mb-0.5">Interactive Card Preview</span>
+            <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">Tap Card To Test Flip</h2>
+            <p class="text-xs text-gray-500 mt-0.5">Cards feature Arabic text, English transliteration & clear translations</p>
+        </div>
+
+        <!-- Sample Card Flip Display -->
+        <div class="max-w-md mx-auto">
+            <!-- Card Selector Tabs -->
+            <div class="flex justify-center gap-1.5 mb-3 text-xs font-semibold overflow-x-auto pb-1 no-scrollbar" id="card-tabs">
+                <button onclick="switchPreviewCard(0)" class="tab-btn bg-onyx text-gold-400 px-3 py-1.5 rounded-full border border-gold-500/30 whitespace-nowrap active-tab">1. Niyyah For Umrah</button>
+                <button onclick="switchPreviewCard(1)" class="tab-btn bg-white text-gray-600 px-3 py-1.5 rounded-full border border-gray-200 whitespace-nowrap">2. Tawaf Start</button>
+                <button onclick="switchPreviewCard(2)" class="tab-btn bg-white text-gray-600 px-3 py-1.5 rounded-full border border-gray-200 whitespace-nowrap">3. Safa & Marwah</button>
+            </div>
+
+            <!-- Flip Card Container -->
+            <div class="flip-card cursor-pointer h-[310px] w-full" id="interactive-card" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner relative w-full h-full rounded-2xl shadow-lg">
+                    
+                    <!-- Card Front (Arabic + Transliteration) -->
+                    <div class="flip-card-front absolute inset-0 bg-gradient-to-b from-pearl via-white to-sand rounded-2xl border-2 border-gold-400 p-4 flex flex-col justify-between text-center">
+                        <div class="flex justify-between items-center text-[9px] text-gold-700 font-bold border-b border-gold-300/50 pb-1.5">
+                            <span>CARD 01 OF 35</span>
+                            <span class="uppercase tracking-widest font-cinzel">FATIMA CALLIGRAPHER</span>
+                            <span class="bg-gold-500 text-onyx px-1.5 rounded text-[8px]"><i class="fa-solid fa-rotate mr-1"></i> FLIP</span>
+                        </div>
+
+                        <div class="my-auto">
+                            <h4 class="font-cinzel text-sm font-bold text-onyx mb-1" id="card-title">Niyyah For Umrah</h4>
+                            <div class="font-arabic text-xl sm:text-2xl font-bold text-neutral-900 leading-relaxed my-1" id="card-arabic">
+                                اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي
+                            </div>
+                            <div class="text-xs text-amber-900 font-medium italic mt-2" id="card-trans">
+                                "Allahumma inni ureedul 'umrata fa yassirha li wa taqabbalha minni"
+                            </div>
+                        </div>
+
+                        <div class="text-[9px] text-gray-500 border-t border-gold-300/50 pt-1.5 flex justify-between items-center">
+                            <span>Makkah Mukarramah</span>
+                            <span class="text-gold-700 font-bold"><i class="fa-solid fa-droplet text-[8px] mr-1"></i>100% Laminated</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Back (English Meaning) -->
+                    <div class="flip-card-back absolute inset-0 bg-onyx text-pearl rounded-2xl border-2 border-gold-400 p-4 flex flex-col justify-between text-center">
+                        <div class="flex justify-between items-center text-[9px] text-gold-400 font-bold border-b border-gold-500/30 pb-1.5">
+                            <span>ENGLISH TRANSLATION</span>
+                            <span class="bg-gold-500 text-onyx px-1.5 rounded text-[8px]"><i class="fa-solid fa-rotate mr-1"></i> FLIP</span>
+                        </div>
+
+                        <div class="my-auto px-2">
+                            <i class="fa-solid fa-quote-left text-gold-500/30 text-xl block mb-1"></i>
+                            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed font-cinzel" id="card-english">
+                                "O Allah, I intend to perform Umrah. Make it easy for me and accept it from me."
+                            </p>
+                            <div class="text-[10px] text-gold-400 mt-2.5 font-semibold" id="card-note">
+                                Recited upon wearing Ihram before crossing Meeqat.
+                            </div>
+                        </div>
+
+                        <div class="text-[9px] text-gray-400 border-t border-gold-500/30 pt-1.5">
+                            Authentic supplication based on Quran & Sunnah
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PILGRIM REVIEWS -->
+    <section id="reviews" class="py-8 px-4 bg-pearl border-t border-gold-200">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-5">
+                <span class="text-[10px] uppercase tracking-widest text-gold-600 font-bold block mb-0.5">Pilgrim Feedback</span>
+                <h2 class="font-cinzel text-xl font-bold text-onyx">Loved By Pilgrims Worldwide</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex text-amber-400 text-xs mb-1.5">★★★★★</div>
+                    <p class="text-gray-700 italic mb-2">
+                        "Saved my Tawaf! I used to lose count of rounds, but the Tasbih and neck lanyard made everything so smooth."
+                    </p>
+                    <div class="font-bold text-onyx">— Tariq M., Dubai</div>
+                    <div class="text-[9px] text-gray-400">Verified Buyer • Royal Gold Set</div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex text-amber-400 text-xs mb-2">★★★★★</div>
+                    <p class="text-gray-700 italic mb-2">
+                        "100% waterproof. Zamzam water splashed on them and they wiped clean immediately. Clear font!"
+                    </p>
+                    <div class="font-bold text-onyx">— Aisha K., London</div>
+                    <div class="text-[9px] text-gray-400">Verified Buyer • Pocket Companion</div>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex text-amber-400 text-xs mb-2">★★★★★</div>
+                    <p class="text-gray-700 italic mb-2">
+                        "Bought the family pack of 3 for my parents and spouse. Transliteration is so easy to read!"
+                    </p>
+                    <div class="font-bold text-onyx">— Mohammad R., Toronto</div>
+                    <div class="text-[9px] text-gray-400">Verified Buyer • Family Pack</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-onyx text-gray-400 text-xs py-8 px-4 border-t border-gold-500/20 text-center">
+        <div class="max-w-4xl mx-auto space-y-2.5">
+            <div class="font-cinzel text-base font-bold gold-gradient-text">FATIMA CALLIGRAPHER</div>
+            <p class="text-[10px] text-gray-500 max-w-xs mx-auto">
+                Crafting luxury authentic Islamic guides, dua cards & calligraphy pieces for your sacred journey.
+            </p>
+            <div class="text-[9px] text-gray-600 border-t border-gray-800 pt-3">
+                © 2026 FatimaCalligrapher27. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- QUICK VIEW MODAL -->
+    <div id="quickview-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 relative border border-gold-400 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuickView()" class="absolute top-3 right-3 w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-onyx hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="quickview-content"></div>
+        </div>
+    </div>
+
+    <!-- CART / CHECKOUT DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity flex items-end sm:items-stretch justify-center sm:justify-end">
+        <div class="w-full sm:max-w-md bg-white shadow-2xl flex flex-col justify-between rounded-t-3xl sm:rounded-none max-h-[88vh] sm:max-h-full h-auto sm:h-full border-t border-gold-400 sm:border-t-0 overflow-hidden">
+            <div class="bg-onyx text-pearl p-3.5 px-4 border-b border-gold-500/30 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping text-gold-400"></i>
+                    <span class="font-cinzel font-bold text-sm sm:text-base">Checkout & Shipping Details</span>
+                </div>
+                <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-4 flex-1 overflow-y-auto space-y-4">
+                <!-- CART ITEMS -->
+                <div>
+                    <h4 class="font-bold text-xs text-onyx mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-box-open text-gold-600"></i> Order Items
+                    </h4>
+                    <div class="space-y-2" id="cart-items-container"></div>
+                </div>
+
+                <!-- SHIPROCKET COMPATIBLE ADDRESS FORM -->
+                <div class="pt-3 border-t border-gray-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-xs text-onyx flex items-center gap-1.5">
+                            <i class="fa-solid fa-truck-fast text-gold-600"></i> Delivery Address (Shiprocket)
+                        </h4>
+                        <span class="text-[9px] bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded border border-emerald-200">
+                            Required *
+                        </span>
+                    </div>
+
+                    <div class="space-y-2 text-xs">
+                        <div>
+                            <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Full Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="ship-name" placeholder="Enter recipient full name" class="w-full px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Mobile Number <span class="text-red-500">*</span></label>
+                                <input type="tel" id="ship-phone" maxlength="10" placeholder="10-digit Mobile" class="w-full px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Pincode <span class="text-red-500">*</span></label>
+                                <input type="text" id="ship-pincode" maxlength="6" placeholder="6-digit Pincode" class="w-full px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Flat / House No., Building Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="ship-address1" placeholder="Flat No. 402, Building A" class="w-full px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Street, Area, Landmark <span class="text-red-500">*</span></label>
+                            <input type="text" id="ship-address2" placeholder="Road name, colony or famous landmark" class="w-full px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">City / District <span class="text-red-500">*</span></label>
+                                <input type="text" id="ship-city" placeholder="City e.g. Mumbai" class="w-full px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">State <span class="text-red-500">*</span></label>
+                                <input type="text" id="ship-state" placeholder="State e.g. Maharashtra" class="w-full px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-sand/50 border-t border-gold-200">
+                <div class="space-y-1 text-xs mb-3">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal" class="font-bold text-onyx">Rs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-700 font-semibold">
+                        <span>Shiprocket Express Delivery</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="flex justify-between text-base font-bold text-onyx border-t border-gray-200 pt-1.5">
+                        <span>Total Payable</span>
+                        <span id="cart-total" class="text-gold-600">Rs. 0.00</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="text-[9px] uppercase font-bold text-gray-500 block mb-1">Select Payment Method</label>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <label class="border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer">
+                            <input type="radio" name="payment" checked class="accent-gold-600">
+                            <span class="font-bold text-onyx">Cash on Delivery</span>
+                        </label>
+                        <label class="border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70">
+                            <input type="radio" name="payment" class="accent-gold-600">
+                            <span>UPI / Card Pay</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-bold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-transform">
+                    <i class="fa-solid fa-lock text-xs"></i>
+                    <span>CONFIRM & PLACE ORDER (COD)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div id="success-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center border border-gold-400 shadow-2xl relative">
+            <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="font-cinzel text-xl font-bold text-onyx mb-1">Order Confirmed!</h3>
+            <p class="text-xs text-gray-600 mb-2">
+                Umrah Mubarak! Your order has been placed & mapped for Shiprocket express delivery.
+            </p>
+
+            <div id="success-order-details"></div>
+
+            <button onclick="closeSuccessModal()" class="w-full bg-onyx text-gold-400 font-bold py-2.5 rounded-xl text-xs hover:bg-gold-500 hover:text-onyx transition-colors mt-2">
+                CONTINUE SHOPPING
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "Royal Gold Umrah Deluxe Set",
+                price: 39.99,
+                oldPrice: 79.99,
+                badge: "#1 BESTSELLER",
+                desc: "Complete kit featuring 35+ Laminated Umrah Dua Cards, glossy Tawaf Tasbih counter beads, gold lanyard & velvet potli pouch.",
+                features: ["35+ Step-by-Step Dua Cards", "7-Bead Tawaf Counter", "100% Waterproof Laminate", "Gold Drawstring Bag"]
+            },
+            {
+                id: 2,
+                name: "Pocket Companion Dua Cards",
+                price: 24.99,
+                oldPrice: 49.99,
+                badge: "POPULAR",
+                desc: "Compact 6x4 inch card set with stainless steel binder ring. Perfect for carrying in Ihram pocket or purse.",
+                features: ["35+ Waterproof Cards", "Stainless Ring Binder", "English & Transliteration", "Anti-Glare Finish"]
+            },
+            {
+                id: 3,
+                name: "Urdu Transliteration Deluxe Kit",
+                price: 34.99,
+                oldPrice: 65.99,
+                badge: "URDU SPECIAL",
+                desc: "Specially translated set with clear Urdu text alongside English transliteration and Arabic supplications.",
+                features: ["Full Urdu Translation", "35+ Dua Pages", "Tawaf Counter Tasbih", "Soft Neck Lanyard"]
+            },
+            {
+                id: 4,
+                name: "Pilgrim Family Pack (Set of 3)",
+                price: 89.99,
+                oldPrice: 199.99,
+                badge: "BEST VALUE",
+                desc: "Includes 3 complete Deluxe Umrah Kits. Great value for families or group pilgrimage gifts.",
+                features: ["3 Full Deluxe Kits", "Free Express Delivery", "Save Over Rs. 110", "Ideal Ramadan Gift"]
+            },
+            {
+                id: 5,
+                name: "Master Hajj & Umrah Gift Box",
+                price: 49.99,
+                oldPrice: 99.99,
+                badge: "LUXURY GIFT",
+                desc: "Premium rigid gift box containing 40+ Cards covering Hajj, Umrah & Ziyarat in Madinah.",
+                features: ["40+ Comprehensive Cards", "Rigid Gold Gift Box", "Ziyarat Duas Included", "Premium Velvet Pouch"]
+            },
+            {
+                id: 6,
+                name: "Minimalist Tawaf Pocket Set",
+                price: 19.99,
+                oldPrice: 39.99,
+                badge: "ESSENTIAL",
+                desc: "Ultra-lightweight set focused on essential Tawaf & Sa'i prayers with mini counter beads.",
+                features: ["Essential 15 Cards", "Ultra Lightweight", "Neck Lanyard", "Budget Friendly"]
+            }
+        ];
+
+        const previewCards = [
+            {
+                title: "Niyyah For Umrah",
+                arabic: "اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي",
+                trans: '"Allahumma inni ureedul \'umrata fa yassirha li wa taqabbalha minni"',
+                english: '"O Allah, I intend to perform Umrah. Make it easy for me and accept it from me."',
+                note: "Recited upon wearing Ihram before crossing Meeqat."
+            },
+            {
+                title: "Tawaf Start (At Hajr Aswad)",
+                arabic: "بِسْمِ اللهِ وَاللهُ أَكْبَرُ، اللَّهُمَّ إِيمَانًا بِكَ وَتَصْدِيقًا بِكِتَابِكَ",
+                trans: '"Bismillahi Allahu Akbar, Allahumma eemanan bika wa tasdeeqan bi kitabaika"',
+                english: '"In the name of Allah, Allah is the Greatest. O Allah, out of faith in You and belief in Your Book."',
+                note: "Recited facing Black Stone at the beginning of each circuit."
+            },
+            {
+                title: "At Safa & Marwah (Sa'i)",
+                arabic: "إِنَّ الصَّفَا وَالْمَرْوَةَ مِن شَعَائِرِ اللهِ",
+                trans: '"Innas-Safaa wal-Marwata min sha\'aa\'irillah"',
+                english: '"Indeed, Safa and Marwah are among the symbols of Allah."',
+                note: "Recited when approaching Mount Safa before starting Sa'i."
+            }
+        ];
+
+        let cart = [];
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast(product.name);
+        }
+
+        function buyNow(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (!existing) {
+                cart.push({ ...product, qty: 1 });
+            }
+            updateCartUI();
+            toggleCartDrawer(true);
+        }
+
+        function showToast(productName) {
+            let toast = document.getElementById('cart-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'cart-toast';
+                toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-onyx text-pearl border border-gold-400/60 py-2.5 px-4 rounded-2xl shadow-gold-glow flex items-center gap-3 text-xs font-semibold transition-all transform duration-300 translate-y-12 opacity-0 pointer-events-none w-[90%] max-w-sm justify-between';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `
+                <div class="flex items-center gap-2 truncate">
+                    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                    <span class="truncate"><b>${productName}</b> added!</span>
+                </div>
+                <button onclick="toggleCartDrawer(true)" class="bg-gold-500 text-onyx px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase hover:bg-gold-400 whitespace-nowrap">View Cart</button>
+            `;
+
+            toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(window._cartToastTimer);
+            window._cartToastTimer = setTimeout(() => {
+                toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const cartCountEl = document.getElementById('cart-count');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            cartCountEl.textContent = totalItems;
+            subtotalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+            totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-3xl mb-2 text-gold-300"></i>
+                        <p class="text-xs">Your cart is empty.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between p-2.5 bg-pearl rounded-xl border border-gray-200">
+                    <div>
+                        <h4 class="font-bold text-xs text-onyx">${item.name}</h4>
+                        <div class="text-xs text-gold-600 font-bold">Rs. ${item.price} x ${item.qty}</div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="changeQty(${item.id}, -1)" class="w-5 h-5 rounded bg-gray-200 text-onyx font-bold text-xs flex items-center justify-center">-</button>
+                        <span class="text-xs font-bold">${item.qty}</span>
+                        <button onclick="changeQty(${item.id}, 1)" class="w-5 h-5 rounded bg-gray-200 text-onyx font-bold text-xs flex items-center justify-center">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+            }
+            updateCartUI();
+        }
+
+        function toggleCartDrawer(forceOpen = false) {
+            const drawer = document.getElementById('cart-drawer');
+            if (forceOpen || drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.add('hidden');
+            }
+        }
+
+        function openCheckoutWithBestSeller() {
+            if (cart.length === 0) addToCart(1);
+            else toggleCartDrawer(true);
+        }
+
+        function quickView(id) {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+
+            document.getElementById('quickview-content').innerHTML = `
+                <span class="bg-gold-500 text-onyx text-[9px] font-bold px-2 py-0.5 rounded uppercase">${p.badge}</span>
+                <h3 class="font-cinzel text-lg font-bold text-onyx mt-2">${p.name}</h3>
+                <div class="flex items-center gap-2 my-1.5">
+                    <span class="text-base font-bold text-onyx">Rs. ${p.price}</span>
+                    <span class="text-xs text-gray-400 line-through">Rs. ${p.oldPrice}</span>
+                </div>
+                <p class="text-xs text-gray-600 leading-relaxed mb-3">${p.desc}</p>
+                <div class="bg-sand p-2.5 rounded-xl mb-3 text-xs space-y-1">
+                    <div class="font-bold text-onyx mb-1">Highlights:</div>
+                    ${p.features.map(f => `<div class="text-gray-700"><i class="fa-solid fa-check text-gold-600 mr-1"></i>${f}</div>`).join('')}
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="addToCart(${p.id}); closeQuickView();" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold py-2.5 rounded-xl text-xs border border-gray-300 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-cart-plus text-xs"></i> ADD TO CART
+                    </button>
+                    <button onclick="buyNow(${p.id}); closeQuickView();" class="gold-bg-gradient text-onyx font-extrabold py-2.5 rounded-xl text-xs shadow-gold-glow flex items-center justify-center gap-1.5 active:scale-95">
+                        <i class="fa-solid fa-bolt text-xs"></i> BUY NOW
+                    </button>
+                </div>
+            `;
+            document.getElementById('quickview-modal').classList.remove('hidden');
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickview-modal').classList.add('hidden');
+        }
+
+        function switchPreviewCard(index) {
+            const card = previewCards[index];
+            if (!card) return;
+
+            document.getElementById('card-title').textContent = card.title;
+            document.getElementById('card-arabic').textContent = card.arabic;
+            document.getElementById('card-trans').textContent = card.trans;
+            document.getElementById('card-english').textContent = card.english;
+            document.getElementById('card-note').textContent = card.note;
+
+            document.getElementById('interactive-card').classList.remove('flipped');
+
+            document.querySelectorAll('#card-tabs button').forEach((tab, idx) => {
+                tab.className = idx === index
+                    ? "tab-btn bg-onyx text-gold-400 px-3 py-1.5 rounded-full border border-gold-500/30 whitespace-nowrap active-tab"
+                    : "tab-btn bg-white text-gray-600 px-3 py-1.5 rounded-full border border-gray-200 whitespace-nowrap";
+            });
+        }
+
+        function processOrder() {
+            if (cart.length === 0) {
+                alert("Your cart is empty. Please add items before placing order.");
+                return;
+            }
+
+            const name = document.getElementById('ship-name').value.trim();
+            const phone = document.getElementById('ship-phone').value.trim();
+            const pincode = document.getElementById('ship-pincode').value.trim();
+            const address1 = document.getElementById('ship-address1').value.trim();
+            const address2 = document.getElementById('ship-address2').value.trim();
+            const city = document.getElementById('ship-city').value.trim();
+            const state = document.getElementById('ship-state').value.trim();
+
+            if (!name || !phone || !pincode || !address1 || !city || !state) {
+                alert("Please fill in all required delivery address details for Shiprocket shipping.");
+                return;
+            }
+
+            if (phone.length < 10) {
+                alert("Please enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            if (pincode.length !== 6 || isNaN(pincode)) {
+                alert("Please enter a valid 6-digit Indian Pincode.");
+                return;
+            }
+
+            const orderId = "SR-" + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('success-order-details').innerHTML = `
+                <div class="bg-sand/80 border border-gold-300 p-3 rounded-xl text-left text-xs space-y-1.5 my-3">
+                    <div class="flex justify-between items-center border-b border-gold-200 pb-1 font-bold">
+                        <span class="text-onyx">Shiprocket AWB:</span>
+                        <span class="text-gold-700 font-mono">${orderId}</span>
+                    </div>
+                    <div><span class="text-gray-500">Recipient:</span> <b>${name}</b> (${phone})</div>
+                    <div><span class="text-gray-500">Address:</span> ${address1}, ${address2 ? address2 + ', ' : ''}${city}, ${state} - <b>${pincode}</b></div>
+                    <div class="text-[10px] text-emerald-700 font-bold flex items-center gap-1 pt-0.5">
+                        <i class="fa-solid fa-truck-ramp-box"></i> Courier Partner: Delhivery / BlueDart (COD)
+                    </div>
+                </div>
+            `;
+
+            cart = [];
+            updateCartUI();
+            toggleCartDrawer(false);
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
