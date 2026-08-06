@@ -756,10 +756,26 @@
             <div class="p-4 flex-1 overflow-y-auto space-y-4">
                 <!-- CART ITEMS -->
                 <div>
-                    <h4 class="font-bold text-xs text-onyx mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-box-open text-gold-600"></i> Order Items
-                    </h4>
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-xs text-onyx flex items-center gap-1.5">
+                            <i class="fa-solid fa-box-open text-gold-600"></i> Order Items
+                        </h4>
+                        <button onclick="scrollToProductsAndClose()" class="text-[10px] text-amber-900 hover:text-onyx font-bold bg-gold-100 hover:bg-gold-200 px-2 py-1 rounded-lg border border-gold-300 flex items-center gap-1 transition-all active:scale-95 shadow-xs">
+                            <i class="fa-solid fa-plus-circle text-[9px]"></i> Add More Items
+                        </button>
+                    </div>
                     <div class="space-y-2" id="cart-items-container"></div>
+                </div>
+
+                <!-- FREQUENTLY ADDED TOGETHER / RECOMMENDED ADD-ONS -->
+                <div class="pt-3 border-t border-gray-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-xs text-onyx flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-gold-600"></i> Recommended Add-ons
+                        </h4>
+                        <span class="text-[9px] text-gold-700 font-bold uppercase tracking-wider">1-Tap Add</span>
+                    </div>
+                    <div class="space-y-1.5" id="cart-recommendations-container"></div>
                 </div>
 
                 <!-- SHIPROCKET COMPATIBLE ADDRESS FORM -->
@@ -829,6 +845,11 @@
                         <span id="cart-total" class="text-gold-600">Rs. 0.00</span>
                     </div>
                 </div>
+
+                <button onclick="scrollToProductsAndClose()" class="w-full bg-pearl hover:bg-gold-50 text-onyx font-bold py-2 px-3 rounded-xl border border-gold-300 text-xs mb-3 flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-xs">
+                    <i class="fa-solid fa-bag-shopping text-gold-600 text-xs"></i>
+                    <span>+ Add More Products To Order</span>
+                </button>
 
                 <div class="mb-3">
                     <label class="text-[9px] uppercase font-bold text-gray-500 block mb-1">Select Payment Method</label>
@@ -1022,11 +1043,36 @@
             subtotalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
             totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
 
+            // Render recommendations
+            const recContainer = document.getElementById('cart-recommendations-container');
+            if (recContainer) {
+                const unadded = products.filter(p => !cart.some(c => c.id === p.id)).slice(0, 3);
+                if (unadded.length > 0) {
+                    recContainer.parentElement.style.display = 'block';
+                    recContainer.innerHTML = unadded.map(p => `
+                        <div class="flex items-center justify-between p-2 bg-pearl/90 rounded-xl border border-gold-300/50 text-xs shadow-xs hover:border-gold-400 transition-colors">
+                            <div class="truncate mr-2">
+                                <div class="font-bold text-onyx truncate text-[11px]">${p.name}</div>
+                                <div class="text-[10px] text-gold-600 font-bold">Rs. ${p.price} <span class="text-gray-400 line-through font-normal">Rs. ${p.oldPrice}</span></div>
+                            </div>
+                            <button onclick="addToCart(${p.id})" class="gold-bg-gradient text-onyx font-extrabold text-[10px] px-2.5 py-1 rounded-lg flex items-center gap-1 whitespace-nowrap shadow-xs active:scale-95 transition-transform">
+                                <i class="fa-solid fa-plus text-[8px]"></i> Add
+                            </button>
+                        </div>
+                    `).join('');
+                } else {
+                    recContainer.parentElement.style.display = 'none';
+                }
+            }
+
             if (cart.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-10 text-gray-400">
+                    <div class="text-center py-8 text-gray-400">
                         <i class="fa-solid fa-basket-shopping text-3xl mb-2 text-gold-300"></i>
-                        <p class="text-xs">Your cart is empty.</p>
+                        <p class="text-xs font-medium">Your cart is currently empty.</p>
+                        <button onclick="scrollToProductsAndClose()" class="mt-3 bg-gold-500 text-onyx font-bold text-xs px-3 py-1.5 rounded-lg">
+                            Browse Products
+                        </button>
                     </div>
                 `;
                 return;
@@ -1045,6 +1091,14 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function scrollToProductsAndClose() {
+            toggleCartDrawer(false);
+            const grid = document.getElementById('products-grid');
+            if (grid) {
+                grid.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         function changeQty(id, delta) {
