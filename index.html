@@ -559,6 +559,28 @@
         </div>
     </div>
 
+    <!-- STICKY BOTTOM CART BAR (Shows when items exist in cart) -->
+    <div id="sticky-cart-bar" class="fixed bottom-0 left-0 right-0 z-40 bg-onyx/95 backdrop-blur-md border-t-2 border-gold-400 text-pearl py-2.5 px-4 shadow-2xl transition-all duration-300 transform translate-y-full opacity-0 pointer-events-none">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full gold-bg-gradient flex items-center justify-center text-onyx font-bold text-base shadow-gold-glow flex-shrink-0">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-pearl flex items-center gap-1.5 truncate">
+                        <span id="sticky-cart-count" class="bg-gold-500 text-onyx font-extrabold text-[10px] px-2 py-0.5 rounded-full">1 Item</span>
+                        <span class="truncate">in your cart</span>
+                    </div>
+                    <div class="text-xs text-gold-400 font-extrabold" id="sticky-cart-total">Total: Rs. 0</div>
+                </div>
+            </div>
+            <button onclick="toggleCartDrawer(true)" class="gold-bg-gradient text-onyx font-extrabold text-xs sm:text-sm py-2.5 px-5 rounded-xl shadow-gold-glow flex items-center gap-2 hover:opacity-95 active:scale-95 transition-transform whitespace-nowrap">
+                <span>VIEW CART</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         const products = [
@@ -690,14 +712,11 @@
                 : products.filter(p => p.category === filter);
 
             container.innerHTML = filtered.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
+                <div onclick="quickView(${p.id})" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group cursor-pointer">
                     <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100 overflow-hidden">
                         <span class="absolute top-2 left-2 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">
                             ${p.badge}
                         </span>
-                        <button onclick="quickView(${p.id})" class="absolute top-2 right-2 z-10 w-6 h-6 bg-white/90 rounded-full flex items-center justify-center text-onyx hover:bg-onyx hover:text-gold-400 transition-colors shadow-sm" title="Quick View">
-                            <i class="fa-solid fa-eye text-[10px]"></i>
-                        </button>
 
                         <!-- Product Image Showcase -->
                         <div class="aspect-square rounded-xl bg-sand/50 p-0.5 flex items-center justify-center overflow-hidden my-1 border border-gray-200/60 group-hover:border-gold-300 transition-colors">
@@ -726,10 +745,10 @@
                                 <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded whitespace-nowrap">-50%</span>
                             </div>
                             <div class="grid grid-cols-2 gap-1.5">
-                                <button onclick="addToCart(${p.id})" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <button onclick="event.stopPropagation(); addToCart(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
                                     <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
                                 </button>
-                                <button onclick="buyNow(${p.id})" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
+                                <button onclick="event.stopPropagation(); buyNow(${p.id});" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
                                     <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
                                 </button>
                             </div>
@@ -820,12 +839,26 @@
             const subtotalEl = document.getElementById('cart-subtotal');
             const totalEl = document.getElementById('cart-total');
 
+            const stickyBar = document.getElementById('sticky-cart-bar');
+            const stickyCountEl = document.getElementById('sticky-cart-count');
+            const stickyTotalEl = document.getElementById('sticky-cart-total');
+
             const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
             const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             cartCountEl.textContent = totalItems;
             subtotalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
             totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+
+            if (stickyBar) {
+                if (totalItems > 0) {
+                    stickyCountEl.textContent = `${totalItems} ${totalItems === 1 ? 'Item' : 'Items'}`;
+                    stickyTotalEl.textContent = `Total: Rs. ${totalPrice.toFixed(0)}`;
+                    stickyBar.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+                } else {
+                    stickyBar.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+                }
+            }
 
             if (cart.length === 0) {
                 container.innerHTML = `
