@@ -407,9 +407,9 @@
 
 
     <!-- QUICK VIEW MODAL -->
-    <div id="quickview-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-5 relative border border-gold-400 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <button onclick="closeQuickView()" class="absolute top-3 right-3 w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-onyx hover:text-white transition-colors">
+    <div id="quickview-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-4 sm:p-6 relative border border-gold-400/80 shadow-2xl max-h-[92vh] overflow-y-auto">
+            <button onclick="closeQuickView()" class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-onyx text-gold-400 flex items-center justify-center hover:bg-gold-500 hover:text-onyx transition-colors border border-gold-500/40 shadow-md">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div id="quickview-content"></div>
@@ -590,7 +590,9 @@
                 category: "card",
                 language: "English",
                 image: "product/umrah_card_english.webp",
-                price: 299,
+                secondaryImage: "product/umrah_Sticker_English.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                price: 499,
                 oldPrice: 599,
                 badge: "CARD • ENGLISH",
                 rating: "(1,420)",
@@ -603,7 +605,9 @@
                 category: "card",
                 language: "Hindi",
                 image: "product/umrah_card_hindi.webp",
-                price: 299,
+                secondaryImage: "product/umrah_Sticker_hindi.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                price: 499,
                 oldPrice: 599,
                 badge: "CARD • HINDI",
                 rating: "(980)",
@@ -616,7 +620,9 @@
                 category: "card",
                 language: "Roman",
                 image: "product/umrah_card_roman.webp",
-                price: 299,
+                secondaryImage: "product/umrah_card_english.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                price: 499,
                 oldPrice: 599,
                 badge: "CARD • ROMAN",
                 rating: "(850)",
@@ -629,12 +635,14 @@
                 category: "card",
                 language: "Urdu",
                 image: "product/umrah_card_urdu.webp",
-                price: 299,
+                secondaryImage: "product/umrah_Sticker_urdu.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                price: 499,
                 oldPrice: 599,
                 badge: "CARD • URDU",
                 rating: "(1,150)",
                 desc: "Authentic Umrah Dua cards with clear Urdu translation, Arabic text, and complete pilgrimage guide.",
-                features: ["Authentic Urdu Translation", "Arabic Text & Ritual Instructions", "Water & Sweat Proof", "Fits Thobe Pocket"]
+                features: ["Authentic Urdu Translation", "Arabic Script & Ritual Instructions", "Water & Sweat Proof", "Fits Thobe Pocket"]
             },
             {
                 id: 5,
@@ -642,6 +650,8 @@
                 category: "sticker",
                 language: "English",
                 image: "product/umrah_Sticker_English.webp",
+                secondaryImage: "product/umrah_card_english.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 price: 199,
                 oldPrice: 399,
                 badge: "STICKER • ENGLISH",
@@ -655,6 +665,8 @@
                 category: "sticker",
                 language: "Hindi",
                 image: "product/umrah_Sticker_hindi.webp",
+                secondaryImage: "product/umrah_card_hindi.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 price: 199,
                 oldPrice: 399,
                 badge: "STICKER • HINDI",
@@ -668,6 +680,8 @@
                 category: "sticker",
                 language: "Urdu",
                 image: "product/umrah_Sticker_urdu.webp",
+                secondaryImage: "product/umrah_card_urdu.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 price: 199,
                 oldPrice: 399,
                 badge: "STICKER • URDU",
@@ -714,13 +728,19 @@
             container.innerHTML = filtered.map(p => `
                 <div onclick="quickView(${p.id})" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group cursor-pointer">
                     <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100 overflow-hidden">
-                        <span class="absolute top-2 left-2 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">
+                        <span class="absolute top-2 left-2 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase shadow-xs">
                             ${p.badge}
                         </span>
 
-                        <!-- Product Image Showcase -->
-                        <div class="aspect-square rounded-xl bg-sand/50 p-0.5 flex items-center justify-center overflow-hidden my-1 border border-gray-200/60 group-hover:border-gold-300 transition-colors">
-                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                        <!-- Watch Video Badge Button -->
+                        <button onclick="event.stopPropagation(); quickView(${p.id}, 'video');" class="absolute top-2 right-2 z-20 bg-onyx/90 hover:bg-gold-500 hover:text-onyx text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-1 border border-gold-500/40 shadow-sm transition-all active:scale-95">
+                            <i class="fa-solid fa-circle-play text-gold-400"></i>
+                            <span>Video</span>
+                        </button>
+
+                        <!-- Product Image Showcase (Uncropped contain view) -->
+                        <div class="aspect-square rounded-xl bg-sand/40 p-1 flex items-center justify-center overflow-hidden my-1 border border-gray-200/60 group-hover:border-gold-300 transition-colors">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy">
                         </div>
                     </div>
                     
@@ -917,12 +937,190 @@
             }
         }
 
-        function openCheckoutWithBestSeller() {
-            if (cart.length === 0) addToCart(1);
-            else toggleCartDrawer(true);
+        let currentQuickViewProduct = null;
+        let currentSlideIndex = 0;
+        let currentZoom = 1;
+        let isDraggingImage = false;
+        let startX = 0, startY = 0, currentPanX = 0, currentPanY = 0;
+
+        function getMediaItems(product) {
+            if (!product) return [];
+            const items = [];
+            
+            // Primary image (Full view)
+            if (product.image) {
+                items.push({ type: 'image', url: product.image, title: 'Full Product View' });
+            }
+            
+            // Secondary angle / detail image
+            if (product.secondaryImage) {
+                items.push({ type: 'image', url: product.secondaryImage, title: 'Detail / Companion View' });
+            }
+            
+            // Product Video (Option in every card)
+            if (product.video) {
+                items.push({ type: 'video', url: product.video, title: 'Product Demonstration Video' });
+            }
+            
+            return items;
         }
 
-        let currentZoom = 1;
+        function quickView(id, targetType = 'image', targetIndex = 0) {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+
+            currentQuickViewProduct = p;
+            currentZoom = 1;
+            currentPanX = 0;
+            currentPanY = 0;
+
+            const mediaList = getMediaItems(p);
+            if (targetType === 'video') {
+                const vIdx = mediaList.findIndex(m => m.type === 'video');
+                currentSlideIndex = vIdx >= 0 ? vIdx : 0;
+            } else {
+                currentSlideIndex = Math.min(targetIndex, mediaList.length - 1);
+            }
+
+            renderQuickViewModalContent();
+            document.getElementById('quickview-modal').classList.remove('hidden');
+        }
+
+        function renderQuickViewModalContent() {
+            const p = currentQuickViewProduct;
+            if (!p) return;
+            
+            const mediaList = getMediaItems(p);
+            const activeMedia = mediaList[currentSlideIndex] || mediaList[0];
+            const isVideo = activeMedia.type === 'video';
+
+            document.getElementById('quickview-content').innerHTML = `
+                <div class="flex items-center justify-between mb-2.5 pr-8">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="bg-onyx text-gold-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded border border-gold-500/40 uppercase">
+                            ${p.badge}
+                        </span>
+                        <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                            <i class="fa-solid fa-circle-check text-[10px] mr-1"></i> In Stock
+                        </span>
+                    </div>
+                    <span class="text-xs text-amber-600 font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-star text-gold-500"></i> ${p.rating}
+                    </span>
+                </div>
+
+                <!-- MAIN MEDIA DISPLAY (Uncropped, Full Aspect Ratio View) -->
+                <div class="relative w-full h-72 sm:h-96 rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border border-gold-500/30 mb-3 shadow-2xl flex items-center justify-center select-none group">
+                    
+                    ${!isVideo ? `
+                        <!-- Floating Zoom Controls for Image -->
+                        <div class="absolute top-3 right-3 z-30 flex items-center gap-1 bg-black/80 backdrop-blur-md text-white p-1 rounded-xl border border-gold-500/30 text-xs shadow-xl" onclick="event.stopPropagation()">
+                            <button onclick="zoomModalImage(-0.3)" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom Out">
+                                <i class="fa-solid fa-magnifying-glass-minus text-xs"></i>
+                            </button>
+                            <span id="zoom-level-label" class="text-[10px] font-mono px-1 font-extrabold text-gold-300 min-w-[38px] text-center">${Math.round(currentZoom * 100)}%</span>
+                            <button onclick="zoomModalImage(0.3)" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom In">
+                                <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                            </button>
+                            <button onclick="zoomModalImage('reset')" class="px-2 py-1 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx text-[9px] font-extrabold uppercase transition-colors" title="Reset Zoom">
+                                Reset
+                            </button>
+                        </div>
+
+                        <!-- Zoom / Drag Tooltip Badge -->
+                        <div class="absolute bottom-3 left-3 z-30 bg-black/75 backdrop-blur-md text-gold-300 text-[10px] font-semibold px-2.5 py-1 rounded-full pointer-events-none flex items-center gap-1.5 border border-gold-500/30 shadow-lg">
+                            <i class="fa-solid fa-expand text-[9px]"></i> Double-click or +/- to Zoom & Drag
+                        </div>
+
+                        <!-- Full Uncropped Image View Container -->
+                        <div id="modal-image-wrapper" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-2"
+                             onmousedown="startImageDrag(event)" onmousemove="dragImage(event)" onmouseup="stopImageDrag()" onmouseleave="stopImageDrag()"
+                             ontouchstart="startImageDrag(event)" ontouchmove="dragImage(event)" ontouchend="stopImageDrag()" ondblclick="toggleModalZoom()">
+                            <img id="quickview-image" src="${activeMedia.url}" alt="${p.name}" 
+                                 class="max-w-full max-h-full object-contain transition-transform duration-150 origin-center pointer-events-none"
+                                 style="transform: scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px);">
+                        </div>
+                    ` : `
+                        <!-- Full Video Player Container -->
+                        <div class="w-full h-full flex items-center justify-center p-1 bg-black">
+                            <video id="quickview-video" controls autoplay loop playsinline class="w-full h-full max-h-full object-contain rounded-xl">
+                                <source src="${activeMedia.url}" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                    `}
+
+                    <!-- Slide Navigation Arrows -->
+                    ${mediaList.length > 1 ? `
+                        <button onclick="prevModalSlide()" class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Previous Slide">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        </button>
+                        <button onclick="nextModalSlide()" class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Next Slide">
+                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        </button>
+                    ` : ''}
+                </div>
+
+                <!-- MEDIA THUMBNAIL STRIP -->
+                <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+                    ${mediaList.map((item, idx) => `
+                        <button onclick="setModalSlide(${idx})" class="relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentSlideIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
+                            ${item.type === 'image' ? `
+                                <img src="${item.url}" class="w-full h-full object-contain rounded-lg">
+                            ` : `
+                                <div class="w-full h-full bg-onyx rounded-lg flex flex-col items-center justify-center text-gold-400 text-xs gap-1 border border-gold-500/30">
+                                    <i class="fa-solid fa-circle-play text-base text-gold-500 animate-pulse"></i>
+                                    <span class="text-[9px] font-extrabold uppercase text-white">Video</span>
+                                </div>
+                            `}
+                        </button>
+                    `).join('')}
+                </div>
+
+                <h3 class="font-cinzel text-lg sm:text-xl font-bold text-onyx mb-1">${p.name}</h3>
+                <div class="flex items-center gap-2 mb-2.5">
+                    <span class="text-lg font-extrabold text-onyx">Rs. ${p.price}</span>
+                    <span class="text-xs text-gray-400 line-through">Rs. ${p.oldPrice}</span>
+                    <span class="text-xs text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200">-50% OFF</span>
+                </div>
+                <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3">${p.desc}</p>
+                <div class="bg-sand/70 p-3 rounded-xl mb-4 text-xs space-y-1.5 border border-gold-200">
+                    <div class="font-bold text-onyx mb-1 text-xs">Highlights:</div>
+                    ${p.features.map(f => `<div class="text-gray-700 font-medium"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>${f}</div>`).join('')}
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button onclick="addToCart(${p.id}); closeQuickView();" class="bg-white hover:bg-gold-100 text-onyx font-bold py-3 rounded-xl text-xs sm:text-sm border-2 border-onyx flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm">
+                        <i class="fa-solid fa-cart-plus text-sm"></i> ADD TO CART
+                    </button>
+                    <button onclick="buyNow(${p.id}); closeQuickView();" class="gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl text-xs sm:text-sm shadow-gold-glow flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all">
+                        <i class="fa-solid fa-bolt text-sm"></i> BUY NOW
+                    </button>
+                </div>
+            `;
+        }
+
+        function setModalSlide(index) {
+            currentSlideIndex = index;
+            currentZoom = 1;
+            currentPanX = 0;
+            currentPanY = 0;
+            renderQuickViewModalContent();
+        }
+
+        function nextModalSlide() {
+            if (!currentQuickViewProduct) return;
+            const mediaList = getMediaItems(currentQuickViewProduct);
+            currentSlideIndex = (currentSlideIndex + 1) % mediaList.length;
+            setModalSlide(currentSlideIndex);
+        }
+
+        function prevModalSlide() {
+            if (!currentQuickViewProduct) return;
+            const mediaList = getMediaItems(currentQuickViewProduct);
+            currentSlideIndex = (currentSlideIndex - 1 + mediaList.length) % mediaList.length;
+            setModalSlide(currentSlideIndex);
+        }
 
         function zoomModalImage(factor) {
             const img = document.getElementById('quickview-image');
@@ -931,12 +1129,18 @@
 
             if (factor === 'reset') {
                 currentZoom = 1;
+                currentPanX = 0;
+                currentPanY = 0;
             } else {
-                currentZoom = Math.min(Math.max(1, currentZoom + factor), 2.5);
+                currentZoom = Math.min(Math.max(1, currentZoom + factor), 3.0);
+                if (currentZoom === 1) {
+                    currentPanX = 0;
+                    currentPanY = 0;
+                }
             }
 
-            img.style.transform = `scale(${currentZoom})`;
-            img.style.cursor = currentZoom > 1 ? 'zoom-out' : 'zoom-in';
+            img.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
+            img.style.cursor = currentZoom > 1 ? 'grab' : 'zoom-in';
 
             if (label) {
                 label.textContent = `${Math.round(currentZoom * 100)}%`;
@@ -945,70 +1149,36 @@
 
         function toggleModalZoom() {
             if (currentZoom === 1) {
-                zoomModalImage(0.6);
+                zoomModalImage(0.8);
             } else {
                 zoomModalImage('reset');
             }
         }
 
-        function quickView(id) {
-            const p = products.find(prod => prod.id === id);
-            if (!p) return;
+        function startImageDrag(e) {
+            if (currentZoom <= 1) return;
+            isDraggingImage = true;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            startX = clientX - currentPanX;
+            startY = clientY - currentPanY;
+        }
 
-            currentZoom = 1;
+        function dragImage(e) {
+            if (!isDraggingImage || currentZoom <= 1) return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            currentPanX = clientX - startX;
+            currentPanY = clientY - startY;
+            
+            const img = document.getElementById('quickview-image');
+            if (img) {
+                img.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
+            }
+        }
 
-            document.getElementById('quickview-content').innerHTML = `
-                <div class="flex items-center gap-2 mb-2">
-                    <span class="bg-gold-500 text-onyx text-[9px] font-bold px-2 py-0.5 rounded uppercase">${p.badge}</span>
-                    <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">In Stock</span>
-                </div>
-                
-                <!-- Zoomable Image Container -->
-                <div class="relative w-full h-64 sm:h-72 rounded-xl overflow-hidden bg-sand/60 border border-gold-200 mb-3 shadow-inner flex items-center justify-center group select-none">
-                    <!-- Floating Zoom Controls -->
-                    <div class="absolute top-2 right-2 z-20 flex items-center gap-1 bg-black/75 backdrop-blur-md text-white p-1 rounded-lg border border-gold-500/30 text-xs shadow-lg" onclick="event.stopPropagation()">
-                        <button onclick="zoomModalImage(-0.3)" class="w-6 h-6 rounded bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom Out">
-                            <i class="fa-solid fa-magnifying-glass-minus text-[10px]"></i>
-                        </button>
-                        <span id="zoom-level-label" class="text-[10px] font-mono px-1 font-semibold text-gold-300 min-w-[34px] text-center">100%</span>
-                        <button onclick="zoomModalImage(0.3)" class="w-6 h-6 rounded bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom In">
-                            <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
-                        </button>
-                        <button onclick="zoomModalImage('reset')" class="px-1.5 py-0.5 rounded bg-white/10 hover:bg-gold-500 hover:text-onyx text-[9px] font-bold uppercase transition-colors" title="Reset Zoom">
-                            Reset
-                        </button>
-                    </div>
-
-                    <!-- Tap to Zoom Tooltip Badge -->
-                    <div class="absolute bottom-2 left-2 z-20 bg-black/60 backdrop-blur-sm text-gold-300 text-[9px] font-semibold px-2 py-0.5 rounded-full pointer-events-none flex items-center gap-1 border border-gold-500/20">
-                        <i class="fa-solid fa-hand-pointer text-[8px]"></i> Click image to zoom
-                    </div>
-
-                    <!-- Product Image -->
-                    <img id="quickview-image" src="${p.image}" alt="${p.name}" onclick="toggleModalZoom()" class="w-full h-full object-cover rounded-xl transition-transform duration-300 origin-center cursor-zoom-in">
-                </div>
-
-                <h3 class="font-cinzel text-lg font-bold text-onyx">${p.name}</h3>
-                <div class="flex items-center gap-2 my-1.5">
-                    <span class="text-base font-bold text-onyx">Rs. ${p.price}</span>
-                    <span class="text-xs text-gray-400 line-through">Rs. ${p.oldPrice}</span>
-                    <span class="text-xs text-red-600 font-bold bg-red-50 px-1.5 py-0.5 rounded">-50% OFF</span>
-                </div>
-                <p class="text-xs text-gray-600 leading-relaxed mb-3">${p.desc}</p>
-                <div class="bg-sand/70 p-2.5 rounded-xl mb-3 text-xs space-y-1">
-                    <div class="font-bold text-onyx mb-1">Highlights:</div>
-                    ${p.features.map(f => `<div class="text-gray-700"><i class="fa-solid fa-check text-gold-600 mr-1"></i>${f}</div>`).join('')}
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="addToCart(${p.id}); closeQuickView();" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold py-2.5 rounded-xl text-xs border border-gray-300 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-cart-plus text-xs"></i> ADD TO CART
-                    </button>
-                    <button onclick="buyNow(${p.id}); closeQuickView();" class="gold-bg-gradient text-onyx font-extrabold py-2.5 rounded-xl text-xs shadow-gold-glow flex items-center justify-center gap-1.5 active:scale-95">
-                        <i class="fa-solid fa-bolt text-xs"></i> BUY NOW
-                    </button>
-                </div>
-            `;
-            document.getElementById('quickview-modal').classList.remove('hidden');
+        function stopImageDrag() {
+            isDraggingImage = false;
         }
 
         function closeQuickView() {
