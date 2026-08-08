@@ -919,20 +919,20 @@
 
                 return `
                 <div onclick="quickView(${p.id})" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group cursor-pointer">
-                    <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100 overflow-hidden">
-                        <span class="absolute top-2 left-2 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase shadow-xs">
+                    <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100 overflow-hidden rounded-t-2xl">
+                        <span class="absolute top-2.5 left-2.5 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shadow-xs">
                             ${p.badge}
                         </span>
 
                         <!-- Watch Video Badge Button -->
-                        <button onclick="event.stopPropagation(); quickView(${p.id}, 'video');" class="absolute top-2 right-2 z-20 bg-onyx/90 hover:bg-gold-500 hover:text-onyx text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-1 border border-gold-500/40 shadow-sm transition-all active:scale-95">
+                        <button onclick="event.stopPropagation(); quickView(${p.id}, 'video');" class="absolute top-2.5 right-2.5 z-20 bg-onyx/90 hover:bg-gold-500 hover:text-onyx text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-gold-500/40 shadow-sm transition-all active:scale-95">
                             <i class="fa-solid fa-circle-play text-gold-400"></i>
                             <span>Video</span>
                         </button>
 
-                        <!-- Product Image Showcase -->
-                        <div class="aspect-square rounded-xl bg-sand/40 p-1 flex items-center justify-center overflow-hidden my-1 border border-gray-200/60 group-hover:border-gold-300 transition-colors">
-                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                        <!-- Product Image Showcase with Proper Smooth Curved Corners -->
+                        <div class="aspect-square rounded-2xl bg-sand/40 p-1.5 flex items-center justify-center overflow-hidden my-1 border border-gray-200/70 group-hover:border-gold-300 transition-colors shadow-inner">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain rounded-xl group-hover:scale-105 transition-transform duration-300" loading="lazy">
                         </div>
                     </div>
                     
@@ -940,7 +940,7 @@
                         <div>
                             <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
                                 <span>★★★★★ ${p.rating}</span>
-                                <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">${hasVariants ? '3 Kit Options' : 'In Stock'}</span>
+                                <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200">${hasVariants ? '3 Kit Options' : 'In Stock'}</span>
                             </div>
                             <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
                                 ${p.name}
@@ -962,10 +962,10 @@
                                 <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded whitespace-nowrap">Special Offer</span>
                             </div>
                             <div class="grid grid-cols-2 gap-1.5">
-                                <button onclick="event.stopPropagation(); quickView(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <button onclick="event.stopPropagation(); quickView(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 transition-all border border-gray-300">
                                     <i class="fa-solid fa-sliders text-[9px]"></i> ${hasVariants ? 'Options' : 'View'}
                                 </button>
-                                <button onclick="event.stopPropagation(); quickAddToCartOrBuy(${p.id});" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
+                                <button onclick="event.stopPropagation(); quickAddToCartOrBuy(${p.id});" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
                                     <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
                                 </button>
                             </div>
@@ -1068,13 +1068,13 @@
             document.getElementById('quickview-content').innerHTML = `
                 <div class="flex items-center justify-between mb-2.5 pr-8">
                     <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="bg-onyx text-gold-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded border border-gold-500/40 uppercase">
+                        <span class="bg-onyx text-gold-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/40 uppercase">
                             ${p.badge}
                         </span>
-                        <span class="bg-purple-900/90 text-purple-200 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-purple-400/40">
+                        <span class="bg-purple-900/90 text-purple-200 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-purple-400/40">
                             SKU: ${currentSku}
                         </span>
-                        <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                             <i class="fa-solid fa-circle-check text-[10px] mr-1"></i> In Stock (${currentWeight})
                         </span>
                     </div>
@@ -1083,7 +1083,7 @@
                     </span>
                 </div>
 
-                <!-- MAIN MEDIA DISPLAY (Uncropped, Full Aspect Ratio View) -->
+                <!-- MAIN MEDIA DISPLAY (Uncropped, Full Aspect Ratio View with Smooth Curved Corners) -->
                 <div class="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border border-gold-500/30 mb-3 shadow-2xl flex items-center justify-center select-none group">
                     
                     ${!isVideo ? `
@@ -1106,17 +1106,17 @@
                             <i class="fa-solid fa-expand text-[9px]"></i> Double-click or +/- to Zoom & Drag
                         </div>
 
-                        <!-- Full Uncropped Image View Container -->
-                        <div id="modal-image-wrapper" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-2"
+                        <!-- Full Uncropped Image View Container with Smooth Curves -->
+                        <div id="modal-image-wrapper" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-2 rounded-2xl"
                              onmousedown="startImageDrag(event)" onmousemove="dragImage(event)" onmouseup="stopImageDrag()" onmouseleave="stopImageDrag()"
                              ontouchstart="startImageDrag(event)" ontouchmove="dragImage(event)" ontouchend="stopImageDrag()" ondblclick="toggleModalZoom()">
                             <img id="quickview-image" src="${activeMedia.url}" alt="${p.name}" 
-                                 class="max-w-full max-h-full object-contain transition-transform duration-150 origin-center pointer-events-none"
+                                 class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-150 origin-center pointer-events-none"
                                  style="transform: scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px);">
                         </div>
                     ` : `
                         <!-- Full Video Player Container -->
-                        <div class="w-full h-full flex items-center justify-center p-1 bg-black">
+                        <div class="w-full h-full flex items-center justify-center p-1 bg-black rounded-2xl overflow-hidden">
                             <video id="quickview-video" controls autoplay loop playsinline class="w-full h-full max-h-full object-contain rounded-xl">
                                 <source src="${activeMedia.url}" type="video/mp4">
                                 Your browser does not support video playback.
@@ -1135,14 +1135,14 @@
                     ` : ''}
                 </div>
 
-                <!-- MEDIA THUMBNAIL STRIP -->
+                <!-- MEDIA THUMBNAIL STRIP WITH SMOOTH CURVES -->
                 <div class="flex items-center gap-2 mb-3 overflow-x-auto pb-1">
                     ${mediaList.map((item, idx) => `
-                        <button onclick="setModalSlide(${idx})" class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentSlideIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
+                        <button onclick="setModalSlide(${idx})" class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentSlideIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
                             ${item.type === 'image' ? `
-                                <img src="${item.url}" class="w-full h-full object-contain rounded-lg">
+                                <img src="${item.url}" class="w-full h-full object-contain rounded-xl">
                             ` : `
-                                <div class="w-full h-full bg-onyx rounded-lg flex flex-col items-center justify-center text-gold-400 text-[10px] gap-0.5 border border-gold-500/30">
+                                <div class="w-full h-full bg-onyx rounded-xl flex flex-col items-center justify-center text-gold-400 text-[10px] gap-0.5 border border-gold-500/30">
                                     <i class="fa-solid fa-circle-play text-sm text-gold-500 animate-pulse"></i>
                                     <span class="text-[8px] font-extrabold uppercase text-white">Video</span>
                                 </div>
