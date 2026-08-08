@@ -406,30 +406,28 @@
 
 
 
-    <!-- QUICK VIEW MODAL (Responsive with Dedicated Sticky Header, Easy Cancel, and Fixed Bottom Bar) -->
-    <div id="quickview-modal" onclick="if(event.target === this) closeQuickView()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all">
-        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full relative border border-gold-400/80 shadow-2xl max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
+    <!-- QUICK VIEW MODAL (Responsive with Safe Top Spacing, Top & Bottom Cancel Buttons, and Fixed Bottom Bar) -->
+    <div id="quickview-modal" onclick="if(event.target === this) closeQuickView()" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pt-12 sm:pt-4 transition-all">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full relative border border-gold-400/80 shadow-2xl max-h-[88vh] sm:max-h-[90vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
             
-            <!-- Dedicated Sticky Top Header with Pull Handle & Ultra-Accessible Close Button -->
-            <div class="sticky top-0 left-0 right-0 z-40 bg-white/98 backdrop-blur-md border-b border-gray-100 px-3.5 sm:px-5 py-2.5 flex flex-col flex-shrink-0 shadow-xs">
-                <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-1.5 sm:hidden"></div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2 min-w-0 pr-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
-                        <span class="font-cinzel text-xs sm:text-sm font-bold text-onyx truncate" id="modal-top-title">Product Quick View</span>
-                    </div>
-                    <!-- Prominent Close Button (Always visible, never clipped or pushed out of view) -->
-                    <button onclick="closeQuickView()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx flex items-center justify-center transition-all border border-gold-500/40 shadow-md active:scale-90 flex-shrink-0 cursor-pointer" aria-label="Close modal" title="Close">
-                        <i class="fa-solid fa-xmark text-sm font-extrabold"></i>
-                    </button>
+            <!-- Sticky Top Header with Pull Handle & Ultra-Accessible Close Button -->
+            <div class="sticky top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-md border-b border-gray-100 px-3.5 sm:px-5 py-2.5 flex items-center justify-between flex-shrink-0 shadow-xs">
+                <div class="flex items-center gap-2 min-w-0 pr-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
+                    <span class="font-cinzel text-xs sm:text-sm font-bold text-onyx truncate" id="modal-top-title">Product Quick View</span>
                 </div>
+                <!-- Prominent Close Button (Always visible on top header) -->
+                <button onclick="closeQuickView()" class="px-3 py-1 sm:w-9 sm:h-9 rounded-full bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx flex items-center justify-center gap-1.5 transition-all border border-gold-500/40 shadow-md active:scale-90 flex-shrink-0 cursor-pointer font-bold text-xs" aria-label="Close modal" title="Close">
+                    <i class="fa-solid fa-xmark text-sm font-extrabold"></i>
+                    <span class="text-[11px] font-bold uppercase sm:hidden">Close</span>
+                </button>
             </div>
 
             <!-- Scrollable Content Body -->
             <div id="quickview-content" class="p-3.5 sm:p-6 overflow-y-auto flex-1 overscroll-contain"></div>
 
             <!-- Fixed / Sticky Bottom Action Bar -->
-            <div id="quickview-sticky-bar" class="sticky bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gold-300 p-3 sm:px-6 z-30 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2.5 flex-shrink-0"></div>
+            <div id="quickview-sticky-bar" class="sticky bottom-0 left-0 right-0 bg-white/98 backdrop-blur-md border-t border-gold-300 p-2.5 sm:p-3 sm:px-6 z-40 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2 flex-shrink-0"></div>
         </div>
     </div>
 
@@ -598,7 +596,7 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Full catalog of 12 SKUs with kit variants and specification details
+        // Full catalog of 12 SKUs with kit variants and specification details (1 Image + 1 Video per product)
         const products = [
             {
                 id: 1,
@@ -613,7 +611,6 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_urdu.webp",
-                secondaryImage: "product/umrah_Sticker_urdu.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "CARD • URDU",
                 rating: "(1,450)",
@@ -665,7 +662,6 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_english.webp",
-                secondaryImage: "product/umrah_Sticker_English.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "CARD • ENGLISH",
                 rating: "(1,820)",
@@ -717,7 +713,6 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_hindi.webp",
-                secondaryImage: "product/umrah_Sticker_hindi.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "CARD • HINDI",
                 rating: "(1,120)",
@@ -769,7 +764,6 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_roman.webp",
-                secondaryImage: "product/umrah_card_english.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "CARD • ROMAN",
                 rating: "(940)",
@@ -825,7 +819,6 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
-                secondaryImage: "product/umrah_card_english.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "STICKER • ENGLISH",
                 rating: "(720)",
@@ -849,7 +842,6 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
-                secondaryImage: "product/umrah_card_hindi.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "STICKER • HINDI",
                 rating: "(640)",
@@ -873,7 +865,6 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_urdu.webp",
-                secondaryImage: "product/umrah_card_urdu.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "STICKER • URDU",
                 rating: "(810)",
@@ -1013,17 +1004,12 @@
             if (!product) return [];
             const items = [];
             
-            // Primary image (Full view)
+            // Exactly 1 Primary Product Image
             if (product.image) {
                 items.push({ type: 'image', url: product.image, title: 'Full Product View' });
             }
             
-            // Secondary angle / detail image
-            if (product.secondaryImage) {
-                items.push({ type: 'image', url: product.secondaryImage, title: 'Detail / Companion View' });
-            }
-            
-            // Product Video (Option in every card)
+            // Exactly 1 Product Demonstration Video
             if (product.video) {
                 items.push({ type: 'video', url: product.video, title: 'Product Demonstration Video' });
             }
@@ -1044,7 +1030,7 @@
             const mediaList = getMediaItems(p);
             if (targetType === 'video') {
                 const vIdx = mediaList.findIndex(m => m.type === 'video');
-                currentSlideIndex = vIdx >= 0 ? vIdx : 0;
+                currentSlideIndex = vIdx >= 0 ? vIdx : 1;
             } else {
                 currentSlideIndex = Math.min(targetIndex, mediaList.length - 1);
             }
@@ -1129,7 +1115,7 @@
                                  style="transform: scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px);">
                         </div>
                     ` : `
-                        <!-- Full Video Player Container -->
+                        <!-- Full Video Player Container (1 Video) -->
                         <div class="w-full h-full flex items-center justify-center p-1 bg-black rounded-2xl overflow-hidden">
                             <video id="quickview-video" controls autoplay loop playsinline class="w-full h-full max-h-full object-contain rounded-xl">
                                 <source src="${activeMedia.url}" type="video/mp4">
@@ -1149,16 +1135,16 @@
                     ` : ''}
                 </div>
 
-                <!-- MEDIA THUMBNAIL STRIP WITH SMOOTH CURVES -->
-                <div class="flex items-center gap-2 mb-3 overflow-x-auto pb-1">
+                <!-- MEDIA THUMBNAIL STRIP (Exactly 1 Image + 1 Video) -->
+                <div class="flex items-center gap-2.5 mb-3 overflow-x-auto pb-1">
                     ${mediaList.map((item, idx) => `
-                        <button onclick="setModalSlide(${idx})" class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentSlideIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
+                        <button onclick="setModalSlide(${idx})" class="relative flex-shrink-0 w-16 h-16 sm:w-18 sm:h-18 rounded-2xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentSlideIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
                             ${item.type === 'image' ? `
                                 <img src="${item.url}" class="w-full h-full object-contain rounded-xl">
                             ` : `
                                 <div class="w-full h-full bg-onyx rounded-xl flex flex-col items-center justify-center text-gold-400 text-[10px] gap-0.5 border border-gold-500/30">
-                                    <i class="fa-solid fa-circle-play text-sm text-gold-500 animate-pulse"></i>
-                                    <span class="text-[8px] font-extrabold uppercase text-white">Video</span>
+                                    <i class="fa-solid fa-circle-play text-base text-gold-500 animate-pulse"></i>
+                                    <span class="text-[8px] font-extrabold uppercase text-white tracking-wide">Video</span>
                                 </div>
                             `}
                         </button>
@@ -1285,27 +1271,30 @@
                 </div>
             `;
 
-            // Populate Fixed / Sticky Bottom CTA Bar with Live Active Price & Instant Actions
+            // Populate Fixed / Sticky Bottom CTA Bar with Live Active Price & Instant Actions + Quick Close Button
             const stickyBar = document.getElementById('quickview-sticky-bar');
             if (stickyBar) {
                 stickyBar.innerHTML = `
                     <div class="flex items-center gap-2 min-w-0 flex-shrink">
+                        <button onclick="closeQuickView()" class="w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center flex-shrink-0 border border-gray-300 active:scale-90 transition-all" title="Close modal" aria-label="Close">
+                            <i class="fa-solid fa-xmark text-xs font-extrabold"></i>
+                        </button>
                         <div>
                             <div class="flex items-baseline gap-1.5 flex-nowrap">
-                                <span class="text-base sm:text-xl font-extrabold text-onyx whitespace-nowrap">Rs. ${currentPrice}</span>
-                                <span class="text-[10px] sm:text-xs text-gray-400 line-through whitespace-nowrap">Rs. ${currentOldPrice}</span>
+                                <span class="text-sm sm:text-xl font-extrabold text-onyx whitespace-nowrap">Rs. ${currentPrice}</span>
+                                <span class="text-[9px] sm:text-xs text-gray-400 line-through whitespace-nowrap">Rs. ${currentOldPrice}</span>
                             </div>
-                            <div class="text-[9px] text-purple-700 font-mono font-bold truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[200px]">
+                            <div class="text-[8.5px] sm:text-[9px] text-purple-700 font-mono font-bold truncate max-w-[85px] xs:max-w-[130px] sm:max-w-[200px]">
                                 ${currentSku} • ${currentWeight}
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 flex-shrink-0">
-                        <button onclick="addSelectedVariantToCart(${p.id}); closeQuickView();" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold py-2.5 px-3 sm:px-4 rounded-xl text-xs border border-gray-300 flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs whitespace-nowrap">
+                    <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                        <button onclick="addSelectedVariantToCart(${p.id}); closeQuickView();" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold py-2.5 px-2.5 sm:px-4 rounded-xl text-xs border border-gray-300 flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs whitespace-nowrap">
                             <i class="fa-solid fa-cart-plus text-xs"></i>
                             <span>Add</span>
                         </button>
-                        <button onclick="buySelectedVariantNow(${p.id}); closeQuickView();" class="gold-bg-gradient text-onyx font-extrabold py-2.5 px-3.5 sm:px-5 rounded-xl text-xs sm:text-sm shadow-gold-glow flex items-center justify-center gap-1.5 hover:opacity-95 active:scale-95 transition-all whitespace-nowrap">
+                        <button onclick="buySelectedVariantNow(${p.id}); closeQuickView();" class="gold-bg-gradient text-onyx font-extrabold py-2.5 px-3 sm:px-5 rounded-xl text-xs sm:text-sm shadow-gold-glow flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all whitespace-nowrap">
                             <i class="fa-solid fa-bolt text-xs"></i>
                             <span>BUY NOW (COD)</span>
                         </button>
