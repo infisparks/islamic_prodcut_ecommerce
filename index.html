@@ -406,13 +406,19 @@
 
 
 
-    <!-- QUICK VIEW MODAL -->
-    <div id="quickview-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-3xl max-w-xl w-full p-4 sm:p-6 relative border border-gold-400/80 shadow-2xl max-h-[92vh] overflow-y-auto">
-            <button onclick="closeQuickView()" class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-onyx text-gold-400 flex items-center justify-center hover:bg-gold-500 hover:text-onyx transition-colors border border-gold-500/40 shadow-md">
+    <!-- QUICK VIEW MODAL (Responsive with Fixed Bottom Buy Now Bar) -->
+    <div id="quickview-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full relative border border-gold-400/80 shadow-2xl max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden">
+            <!-- Modal Close button -->
+            <button onclick="closeQuickView()" class="absolute top-3 right-3 z-40 w-8 h-8 rounded-full bg-onyx text-gold-400 flex items-center justify-center hover:bg-gold-500 hover:text-onyx transition-colors border border-gold-500/40 shadow-md">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div id="quickview-content"></div>
+
+            <!-- Scrollable Content Body -->
+            <div id="quickview-content" class="p-3.5 sm:p-6 overflow-y-auto flex-1 overscroll-contain"></div>
+
+            <!-- Fixed / Sticky Bottom Action Bar -->
+            <div id="quickview-sticky-bar" class="sticky bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gold-300 p-3 sm:px-6 z-30 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2.5"></div>
         </div>
     </div>
 
@@ -442,8 +448,6 @@
                     </div>
                     <div class="space-y-2" id="cart-items-container"></div>
                 </div>
-
-
 
                 <!-- SHIPROCKET COMPATIBLE ADDRESS FORM -->
                 <div class="pt-3 border-t border-gray-200">
@@ -583,77 +587,235 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // Full catalog of 12 SKUs with kit variants and specification details
         const products = [
             {
                 id: 1,
-                name: "Umrah Dua Card (English)",
-                category: "card",
-                language: "English",
-                image: "product/umrah_card_english.webp",
-                secondaryImage: "product/umrah_Sticker_English.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                price: 499,
-                oldPrice: 599,
-                badge: "CARD • ENGLISH",
-                rating: "(1,420)",
-                desc: "Complete authentic Umrah Dua Card set in clear English translation with Arabic text & transliteration. Laminated & 100% waterproof.",
-                features: ["Clear English Translation", "Arabic Script + Transliteration", "35+ Step-by-Step Duas", "Waterproof Laminated Cards"]
-            },
-            {
-                id: 2,
-                name: "Umrah Dua Card (Hindi / हिंदी)",
-                category: "card",
-                language: "Hindi",
-                image: "product/umrah_card_hindi.webp",
-                secondaryImage: "product/umrah_Sticker_hindi.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                price: 499,
-                oldPrice: 599,
-                badge: "CARD • HINDI",
-                rating: "(980)",
-                desc: "Authentic Umrah prayer guide cards with easy-to-read Hindi script and step-by-step ritual instructions.",
-                features: ["Full Hindi Translation", "Arabic Script & Guidance", "100% Waterproof Laminated", "Pocket & Purse Friendly"]
-            },
-            {
-                id: 3,
-                name: "Umrah Dua Card (Roman English)",
-                category: "card",
-                language: "Roman",
-                image: "product/umrah_card_roman.webp",
-                secondaryImage: "product/umrah_card_english.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                price: 499,
-                oldPrice: 599,
-                badge: "CARD • ROMAN",
-                rating: "(850)",
-                desc: "Umrah Dua Cards in Roman script for effortless Arabic pronunciation during Tawaf & Sa'i.",
-                features: ["Roman Phonetic Pronunciation", "Step-by-Step Tawaf Guidance", "Stainless Binder Ring", "Anti-Glare Matte Finish"]
-            },
-            {
-                id: 4,
-                name: "Umrah Dua Card (Urdu / اردو)",
+                name: "Umrah Dua & Guide Cards (Urdu / اردو)",
                 category: "card",
                 language: "Urdu",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Multi Color",
+                size: "Free Size (4 * 6 * 1 inch)",
+                dimensions: "4 * 6 * 1 inch",
+                material: "Laminated paper, ribbon & beads",
+                manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_urdu.webp",
                 secondaryImage: "product/umrah_Sticker_urdu.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                price: 499,
-                oldPrice: 599,
                 badge: "CARD • URDU",
-                rating: "(1,150)",
-                desc: "Authentic Umrah Dua cards with clear Urdu translation, Arabic text, and complete pilgrimage guide.",
-                features: ["Authentic Urdu Translation", "Arabic Script & Ritual Instructions", "Water & Sweat Proof", "Fits Thobe Pocket"]
+                rating: "(1,450)",
+                desc: "Authentic Umrah Dua cards with clear Urdu translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.",
+                features: ["Authentic Urdu Translation", "Arabic Script & Ritual Guidance", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
+                variants: [
+                    {
+                        sku: "fati_001",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
+                        oldPrice: 999,
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_002",
+                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+                        shortName: "Cards + Tasbih + Lanyard",
+                        price: 589,
+                        oldPrice: 999,
+                        weight: "120gm",
+                        tag: "Popular",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                    },
+                    {
+                        sku: "fati_003",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
+                        oldPrice: 999,
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: "Umrah Dua & Guide Cards (English)",
+                category: "card",
+                language: "English",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Multi Color",
+                size: "Free Size (4 * 6 * 1 inch)",
+                dimensions: "4 * 6 * 1 inch",
+                material: "Laminated paper, ribbon & beads",
+                manufacturer: "fatimacalligrapher27",
+                image: "product/umrah_card_english.webp",
+                secondaryImage: "product/umrah_Sticker_English.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                badge: "CARD • ENGLISH",
+                rating: "(1,820)",
+                desc: "Complete authentic Umrah Dua Card set in clear English translation with Arabic text & transliteration. Laminated & 100% waterproof.",
+                features: ["Clear English Translation", "Arabic Script + Transliteration", "35+ Step-by-Step Duas", "Tawaf Tasbih Counter Included"],
+                variants: [
+                    {
+                        sku: "fati_004",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
+                        oldPrice: 999,
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_005",
+                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+                        shortName: "Cards + Tasbih + Lanyard",
+                        price: 589,
+                        oldPrice: 999,
+                        weight: "120gm",
+                        tag: "Popular",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                    },
+                    {
+                        sku: "fati_006",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
+                        oldPrice: 999,
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: "Umrah Dua & Guide Cards (Hindi / हिंदी)",
+                category: "card",
+                language: "Hindi",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Multi Color",
+                size: "Free Size (4 * 6 * 1 inch)",
+                dimensions: "4 * 6 * 1 inch",
+                material: "Laminated paper, ribbon & beads",
+                manufacturer: "fatimacalligrapher27",
+                image: "product/umrah_card_hindi.webp",
+                secondaryImage: "product/umrah_Sticker_hindi.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                badge: "CARD • HINDI",
+                rating: "(1,120)",
+                desc: "Authentic Umrah prayer guide cards with easy-to-read Hindi translation and step-by-step ritual instructions.",
+                features: ["Full Hindi Translation", "Arabic Script & Transliteration", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
+                variants: [
+                    {
+                        sku: "fati_007",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
+                        oldPrice: 999,
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_008",
+                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+                        shortName: "Cards + Tasbih + Lanyard",
+                        price: 589,
+                        oldPrice: 999,
+                        weight: "120gm",
+                        tag: "Popular",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                    },
+                    {
+                        sku: "fati_009",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
+                        oldPrice: 999,
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                    }
+                ]
+            },
+            {
+                id: 4,
+                name: "Umrah Dua & Guide Cards (Roman English)",
+                category: "card",
+                language: "Roman",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Multi Color",
+                size: "Free Size (4 * 6 * 1 inch)",
+                dimensions: "4 * 6 * 1 inch",
+                material: "Laminated paper, ribbon & beads",
+                manufacturer: "fatimacalligrapher27",
+                image: "product/umrah_card_roman.webp",
+                secondaryImage: "product/umrah_card_english.webp",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                badge: "CARD • ROMAN",
+                rating: "(940)",
+                desc: "Umrah Dua Cards in Roman script for effortless Arabic pronunciation during Tawaf & Sa'i.",
+                features: ["Roman Phonetic Pronunciation", "Step-by-Step Tawaf Guidance", "Stainless Binder Ring", "Tawaf Tasbih Counter Included"],
+                variants: [
+                    {
+                        sku: "fati_010",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
+                        oldPrice: 999,
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_011",
+                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+                        shortName: "Cards + Tasbih + Lanyard",
+                        price: 589,
+                        oldPrice: 999,
+                        weight: "120gm",
+                        tag: "Popular",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                    },
+                    {
+                        sku: "fati_012",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
+                        oldPrice: 999,
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                    }
+                ]
             },
             {
                 id: 5,
                 name: "Umrah Dua Sticker (English)",
                 category: "sticker",
                 language: "English",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Multi Color",
+                size: "Compact (Peel & Stick)",
+                dimensions: "3 * 4 inch",
+                material: "Premium Vinyl Waterproof Adhesive Sticker",
+                weight: "30gm",
+                sku: "fati_stk_01",
+                price: 199,
+                oldPrice: 399,
+                manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
                 secondaryImage: "product/umrah_card_english.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                price: 199,
-                oldPrice: 399,
                 badge: "STICKER • ENGLISH",
                 rating: "(720)",
                 desc: "High-quality waterproof adhesive stickers featuring essential Umrah supplications in English.",
@@ -664,11 +826,20 @@
                 name: "Umrah Dua Sticker (Hindi / हिंदी)",
                 category: "sticker",
                 language: "Hindi",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Multi Color",
+                size: "Compact (Peel & Stick)",
+                dimensions: "3 * 4 inch",
+                material: "Premium Vinyl Waterproof Adhesive Sticker",
+                weight: "30gm",
+                sku: "fati_stk_02",
+                price: 199,
+                oldPrice: 399,
+                manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
                 secondaryImage: "product/umrah_card_hindi.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                price: 199,
-                oldPrice: 399,
                 badge: "STICKER • HINDI",
                 rating: "(640)",
                 desc: "Waterproof Umrah dua stickers with Hindi text and Arabic supplications for easy reference anywhere.",
@@ -679,11 +850,20 @@
                 name: "Umrah Dua Sticker (Urdu / اردو)",
                 category: "sticker",
                 language: "Urdu",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Multi Color",
+                size: "Compact (Peel & Stick)",
+                dimensions: "3 * 4 inch",
+                material: "Premium Vinyl Waterproof Adhesive Sticker",
+                weight: "30gm",
+                sku: "fati_stk_03",
+                price: 199,
+                oldPrice: 399,
+                manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_urdu.webp",
                 secondaryImage: "product/umrah_card_urdu.webp",
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                price: 199,
-                oldPrice: 399,
                 badge: "STICKER • URDU",
                 rating: "(810)",
                 desc: "Authentic Umrah Dua stickers in Urdu script with durable laminate surface and strong adhesive.",
@@ -716,6 +896,12 @@
         ];
 
         let cart = [];
+        let currentQuickViewProduct = null;
+        let currentSelectedVariant = 0;
+        let currentSlideIndex = 0;
+        let currentZoom = 1;
+        let isDraggingImage = false;
+        let startX = 0, startY = 0, currentPanX = 0, currentPanY = 0;
 
         function renderProducts(filter = 'all') {
             const container = document.getElementById('products-catalog-container');
@@ -725,7 +911,13 @@
                 ? products 
                 : products.filter(p => p.category === filter);
 
-            container.innerHTML = filtered.map(p => `
+            container.innerHTML = filtered.map(p => {
+                const hasVariants = p.variants && p.variants.length > 0;
+                const minPrice = hasVariants ? p.variants[p.variants.length - 1].price : p.price;
+                const maxPrice = hasVariants ? p.variants[0].price : p.price;
+                const oldPrice = hasVariants ? p.variants[0].oldPrice : p.oldPrice;
+
+                return `
                 <div onclick="quickView(${p.id})" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group cursor-pointer">
                     <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100 overflow-hidden">
                         <span class="absolute top-2 left-2 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded uppercase shadow-xs">
@@ -738,7 +930,7 @@
                             <span>Video</span>
                         </button>
 
-                        <!-- Product Image Showcase (Uncropped contain view) -->
+                        <!-- Product Image Showcase -->
                         <div class="aspect-square rounded-xl bg-sand/40 p-1 flex items-center justify-center overflow-hidden my-1 border border-gray-200/60 group-hover:border-gold-300 transition-colors">
                             <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy">
                         </div>
@@ -748,7 +940,7 @@
                         <div>
                             <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
                                 <span>★★★★★ ${p.rating}</span>
-                                <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">In Stock</span>
+                                <span class="text-emerald-700 font-bold bg-emerald-50 px-1 rounded">${hasVariants ? '3 Kit Options' : 'In Stock'}</span>
                             </div>
                             <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
                                 ${p.name}
@@ -760,22 +952,28 @@
 
                         <div class="mt-2.5 pt-2 border-t border-gray-100">
                             <div class="flex items-center gap-1.5 mb-2 flex-nowrap whitespace-nowrap overflow-hidden">
-                                <span class="font-extrabold text-xs sm:text-sm text-onyx whitespace-nowrap">Rs. ${p.price}</span>
-                                <span class="text-[10px] text-gray-400 line-through whitespace-nowrap">Rs. ${p.oldPrice}</span>
-                                <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded whitespace-nowrap">-50%</span>
+                                ${hasVariants ? `
+                                    <span class="font-extrabold text-xs sm:text-sm text-onyx whitespace-nowrap">Rs. ${minPrice} - ${maxPrice}</span>
+                                    <span class="text-[10px] text-gray-400 line-through whitespace-nowrap">Rs. ${oldPrice}</span>
+                                ` : `
+                                    <span class="font-extrabold text-xs sm:text-sm text-onyx whitespace-nowrap">Rs. ${p.price}</span>
+                                    <span class="text-[10px] text-gray-400 line-through whitespace-nowrap">Rs. ${p.oldPrice}</span>
+                                `}
+                                <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded whitespace-nowrap">Special Offer</span>
                             </div>
                             <div class="grid grid-cols-2 gap-1.5">
-                                <button onclick="event.stopPropagation(); addToCart(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
-                                    <i class="fa-solid fa-cart-plus text-[9px]"></i> Add
+                                <button onclick="event.stopPropagation(); quickView(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                    <i class="fa-solid fa-sliders text-[9px]"></i> ${hasVariants ? 'Options' : 'View'}
                                 </button>
-                                <button onclick="event.stopPropagation(); buyNow(${p.id});" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
+                                <button onclick="event.stopPropagation(); quickAddToCartOrBuy(${p.id});" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-lg flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
                                     <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function filterProducts(category) {
@@ -800,149 +998,6 @@
             }
         }
 
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            const existing = cart.find(item => item.id === productId);
-            if (existing) {
-                existing.qty++;
-            } else {
-                cart.push({ ...product, qty: 1 });
-            }
-
-            updateCartUI();
-            showToast(product.name);
-        }
-
-        function buyNow(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            const existing = cart.find(item => item.id === productId);
-            if (!existing) {
-                cart.push({ ...product, qty: 1 });
-            }
-            updateCartUI();
-            toggleCartDrawer(true);
-        }
-
-        function showToast(productName) {
-            let toast = document.getElementById('cart-toast');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'cart-toast';
-                toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-onyx text-pearl border border-gold-400/60 py-2.5 px-4 rounded-2xl shadow-gold-glow flex items-center gap-3 text-xs font-semibold transition-all transform duration-300 translate-y-12 opacity-0 pointer-events-none w-[90%] max-w-sm justify-between';
-                document.body.appendChild(toast);
-            }
-            toast.innerHTML = `
-                <div class="flex items-center gap-2 truncate">
-                    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
-                    <span class="truncate"><b>${productName}</b> added!</span>
-                </div>
-                <button onclick="toggleCartDrawer(true)" class="bg-gold-500 text-onyx px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase hover:bg-gold-400 whitespace-nowrap">View Cart</button>
-            `;
-
-            toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
-            toast.classList.add('translate-y-0', 'opacity-100');
-
-            clearTimeout(window._cartToastTimer);
-            window._cartToastTimer = setTimeout(() => {
-                toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
-                toast.classList.remove('translate-y-0', 'opacity-100');
-            }, 3000);
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cart-items-container');
-            const cartCountEl = document.getElementById('cart-count');
-            const subtotalEl = document.getElementById('cart-subtotal');
-            const totalEl = document.getElementById('cart-total');
-
-            const stickyBar = document.getElementById('sticky-cart-bar');
-            const stickyCountEl = document.getElementById('sticky-cart-count');
-            const stickyTotalEl = document.getElementById('sticky-cart-total');
-
-            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-            cartCountEl.textContent = totalItems;
-            subtotalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
-            totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
-
-            if (stickyBar) {
-                if (totalItems > 0) {
-                    stickyCountEl.textContent = `${totalItems} ${totalItems === 1 ? 'Item' : 'Items'}`;
-                    stickyTotalEl.textContent = `Total: Rs. ${totalPrice.toFixed(0)}`;
-                    stickyBar.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
-                } else {
-                    stickyBar.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
-                }
-            }
-
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 text-gray-400">
-                        <i class="fa-solid fa-basket-shopping text-3xl mb-2 text-gold-300"></i>
-                        <p class="text-xs font-medium">Your cart is currently empty.</p>
-                        <button onclick="scrollToProductsAndClose()" class="mt-3 bg-gold-500 text-onyx font-bold text-xs px-3 py-1.5 rounded-lg">
-                            Browse Products
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = cart.map(item => `
-                <div class="flex items-center justify-between p-2.5 bg-pearl rounded-xl border border-gray-200 gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <img src="${item.image}" alt="${item.name}" class="w-10 h-10 object-contain bg-white rounded border border-gray-200 p-0.5 flex-shrink-0">
-                        <div class="min-w-0">
-                            <h4 class="font-bold text-xs text-onyx truncate">${item.name}</h4>
-                            <div class="text-xs text-gold-600 font-bold">Rs. ${item.price} x ${item.qty}</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-1.5 flex-shrink-0">
-                        <button onclick="changeQty(${item.id}, -1)" class="w-5 h-5 rounded bg-gray-200 text-onyx font-bold text-xs flex items-center justify-center hover:bg-gray-300">-</button>
-                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                        <button onclick="changeQty(${item.id}, 1)" class="w-5 h-5 rounded bg-gray-200 text-onyx font-bold text-xs flex items-center justify-center hover:bg-gray-300">+</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function scrollToProductsAndClose() {
-            toggleCartDrawer(false);
-            const grid = document.getElementById('products-grid');
-            if (grid) {
-                grid.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        function changeQty(id, delta) {
-            const item = cart.find(i => i.id === id);
-            if (item) {
-                item.qty += delta;
-                if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-            }
-            updateCartUI();
-        }
-
-        function toggleCartDrawer(forceOpen = false) {
-            const drawer = document.getElementById('cart-drawer');
-            if (forceOpen || drawer.classList.contains('hidden')) {
-                drawer.classList.remove('hidden');
-            } else {
-                drawer.classList.add('hidden');
-            }
-        }
-
-        let currentQuickViewProduct = null;
-        let currentSlideIndex = 0;
-        let currentZoom = 1;
-        let isDraggingImage = false;
-        let startX = 0, startY = 0, currentPanX = 0, currentPanY = 0;
-
         function getMediaItems(product) {
             if (!product) return [];
             const items = [];
@@ -965,11 +1020,12 @@
             return items;
         }
 
-        function quickView(id, targetType = 'image', targetIndex = 0) {
+        function quickView(id, targetType = 'image', targetIndex = 0, initialVariantIndex = 0) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
 
             currentQuickViewProduct = p;
+            currentSelectedVariant = initialVariantIndex;
             currentZoom = 1;
             currentPanX = 0;
             currentPanY = 0;
@@ -986,6 +1042,11 @@
             document.getElementById('quickview-modal').classList.remove('hidden');
         }
 
+        function selectProductVariant(variantIndex) {
+            currentSelectedVariant = variantIndex;
+            renderQuickViewModalContent();
+        }
+
         function renderQuickViewModalContent() {
             const p = currentQuickViewProduct;
             if (!p) return;
@@ -994,14 +1055,27 @@
             const activeMedia = mediaList[currentSlideIndex] || mediaList[0];
             const isVideo = activeMedia.type === 'video';
 
+            const hasVariants = p.variants && p.variants.length > 0;
+            const activeVariant = hasVariants ? p.variants[currentSelectedVariant] || p.variants[0] : null;
+
+            const currentPrice = activeVariant ? activeVariant.price : p.price;
+            const currentOldPrice = activeVariant ? activeVariant.oldPrice : p.oldPrice;
+            const currentSku = activeVariant ? activeVariant.sku : (p.sku || 'fati_stk');
+            const currentWeight = activeVariant ? activeVariant.weight : p.weight;
+            const discountPercent = Math.round(((currentOldPrice - currentPrice) / currentOldPrice) * 100);
+
+            // Populate Main Scrollable Content
             document.getElementById('quickview-content').innerHTML = `
                 <div class="flex items-center justify-between mb-2.5 pr-8">
-                    <div class="flex items-center gap-2 flex-wrap">
+                    <div class="flex items-center gap-1.5 flex-wrap">
                         <span class="bg-onyx text-gold-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded border border-gold-500/40 uppercase">
                             ${p.badge}
                         </span>
+                        <span class="bg-purple-900/90 text-purple-200 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-purple-400/40">
+                            SKU: ${currentSku}
+                        </span>
                         <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                            <i class="fa-solid fa-circle-check text-[10px] mr-1"></i> In Stock
+                            <i class="fa-solid fa-circle-check text-[10px] mr-1"></i> In Stock (${currentWeight})
                         </span>
                     </div>
                     <span class="text-xs text-amber-600 font-bold flex items-center gap-1">
@@ -1010,7 +1084,7 @@
                 </div>
 
                 <!-- MAIN MEDIA DISPLAY (Uncropped, Full Aspect Ratio View) -->
-                <div class="relative w-full h-72 sm:h-96 rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border border-gold-500/30 mb-3 shadow-2xl flex items-center justify-center select-none group">
+                <div class="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border border-gold-500/30 mb-3 shadow-2xl flex items-center justify-center select-none group">
                     
                     ${!isVideo ? `
                         <!-- Floating Zoom Controls for Image -->
@@ -1052,52 +1126,178 @@
 
                     <!-- Slide Navigation Arrows -->
                     ${mediaList.length > 1 ? `
-                        <button onclick="prevModalSlide()" class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Previous Slide">
-                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        <button onclick="prevModalSlide()" class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Previous Slide">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
                         </button>
-                        <button onclick="nextModalSlide()" class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Next Slide">
-                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        <button onclick="nextModalSlide()" class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Next Slide">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
                         </button>
                     ` : ''}
                 </div>
 
                 <!-- MEDIA THUMBNAIL STRIP -->
-                <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+                <div class="flex items-center gap-2 mb-3 overflow-x-auto pb-1">
                     ${mediaList.map((item, idx) => `
-                        <button onclick="setModalSlide(${idx})" class="relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentSlideIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
+                        <button onclick="setModalSlide(${idx})" class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentSlideIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
                             ${item.type === 'image' ? `
                                 <img src="${item.url}" class="w-full h-full object-contain rounded-lg">
                             ` : `
-                                <div class="w-full h-full bg-onyx rounded-lg flex flex-col items-center justify-center text-gold-400 text-xs gap-1 border border-gold-500/30">
-                                    <i class="fa-solid fa-circle-play text-base text-gold-500 animate-pulse"></i>
-                                    <span class="text-[9px] font-extrabold uppercase text-white">Video</span>
+                                <div class="w-full h-full bg-onyx rounded-lg flex flex-col items-center justify-center text-gold-400 text-[10px] gap-0.5 border border-gold-500/30">
+                                    <i class="fa-solid fa-circle-play text-sm text-gold-500 animate-pulse"></i>
+                                    <span class="text-[8px] font-extrabold uppercase text-white">Video</span>
                                 </div>
                             `}
                         </button>
                     `).join('')}
                 </div>
 
+                <!-- TITLE & DYNAMIC PRICE -->
                 <h3 class="font-cinzel text-lg sm:text-xl font-bold text-onyx mb-1">${p.name}</h3>
-                <div class="flex items-center gap-2 mb-2.5">
-                    <span class="text-lg font-extrabold text-onyx">Rs. ${p.price}</span>
-                    <span class="text-xs text-gray-400 line-through">Rs. ${p.oldPrice}</span>
-                    <span class="text-xs text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200">-50% OFF</span>
-                </div>
-                <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-3">${p.desc}</p>
-                <div class="bg-sand/70 p-3 rounded-xl mb-4 text-xs space-y-1.5 border border-gold-200">
-                    <div class="font-bold text-onyx mb-1 text-xs">Highlights:</div>
-                    ${p.features.map(f => `<div class="text-gray-700 font-medium"><i class="fa-solid fa-circle-check text-gold-600 mr-1.5"></i>${f}</div>`).join('')}
+                <div class="flex items-center gap-2 mb-3 flex-wrap">
+                    <span class="text-xl sm:text-2xl font-extrabold text-onyx">Rs. ${currentPrice}</span>
+                    <span class="text-xs text-gray-400 line-through">MRP Rs. ${currentOldPrice}</span>
+                    <span class="text-xs text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200">-${discountPercent}% OFF</span>
+                    <span class="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        <i class="fa-solid fa-truck-fast mr-1"></i> Free Express Delivery
+                    </span>
                 </div>
 
-                <div class="grid grid-cols-2 gap-2.5">
-                    <button onclick="addToCart(${p.id}); closeQuickView();" class="bg-white hover:bg-gold-100 text-onyx font-bold py-3 rounded-xl text-xs sm:text-sm border-2 border-onyx flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm">
-                        <i class="fa-solid fa-cart-plus text-sm"></i> ADD TO CART
-                    </button>
-                    <button onclick="buyNow(${p.id}); closeQuickView();" class="gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl text-xs sm:text-sm shadow-gold-glow flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all">
-                        <i class="fa-solid fa-bolt text-sm"></i> BUY NOW
-                    </button>
+                <!-- INTERACTIVE RIGHT-SLIDEABLE KIT / PACKAGE VARIANT SELECTION -->
+                ${hasVariants ? `
+                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-3 mb-3.5">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-xs font-bold text-onyx flex items-center gap-1.5">
+                                <i class="fa-solid fa-layer-group text-gold-600"></i>
+                                <span>Choose Kit / Package Option:</span>
+                            </label>
+                            <span class="text-[9px] font-bold text-gold-700 bg-gold-100 px-2 py-0.5 rounded-full border border-gold-300 flex items-center gap-1">
+                                <span>👉 Swipe right (3 Options)</span> <i class="fa-solid fa-arrow-right text-[8px] animate-pulse"></i>
+                            </span>
+                        </div>
+
+                        <!-- Right Slideable Row with Smooth Horizontal Scrolling & Touch Snap -->
+                        <div class="flex gap-2.5 overflow-x-auto pb-2 -mx-1 px-1 no-scrollbar scroll-smooth snap-x snap-mandatory flex-nowrap" id="variant-options-slider">
+                            ${p.variants.map((v, vIdx) => {
+                                const isSelected = vIdx === currentSelectedVariant;
+                                return `
+                                    <div onclick="selectProductVariant(${vIdx})" 
+                                         class="min-w-[200px] xs:min-w-[220px] sm:min-w-0 sm:flex-1 flex-shrink-0 snap-start cursor-pointer rounded-xl p-2.5 transition-all border-2 relative flex flex-col justify-between ${
+                                             isSelected 
+                                                ? 'border-gold-500 bg-gold-50/70 shadow-md ring-2 ring-gold-400/40 scale-[1.01]' 
+                                                : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/20'
+                                         }">
+                                        
+                                        <!-- Top Badge & Selection Radio -->
+                                        <div class="flex items-start justify-between gap-1 mb-1">
+                                            <span class="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase ${
+                                                vIdx === 0 ? 'bg-onyx text-gold-400' : vIdx === 1 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700'
+                                            }">
+                                                ${v.tag}
+                                            </span>
+                                            <div class="w-4 h-4 rounded-full flex items-center justify-center border ${
+                                                isSelected ? 'bg-gold-500 border-gold-600 text-onyx' : 'border-gray-300 bg-white'
+                                            }">
+                                                ${isSelected ? '<i class="fa-solid fa-check text-[9px] font-bold"></i>' : ''}
+                                            </div>
+                                        </div>
+
+                                        <!-- Option Details -->
+                                        <div class="my-0.5">
+                                            <div class="text-xs font-bold text-onyx leading-tight line-clamp-1">${v.shortName}</div>
+                                            <div class="text-[9px] text-gray-500 font-mono">SKU: <b>${v.sku}</b> (${v.weight})</div>
+                                        </div>
+
+                                        <!-- Price Tag -->
+                                        <div class="pt-1.5 border-t border-gray-200/80 flex items-baseline justify-between mt-1">
+                                            <span class="font-extrabold text-sm text-onyx">Rs. ${v.price}</span>
+                                            <span class="text-[10px] text-gray-400 line-through">Rs. ${v.oldPrice}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <!-- Active Inclusions Summary -->
+                        <div class="mt-2 pt-2 border-t border-gray-200 text-xs">
+                            <div class="font-bold text-[11px] text-onyx mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-box-check text-emerald-600"></i> Included in Selected Package:
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-gray-700">
+                                ${activeVariant.includes.map(inc => `
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="fa-solid fa-circle-check text-emerald-600 text-[10px]"></i>
+                                        <span>${inc}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <p class="text-xs text-gray-600 leading-relaxed mb-3">${p.desc}</p>
+
+                <!-- DETAILED SELLER SPECIFICATIONS TABLE (MATCHING SELLER SKU SHEET) -->
+                <div class="bg-pearl/80 border border-gray-200 rounded-2xl p-3 mb-2">
+                    <div class="font-bold text-xs text-onyx mb-2 flex items-center gap-1.5 border-b border-gray-200 pb-1.5">
+                        <i class="fa-solid fa-table-list text-gold-600"></i>
+                        <span>Product & Seller Specifications</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px]">
+                        <div class="bg-white p-2 rounded-lg border border-gray-200/70">
+                            <div class="text-gray-400 text-[9px] uppercase font-semibold">Brand / Generic</div>
+                            <div class="font-bold text-onyx truncate">${p.brand || 'fatimacalligrapher27'}</div>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-gray-200/70">
+                            <div class="text-gray-400 text-[9px] uppercase font-semibold">SKU (Seller Code)</div>
+                            <div class="font-bold text-purple-700 font-mono truncate">${currentSku}</div>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-gray-200/70">
+                            <div class="text-gray-400 text-[9px] uppercase font-semibold">Price / MRP</div>
+                            <div class="font-bold text-emerald-700 truncate">Rs. ${currentPrice} <span class="text-gray-400 font-normal line-through">(Rs. ${currentOldPrice})</span></div>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-gray-200/70">
+                            <div class="text-gray-400 text-[9px] uppercase font-semibold">Weight / Dimensions</div>
+                            <div class="font-bold text-onyx truncate">${currentWeight} • ${p.dimensions || '4*6*1'}</div>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-gray-200/70">
+                            <div class="text-gray-400 text-[9px] uppercase font-semibold">Material / Fabric</div>
+                            <div class="font-bold text-onyx truncate">${p.material}</div>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-gray-200/70">
+                            <div class="text-gray-400 text-[9px] uppercase font-semibold">HSN Code / Mfg</div>
+                            <div class="font-bold text-onyx truncate">${p.hsn || '4910'} • ${p.manufacturer}</div>
+                        </div>
+                    </div>
                 </div>
             `;
+
+            // Populate Fixed / Sticky Bottom CTA Bar with Live Active Price & Instant Actions
+            const stickyBar = document.getElementById('quickview-sticky-bar');
+            if (stickyBar) {
+                stickyBar.innerHTML = `
+                    <div class="flex items-center gap-2 min-w-0 flex-shrink">
+                        <div>
+                            <div class="flex items-baseline gap-1.5 flex-nowrap">
+                                <span class="text-base sm:text-xl font-extrabold text-onyx whitespace-nowrap">Rs. ${currentPrice}</span>
+                                <span class="text-[10px] sm:text-xs text-gray-400 line-through whitespace-nowrap">Rs. ${currentOldPrice}</span>
+                            </div>
+                            <div class="text-[9px] text-purple-700 font-mono font-bold truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[200px]">
+                                ${currentSku} • ${currentWeight}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <button onclick="addSelectedVariantToCart(${p.id}); closeQuickView();" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold py-2.5 px-3 sm:px-4 rounded-xl text-xs border border-gray-300 flex items-center justify-center gap-1 transition-all active:scale-95 shadow-xs whitespace-nowrap">
+                            <i class="fa-solid fa-cart-plus text-xs"></i>
+                            <span>Add</span>
+                        </button>
+                        <button onclick="buySelectedVariantNow(${p.id}); closeQuickView();" class="gold-bg-gradient text-onyx font-extrabold py-2.5 px-3.5 sm:px-5 rounded-xl text-xs sm:text-sm shadow-gold-glow flex items-center justify-center gap-1.5 hover:opacity-95 active:scale-95 transition-all whitespace-nowrap">
+                            <i class="fa-solid fa-bolt text-xs"></i>
+                            <span>BUY NOW (COD)</span>
+                        </button>
+                    </div>
+                `;
+            }
         }
 
         function setModalSlide(index) {
@@ -1204,6 +1404,180 @@
             });
         }
 
+        // CART LOGIC SUPPORTING MULTI-VARIANTS & SKUs
+        function addSelectedVariantToCart(productId) {
+            addToCart(productId, currentSelectedVariant);
+        }
+
+        function buySelectedVariantNow(productId) {
+            buyNow(productId, currentSelectedVariant);
+        }
+
+        function quickAddToCartOrBuy(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            if (product.variants && product.variants.length > 0) {
+                // Open quick view with options for user to select kit
+                quickView(productId);
+            } else {
+                buyNow(productId, 0);
+            }
+        }
+
+        function addToCart(productId, variantIndex = 0) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const hasVariants = product.variants && product.variants.length > 0;
+            const variant = hasVariants ? product.variants[variantIndex] || product.variants[0] : null;
+
+            const cartKey = hasVariants ? `${product.id}_${variant.sku}` : `${product.id}_${product.sku || 'std'}`;
+            const existing = cart.find(item => item.cartKey === cartKey);
+
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({
+                    cartKey: cartKey,
+                    id: product.id,
+                    sku: variant ? variant.sku : (product.sku || 'fati_stk'),
+                    name: product.name,
+                    variantName: variant ? variant.shortName : '',
+                    price: variant ? variant.price : product.price,
+                    oldPrice: variant ? variant.oldPrice : product.oldPrice,
+                    weight: variant ? variant.weight : product.weight,
+                    image: product.image,
+                    qty: 1
+                });
+            }
+
+            updateCartUI();
+            const displayName = variant ? `${product.name} (${variant.shortName})` : product.name;
+            showToast(displayName);
+        }
+
+        function buyNow(productId, variantIndex = 0) {
+            addToCart(productId, variantIndex);
+            toggleCartDrawer(true);
+        }
+
+        function showToast(productName) {
+            let toast = document.getElementById('cart-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'cart-toast';
+                toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-onyx text-pearl border border-gold-400/60 py-2.5 px-4 rounded-2xl shadow-gold-glow flex items-center gap-3 text-xs font-semibold transition-all transform duration-300 translate-y-12 opacity-0 pointer-events-none w-[90%] max-w-sm justify-between';
+                document.body.appendChild(toast);
+            }
+            toast.innerHTML = `
+                <div class="flex items-center gap-2 truncate">
+                    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                    <span class="truncate"><b>${productName}</b> added!</span>
+                </div>
+                <button onclick="toggleCartDrawer(true)" class="bg-gold-500 text-onyx px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase hover:bg-gold-400 whitespace-nowrap">View Cart</button>
+            `;
+
+            toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(window._cartToastTimer);
+            window._cartToastTimer = setTimeout(() => {
+                toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const cartCountEl = document.getElementById('cart-count');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            const stickyBar = document.getElementById('sticky-cart-bar');
+            const stickyCountEl = document.getElementById('sticky-cart-count');
+            const stickyTotalEl = document.getElementById('sticky-cart-total');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if (cartCountEl) cartCountEl.textContent = totalItems;
+            if (subtotalEl) subtotalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+            if (totalEl) totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+
+            if (stickyBar) {
+                if (totalItems > 0) {
+                    stickyCountEl.textContent = `${totalItems} ${totalItems === 1 ? 'Item' : 'Items'}`;
+                    stickyTotalEl.textContent = `Total: Rs. ${totalPrice.toFixed(0)}`;
+                    stickyBar.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+                } else {
+                    stickyBar.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+                }
+            }
+
+            if (!container) return;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-3xl mb-2 text-gold-300"></i>
+                        <p class="text-xs font-medium">Your cart is currently empty.</p>
+                        <button onclick="scrollToProductsAndClose()" class="mt-3 bg-gold-500 text-onyx font-bold text-xs px-3 py-1.5 rounded-lg">
+                            Browse Products
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between p-2.5 bg-pearl rounded-xl border border-gray-200 gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <img src="${item.image}" alt="${item.name}" class="w-10 h-10 object-contain bg-white rounded border border-gray-200 p-0.5 flex-shrink-0">
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-xs text-onyx truncate">${item.name}</h4>
+                            ${item.variantName ? `<div class="text-[10px] text-gray-600 truncate">${item.variantName}</div>` : ''}
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="text-xs text-gold-600 font-bold">Rs. ${item.price} x ${item.qty}</span>
+                                <span class="text-[9px] font-mono font-semibold bg-gray-100 text-gray-600 px-1.5 py-0.2 rounded border border-gray-200">SKU: ${item.sku}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                        <button onclick="changeCartItemQty('${item.cartKey}', -1)" class="w-5 h-5 rounded bg-gray-200 text-onyx font-bold text-xs flex items-center justify-center hover:bg-gray-300">-</button>
+                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                        <button onclick="changeCartItemQty('${item.cartKey}', 1)" class="w-5 h-5 rounded bg-gray-200 text-onyx font-bold text-xs flex items-center justify-center hover:bg-gray-300">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function scrollToProductsAndClose() {
+            toggleCartDrawer(false);
+            const grid = document.getElementById('products-grid');
+            if (grid) {
+                grid.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function changeCartItemQty(cartKey, delta) {
+            const item = cart.find(i => i.cartKey === cartKey);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(i => i.cartKey !== cartKey);
+            }
+            updateCartUI();
+        }
+
+        function toggleCartDrawer(forceOpen = false) {
+            const drawer = document.getElementById('cart-drawer');
+            if (forceOpen || drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.add('hidden');
+            }
+        }
+
         function processOrder() {
             if (cart.length === 0) {
                 alert("Your cart is empty. Please add items before placing order.");
@@ -1234,16 +1608,33 @@
             }
 
             const orderId = "SR-" + Math.floor(100000 + Math.random() * 900000);
+            const itemsSummary = cart.map(item => `
+                <div class="flex justify-between items-center text-[10px] text-gray-700 py-0.5">
+                    <span class="truncate pr-2">${item.name} (${item.sku}) x ${item.qty}</span>
+                    <span class="font-bold text-onyx whitespace-nowrap">Rs. ${item.price * item.qty}</span>
+                </div>
+            `).join('');
+
+            const orderTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
             document.getElementById('success-order-details').innerHTML = `
                 <div class="bg-sand/80 border border-gold-300 p-3 rounded-xl text-left text-xs space-y-1.5 my-3">
                     <div class="flex justify-between items-center border-b border-gold-200 pb-1 font-bold">
                         <span class="text-onyx">Shiprocket AWB:</span>
                         <span class="text-gold-700 font-mono">${orderId}</span>
                     </div>
+                    <div class="border-b border-gold-200/70 pb-1 pt-0.5">
+                        <div class="text-[9px] font-bold uppercase text-gray-500 mb-0.5">Items Ordered:</div>
+                        ${itemsSummary}
+                        <div class="flex justify-between items-center text-xs font-bold text-onyx pt-1 mt-1 border-t border-gray-200">
+                            <span>Total (COD):</span>
+                            <span class="text-gold-700">Rs. ${orderTotal}</span>
+                        </div>
+                    </div>
                     <div><span class="text-gray-500">Recipient:</span> <b>${name}</b> (${phone})</div>
                     <div><span class="text-gray-500">Address:</span> ${address1}, ${address2 ? address2 + ', ' : ''}${city}, ${state} - <b>${pincode}</b></div>
                     <div class="text-[10px] text-emerald-700 font-bold flex items-center gap-1 pt-0.5">
-                        <i class="fa-solid fa-truck-ramp-box"></i> Courier Partner: Delhivery / BlueDart (COD)
+                        <i class="fa-solid fa-truck-ramp-box"></i> Courier Partner: Delhivery / BlueDart (COD Express)
                     </div>
                 </div>
             `;
