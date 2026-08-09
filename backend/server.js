@@ -16,7 +16,7 @@ const adminRouter = require('./routes/admin');
 
 const app = express();
 
-// 1. Security Headers with Helmet (Allowing necessary CDNs for Razorpay, Fonts & Videos)
+// 1. Security Headers with Helmet (Configured for inline onclick handlers, Razorpay SDK, Firebase & Tailwind)
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -28,26 +28,42 @@ app.use(
           "'unsafe-eval'",
           "https://cdn.tailwindcss.com",
           "https://checkout.razorpay.com",
-          "https://cdnjs.cloudflare.com"
+          "https://cdn.razorpay.com",
+          "https://*.razorpay.com",
+          "https://cdnjs.cloudflare.com",
+          "https://www.gstatic.com",
+          "https://*.googleapis.com"
         ],
         scriptSrcElem: [
           "'self'",
           "'unsafe-inline'",
           "https://cdn.tailwindcss.com",
           "https://checkout.razorpay.com",
-          "https://cdnjs.cloudflare.com"
+          "https://cdn.razorpay.com",
+          "https://*.razorpay.com",
+          "https://cdnjs.cloudflare.com",
+          "https://www.gstatic.com",
+          "https://*.googleapis.com"
         ],
+        scriptSrcAttr: ["'unsafe-inline'"],
         frameSrc: [
           "'self'",
           "https://api.razorpay.com",
-          "https://checkout.razorpay.com"
+          "https://checkout.razorpay.com",
+          "https://*.razorpay.com",
+          "https://*.firebaseapp.com"
         ],
         connectSrc: [
           "'self'",
           "https://api.razorpay.com",
           "https://checkout.razorpay.com",
+          "https://*.razorpay.com",
           "https://lumberjack.razorpay.com",
-          "https://apiv2.shiprocket.in"
+          "https://apiv2.shiprocket.in",
+          "https://*.shiprocket.in",
+          "https://*.firebaseio.com",
+          "https://*.googleapis.com",
+          "https://*.firebaseapp.com"
         ],
         styleSrc: [
           "'self'",
@@ -55,6 +71,7 @@ app.use(
           "https://fonts.googleapis.com",
           "https://cdnjs.cloudflare.com"
         ],
+        styleSrcAttr: ["'unsafe-inline'"],
         fontSrc: [
           "'self'",
           "https://fonts.gstatic.com",
