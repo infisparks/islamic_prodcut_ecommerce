@@ -2199,6 +2199,28 @@
             }
         }
 
+        function highlightInvalidInput(inputId, message, title) {
+            const allInputs = document.querySelectorAll('#cart-drawer input');
+            allInputs.forEach(input => {
+                input.classList.remove('border-red-500', 'ring-2', 'ring-red-200', 'bg-red-50/40');
+            });
+
+            const el = document.getElementById(inputId);
+            if (el) {
+                el.classList.add('border-red-500', 'ring-2', 'ring-red-200', 'bg-red-50/40');
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => el.focus(), 300);
+
+                const removeErr = () => {
+                    el.classList.remove('border-red-500', 'ring-2', 'ring-red-200', 'bg-red-50/40');
+                    el.removeEventListener('input', removeErr);
+                };
+                el.addEventListener('input', removeErr);
+            }
+
+            showErrorFeedback(message, title);
+        }
+
         async function processOrder() {
             if (isProcessingOrder) return;
 
@@ -2216,35 +2238,35 @@
             const state = document.getElementById('ship-state').value.trim();
 
             if (!name || name.length < 2) {
-                showErrorFeedback("Please enter the recipient full name (at least 2 characters).", "Name Required");
+                highlightInvalidInput('ship-name', "Please enter recipient full name (at least 2 characters).", "Name Required");
                 return;
             }
 
             const cleanPhone = phone.replace(/\D/g, '');
             if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
-                showErrorFeedback("Please enter a valid 10-digit Indian mobile number (starting with 6, 7, 8 or 9).", "Invalid Mobile Number");
+                highlightInvalidInput('ship-phone', "Please enter a valid 10-digit Indian mobile number (starting with 6, 7, 8 or 9).", "Invalid Mobile Number");
                 return;
             }
 
             const cleanPincode = pincode.replace(/\D/g, '').slice(0, 6);
             if (cleanPincode.length !== 6 || !/^[1-9][0-9]{5}$/.test(cleanPincode)) {
-                showErrorFeedback("Please enter a valid 6-digit Indian delivery pincode.", "Invalid Pincode");
+                highlightInvalidInput('ship-pincode', "Please enter a valid 6-digit Indian delivery pincode.", "Invalid Pincode");
                 return;
             }
             document.getElementById('ship-pincode').value = cleanPincode;
 
             if (!address1 || address1.length < 5) {
-                showErrorFeedback("Please enter your complete flat / house / building address.", "Address Required");
+                highlightInvalidInput('ship-address1', "Please enter your complete flat / house / building address.", "Address Required");
                 return;
             }
 
             if (!city || city.length < 2) {
-                showErrorFeedback("Please enter your City / District name.", "City Required");
+                highlightInvalidInput('ship-city', "Please enter your City / District name.", "City Required");
                 return;
             }
 
             if (!state || state.length < 2) {
-                showErrorFeedback("Please enter your State name.", "State Required");
+                highlightInvalidInput('ship-state', "Please enter your State name.", "State Required");
                 return;
             }
 
