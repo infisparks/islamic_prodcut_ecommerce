@@ -157,6 +157,7 @@ const shiprocketService = {
   calculateShippingCharge,
 
   // Check Pincode Serviceability & Dynamic Courier Rates
+  // Check Pincode Serviceability & Dynamic Courier Rates strictly using Shiprocket API
   checkServiceability: async (pincode, isCod = true, weight = 0.15) => {
     const cleanPincode = String(pincode).trim().replace(/\D/g, '');
     if (!/^[1-9][0-9]{5}$/.test(cleanPincode)) {
@@ -167,16 +168,27 @@ const shiprocketService = {
     }
 
     const prefix = cleanPincode.substring(0, 2);
-    const locationInfo = PINCODE_STATE_MAP[prefix] || { city: 'Serviceable Area', state: 'India' };
-    const dynamicCharge = calculateShippingCharge(cleanPincode, weight);
+    const locationInfo = PINCODE_STATE_MAP[prefix] || { city: 'Delivery Area', state: 'India' };
+    const rawPickup = config.shiprocket.pickupLocation || '421302';
+    const pickupPincode = /^\d{6}$/.test(rawPickup) ? rawPickup : '421302';
+
+    console.log('\n================ 📦 SHIPROCKET PINCODE CHECK ================');
+    console.log(`📍 Destination Pincode: ${cleanPincode}`);
+    console.log(`🏙️  Detected Location: ${locationInfo.city}, ${locationInfo.state}`);
+    console.log(`🏬 Pickup Warehouse Pincode: ${pickupPincode}`);
+    console.log(`💵 Payment Method (COD): ${isCod ? 'YES' : 'NO'}`);
+    console.log(`⚖️  Package Weight: ${weight} kg`);
 
     try {
       const token = await getAuthToken();
+
+      // Live Shiprocket Serviceability Check
       if (isConfigured && !token.startsWith('mock_jwt_')) {
+        console.log(`🌐 Mode: LIVE SHIPROCKET API CALL`);
         try {
           const res = await axios.get(`${config.shiprocket.baseUrl}/courier/serviceability/`, {
             params: {
-              pickup_postcode: '421302',
+              pickup_postcode: pickupPincode,
               delivery_postcode: cleanPincode,
               weight: weight || 0.15,
               cod: isCod ? 1 : 0
@@ -185,12 +197,20 @@ const shiprocketService = {
             timeout: 10000
           });
 
+          console.log(`✅ Shiprocket API Response Status: ${res.status}`);
+
           if (res.data && res.data.data && res.data.data.available_courier_companies) {
             const couriers = res.data.data.available_courier_companies;
-            if (couriers.length > 0) {
+            console.log(`🚚 Available Couriers Count: ${couriers.length}`);
+
+            if (Array.isArray(couriers) && couriers.length > 0) {
               const bestCourier = couriers[0];
-              const courierNames = couriers.slice(0, 3).map(c => c.courier_name);
-              const liveRate = Math.round(Number(bestCourier.rate) || dynamicCharge);
+              const courierNames = couriers.slice(0, 3).map(c => `${c.courier_name} (₹${c.rate})`);
+              const liveRate = Math.round(Number(bestCourier.rate) || 49);
+
+              console.log(`🏆 Recommended Courier: ${bestCourier.courier_name} | Rate: ₹${liveRate} | ETD: ${bestCourier.etd || '3-5'} Days`);
+              console.log(`📋 Top Available Couriers: ${courierNames.join(', ')}`);
+              console.log('=============================================================\n');
 
               return {
                 isServiceable: true,
@@ -198,19 +218,44 @@ const shiprocketService = {
                 city: locationInfo.city,
                 state: locationInfo.state,
                 shippingCharge: liveRate,
-                estimatedDays: bestCourier.etd ? `${bestCourier.etd} Days` : '3-4 Business Days',
+                estimatedDays: bestCourier.etd ? `${bestCourier.etd} Days` : '3-5 Business Days',
                 codAvailable: Boolean(bestCourier.cod),
-                couriers: courierNames,
-                deliveryType: 'Express Courier Delivery'
+                couriers: couriers.slice(0, 3).map(c => c.courier_name),
+                deliveryType: bestCourier.courier_name || 'Shiprocket Courier Partner'
               };
             }
           }
+
+          console.log(`❌ Shiprocket returned 0 available couriers for pincode ${cleanPincode}.`);
+          console.log('=============================================================\n');
+
+          return {
+            isServiceable: false,
+            pincode: cleanPincode,
+            city: locationInfo.city,
+            state: locationInfo.state,
+            message: `Pincode ${cleanPincode} is currently unserviceable via Shiprocket couriers.`
+          };
         } catch (apiErr) {
-          logger.warn('SHIPROCKET_SERVICEABILITY_API_FALLBACK', { error: apiErr.message });
+          const errorMsg = apiErr.response?.data?.message || (apiErr.response?.data ? JSON.stringify(apiErr.response.data) : apiErr.message);
+          console.log(`❌ Shiprocket API Error [${apiErr.response?.status || '500'}]:`, errorMsg);
+          console.log('=============================================================\n');
+
+          return {
+            isServiceable: false,
+            pincode: cleanPincode,
+            city: locationInfo.city,
+            state: locationInfo.state,
+            message: `Shiprocket serviceability error: ${errorMsg}`
+          };
         }
       }
 
-      // Valid Indian Pincode Fallback / Test Simulation with dynamic distance rate
+      console.log(`🧪 Mode: TEST / MOCK SIMULATION MODE`);
+      const dynamicCharge = calculateShippingCharge(cleanPincode, weight);
+      console.log(`💰 Simulated Shipping Charge: ₹${dynamicCharge}`);
+      console.log('=============================================================\n');
+
       return {
         isServiceable: true,
         pincode: cleanPincode,
@@ -219,21 +264,19 @@ const shiprocketService = {
         shippingCharge: dynamicCharge,
         estimatedDays: '3-4 Business Days',
         codAvailable: true,
-        couriers: ['BlueDart Express', 'Delhivery Surface', 'DTDC Air'],
-        deliveryType: 'Express Delivery with Tracking'
+        couriers: ['BlueDart Express', 'Delhivery Surface'],
+        deliveryType: 'Shiprocket Express Partner (Test Mode)'
       };
     } catch (err) {
-      logger.error('SERVICEABILITY_CHECK_ERROR', { error: err.message });
+      console.log(`❌ Serviceability Check Error:`, err.message);
+      console.log('=============================================================\n');
+
       return {
-        isServiceable: true,
+        isServiceable: false,
         pincode: cleanPincode,
         city: locationInfo.city,
         state: locationInfo.state,
-        shippingCharge: dynamicCharge,
-        estimatedDays: '3-5 Business Days',
-        codAvailable: true,
-        couriers: ['Standard Express Delivery'],
-        deliveryType: 'Standard Delivery'
+        message: `Serviceability check failed: ${err.message}`
       };
     }
   },
