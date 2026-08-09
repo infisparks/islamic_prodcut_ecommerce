@@ -1732,6 +1732,7 @@
 
             const orderId = orderData.orderId || 'FC-CONFIRMED';
             const isCod = orderData.payment && orderData.payment.provider === 'COD';
+            const paymentStatusLabel = isCod ? 'Pending (Cash on Delivery)' : '✓ Paid (Razorpay)';
             const customer = orderData.customer || {
                 name: document.getElementById('ship-name').value.trim(),
                 phone: document.getElementById('ship-phone').value.trim(),
