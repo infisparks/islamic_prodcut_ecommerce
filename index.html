@@ -473,7 +473,7 @@
                     </div>
                     <div class="flex justify-between text-emerald-800 font-semibold">
                         <span>Express Delivery:</span>
-                        <span id="cart-shipping-fee" class="font-bold">FREE / Pincode</span>
+                        <span id="cart-shipping-fee" class="font-semibold text-gray-500">Enter Pincode</span>
                     </div>
                     <div class="flex justify-between items-center text-xs font-bold text-onyx border-t border-gray-200 pt-1.5">
                         <span>Total Payable:</span>
@@ -659,7 +659,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_urdu.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                video: "video/Mantasha Card.mp4",
                 badge: "CARD • URDU",
                 rating: "(1,450)",
                 desc: "Authentic Umrah Dua cards with clear Urdu translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.",
@@ -710,7 +710,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_english.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                video: "video/Mantasha Card.mp4",
                 badge: "CARD • ENGLISH",
                 rating: "(1,820)",
                 desc: "Complete authentic Umrah Dua Card set in clear English translation with Arabic text & transliteration. Laminated & 100% waterproof.",
@@ -761,7 +761,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_hindi.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                video: "video/Mantasha Card.mp4",
                 badge: "CARD • HINDI",
                 rating: "(1,120)",
                 desc: "Authentic Umrah prayer guide cards with easy-to-read Hindi translation and step-by-step ritual instructions.",
@@ -812,7 +812,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_roman.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                video: "video/Mantasha Card.mp4",
                 badge: "CARD • ROMAN",
                 rating: "(940)",
                 desc: "Umrah Dua Cards in Roman script for effortless Arabic pronunciation during Tawaf & Sa'i.",
@@ -867,7 +867,7 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                video: "video/Mantasha Sticker.mp4",
                 badge: "STICKER • ENGLISH",
                 rating: "(720)",
                 desc: "High-quality waterproof adhesive stickers featuring essential supplications in English.",
@@ -890,7 +890,7 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                video: "video/Mantasha Sticker.mp4",
                 badge: "STICKER • HINDI",
                 rating: "(640)",
                 desc: "Waterproof dua stickers with Hindi text and Arabic supplications for easy reference anywhere.",
@@ -913,7 +913,7 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_urdu.webp",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                video: "video/Mantasha Sticker.mp4",
                 badge: "STICKER • URDU",
                 rating: "(810)",
                 desc: "Authentic Dua stickers in Urdu script with durable laminate surface and strong adhesive.",
@@ -1553,7 +1553,7 @@
             }, 3000);
         }
 
-        let currentShippingFee = 0;
+        let currentShippingFee = null;
 
         function updateCartUI() {
             const container = document.getElementById('cart-items-container');
@@ -1568,12 +1568,27 @@
 
             const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const totalWithShipping = subtotalPrice > 0 ? (subtotalPrice + currentShippingFee) : 0;
+            
+            let effectiveFee = currentShippingFee;
+            if (subtotalPrice >= 499 && currentShippingFee !== null) {
+                effectiveFee = 0;
+            }
+            const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
+            const totalWithShipping = subtotalPrice > 0 ? (subtotalPrice + activeFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                shippingFeeEl.textContent = currentShippingFee > 0 ? `Rs. ${currentShippingFee.toFixed(2)}` : 'FREE';
+                if (effectiveFee === null || effectiveFee === undefined) {
+                    shippingFeeEl.className = "font-semibold text-gray-500";
+                    shippingFeeEl.textContent = 'Enter Pincode';
+                } else if (effectiveFee === 0) {
+                    shippingFeeEl.className = "font-extrabold text-emerald-700";
+                    shippingFeeEl.textContent = 'FREE Delivery';
+                } else {
+                    shippingFeeEl.className = "font-bold text-onyx";
+                    shippingFeeEl.textContent = `Rs. ${effectiveFee.toFixed(2)}`;
+                }
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
 
@@ -1846,6 +1861,8 @@
 
             if (clean.length < 6) {
                 badge.classList.add('hidden');
+                currentShippingFee = null;
+                updateCartUI();
                 return;
             }
 
