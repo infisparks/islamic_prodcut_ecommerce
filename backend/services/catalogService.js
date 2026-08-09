@@ -3,7 +3,7 @@ const { findItemBySku } = require('../config/catalog');
 /**
  * Authoritatively calculates cart items and total pricing from server catalog
  */
-function buildTrustedOrderItems(rawItems, deliveryPincode) {
+async function buildTrustedOrderItems(rawItems, deliveryPincode) {
   let subtotal = 0;
   let totalWeightKg = 0;
   let maxDimensions = { length: 15, breadth: 10, height: 2.5 }; // base package dimensions
@@ -50,9 +50,21 @@ function buildTrustedOrderItems(rawItems, deliveryPincode) {
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Calculate dynamic shipping fee by pincode zone distance from warehouse
-  const { calculateShippingCharge } = require('./shiprocketService');
-  const shipping = deliveryPincode ? calculateShippingCharge(deliveryPincode, finalWeightKg) : 0;
+  // Calculate dynamic shipping fee live via Shiprocket courier API
+  let shipping = 0;
+  if (deliveryPincode) {
+    const shiprocketService = require('./shiprocketService');
+    try {
+      const servRes = await shiprocketService.checkServiceability(deliveryPincode, true, finalWeightKg);
+      if (servRes.isServiceable && typeof servRes.shippingCharge === 'number') {
+        shipping = servRes.shippingCharge;
+      } else {
+        shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
+      }
+    } catch (e) {
+      shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
+    }
+  }
   const total = subtotal + shipping;
 
   return {

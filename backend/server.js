@@ -75,11 +75,14 @@ app.use(
         styleSrc: [
           "'self'",
           "'unsafe-inline'",
-          "https://fonts.googleapis.com",
-          "https://cdnjs.cloudflare.com",
-          "https://*.razorpay.com",
-          "https://*.hcaptcha.com",
-          "https://*.stripe.network"
+          "https:",
+          "http:"
+        ],
+        styleSrcElem: [
+          "'self'",
+          "'unsafe-inline'",
+          "https:",
+          "http:"
         ],
         styleSrcAttr: ["'unsafe-inline'"],
         fontSrc: [
