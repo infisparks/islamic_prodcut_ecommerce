@@ -166,8 +166,9 @@
         <!-- Background Image with Clear Visibility & Soft Overlay -->
         <div class="absolute inset-0 z-0">
             <picture>
+                <source srcset="product/hero.webp" type="image/webp">
                 <source srcset="hero.webp" type="image/webp">
-                <img src="hero.png" alt="Hero Background" class="w-full h-full object-cover object-center opacity-80" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='hero.webp';} else if(this.dataset.tried==='1'){this.dataset.tried='2'; this.src='hero2.png';} else if(this.dataset.tried==='2'){this.dataset.tried='3'; this.src='hero2.webp';}">
+                <img src="product/hero.png" alt="Hero Background" class="w-full h-full object-cover object-center opacity-85" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='hero.png';} else if(this.dataset.tried==='1'){this.dataset.tried='2'; this.src='product/hero2.webp';} else if(this.dataset.tried==='2'){this.dataset.tried='3'; this.src='product/umrah_card_urdu.webp';}">
             </picture>
             <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-onyx/95"></div>
         </div>

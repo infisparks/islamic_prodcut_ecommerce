@@ -33,7 +33,9 @@ app.use(
           "https://cdnjs.cloudflare.com",
           "https://www.gstatic.com",
           "https://*.gstatic.com",
-          "https://*.googleapis.com"
+          "https://*.googleapis.com",
+          "https://static.cloudflareinsights.com",
+          "https://*.cloudflareinsights.com"
         ],
         scriptSrcElem: [
           "'self'",
@@ -45,7 +47,9 @@ app.use(
           "https://cdnjs.cloudflare.com",
           "https://www.gstatic.com",
           "https://*.gstatic.com",
-          "https://*.googleapis.com"
+          "https://*.googleapis.com",
+          "https://static.cloudflareinsights.com",
+          "https://*.cloudflareinsights.com"
         ],
         scriptSrcAttr: ["'unsafe-inline'"],
         frameSrc: [
@@ -70,7 +74,9 @@ app.use(
           "https://www.gstatic.com",
           "https://*.firebaseapp.com",
           "https://*.stripe.network",
-          "https://*.hcaptcha.com"
+          "https://*.hcaptcha.com",
+          "https://static.cloudflareinsights.com",
+          "https://*.cloudflareinsights.com"
         ],
         styleSrc: [
           "'self'",
