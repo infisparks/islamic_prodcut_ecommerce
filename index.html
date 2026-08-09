@@ -659,7 +659,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_urdu.webp",
-                video: "video/mantasha_card.mp4",
+                video: "product/mantasha_card.mp4",
                 badge: "CARD • URDU",
                 rating: "(1,450)",
                 desc: "Authentic Umrah Dua cards with clear Urdu translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.",
@@ -710,7 +710,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_english.webp",
-                video: "video/mantasha_card.mp4",
+                video: "product/mantasha_card.mp4",
                 badge: "CARD • ENGLISH",
                 rating: "(1,820)",
                 desc: "Complete authentic Umrah Dua Card set in clear English translation with Arabic text & transliteration. Laminated & 100% waterproof.",
@@ -761,7 +761,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_hindi.webp",
-                video: "video/mantasha_card.mp4",
+                video: "product/mantasha_card.mp4",
                 badge: "CARD • HINDI",
                 rating: "(1,120)",
                 desc: "Authentic Umrah prayer guide cards with easy-to-read Hindi translation and step-by-step ritual instructions.",
@@ -812,7 +812,7 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_roman.webp",
-                video: "video/mantasha_card.mp4",
+                video: "product/mantasha_card.mp4",
                 badge: "CARD • ROMAN",
                 rating: "(940)",
                 desc: "Umrah Dua Cards in Roman script for effortless Arabic pronunciation during Tawaf & Sa'i.",
@@ -867,7 +867,7 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
-                video: "video/mantasha_sticker.mp4",
+                video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • ENGLISH",
                 rating: "(720)",
                 desc: "High-quality waterproof adhesive stickers featuring essential supplications in English.",
@@ -890,7 +890,7 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
-                video: "video/mantasha_sticker.mp4",
+                video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • HINDI",
                 rating: "(640)",
                 desc: "Waterproof dua stickers with Hindi text and Arabic supplications for easy reference anywhere.",
@@ -913,7 +913,7 @@
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_urdu.webp",
-                video: "video/mantasha_sticker.mp4",
+                video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • URDU",
                 rating: "(810)",
                 desc: "Authentic Dua stickers in Urdu script with durable laminate surface and strong adhesive.",
@@ -1158,6 +1158,8 @@
                         <div class="w-full h-full flex items-center justify-center p-1 bg-black rounded-2xl overflow-hidden">
                             <video id="quickview-video" controls autoplay loop playsinline class="w-full h-full max-h-full object-contain rounded-xl">
                                 <source src="${activeMedia.url}" type="video/mp4">
+                                ${activeMedia.url.includes('product/') ? `<source src="${activeMedia.url.replace('product/', 'video/')}" type="video/mp4">` : ''}
+                                ${activeMedia.url.includes('video/') ? `<source src="${activeMedia.url.replace('video/', 'product/')}" type="video/mp4">` : ''}
                                 Your browser does not support video playback.
                             </video>
                         </div>
