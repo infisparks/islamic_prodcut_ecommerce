@@ -65,6 +65,7 @@
         .gold-gradient-text {
             background: linear-gradient(135deg, #FFF1B0 0%, #D4AF37 40%, #AA8518 70%, #F5C832 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -164,8 +165,11 @@
     <section class="relative bg-onyx text-white pt-10 pb-14 sm:pt-14 sm:pb-16 px-4 overflow-hidden border-b border-gold-500/30">
         <!-- Background Image with Clear Visibility & Soft Overlay -->
         <div class="absolute inset-0 z-0">
-            <img src="hero.webp" alt="Hero Background" class="w-full h-full object-cover object-center">
-            <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-onyx/90"></div>
+            <picture>
+                <source srcset="hero.webp" type="image/webp">
+                <img src="hero.png" alt="Hero Background" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='hero.png';">
+            </picture>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/20 to-onyx/90"></div>
         </div>
 
         <!-- Glow accents -->
@@ -206,25 +210,25 @@
         </div>
     </section>
 
-    <!-- SECTION TITLE: UMRAH DUA CARDS COLLECTION -->
+    <!-- SECTION TITLE: UMRAH DUA CARDS & STICKERS COLLECTION -->
     <section id="products-grid" class="pt-6 pb-2 px-4 max-w-6xl mx-auto">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-gold-200 pb-2.5 mb-3">
             <div>
                 <span class="text-[10px] uppercase tracking-widest text-gold-700 font-extrabold block">Authentic Collection</span>
-                <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">Umrah Dua & Guide Cards</h2>
+                <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">Umrah Dua Cards & Stickers</h2>
             </div>
             <span class="text-[11px] text-gray-500 mt-1 sm:mt-0">Available in Urdu, English, Hindi & Roman English editions.</span>
         </div>
 
         <!-- Filter Category Tabs -->
-        <div class="hidden items-center gap-2 overflow-x-auto pb-2 mb-2 no-scrollbar" id="category-filter-bar">
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-2 no-scrollbar" id="category-filter-bar">
             <button onclick="filterProducts('all')" id="filter-all" class="filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs">
-                All Products (4)
+                All Products (7)
             </button>
             <button onclick="filterProducts('card')" id="filter-card" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
                 💳 Umrah Cards (4)
             </button>
-            <button onclick="filterProducts('sticker')" id="filter-sticker" class="hidden filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
+            <button onclick="filterProducts('sticker')" id="filter-sticker" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
                 🏷️ Dua Stickers (3)
             </button>
         </div>
@@ -932,7 +936,7 @@
             const container = document.getElementById('products-catalog-container');
             if (!container) return;
 
-            const visibleProducts = products.filter(p => !p.hidden && p.category !== 'sticker');
+            const visibleProducts = products.filter(p => !p.hidden);
             const filtered = filter === 'all' 
                 ? visibleProducts 
                 : visibleProducts.filter(p => p.category === filter);
@@ -1779,6 +1783,13 @@
                     ` : ''}
                 </div>
             `;
+
+            // Reset cart state
+            cart = [];
+            updateCartUI();
+            toggleCartDrawer(false);
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
 
         // PINCODE SERVICEABILITY CLIENT LOGIC
         let pincodeCheckTimer = null;
