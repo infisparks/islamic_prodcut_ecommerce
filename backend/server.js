@@ -32,6 +32,7 @@ app.use(
           "https://*.razorpay.com",
           "https://cdnjs.cloudflare.com",
           "https://www.gstatic.com",
+          "https://*.gstatic.com",
           "https://*.googleapis.com"
         ],
         scriptSrcElem: [
@@ -43,6 +44,7 @@ app.use(
           "https://*.razorpay.com",
           "https://cdnjs.cloudflare.com",
           "https://www.gstatic.com",
+          "https://*.gstatic.com",
           "https://*.googleapis.com"
         ],
         scriptSrcAttr: ["'unsafe-inline'"],
@@ -51,7 +53,8 @@ app.use(
           "https://api.razorpay.com",
           "https://checkout.razorpay.com",
           "https://*.razorpay.com",
-          "https://*.firebaseapp.com"
+          "https://*.firebaseapp.com",
+          "https://*.hcaptcha.com"
         ],
         connectSrc: [
           "'self'",
@@ -63,13 +66,20 @@ app.use(
           "https://*.shiprocket.in",
           "https://*.firebaseio.com",
           "https://*.googleapis.com",
-          "https://*.firebaseapp.com"
+          "https://*.gstatic.com",
+          "https://www.gstatic.com",
+          "https://*.firebaseapp.com",
+          "https://*.stripe.network",
+          "https://*.hcaptcha.com"
         ],
         styleSrc: [
           "'self'",
           "'unsafe-inline'",
           "https://fonts.googleapis.com",
-          "https://cdnjs.cloudflare.com"
+          "https://cdnjs.cloudflare.com",
+          "https://*.razorpay.com",
+          "https://*.hcaptcha.com",
+          "https://*.stripe.network"
         ],
         styleSrcAttr: ["'unsafe-inline'"],
         fontSrc: [
@@ -77,10 +87,12 @@ app.use(
           "https://fonts.gstatic.com",
           "https://cdnjs.cloudflare.com"
         ],
-        imgSrc: ["'self'", "data:", "https:"],
+        imgSrc: ["'self'", "data:", "blob:", "https:"],
         mediaSrc: ["'self'", "https:", "https://commondatastorage.googleapis.com"]
       }
     },
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
     crossOriginEmbedderPolicy: false
   })
 );

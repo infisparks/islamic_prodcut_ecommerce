@@ -283,7 +283,14 @@ router.post('/orders/:orderId/retry-shipping', async (req, res, next) => {
       data: updatedOrder
     });
   } catch (err) {
-    next(err);
+    logger.error('ADMIN_RETRY_SHIPPING_FAILED', { orderId: req.params.orderId, error: err.message });
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'SHIPROCKET_BOOKING_FAILED',
+        message: err.message || 'Shiprocket shipment retry failed.'
+      }
+    });
   }
 });
 
