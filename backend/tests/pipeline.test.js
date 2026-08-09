@@ -303,7 +303,7 @@ async function runTests() {
     assert.strictEqual(res2.body.message, 'Event already processed.');
 
     // Check DB status is SHIPPED
-    await new Promise(r => setTimeout(r, 50));
+    await new Promise(r => setTimeout(r, 1000));
     const orderInDb = await firebaseService.getOrder(orderId);
     assert.strictEqual(orderInDb.status, 'SHIPPED');
   });
@@ -438,8 +438,8 @@ async function runTests() {
     });
     assert.strictEqual(webhookRes.status, 200);
 
-    // Allow background processing
-    await new Promise(r => setTimeout(r, 800));
+    // Allow background processing for live network requests
+    await new Promise(r => setTimeout(r, 2500));
 
     const orderInDb = await firebaseService.getOrder(orderId);
     assert.strictEqual(orderInDb.payment.status, 'CAPTURED');

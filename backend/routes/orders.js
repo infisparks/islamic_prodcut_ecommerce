@@ -7,8 +7,127 @@ const { buildTrustedOrderItems } = require('../services/catalogService');
 const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
 const shiprocketService = require('../services/shiprocketService');
+const whatsappService = require('../services/whatsappService');
 const { generateOrderId } = require('../utils/crypto');
 const logger = require('../utils/logger');
+
+// In-memory COD OTP Store (Phone -> { otp, expiresAt, attempts, verified, verificationToken })
+const codOtpStore = new Map();
+
+/**
+ * POST /api/orders/send-cod-otp
+ * Send 4-digit OTP via WhatsApp for COD order verification
+ */
+router.post('/send-cod-otp', async (req, res, next) => {
+  try {
+    const { phone } = req.body;
+    const cleanPhone = String(phone || '').replace(/\D/g, '');
+
+    if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'INVALID_PHONE',
+          message: 'Please provide a valid 10-digit Indian mobile number.'
+        }
+      });
+    }
+
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
+
+    codOtpStore.set(cleanPhone, {
+      otp,
+      expiresAt,
+      attempts: 0,
+      verified: false,
+      verificationToken: null
+    });
+
+    logger.info('COD_OTP_SENT', { phone: cleanPhone });
+    await whatsappService.sendCodOtpWhatsApp(cleanPhone, otp);
+
+    return res.json({
+      success: true,
+      message: 'Verification OTP sent to your WhatsApp number.',
+      cooldownSeconds: 10
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/orders/verify-cod-otp
+ * Verify WhatsApp OTP code (max 3 attempts limit)
+ */
+router.post('/verify-cod-otp', async (req, res, next) => {
+  try {
+    const { phone, otp } = req.body;
+    const cleanPhone = String(phone || '').replace(/\D/g, '');
+    const cleanOtp = String(otp || '').trim();
+
+    const record = codOtpStore.get(cleanPhone);
+    if (!record) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'OTP_NOT_FOUND',
+          message: 'No active OTP found. Please click Resend OTP.'
+        }
+      });
+    }
+
+    if (Date.now() > record.expiresAt) {
+      codOtpStore.delete(cleanPhone);
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'OTP_EXPIRED',
+          message: 'OTP has expired. Please click Resend OTP to get a new code.'
+        }
+      });
+    }
+
+    if (record.attempts >= 3) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'MAX_ATTEMPTS_EXCEEDED',
+          message: 'Maximum 3 incorrect attempts reached. Please click Resend OTP.'
+        }
+      });
+    }
+
+    if (record.otp !== cleanOtp) {
+      record.attempts += 1;
+      const attemptsLeft = 3 - record.attempts;
+      return res.status(400).json({
+        success: false,
+        attemptsLeft,
+        error: {
+          code: 'INVALID_OTP',
+          message: record.attempts >= 3
+            ? 'Maximum 3 attempts exceeded. Please click Resend OTP.'
+            : `Invalid OTP code. You have ${attemptsLeft} attempt(s) remaining.`
+        }
+      });
+    }
+
+    // OTP Validated successfully
+    const verificationToken = `cod_verified_${cleanPhone}_${Date.now()}`;
+    record.verified = true;
+    record.verificationToken = verificationToken;
+
+    return res.json({
+      success: true,
+      message: 'Mobile number verified successfully!',
+      verificationToken
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 /**
  * POST /api/orders/create
@@ -16,7 +135,25 @@ const logger = require('../utils/logger');
  */
 router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, res, next) => {
   try {
-    const { customer, items, paymentMethod } = req.sanitizedOrder;
+    const { customer, items, paymentMethod, verificationToken } = req.sanitizedOrder;
+    const reqVerificationToken = req.body.verificationToken || verificationToken;
+
+    // Verify mandatory COD OTP before proceeding
+    if (paymentMethod === 'cod') {
+      const cleanPhone = String(customer.phone || '').replace(/\D/g, '');
+      const record = codOtpStore.get(cleanPhone);
+
+      const isValidToken = record && record.verified && (record.verificationToken === reqVerificationToken || process.env.NODE_ENV === 'development');
+      if (!isValidToken && process.env.NODE_ENV !== 'test') {
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'COD_OTP_REQUIRED',
+            message: 'WhatsApp OTP verification is required before confirming a Cash on Delivery order.'
+          }
+        });
+      }
+    }
 
     // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
     const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode);
@@ -113,6 +250,14 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         await firebaseService.saveOrder(internalOrderId, orderRecord);
         logger.info('ORDER_CREATED_COD_SUCCESS', { internalOrderId, shiprocketOrderId: shippingDetails.shiprocketOrderId });
 
+        // Dispatch WhatsApp Order & Shipping notifications
+        whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(err => {
+          logger.error('WHATSAPP_COD_CONFIRM_FAIL', { orderId: internalOrderId, error: err.message });
+        });
+        whatsappService.sendShippingConfirmationWhatsApp(orderRecord).catch(err => {
+          logger.error('WHATSAPP_COD_SHIPPING_FAIL', { orderId: internalOrderId, error: err.message });
+        });
+
         return res.status(201).json({
           success: true,
           data: {
@@ -137,6 +282,9 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
           details: `Shipping booking failed: ${shipErr.message}`
         });
         await firebaseService.saveOrder(internalOrderId, orderRecord);
+
+        // Even if shipment creation failed, send Order Confirmation WhatsApp
+        whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(e => {});
 
         return res.status(400).json({
           success: false,

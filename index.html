@@ -285,78 +285,6 @@
         </div>
     </section>
 
-    <!-- LIVE INTERACTIVE DUA CARD FLIP PREVIEWER -->
-    <section class="py-10 px-4 max-w-2xl mx-auto">
-        <div class="text-center mb-5">
-            <span class="text-[10px] uppercase tracking-widest text-gold-600 font-bold block mb-0.5">Interactive Card Preview</span>
-            <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">Tap Card To Test Flip</h2>
-            <p class="text-xs text-gray-500 mt-0.5">Cards feature Arabic text, English transliteration & clear translations</p>
-        </div>
-
-        <!-- Sample Card Flip Display -->
-        <div class="max-w-md mx-auto">
-            <!-- Card Selector Tabs -->
-            <div class="flex justify-center gap-1.5 mb-3 text-xs font-semibold overflow-x-auto pb-1 no-scrollbar" id="card-tabs">
-                <button onclick="switchPreviewCard(0)" class="tab-btn bg-onyx text-gold-400 px-3 py-1.5 rounded-full border border-gold-500/30 whitespace-nowrap active-tab">1. Niyyah For Umrah</button>
-                <button onclick="switchPreviewCard(1)" class="tab-btn bg-white text-gray-600 px-3 py-1.5 rounded-full border border-gray-200 whitespace-nowrap">2. Tawaf Start</button>
-                <button onclick="switchPreviewCard(2)" class="tab-btn bg-white text-gray-600 px-3 py-1.5 rounded-full border border-gray-200 whitespace-nowrap">3. Safa & Marwah</button>
-            </div>
-
-            <!-- Flip Card Container -->
-            <div class="flip-card cursor-pointer h-[310px] w-full" id="interactive-card" onclick="this.classList.toggle('flipped')">
-                <div class="flip-card-inner relative w-full h-full rounded-2xl shadow-lg">
-                    
-                    <!-- Card Front (Arabic + Transliteration) -->
-                    <div class="flip-card-front absolute inset-0 bg-gradient-to-b from-pearl via-white to-sand rounded-2xl border-2 border-gold-400 p-4 flex flex-col justify-between text-center">
-                        <div class="flex justify-between items-center text-[9px] text-gold-700 font-bold border-b border-gold-300/50 pb-1.5">
-                            <span>CARD 01 OF 35</span>
-                            <span class="uppercase tracking-widest font-cinzel">FATIMA CALLIGRAPHER</span>
-                            <span class="bg-gold-500 text-onyx px-1.5 rounded text-[8px]"><i class="fa-solid fa-rotate mr-1"></i> FLIP</span>
-                        </div>
-
-                        <div class="my-auto">
-                            <h4 class="font-cinzel text-sm font-bold text-onyx mb-1" id="card-title">Niyyah For Umrah</h4>
-                            <div class="font-arabic text-xl sm:text-2xl font-bold text-neutral-900 leading-relaxed my-1" id="card-arabic">
-                                اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي
-                            </div>
-                            <div class="text-xs text-amber-900 font-medium italic mt-2" id="card-trans">
-                                "Allahumma inni ureedul 'umrata fa yassirha li wa taqabbalha minni"
-                            </div>
-                        </div>
-
-                        <div class="text-[9px] text-gray-500 border-t border-gold-300/50 pt-1.5 flex justify-between items-center">
-                            <span>Makkah Mukarramah</span>
-                            <span class="text-gold-700 font-bold"><i class="fa-solid fa-droplet text-[8px] mr-1"></i>100% Laminated</span>
-                        </div>
-                    </div>
-
-                    <!-- Card Back (English Meaning) -->
-                    <div class="flip-card-back absolute inset-0 bg-onyx text-pearl rounded-2xl border-2 border-gold-400 p-4 flex flex-col justify-between text-center">
-                        <div class="flex justify-between items-center text-[9px] text-gold-400 font-bold border-b border-gold-500/30 pb-1.5">
-                            <span>ENGLISH TRANSLATION</span>
-                            <span class="bg-gold-500 text-onyx px-1.5 rounded text-[8px]"><i class="fa-solid fa-rotate mr-1"></i> FLIP</span>
-                        </div>
-
-                        <div class="my-auto px-2">
-                            <i class="fa-solid fa-quote-left text-gold-500/30 text-xl block mb-1"></i>
-                            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed font-cinzel" id="card-english">
-                                "O Allah, I intend to perform Umrah. Make it easy for me and accept it from me."
-                            </p>
-                            <div class="text-[10px] text-gold-400 mt-2.5 font-semibold" id="card-note">
-                                Recited upon wearing Ihram before crossing Meeqat.
-                            </div>
-                        </div>
-
-                        <div class="text-[9px] text-gray-400 border-t border-gold-500/30 pt-1.5">
-                            Authentic supplication based on Quran & Sunnah
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- PILGRIM REVIEWS -->
     <section id="reviews" class="py-8 px-4 bg-pearl border-t border-gold-200">
         <div class="max-w-4xl mx-auto">
@@ -595,6 +523,58 @@
 
             <div class="text-[10px] text-gray-500 text-center leading-relaxed">
                 💡 Note: To use live Razorpay checkout, ensure your active Razorpay Key ID and Secret are saved in <code class="bg-gray-100 px-1 py-0.5 rounded">.env</code>.
+            </div>
+        </div>
+    </div>
+
+    <!-- WHATSAPP COD OTP VERIFICATION MODAL -->
+    <div id="whatsapp-otp-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 border border-emerald-500/40 shadow-2xl relative text-xs" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg border border-emerald-200 shadow-xs">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-onyx text-sm">WhatsApp Verification</div>
+                        <div class="text-[11px] text-gray-500">Cash on Delivery Confirmation</div>
+                    </div>
+                </div>
+                <button onclick="closeWhatsAppOtpModal()" class="w-7 h-7 rounded-full bg-gray-100 text-gray-500 hover:text-onyx flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <div class="text-center mb-4">
+                <p class="text-xs text-gray-600 leading-relaxed mb-1">
+                    We sent a 4-digit verification OTP code to your WhatsApp number:
+                </p>
+                <div class="font-bold text-onyx text-sm font-mono tracking-wide" id="otp-phone-display">+91 XXXXX XXXXX</div>
+            </div>
+
+            <!-- OTP Input Boxes -->
+            <div class="flex justify-center gap-2 mb-4" id="otp-inputs-container">
+                <input type="text" maxlength="1" id="otp-1" inputmode="numeric" class="otp-input w-11 h-12 text-center text-lg font-bold border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-gray-50 text-onyx" oninput="handleOtpInput(this, 'otp-2', null)" onkeydown="handleOtpKeyDown(event, this, null, 'otp-2')">
+                <input type="text" maxlength="1" id="otp-2" inputmode="numeric" class="otp-input w-11 h-12 text-center text-lg font-bold border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-gray-50 text-onyx" oninput="handleOtpInput(this, 'otp-3', 'otp-1')" onkeydown="handleOtpKeyDown(event, this, 'otp-1', 'otp-3')">
+                <input type="text" maxlength="1" id="otp-3" inputmode="numeric" class="otp-input w-11 h-12 text-center text-lg font-bold border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-gray-50 text-onyx" oninput="handleOtpInput(this, 'otp-4', 'otp-2')" onkeydown="handleOtpKeyDown(event, this, 'otp-2', 'otp-4')">
+                <input type="text" maxlength="1" id="otp-4" inputmode="numeric" class="otp-input w-11 h-12 text-center text-lg font-bold border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 bg-gray-50 text-onyx" oninput="handleOtpInput(this, null, 'otp-3')" onkeydown="handleOtpKeyDown(event, this, 'otp-3', null)">
+            </div>
+
+            <!-- Status Alert Box -->
+            <div id="otp-status-msg" class="hidden text-[11px] p-2.5 rounded-xl border mb-3 text-center transition-all"></div>
+
+            <!-- Action Buttons -->
+            <button id="btn-verify-otp" onclick="submitWhatsAppOtpVerification()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer active:scale-95 text-xs mb-3">
+                <i class="fa-solid fa-shield-check text-sm"></i>
+                <span id="btn-verify-text">Verify & Confirm Order</span>
+            </button>
+
+            <!-- Resend Countdown Timer Section -->
+            <div class="flex items-center justify-between text-[11px] text-gray-500 pt-1">
+                <span>Didn't receive code?</span>
+                <button id="btn-resend-otp" onclick="resendWhatsAppOtpCode()" disabled class="font-bold text-emerald-600 disabled:text-gray-400 disabled:cursor-not-allowed hover:underline cursor-pointer">
+                    Resend OTP (<span id="resend-timer-count">10</span>s)
+                </button>
             </div>
         </div>
     </div>
@@ -1465,8 +1445,8 @@
         }
 
         function switchPreviewCard(index) {
-            const card = previewCards[index];
-            if (!card) return;
+            const card = previewCards?.[index];
+            if (!card || !document.getElementById('card-title')) return;
 
             document.getElementById('card-title').textContent = card.title;
             document.getElementById('card-arabic').textContent = card.arabic;
@@ -1474,7 +1454,8 @@
             document.getElementById('card-english').textContent = card.english;
             document.getElementById('card-note').textContent = card.note;
 
-            document.getElementById('interactive-card').classList.remove('flipped');
+            const interactiveCard = document.getElementById('interactive-card');
+            if (interactiveCard) interactiveCard.classList.remove('flipped');
 
             document.querySelectorAll('#card-tabs button').forEach((tab, idx) => {
                 tab.className = idx === index
@@ -1980,56 +1961,188 @@
             } catch (e) {}
         }
 
-        let pendingSimulatedOrder = null;
+        // ==========================================
+        // WHATSAPP COD OTP VERIFICATION ENGINE
+        // ==========================================
+        let whatsappOtpPhone = null;
+        let whatsappOtpVerificationToken = null;
+        let resendTimerInterval = null;
+        let whatsappOtpFailedAttempts = 0;
 
-        function openTestPaymentModal(orderData) {
-            pendingSimulatedOrder = orderData;
-            document.getElementById('test-pay-order-id').textContent = orderData.orderId;
-            document.getElementById('test-pay-amount').textContent = `Rs. ${(orderData.amount / 100).toFixed(2)}`;
-            document.getElementById('test-payment-modal').classList.remove('hidden');
+        function openWhatsAppOtpModal(phone) {
+            whatsappOtpPhone = phone;
+            whatsappOtpFailedAttempts = 0;
+            
+            // Format phone display
+            const formattedDisplay = `+91 ${phone.substring(0, 5)} ${phone.substring(5)}`;
+            document.getElementById('otp-phone-display').textContent = formattedDisplay;
+
+            // Clear inputs
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`otp-${i}`);
+                if (el) el.value = '';
+            }
+
+            // Hide error msg
+            const statusBox = document.getElementById('otp-status-msg');
+            statusBox.classList.add('hidden');
+
+            // Reset buttons
+            document.getElementById('btn-verify-otp').disabled = false;
+            document.getElementById('btn-verify-text').textContent = 'Verify & Confirm Order';
+
+            // Show modal
+            document.getElementById('whatsapp-otp-modal').classList.remove('hidden');
+
+            // Start 10-second countdown timer
+            startResendTimer(10);
+
+            // Auto focus first input
+            setTimeout(() => {
+                document.getElementById('otp-1')?.focus();
+            }, 100);
         }
 
-        function closeTestPaymentModal() {
-            document.getElementById('test-payment-modal').classList.add('hidden');
+        function closeWhatsAppOtpModal() {
+            document.getElementById('whatsapp-otp-modal').classList.add('hidden');
+            if (resendTimerInterval) clearInterval(resendTimerInterval);
+            setCheckoutButtonLoading(false);
         }
 
-        async function completeSimulatedPayment(paymentType) {
-            if (!pendingSimulatedOrder) return;
-            const orderData = pendingSimulatedOrder;
-            closeTestPaymentModal();
-            setCheckoutButtonLoading(true, "Simulating Payment & Booking Shipment...");
+        function handleOtpInput(current, nextId, prevId) {
+            current.value = current.value.replace(/\D/g, '');
+            if (current.value.length >= 1) {
+                if (nextId) document.getElementById(nextId)?.focus();
+            }
+        }
+
+        function handleOtpKeyDown(event, current, prevId, nextId) {
+            if (event.key === 'Backspace' && !current.value && prevId) {
+                document.getElementById(prevId)?.focus();
+            }
+        }
+
+        function startResendTimer(seconds) {
+            if (resendTimerInterval) clearInterval(resendTimerInterval);
+            
+            const timerBtn = document.getElementById('btn-resend-otp');
+            const timerCount = document.getElementById('resend-timer-count');
+            
+            timerBtn.disabled = true;
+            let currentSec = seconds;
+            timerCount.innerHTML = `<span id="resend-timer-count">${currentSec}</span>s`;
+
+            resendTimerInterval = setInterval(() => {
+                currentSec--;
+                if (currentSec > 0) {
+                    const countSpan = document.getElementById('resend-timer-count');
+                    if (countSpan) countSpan.textContent = currentSec;
+                } else {
+                    clearInterval(resendTimerInterval);
+                    timerBtn.disabled = false;
+                    timerBtn.innerHTML = 'Resend OTP';
+                }
+            }, 1000);
+        }
+
+        async function resendWhatsAppOtpCode() {
+            if (!whatsappOtpPhone) return;
+
+            const timerBtn = document.getElementById('btn-resend-otp');
+            timerBtn.disabled = true;
+            timerBtn.textContent = 'Sending...';
+
+            showOtpStatus('Sending fresh OTP to your WhatsApp...', 'loading');
 
             try {
-                const verifyRes = await fetch('/api/payments/razorpay/verify', {
+                const res = await fetch('/api/orders/send-cod-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        razorpay_order_id: orderData.razorpayOrderId || `order_${orderData.orderId}`,
-                        razorpay_payment_id: `pay_sim_${paymentType}_${Date.now()}`,
-                        razorpay_signature: `sig_sim_${Date.now()}`
-                    })
+                    body: JSON.stringify({ phone: whatsappOtpPhone })
                 });
 
-                const verifyResult = await verifyRes.json();
-                if (verifyRes.ok && verifyResult.success) {
-                    showSuccessOrder(verifyResult.data);
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    whatsappOtpFailedAttempts = 0;
+                    document.getElementById('btn-verify-otp').disabled = false;
+                    showOtpStatus('✅ Fresh OTP sent! Please check your WhatsApp messages.', 'success');
+                    startResendTimer(data.cooldownSeconds || 10);
                 } else {
-                    showSuccessOrder({
-                        orderId: orderData.orderId,
-                        totalAmount: (orderData.amount / 100).toFixed(2),
-                        customer: orderData.customer || { name: document.getElementById('ship-name').value, phone: document.getElementById('ship-phone').value, address1: document.getElementById('ship-address1').value, city: document.getElementById('ship-city').value, state: document.getElementById('ship-state').value, pincode: document.getElementById('ship-pincode').value },
-                        paymentMethod: 'razorpay'
-                    });
+                    showOtpStatus(`❌ ${data.error?.message || 'Failed to send OTP.'}`, 'error');
+                    timerBtn.disabled = false;
+                    timerBtn.textContent = 'Resend OTP';
                 }
             } catch (err) {
-                showSuccessOrder({
-                    orderId: orderData.orderId,
-                    totalAmount: (orderData.amount / 100).toFixed(2),
-                    customer: orderData.customer || { name: document.getElementById('ship-name').value, phone: document.getElementById('ship-phone').value, address1: document.getElementById('ship-address1').value, city: document.getElementById('ship-city').value, state: document.getElementById('ship-state').value, pincode: document.getElementById('ship-pincode').value },
-                    paymentMethod: 'razorpay'
+                showOtpStatus('❌ Network error sending OTP. Please try again.', 'error');
+                timerBtn.disabled = false;
+                timerBtn.textContent = 'Resend OTP';
+            }
+        }
+
+        function showOtpStatus(message, type) {
+            const box = document.getElementById('otp-status-msg');
+            box.classList.remove('hidden', 'bg-rose-50', 'text-rose-700', 'border-rose-200', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200', 'bg-amber-50', 'text-amber-700', 'border-amber-200');
+
+            if (type === 'error') {
+                box.classList.add('bg-rose-50', 'text-rose-700', 'border-rose-200');
+            } else if (type === 'success') {
+                box.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+            } else {
+                box.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-200');
+            }
+            box.textContent = message;
+        }
+
+        async function submitWhatsAppOtpVerification() {
+            const digit1 = document.getElementById('otp-1').value.trim();
+            const digit2 = document.getElementById('otp-2').value.trim();
+            const digit3 = document.getElementById('otp-3').value.trim();
+            const digit4 = document.getElementById('otp-4').value.trim();
+            const otpCode = `${digit1}${digit2}${digit3}${digit4}`;
+
+            if (otpCode.length < 4) {
+                showOtpStatus('Please enter all 4 digits of your WhatsApp OTP.', 'error');
+                return;
+            }
+
+            const verifyBtn = document.getElementById('btn-verify-otp');
+            const verifyText = document.getElementById('btn-verify-text');
+            verifyBtn.disabled = true;
+            verifyText.textContent = 'Verifying Code...';
+
+            try {
+                const res = await fetch('/api/orders/verify-cod-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: whatsappOtpPhone, otp: otpCode })
                 });
-            } finally {
-                setCheckoutButtonLoading(false);
+
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    showOtpStatus('✅ Verified successfully! Placing your order...', 'success');
+                    whatsappOtpVerificationToken = data.verificationToken;
+                    
+                    setTimeout(() => {
+                        closeWhatsAppOtpModal();
+                        executeOrderCreation(whatsappOtpVerificationToken);
+                    }, 600);
+                } else {
+                    whatsappOtpFailedAttempts++;
+                    verifyBtn.disabled = false;
+                    verifyText.textContent = 'Verify & Confirm Order';
+
+                    if (data.error?.code === 'MAX_ATTEMPTS_EXCEEDED' || whatsappOtpFailedAttempts >= 3) {
+                        showOtpStatus('⚠️ Maximum 3 attempts exceeded. Click "Resend OTP" to receive a new code.', 'error');
+                        verifyBtn.disabled = true;
+                    } else {
+                        const msg = data.error?.message || 'Invalid OTP code.';
+                        showOtpStatus(`❌ ${msg}`, 'error');
+                    }
+                }
+            } catch (err) {
+                verifyBtn.disabled = false;
+                verifyText.textContent = 'Verify & Confirm Order';
+                showOtpStatus('❌ Connection error verifying OTP. Please try again.', 'error');
             }
         }
 
@@ -2084,6 +2197,45 @@
             // Save details to storage
             saveCustomerDetailsToStorage();
 
+            // If Cash on Delivery (COD) selected, trigger WhatsApp OTP verification modal first
+            if (selectedPaymentMethod === 'cod') {
+                setCheckoutButtonLoading(true, "Sending WhatsApp Verification OTP...");
+                try {
+                    const otpRes = await fetch('/api/orders/send-cod-otp', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone: cleanPhone })
+                    });
+                    const otpData = await otpRes.json();
+                    if (otpRes.ok && otpData.success) {
+                        openWhatsAppOtpModal(cleanPhone);
+                    } else {
+                        showErrorFeedback(otpData.error?.message || 'Failed to send WhatsApp verification OTP.', 'WhatsApp OTP Error');
+                        setCheckoutButtonLoading(false);
+                    }
+                } catch (err) {
+                    showErrorFeedback('Could not connect to WhatsApp OTP service. Please try again.', 'Connection Error');
+                    setCheckoutButtonLoading(false);
+                }
+                return;
+            }
+
+            // Razorpay flow directly calls server order creation
+            executeOrderCreation(null);
+        }
+
+        async function executeOrderCreation(verificationToken) {
+            const name = document.getElementById('ship-name').value.trim();
+            const phone = document.getElementById('ship-phone').value.trim();
+            const pincode = document.getElementById('ship-pincode').value.trim();
+            const address1 = document.getElementById('ship-address1').value.trim();
+            const address2 = document.getElementById('ship-address2').value.trim();
+            const city = document.getElementById('ship-city').value.trim();
+            const state = document.getElementById('ship-state').value.trim();
+
+            const cleanPhone = phone.replace(/\D/g, '');
+            const cleanPincode = pincode.replace(/\D/g, '');
+
             // Lock UI
             setCheckoutButtonLoading(true, "Securing Order with Server...");
 
@@ -2102,7 +2254,8 @@
                     sku: item.sku,
                     quantity: item.qty
                 })),
-                paymentMethod: selectedPaymentMethod
+                paymentMethod: selectedPaymentMethod,
+                verificationToken: verificationToken || null
             };
 
             try {

@@ -4,6 +4,7 @@ const router = express.Router();
 const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
 const shiprocketService = require('../services/shiprocketService');
+const whatsappService = require('../services/whatsappService');
 const config = require('../config/env');
 const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
@@ -79,6 +80,10 @@ router.post('/razorpay', async (req, res) => {
               status: freshOrder.status,
               events: freshOrder.events
             });
+
+            whatsappService.sendOrderConfirmationWhatsApp(freshOrder).catch(err => {
+              logger.error('WEBHOOK_WHATSAPP_CONFIRM_FAIL', { orderId, error: err.message });
+            });
           }
 
           // Trigger Shiprocket booking if not yet booked
@@ -103,6 +108,10 @@ router.post('/razorpay', async (req, res) => {
                 shipping: freshOrder.shipping,
                 status: freshOrder.status,
                 events: freshOrder.events
+              });
+
+              whatsappService.sendShippingConfirmationWhatsApp(freshOrder).catch(err => {
+                logger.error('WEBHOOK_WHATSAPP_SHIPPING_FAIL', { orderId, error: err.message });
               });
             } catch (shipErr) {
               logger.error('WEBHOOK_SHIPMENT_BOOKING_FAILED', {

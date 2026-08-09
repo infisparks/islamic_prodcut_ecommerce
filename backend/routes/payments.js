@@ -5,6 +5,7 @@ const { validatePaymentVerification } = require('../middleware/validation');
 const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
 const shiprocketService = require('../services/shiprocketService');
+const whatsappService = require('../services/whatsappService');
 const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
 
@@ -87,6 +88,11 @@ router.post('/razorpay/verify', validatePaymentVerification, async (req, res, ne
 
       await firebaseService.updateOrder(orderId, paymentUpdates);
 
+      // Trigger Order Confirmation WhatsApp message
+      whatsappService.sendOrderConfirmationWhatsApp(freshOrder).catch(err => {
+        logger.error('WHATSAPP_RAZORPAY_CONFIRM_FAIL', { orderId, error: err.message });
+      });
+
       // 4. Book Shiprocket Shipment
       if (
         !freshOrder.shipping ||
@@ -117,6 +123,11 @@ router.post('/razorpay/verify', validatePaymentVerification, async (req, res, ne
             orderId,
             awb: shipmentDetails.awb,
             courier: shipmentDetails.courierName
+          });
+
+          // Trigger Shipping Confirmation WhatsApp message
+          whatsappService.sendShippingConfirmationWhatsApp(freshOrder).catch(err => {
+            logger.error('WHATSAPP_RAZORPAY_SHIPPING_FAIL', { orderId, error: err.message });
           });
         } catch (shipErr) {
           logger.error('SHIPMENT_CREATION_FAILED_AFTER_PAYMENT', {

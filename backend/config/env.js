@@ -33,6 +33,12 @@ const config = {
     keySecret: process.env.RAZORPAY_KEY_SECRET || '',
     webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET || '',
   },
+
+  whatsapp: {
+    apiUrl: process.env.WHATSAPP_API_URL || 'https://evo.infispark.in',
+    apiKey: process.env.WHATSAPP_API_KEY || 'vR39h6avY69g7kAU3YQbS6V6XEvudson',
+    instance: process.env.WHATSAPP_INSTANCE || 'mudassir',
+  },
 };
 
 module.exports = config;
