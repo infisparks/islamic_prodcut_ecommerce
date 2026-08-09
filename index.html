@@ -452,13 +452,13 @@
                 <div class="bg-sand/60 p-2.5 rounded-xl border border-gold-200">
                     <label class="text-[9px] uppercase font-bold text-gray-600 block mb-1">Select Payment Method</label>
                     <div class="grid grid-cols-2 gap-2 text-xs">
-                        <label id="payment-label-cod" class="border border-gold-500 bg-gold-50/70 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors">
-                            <input type="radio" name="payment" id="payment-method-cod" value="cod" checked onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage();" class="accent-gold-600">
-                            <span class="font-bold text-onyx">Cash on Delivery</span>
-                        </label>
-                        <label id="payment-label-razorpay" class="border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-80 transition-colors">
-                            <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage();" class="accent-gold-600">
+                        <label id="payment-label-razorpay" class="border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors">
+                            <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" checked onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage();" class="accent-gold-600">
                             <span class="font-bold text-onyx">UPI / Card Pay</span>
+                        </label>
+                        <label id="payment-label-cod" class="border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70 transition-colors">
+                            <input type="radio" name="payment" id="payment-method-cod" value="cod" onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage();" class="accent-gold-600">
+                            <span class="font-bold text-onyx">Cash on Delivery</span>
                         </label>
                     </div>
                 </div>
@@ -483,7 +483,7 @@
 
                 <button id="checkout-submit-btn" onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all">
                     <i class="fa-solid fa-lock text-xs"></i>
-                    <span id="checkout-btn-text">PLACE ORDER NOW (CASH ON DELIVERY)</span>
+                    <span id="checkout-btn-text">PAY NOW WITH RAZORPAY (UPI/CARD)</span>
                 </button>
             </div>
         </div>

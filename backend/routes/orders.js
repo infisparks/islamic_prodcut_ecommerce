@@ -47,7 +47,7 @@ router.post('/send-cod-otp', async (req, res, next) => {
     }
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
+    const expiresAt = Date.now() + 15 * 60 * 1000; // Increased to 15 minutes validity
 
     codOtpStore.set(cleanPhone, {
       otp,
@@ -58,7 +58,11 @@ router.post('/send-cod-otp', async (req, res, next) => {
     });
 
     logger.info('COD_OTP_SENT', { phone: cleanPhone });
-    await whatsappService.sendCodOtpWhatsApp(cleanPhone, otp);
+
+    // Trigger WhatsApp Evolution API dispatch asynchronously for sub-100ms instant UI response
+    whatsappService.sendCodOtpWhatsApp(cleanPhone, otp).catch(err => {
+      logger.error('ASYNC_COD_OTP_SEND_ERROR', { phone: cleanPhone, error: err.message });
+    });
 
     return res.json({
       success: true,
