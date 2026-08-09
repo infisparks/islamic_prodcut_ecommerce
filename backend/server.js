@@ -145,8 +145,10 @@ app.use('/api/shipments', shipmentsRouter);
 app.use('/api/webhooks', webhooksRouter);
 app.use('/api/admin', adminRouter);
 
-// 7. Serve existing frontend static files
+// 7. Serve existing frontend static files & media directories
 const rootDir = path.resolve(__dirname, '..');
+app.use('/product', express.static(path.join(rootDir, 'product')));
+app.use('/video', express.static(path.join(rootDir, 'video')));
 app.use(express.static(rootDir));
 
 app.get('/', (req, res) => {
