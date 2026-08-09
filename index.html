@@ -411,25 +411,17 @@
 
 
 
-    <!-- QUICK VIEW MODAL (Responsive with Safe Top Spacing, Top & Bottom Cancel Buttons, and Fixed Bottom Bar) -->
-    <div id="quickview-modal" onclick="if(event.target === this) closeQuickView()" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pt-12 sm:pt-4 transition-all">
-        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full relative border border-gold-400/80 shadow-2xl max-h-[88vh] sm:max-h-[90vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
+    <!-- QUICK VIEW MODAL (Compact, Image Starts at Top with Top-Right Cancel Icon) -->
+    <div id="quickview-modal" onclick="if(event.target === this) closeQuickView()" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pt-4 sm:pt-4 transition-all">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full relative border border-gold-400/80 shadow-2xl max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
             
-            <!-- Sticky Top Header with Pull Handle & Ultra-Accessible Close Button -->
-            <div class="sticky top-0 left-0 right-0 z-50 bg-white/98 backdrop-blur-md border-b border-gray-100 px-3.5 sm:px-5 py-2.5 flex items-center justify-between flex-shrink-0 shadow-xs">
-                <div class="flex items-center gap-2 min-w-0 pr-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
-                    <span class="font-cinzel text-xs sm:text-sm font-bold text-onyx truncate" id="modal-top-title">Product Quick View</span>
-                </div>
-                <!-- Prominent Close Button (Always visible on top header) -->
-                <button onclick="closeQuickView()" class="px-3 py-1 sm:w-9 sm:h-9 rounded-full bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx flex items-center justify-center gap-1.5 transition-all border border-gold-500/40 shadow-md active:scale-90 flex-shrink-0 cursor-pointer font-bold text-xs" aria-label="Close modal" title="Close">
-                    <i class="fa-solid fa-xmark text-sm font-extrabold"></i>
-                    <span class="text-[11px] font-bold uppercase sm:hidden">Close</span>
-                </button>
-            </div>
+            <!-- Top Right Cancel / Close Button (Positioned over the top-right of modal and image) -->
+            <button onclick="closeQuickView()" class="absolute top-3.5 right-3.5 z-50 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/80 hover:bg-gold-500 text-gold-400 hover:text-onyx flex items-center justify-center transition-all border border-gold-500/50 backdrop-blur-md shadow-2xl active:scale-90 cursor-pointer" title="Close modal" aria-label="Close">
+                <i class="fa-solid fa-xmark text-sm font-extrabold"></i>
+            </button>
 
-            <!-- Scrollable Content Body -->
-            <div id="quickview-content" class="p-3.5 sm:p-6 overflow-y-auto flex-1 overscroll-contain"></div>
+            <!-- Scrollable Content Body (Starts directly with the product image) -->
+            <div id="quickview-content" class="p-3 sm:p-5 overflow-y-auto flex-1 overscroll-contain"></div>
 
             <!-- Fixed / Sticky Bottom Action Bar -->
             <div id="quickview-sticky-bar" class="sticky bottom-0 left-0 right-0 bg-white/98 backdrop-blur-md border-t border-gold-300 p-2.5 sm:p-3 sm:px-6 z-40 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2 flex-shrink-0"></div>
@@ -1089,49 +1081,37 @@
             const currentWeight = activeVariant ? activeVariant.weight : p.weight;
             const discountPercent = Math.round(((currentOldPrice - currentPrice) / currentOldPrice) * 100);
 
-            const topTitle = document.getElementById('modal-top-title');
-            if (topTitle) topTitle.textContent = p.name;
-
-            // Populate Main Scrollable Content
+            // Populate Main Scrollable Content (Starts directly from the top image)
             document.getElementById('quickview-content').innerHTML = `
-                <div class="flex items-center justify-between mb-2.5">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="bg-onyx text-gold-400 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/40 uppercase">
-                            ${p.badge}
-                        </span>
-                        <span class="bg-purple-900/90 text-purple-200 text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-purple-400/40">
-                            SKU: ${currentSku}
-                        </span>
-                        <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                            <i class="fa-solid fa-circle-check text-[10px] mr-1"></i> In Stock (${currentWeight})
-                        </span>
-                    </div>
-                    <span class="text-xs text-amber-600 font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-star text-gold-500"></i> ${p.rating}
-                    </span>
-                </div>
-
-                <!-- MAIN MEDIA DISPLAY (Uncropped, Full Aspect Ratio View with Smooth Curved Corners) -->
+                <!-- MAIN MEDIA DISPLAY (Starts at top with Smooth Curved Corners & Overlay Badges) -->
                 <div class="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border border-gold-500/30 mb-3 shadow-2xl flex items-center justify-center select-none group">
                     
+                    <!-- Floating Badges on Top-Left of Image -->
+                    <div class="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5 flex-wrap max-w-[75%] pointer-events-none">
+                        <span class="bg-black/80 backdrop-blur-md text-gold-400 text-[9px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/40 uppercase shadow-md">
+                            ${p.badge}
+                        </span>
+                        <span class="bg-purple-950/85 backdrop-blur-md text-purple-200 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border border-purple-400/40 shadow-md">
+                            SKU: ${currentSku}
+                        </span>
+                        <span class="text-[9px] text-emerald-300 font-bold bg-emerald-950/85 backdrop-blur-md px-2 py-0.5 rounded-full border border-emerald-500/40 shadow-md">
+                            ${currentWeight}
+                        </span>
+                    </div>
+
                     ${!isVideo ? `
-                        <!-- Floating Zoom Controls for Image (Placed Top-Left so it never clashes with Close button) -->
-                        <div class="absolute top-2.5 left-2.5 z-20 flex items-center gap-1 bg-black/80 backdrop-blur-md text-white p-1 rounded-xl border border-gold-500/30 text-xs shadow-xl" onclick="event.stopPropagation()">
-                            <button onclick="zoomModalImage(-0.3)" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom Out">
-                                <i class="fa-solid fa-magnifying-glass-minus text-xs"></i>
+                        <!-- Floating Zoom Controls for Image -->
+                        <div class="absolute bottom-2.5 left-2.5 z-20 flex items-center gap-1 bg-black/80 backdrop-blur-md text-white p-1 rounded-xl border border-gold-500/30 text-xs shadow-xl" onclick="event.stopPropagation()">
+                            <button onclick="zoomModalImage(-0.3)" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom Out">
+                                <i class="fa-solid fa-magnifying-glass-minus text-[10px]"></i>
                             </button>
-                            <span id="zoom-level-label" class="text-[10px] font-mono px-1 font-extrabold text-gold-300 min-w-[38px] text-center">${Math.round(currentZoom * 100)}%</span>
-                            <button onclick="zoomModalImage(0.3)" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom In">
-                                <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                            <span id="zoom-level-label" class="text-[9px] sm:text-[10px] font-mono px-1 font-extrabold text-gold-300 min-w-[34px] text-center">${Math.round(currentZoom * 100)}%</span>
+                            <button onclick="zoomModalImage(0.3)" class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom In">
+                                <i class="fa-solid fa-magnifying-glass-plus text-[10px]"></i>
                             </button>
-                            <button onclick="zoomModalImage('reset')" class="px-2 py-1 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx text-[9px] font-extrabold uppercase transition-colors" title="Reset Zoom">
+                            <button onclick="zoomModalImage('reset')" class="px-1.5 py-0.5 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx text-[8px] sm:text-[9px] font-extrabold uppercase transition-colors" title="Reset Zoom">
                                 Reset
                             </button>
-                        </div>
-
-                        <!-- Zoom / Drag Tooltip Badge -->
-                        <div class="absolute bottom-2.5 left-2.5 z-20 bg-black/75 backdrop-blur-md text-gold-300 text-[10px] font-semibold px-2.5 py-1 rounded-full pointer-events-none flex items-center gap-1.5 border border-gold-500/30 shadow-lg">
-                            <i class="fa-solid fa-expand text-[9px]"></i> Double-click or +/- to Zoom & Drag
                         </div>
 
                         <!-- Full Uncropped Image View Container with Smooth Curves -->
