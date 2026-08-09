@@ -1732,15 +1732,6 @@
 
             const orderId = orderData.orderId || 'FC-CONFIRMED';
             const isCod = orderData.payment && orderData.payment.provider === 'COD';
-            const paymentStatusLabel = isCod ? 'Pending (Cash on Delivery)' : '✓ Paid (Razorpay)';
-            const shippingStatusLabel = orderData.shipping && orderData.shipping.status !== 'NOT_BOOKED'
-                ? `✓ Shipment ${orderData.shipping.status === 'BOOKED' || orderData.shipping.status === 'AWB_ASSIGNED' ? 'Booked' : orderData.shipping.status}`
-                : 'Processing Express Booking';
-
-            const courierName = (orderData.shipping && orderData.shipping.courierName) || 'Shiprocket Express Partner';
-            const awbNumber = (orderData.shipping && orderData.shipping.awb) || 'Assigned after dispatch';
-            const trackingUrl = orderData.shipping && orderData.shipping.trackingUrl;
-
             const customer = orderData.customer || {
                 name: document.getElementById('ship-name').value.trim(),
                 phone: document.getElementById('ship-phone').value.trim(),
