@@ -989,28 +989,30 @@
                     
                     <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
                         <div>
-                            <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1">
+                            <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1.5">
                                 <span>★★★★★ ${p.rating}</span>
                                 <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200">${hasVariants ? '3 Kit Options' : 'In Stock'}</span>
                             </div>
-                            <h3 class="font-bold text-xs text-onyx line-clamp-1 group-hover:text-gold-600 transition-colors">
+                            <h3 class="font-bold text-xs sm:text-sm text-onyx line-clamp-2 min-h-[2.25rem] leading-snug group-hover:text-gold-600 transition-colors">
                                 ${p.name}
                             </h3>
-                            <p class="text-[10px] text-gray-500 line-clamp-2 mt-0.5">
+                            <p class="text-[10px] text-gray-500 line-clamp-2 mt-1">
                                 ${p.desc}
                             </p>
                         </div>
 
                         <div class="mt-2.5 pt-2 border-t border-gray-100">
-                            <div class="flex items-center gap-1.5 mb-2 flex-nowrap whitespace-nowrap overflow-hidden">
-                                ${hasVariants ? `
-                                    <span class="font-extrabold text-xs sm:text-sm text-onyx whitespace-nowrap">Rs. ${minPrice} - ${maxPrice}</span>
-                                    <span class="text-[10px] text-gray-400 line-through whitespace-nowrap">Rs. ${oldPrice}</span>
-                                ` : `
-                                    <span class="font-extrabold text-xs sm:text-sm text-onyx whitespace-nowrap">Rs. ${p.price}</span>
-                                    <span class="text-[10px] text-gray-400 line-through whitespace-nowrap">Rs. ${p.oldPrice}</span>
-                                `}
-                                <span class="text-[8px] text-red-600 font-bold bg-red-50 px-1 rounded whitespace-nowrap">Special Offer</span>
+                            <div class="flex items-center justify-between gap-1 mb-2 flex-wrap">
+                                <div class="flex items-baseline gap-1">
+                                    ${hasVariants ? `
+                                        <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${minPrice} – ${maxPrice}</span>
+                                        <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${oldPrice}</span>
+                                    ` : `
+                                        <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${p.price}</span>
+                                        <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${p.oldPrice}</span>
+                                    `}
+                                </div>
+                                <span class="text-[8px] sm:text-[9px] text-red-600 font-bold bg-red-50 px-1.5 py-0.5 rounded border border-red-200 shrink-0">Special Offer</span>
                             </div>
                             <div class="grid grid-cols-2 gap-1.5">
                                 <button onclick="event.stopPropagation(); quickView(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 transition-all border border-gray-300">
