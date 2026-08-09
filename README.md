@@ -119,8 +119,27 @@ npm start
 ```
 
 Visit the storefront at: `http://localhost:3000`
+Visit the admin dashboard at: `http://localhost:3000/admin`
 
 ---
+
+## 🛡️ Admin Dashboard & Firebase Authentication
+
+The Admin Portal (`/admin`) is built following a clean HR-dashboard minimal design system (purple/indigo primary accents, `#F5F6F8` background, clean data tables, live search/filtering, and 1-click order cancellation).
+
+### How to Create an Admin Account in Firebase Auth:
+1. Go to your [Firebase Console](https://console.firebase.google.com/) → Select your project **`mantasha-9b267`**.
+2. Click **Authentication** (left sidebar) → **Users** tab.
+3. If not already enabled, enable **Email/Password** under the **Sign-in method** tab.
+4. Click **Add user** → Enter your admin email (e.g. `admin@fatimacalligrapher.com`) and a secure password.
+5. Visit `http://localhost:3000/admin` and log in with those credentials!
+
+### Admin Features:
+- **Real-Time KPIs**: Total Orders, Total Revenue, Paid (Razorpay), Cash on Delivery, and Cancelled Orders.
+- **Search & Live Filters**: Search by Order ID, Customer Name, Phone, AWB, or filter by status.
+- **1-Click Cancel Order**: Instantly cancel any order (ideal for test orders or customer requests). It updates Firebase status to `CANCELLED` and marks shipping as cancelled.
+- **Full Order Detail View**: Customer shipping address, SKU breakdown, payment details, live Shiprocket AWB tracking link, and event activity history.
+- **Retry Failed Shipping**: 1-click retry for any order whose courier booking was delayed.
 
 ## 🔒 Webhook Secret Setup Instructions
 
