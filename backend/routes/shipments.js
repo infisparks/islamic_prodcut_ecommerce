@@ -7,6 +7,37 @@ const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
 
 /**
+ * GET /api/shipments/serviceability
+ * Check if a 6-digit delivery pincode is serviceable
+ */
+router.get('/serviceability', async (req, res, next) => {
+  try {
+    const { pincode, cod, weight } = req.query;
+    if (!pincode) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'MISSING_PINCODE',
+          message: 'Delivery pincode is required.'
+        }
+      });
+    }
+
+    const isCod = cod === 'true' || cod === '1';
+    const parsedWeight = parseFloat(weight) || 0.5;
+
+    const result = await shiprocketService.checkServiceability(pincode, isCod, parsedWeight);
+
+    res.json({
+      success: true,
+      data: result
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * POST /api/shipments/create
  * Internal/Direct endpoint to book shipment for a verified order
  */
