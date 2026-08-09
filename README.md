@@ -110,12 +110,25 @@ npm test
 
 ### 4. Start the Application
 
+#### Option A: Using Node / PM2
 ```bash
 # Development mode with live reload
 npm run dev
 
 # Or standard production start
 npm start
+```
+
+#### Option B: Using Docker & Docker Compose
+```bash
+# Build and run container in background
+docker compose up -d --build
+
+# View container logs
+docker compose logs -f
+
+# Stop container
+docker compose down
 ```
 
 Visit the storefront at: `http://localhost:3000`
