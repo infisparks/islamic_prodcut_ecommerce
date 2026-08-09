@@ -158,31 +158,41 @@ router.post('/:orderId/retry', async (req, res, next) => {
       });
     }
 
-    const shippingDetails = await shiprocketService.createShipment(order);
-    order.shipping = {
-      ...order.shipping,
-      ...shippingDetails
-    };
-    order.status = 'SHIPMENT_BOOKED';
+    try {
+      const shippingDetails = await shiprocketService.createShipment(order);
+      order.shipping = {
+        ...order.shipping,
+        ...shippingDetails
+      };
+      order.status = 'SHIPMENT_BOOKED';
 
-    if (!order.events) order.events = [];
-    order.events.push({
-      event: 'SHIPMENT_RETRY_SUCCESS',
-      timestamp: new Date().toISOString(),
-      details: `Shipment retry successful with AWB ${shippingDetails.awb}`
-    });
+      if (!order.events) order.events = [];
+      order.events.push({
+        event: 'SHIPMENT_RETRY_SUCCESS',
+        timestamp: new Date().toISOString(),
+        details: `Shipment retry successful with AWB ${shippingDetails.awb}`
+      });
 
-    await firebaseService.updateOrder(orderId, {
-      shipping: order.shipping,
-      status: order.status,
-      events: order.events
-    });
+      await firebaseService.updateOrder(orderId, {
+        shipping: order.shipping,
+        status: order.status,
+        events: order.events
+      });
 
-    res.json({
-      success: true,
-      message: 'Shipment booked successfully on retry.',
-      data: order.shipping
-    });
+      res.json({
+        success: true,
+        message: 'Shipment booked successfully on retry.',
+        data: order.shipping
+      });
+    } catch (shipErr) {
+      res.status(400).json({
+        success: false,
+        error: {
+          code: 'SHIPROCKET_ERROR',
+          message: shipErr.message || 'Shiprocket booking failed on retry.'
+        }
+      });
+    }
   } catch (err) {
     next(err);
   }
