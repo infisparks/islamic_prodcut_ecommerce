@@ -233,7 +233,7 @@ const shiprocketService = {
       const payload = {
         order_id: order.orderId,
         order_date: orderDate,
-        pickup_location: 'Primary',
+        pickup_location: config.shiprocket.pickupLocation || 'Primary',
         channel_id: '',
         comment: `Order ${order.orderId}`,
         billing_customer_name: order.customer.name,

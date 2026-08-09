@@ -23,6 +23,7 @@ const config = {
   shiprocket: {
     email: process.env.SHIPROCKET_EMAIL || '',
     password: process.env.SHIPROCKET_PASSWORD || '',
+    pickupLocation: process.env.SHIPROCKET_PICKUP_LOCATION || 'Primary',
     webhookSecret: process.env.SHIPROCKET_WEBHOOK_SECRET || '',
     baseUrl: 'https://apiv2.shiprocket.in/v1/external',
   },
