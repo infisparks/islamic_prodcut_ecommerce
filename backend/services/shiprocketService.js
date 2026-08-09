@@ -46,6 +46,14 @@ async function getAuthToken() {
   } catch (err) {
     const errorMsg = err.response?.data?.message || err.message || 'Shiprocket authentication failed';
     logger.error('SHIPROCKET_AUTH_FAILED', { message: errorMsg, status: err.response?.status });
+
+    if (config.shiprocketMode === 'test' || process.env.NODE_ENV === 'test') {
+      logger.warn('SHIPROCKET_AUTH_TEST_MODE_FALLBACK', { message: errorMsg });
+      cachedToken = `mock_jwt_${Math.random().toString(36).substring(2, 18)}`;
+      tokenExpiresAt = now + 10 * 24 * 60 * 60 * 1000;
+      return cachedToken;
+    }
+
     throw new Error(`Shiprocket Auth Error: ${errorMsg}`);
   }
 }
@@ -119,9 +127,37 @@ const PINCODE_STATE_MAP = {
   '84': { city: 'Muzaffarpur', state: 'Bihar' }
 };
 
+function calculateShippingCharge(pincode, weightKg = 0.15) {
+  const clean = String(pincode || '').trim().replace(/\D/g, '');
+  if (!clean || clean.length !== 6) return 50;
+
+  const prefix = clean.substring(0, 2);
+  const prefix3 = clean.substring(0, 3);
+
+  // Local Mumbai / Thane Zone (origin Bhiwandi 421302)
+  if (prefix === '40' || prefix3 === '421') {
+    return 40;
+  }
+  // Maharashtra & Gujarat Zone
+  if (['41', '42', '43', '44', '38', '39'].includes(prefix)) {
+    return 50;
+  }
+  // North / South / Metro Zone (Delhi, Bangalore, Hyderabad, UP, Rajasthan, etc.)
+  if (['11', '12', '13', '14', '16', '20', '21', '22', '24', '25', '28', '30', '50', '56', '60', '70', '80'].includes(prefix)) {
+    return 65;
+  }
+  // Special / Remote / J&K / North-East Zone
+  if (['17', '18', '19', '78', '79'].includes(prefix)) {
+    return 85;
+  }
+  return 60;
+}
+
 const shiprocketService = {
-  // Check Pincode Serviceability
-  checkServiceability: async (pincode, isCod = true, weight = 0.5) => {
+  calculateShippingCharge,
+
+  // Check Pincode Serviceability & Dynamic Courier Rates
+  checkServiceability: async (pincode, isCod = true, weight = 0.15) => {
     const cleanPincode = String(pincode).trim().replace(/\D/g, '');
     if (!/^[1-9][0-9]{5}$/.test(cleanPincode)) {
       return {
@@ -132,6 +168,7 @@ const shiprocketService = {
 
     const prefix = cleanPincode.substring(0, 2);
     const locationInfo = PINCODE_STATE_MAP[prefix] || { city: 'Serviceable Area', state: 'India' };
+    const dynamicCharge = calculateShippingCharge(cleanPincode, weight);
 
     try {
       const token = await getAuthToken();
@@ -139,9 +176,9 @@ const shiprocketService = {
         try {
           const res = await axios.get(`${config.shiprocket.baseUrl}/courier/serviceability/`, {
             params: {
-              pickup_postcode: '400001',
+              pickup_postcode: '421302',
               delivery_postcode: cleanPincode,
-              weight: weight || 0.5,
+              weight: weight || 0.15,
               cod: isCod ? 1 : 0
             },
             headers: { Authorization: `Bearer ${token}` },
@@ -153,12 +190,15 @@ const shiprocketService = {
             if (couriers.length > 0) {
               const bestCourier = couriers[0];
               const courierNames = couriers.slice(0, 3).map(c => c.courier_name);
+              const liveRate = Math.round(Number(bestCourier.rate) || dynamicCharge);
+
               return {
                 isServiceable: true,
                 pincode: cleanPincode,
                 city: locationInfo.city,
                 state: locationInfo.state,
-                estimatedDays: bestCourier.etd ? `${bestCourier.etd} Days` : '3-5 Business Days',
+                shippingCharge: liveRate,
+                estimatedDays: bestCourier.etd ? `${bestCourier.etd} Days` : '3-4 Business Days',
                 codAvailable: Boolean(bestCourier.cod),
                 couriers: courierNames,
                 deliveryType: 'Express Courier Delivery'
@@ -170,12 +210,13 @@ const shiprocketService = {
         }
       }
 
-      // Valid Indian Pincode Fallback / Test Simulation
+      // Valid Indian Pincode Fallback / Test Simulation with dynamic distance rate
       return {
         isServiceable: true,
         pincode: cleanPincode,
         city: locationInfo.city,
         state: locationInfo.state,
+        shippingCharge: dynamicCharge,
         estimatedDays: '3-4 Business Days',
         codAvailable: true,
         couriers: ['BlueDart Express', 'Delhivery Surface', 'DTDC Air'],
@@ -188,6 +229,7 @@ const shiprocketService = {
         pincode: cleanPincode,
         city: locationInfo.city,
         state: locationInfo.state,
+        shippingCharge: dynamicCharge,
         estimatedDays: '3-5 Business Days',
         codAvailable: true,
         couriers: ['Standard Express Delivery'],

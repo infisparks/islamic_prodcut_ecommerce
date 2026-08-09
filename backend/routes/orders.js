@@ -18,8 +18,8 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
   try {
     const { customer, items, paymentMethod } = req.sanitizedOrder;
 
-    // 1. Calculate trusted cart pricing, weights, dimensions
-    const trustedOrderData = buildTrustedOrderItems(items);
+    // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
+    const trustedOrderData = buildTrustedOrderItems(items, customer.pincode);
     const internalOrderId = generateOrderId();
     const now = new Date().toISOString();
 

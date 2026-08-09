@@ -28,7 +28,7 @@ async function verifyAdminAuth(req, res, next) {
   const idToken = authHeader.split('Bearer ')[1].trim();
 
   // Test token bypass for automated test suites
-  if (config.nodeEnv === 'development' && idToken === 'mock_admin_token_for_tests') {
+  if ((config.nodeEnv === 'development' || config.nodeEnv === 'test') && idToken === 'mock_admin_token_for_tests') {
     req.adminUser = {
       uid: 'admin_test_uid',
       email: 'admin@fatimacalligrapher.com'

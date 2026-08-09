@@ -1,3 +1,7 @@
+process.env.NODE_ENV = 'test';
+const config = require('../config/env');
+config.shiprocketMode = 'test';
+
 /**
  * Automated Verification Test Suite
  * Tests all 12 critical ecommerce, payment, shipping, and failure scenarios.
@@ -101,7 +105,7 @@ async function runTests() {
 
     assert.strictEqual(createRes.status, 201);
     assert.strictEqual(createRes.body.success, true);
-    assert.strictEqual(createRes.body.data.amount, 69900); // Rs 699 = 69900 paise
+    assert.strictEqual(createRes.body.data.amount, 73900); // Rs 699 + Rs 40 shipping = 73900 paise
     assert.ok(createRes.body.data.orderId.startsWith('FC-'));
 
     const { orderId, razorpayOrderId } = createRes.body.data;
@@ -148,14 +152,14 @@ async function runTests() {
       customer: mockCustomer,
       items: [
         { productId: 1, sku: 'fati_001', quantity: 2 }, // 699 * 2 = 1398
-        { productId: 5, sku: 'fati_stk_01', quantity: 1 } // 199 * 1 = 199 -> Total = 1597
+        { productId: 5, sku: 'fati_stk_01', quantity: 1 } // 199 * 1 = 199 -> Subtotal = 1597 + 40 = 1637
       ],
       paymentMethod: 'razorpay'
     });
 
     assert.strictEqual(createRes.status, 201);
-    assert.strictEqual(createRes.body.data.pricing.total, 1597);
-    assert.strictEqual(createRes.body.data.amount, 159700);
+    assert.strictEqual(createRes.body.data.pricing.total, 1637);
+    assert.strictEqual(createRes.body.data.amount, 163700);
 
     const { razorpayOrderId } = createRes.body.data;
     const paymentId = 'pay_cart_mult_999';
@@ -319,8 +323,8 @@ async function runTests() {
 
     const res = await makeRequest('POST', '/api/orders/create', tamperedPayload);
     assert.strictEqual(res.status, 201);
-    assert.strictEqual(res.body.data.pricing.total, 699); // Server computed authoritative price
-    assert.strictEqual(res.body.data.amount, 69900); // 69900 paise
+    assert.strictEqual(res.body.data.pricing.total, 739); // Server computed authoritative price (699 + 40 shipping)
+    assert.strictEqual(res.body.data.amount, 73900); // 73900 paise
   });
 
   // SCENARIO 8: Invalid SKU -> backend rejects with 400 Bad Request
@@ -455,14 +459,14 @@ async function runTests() {
 
   // SCENARIO 14: Admin API Authorized -> Fetches Orders & Stats
   await test('Scenario 14: Admin API Authorized -> Fetches Orders & Stats Successfully', async () => {
+    const headers = { 'Authorization': 'Bearer mock_admin_token_for_tests' };
+
     // 1. Create a test order
     await makeRequest('POST', '/api/orders/create', {
       customer: mockCustomer,
       items: [{ sku: 'fati_001', quantity: 1 }],
       paymentMethod: 'cod'
     });
-
-    const headers = { 'Authorization': 'Bearer mock_admin_token_for_tests' };
 
     // Fetch Orders
     const ordersRes = await makeRequest('GET', '/api/admin/orders', null, headers);
@@ -479,6 +483,8 @@ async function runTests() {
 
   // SCENARIO 15: Admin Cancel Order -> Successfully cancels order in Firebase
   await test('Scenario 15: Admin Cancel Order -> Status set to CANCELLED', async () => {
+    const headers = { 'Authorization': 'Bearer mock_admin_token_for_tests' };
+
     // 1. Create an order
     const createRes = await makeRequest('POST', '/api/orders/create', {
       customer: mockCustomer,
@@ -486,8 +492,6 @@ async function runTests() {
       paymentMethod: 'cod'
     });
     const orderId = createRes.body.data.orderId;
-
-    const headers = { 'Authorization': 'Bearer mock_admin_token_for_tests' };
 
     // 2. Admin cancels order
     const cancelRes = await makeRequest('POST', `/api/admin/orders/${orderId}/cancel`, {

@@ -530,11 +530,21 @@
                 </div>
             </div>
 
-            <!-- Sticky Bottom CTA -->
+            <!-- Sticky Bottom CTA with Item Subtotal + Dynamic Shipping Fee Breakdown -->
             <div class="p-3 sm:p-4 bg-sand/80 border-t border-gold-300 flex-shrink-0">
-                <div class="flex items-center justify-between mb-2 text-xs font-bold text-onyx">
-                    <span>Total Payable (Free Express Shipping):</span>
-                    <span id="cart-total" class="text-base text-gold-700 font-extrabold">Rs. 0.00</span>
+                <div class="space-y-1 text-xs mb-2">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Items Subtotal:</span>
+                        <span id="cart-subtotal" class="font-bold text-onyx">Rs. 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-800 font-semibold">
+                        <span>Express Delivery:</span>
+                        <span id="cart-shipping-fee" class="font-bold">FREE / Pincode</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-bold text-onyx border-t border-gray-200 pt-1.5">
+                        <span>Total Payable:</span>
+                        <span id="cart-total" class="text-base text-gold-700 font-extrabold">Rs. 0.00</span>
+                    </div>
                 </div>
 
                 <button id="checkout-submit-btn" onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all">
@@ -1557,10 +1567,13 @@
             }, 3000);
         }
 
+        let currentShippingFee = 0;
+
         function updateCartUI() {
             const container = document.getElementById('cart-items-container');
             const cartCountEl = document.getElementById('cart-count');
             const subtotalEl = document.getElementById('cart-subtotal');
+            const shippingFeeEl = document.getElementById('cart-shipping-fee');
             const totalEl = document.getElementById('cart-total');
 
             const stickyBar = document.getElementById('sticky-cart-bar');
@@ -1568,16 +1581,20 @@
             const stickyTotalEl = document.getElementById('sticky-cart-total');
 
             const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const totalWithShipping = subtotalPrice > 0 ? (subtotalPrice + currentShippingFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
-            if (subtotalEl) subtotalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
-            if (totalEl) totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+            if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
+            if (shippingFeeEl) {
+                shippingFeeEl.textContent = currentShippingFee > 0 ? `Rs. ${currentShippingFee.toFixed(2)}` : 'FREE';
+            }
+            if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
 
             if (stickyBar) {
                 if (totalItems > 0) {
                     stickyCountEl.textContent = `${totalItems} ${totalItems === 1 ? 'Item' : 'Items'}`;
-                    stickyTotalEl.textContent = `Total: Rs. ${totalPrice.toFixed(0)}`;
+                    stickyTotalEl.textContent = `Total: Rs. ${totalWithShipping.toFixed(0)}`;
                     stickyBar.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
                 } else {
                     stickyBar.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
@@ -1738,6 +1755,19 @@
                 ? orderData.items
                 : cart;
 
+            const shippingStatusRaw = (orderData.shipping && orderData.shipping.status) ? orderData.shipping.status : 'PENDING';
+            let shippingStatusBadge = '';
+            let courierName = (orderData.shipping && orderData.shipping.courierName) || 'Shiprocket Express Partner';
+            let awbNumber = (orderData.shipping && orderData.shipping.awb) || 'Assigned on dispatch';
+            let trackingUrl = (orderData.shipping && orderData.shipping.trackingUrl) || '';
+
+            if (['BOOKED', 'AWB_ASSIGNED', 'SHIPPED', 'IN_TRANSIT'].includes(shippingStatusRaw)) {
+                shippingStatusBadge = `<span class="font-bold text-emerald-700">✓ Shipment Booked</span>`;
+            } else {
+                shippingStatusBadge = `<span class="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">📦 Preparing in Warehouse</span>`;
+                awbNumber = 'Assigned on dispatch';
+            }
+
             const itemsHtml = itemsList.map(item => `
                 <div class="flex justify-between items-center text-[10px] text-gray-700 py-0.5">
                     <span class="truncate pr-2">${item.name || item.variantName} (${item.sku}) × ${item.quantity || item.qty}</span>
@@ -1745,7 +1775,7 @@
                 </div>
             `).join('');
 
-            const totalAmount = orderData.pricing ? orderData.pricing.total : itemsList.reduce((s, i) => s + ((i.unitPrice || i.price) * (i.quantity || i.qty)), 0);
+            const totalAmount = orderData.pricing ? orderData.pricing.total : (orderData.totalAmount || itemsList.reduce((s, i) => s + ((i.unitPrice || i.price) * (i.quantity || i.qty)), 0));
 
             container.innerHTML = `
                 <div class="bg-sand/80 border border-gold-300 p-3 rounded-xl text-left text-xs space-y-1.5 my-3">
@@ -1761,7 +1791,7 @@
                         </div>
                         <div>
                             <span class="text-gray-500 block text-[9px] uppercase font-semibold">Shipping Status:</span>
-                            <span class="font-bold text-gold-700">${shippingStatusLabel}</span>
+                            ${shippingStatusBadge}
                         </div>
                     </div>
 
@@ -1846,12 +1876,15 @@
                 const result = await fetchPincodeServiceability(clean);
 
                 if (result.isServiceable) {
+                    currentShippingFee = result.shippingCharge || 50;
+                    updateCartUI();
+
                     badge.className = 'text-[11px] p-2.5 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2';
                     badge.innerHTML = `
                         <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                         <div>
                             <div class="font-bold">✓ Delivery Available to ${result.city || ''} ${result.state ? '(' + result.state + ')' : ''}</div>
-                            <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery: <b>${result.estimatedDays || '3-4 Days'}</b> • Express Shipping & COD Supported</div>
+                            <div class="text-[10px] text-emerald-700 mt-0.5">Est: <b>${result.estimatedDays || '3-4 Days'}</b> • Shipping Charge: <b>Rs. ${currentShippingFee}</b> (COD Available)</div>
                         </div>
                     `;
 
