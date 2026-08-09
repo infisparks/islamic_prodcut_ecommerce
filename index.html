@@ -1660,8 +1660,15 @@
 
         function toggleCartDrawer(forceOpen = false) {
             const drawer = document.getElementById('cart-drawer');
-            if (forceOpen || drawer.classList.contains('hidden')) {
+            const isOpening = forceOpen || drawer.classList.contains('hidden');
+            if (isOpening) {
                 drawer.classList.remove('hidden');
+                restoreCustomerDetailsFromStorage();
+                const pincodeInput = document.getElementById('ship-pincode');
+                const cleanPin = pincodeInput ? pincodeInput.value.replace(/\D/g, '').slice(0, 6) : '';
+                if (cleanPin && cleanPin.length === 6) {
+                    handlePincodeAutoCheck(cleanPin);
+                }
             } else {
                 drawer.classList.add('hidden');
             }
@@ -1954,16 +1961,18 @@
         // LOCAL STORAGE AUTO-SAVE AND AUTO-FILL FOR CUSTOMER DETAILS
         function saveCustomerDetailsToStorage() {
             try {
+                const rawPin = document.getElementById('ship-pincode')?.value || '';
+                const cleanPin = rawPin.replace(/\D/g, '').slice(0, 6);
                 const details = {
                     name: document.getElementById('ship-name')?.value || '',
                     phone: document.getElementById('ship-phone')?.value || '',
                     emergencyPhone: document.getElementById('ship-emergency-phone')?.value || '',
-                    pincode: document.getElementById('ship-pincode')?.value || '',
+                    pincode: cleanPin,
                     address1: document.getElementById('ship-address1')?.value || '',
                     address2: document.getElementById('ship-address2')?.value || '',
                     city: document.getElementById('ship-city')?.value || '',
                     state: document.getElementById('ship-state')?.value || '',
-                    paymentMethod: selectedPaymentMethod || 'cod'
+                    paymentMethod: selectedPaymentMethod || 'razorpay'
                 };
                 localStorage.setItem('fc_customer_details', JSON.stringify(details));
             } catch (e) {}
@@ -1980,8 +1989,9 @@
                     document.getElementById('ship-emergency-phone').value = details.emergencyPhone;
                 }
                 if (details.pincode) {
-                    document.getElementById('ship-pincode').value = details.pincode;
-                    handlePincodeAutoCheck(details.pincode);
+                    const cleanPin = String(details.pincode).replace(/\D/g, '').slice(0, 6);
+                    document.getElementById('ship-pincode').value = cleanPin;
+                    handlePincodeAutoCheck(cleanPin);
                 }
                 if (details.address1) document.getElementById('ship-address1').value = details.address1;
                 if (details.address2) document.getElementById('ship-address2').value = details.address2;
@@ -2205,11 +2215,12 @@
                 return;
             }
 
-            const cleanPincode = pincode.replace(/\D/g, '');
+            const cleanPincode = pincode.replace(/\D/g, '').slice(0, 6);
             if (cleanPincode.length !== 6 || !/^[1-9][0-9]{5}$/.test(cleanPincode)) {
                 showErrorFeedback("Please enter a valid 6-digit Indian delivery pincode.", "Invalid Pincode");
                 return;
             }
+            document.getElementById('ship-pincode').value = cleanPincode;
 
             if (!address1 || address1.length < 5) {
                 showErrorFeedback("Please enter your complete flat / house / building address.", "Address Required");

@@ -27,8 +27,8 @@ function validateOrderCreation(req, res, next) {
 
   // Sanitize fields
   const name = sanitizeString(customer.name, 100);
-  const phone = sanitizeString(customer.phone, 15).replace(/\D/g, ''); // only digits
-  const pincode = sanitizeString(customer.pincode, 6).replace(/\D/g, '');
+  const phone = String(customer.phone || '').replace(/\D/g, '').slice(-10); // Extract last 10 digits
+  const pincode = String(customer.pincode || '').replace(/\D/g, '').slice(0, 6); // Extract 6 digits
   const address1 = sanitizeString(customer.address1, 200);
   const address2 = sanitizeString(customer.address2 || '', 200);
   const city = sanitizeString(customer.city, 100);
