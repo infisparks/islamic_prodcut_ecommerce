@@ -161,6 +161,18 @@ router.post('/orders/:orderId/cancel', async (req, res, next) => {
       });
     }
 
+    // If order has a Shiprocket Order ID, cancel it directly on Shiprocket API
+    const srOrderId = order.shipping ? order.shipping.shiprocketOrderId : null;
+    let srCancelMsg = '';
+    if (srOrderId) {
+      const srCancelRes = await shiprocketService.cancelOrder(srOrderId);
+      if (srCancelRes.success) {
+        srCancelMsg = ` (Shiprocket order #${srOrderId} cancelled successfully)`;
+      } else {
+        srCancelMsg = ` (Shiprocket cancellation notice: ${srCancelRes.error || 'Check Shiprocket dashboard'})`;
+      }
+    }
+
     const now = new Date().toISOString();
     const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
 
@@ -168,7 +180,7 @@ router.post('/orders/:orderId/cancel', async (req, res, next) => {
     events.push({
       event: 'ORDER_CANCELLED_BY_ADMIN',
       timestamp: now,
-      details: `Order cancelled by ${adminEmail}. Reason: ${reason || 'Admin manual cancellation'}`
+      details: `Order cancelled by ${adminEmail}. Reason: ${reason || 'Admin manual cancellation'}${srCancelMsg}`
     });
 
     const updates = {
@@ -178,11 +190,11 @@ router.post('/orders/:orderId/cancel', async (req, res, next) => {
     };
 
     const updatedOrder = await firebaseService.updateOrder(orderId, updates);
-    logger.info('ORDER_CANCELLED_BY_ADMIN', { orderId, adminEmail, reason });
+    logger.info('ORDER_CANCELLED_BY_ADMIN', { orderId, adminEmail, reason, shiprocketOrderId: srOrderId });
 
     res.json({
       success: true,
-      message: `Order ${orderId} has been successfully cancelled.`,
+      message: `Order ${orderId} has been successfully cancelled${srCancelMsg}.`,
       data: updatedOrder
     });
   } catch (err) {

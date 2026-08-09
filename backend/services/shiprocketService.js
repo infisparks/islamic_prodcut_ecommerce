@@ -456,6 +456,59 @@ const shiprocketService = {
         invoiceUrl: `https://app.shiprocket.in/orders/${shiprocketOrderId}`
       };
     }
+  },
+
+  /**
+   * Cancel an order/shipment directly on Shiprocket API
+   */
+  cancelOrder: async (shiprocketOrderId) => {
+    if (!shiprocketOrderId) {
+      return { success: false, message: 'No Shiprocket Order ID provided.' };
+    }
+
+    const token = await getAuthToken();
+
+    // If mock/test mode or mock token
+    if (!isConfigured || token.startsWith('mock_jwt_')) {
+      logger.info('SHIPROCKET_CANCEL_ORDER_MOCK_SUCCESS', { shiprocketOrderId });
+      return { success: true, message: 'Mock Shiprocket order cancelled successfully.' };
+    }
+
+    try {
+      const response = await axios.post(
+        `${config.shiprocket.baseUrl}/orders/cancel`,
+        { ids: [Number(shiprocketOrderId)] },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          timeout: 12000
+        }
+      );
+
+      logger.info('SHIPROCKET_CANCEL_ORDER_SUCCESS', {
+        shiprocketOrderId,
+        status: response.status,
+        data: response.data
+      });
+
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || (err.response?.data?.errors ? JSON.stringify(err.response.data.errors) : err.message);
+      logger.error('SHIPROCKET_CANCEL_ORDER_FAILED', {
+        shiprocketOrderId,
+        error: errorMsg
+      });
+
+      return {
+        success: false,
+        error: errorMsg
+      };
+    }
   }
 };
 

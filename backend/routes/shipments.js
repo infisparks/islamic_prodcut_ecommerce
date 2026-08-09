@@ -248,4 +248,52 @@ router.get('/:orderId/invoice', async (req, res, next) => {
   }
 });
 
+/**
+ * POST /api/shipments/:orderId/cancel
+ * Cancel shipment on Shiprocket and update order status in Firebase
+ */
+router.get('/:orderId/cancel', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const order = await firebaseService.getOrder(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'ORDER_NOT_FOUND',
+          message: 'Order was not found.'
+        }
+      });
+    }
+
+    const srOrderId = order.shipping ? order.shipping.shiprocketOrderId : null;
+    let srResult = { success: true };
+    if (srOrderId) {
+      srResult = await shiprocketService.cancelOrder(srOrderId);
+    }
+
+    const events = order.events || [];
+    events.push({
+      event: 'SHIPMENT_CANCELLED',
+      timestamp: new Date().toISOString(),
+      details: `Shipment cancelled on Shiprocket API (ID: ${srOrderId || 'N/A'})`
+    });
+
+    await firebaseService.updateOrder(orderId, {
+      status: 'CANCELLED',
+      'shipping/status': 'CANCELLED',
+      events
+    });
+
+    res.json({
+      success: true,
+      message: 'Shipment and order cancelled successfully.',
+      data: srResult
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
