@@ -555,6 +555,9 @@
                         <td class="py-3 px-4 text-right">
                             <div class="flex items-center justify-end gap-1.5">
                                 ${order.shipping && order.shipping.shiprocketOrderId ? `
+                                    <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1" title="Download Shipping Label">
+                                        <i class="fa-solid fa-tag text-xs"></i> Label
+                                    </a>
                                     <a href="/api/shipments/${orderId}/invoice?redirect=1" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1" title="Download Tax Invoice">
                                         <i class="fa-solid fa-file-invoice text-xs"></i> Invoice
                                     </a>
@@ -648,7 +651,16 @@
                             <div>AWB: <b class="font-mono">${order.shipping?.awb || 'None'}</b></div>
                             <div>Shipping Status: <b>${order.shipping?.status || 'NOT_BOOKED'}</b></div>
                             ${order.shipping?.trackingUrl ? `<div><a href="${order.shipping.trackingUrl}" target="_blank" class="text-indigo-600 underline font-semibold">Track on Shiprocket</a></div>` : ''}
-                            ${order.shipping?.shiprocketOrderId ? `<div class="pt-1"><a href="/api/shipments/${order.orderId}/invoice?redirect=1" target="_blank" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-bold underline"><i class="fa-solid fa-file-invoice text-xs"></i> Download Tax Invoice</a></div>` : ''}
+                            ${order.shipping?.shiprocketOrderId ? `
+                                <div class="pt-2 flex flex-wrap gap-2">
+                                    <a href="/api/shipments/${order.orderId}/label?redirect=1" target="_blank" class="inline-flex items-center gap-1 text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 font-semibold px-2 py-1 rounded text-[11px] transition-colors">
+                                        <i class="fa-solid fa-tag text-xs"></i> Shipping Label
+                                    </a>
+                                    <a href="/api/shipments/${order.orderId}/invoice?redirect=1" target="_blank" class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 font-semibold px-2 py-1 rounded text-[11px] transition-colors">
+                                        <i class="fa-solid fa-file-invoice text-xs"></i> Tax Invoice
+                                    </a>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                 </div>

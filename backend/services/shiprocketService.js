@@ -459,6 +459,51 @@ const shiprocketService = {
   },
 
   /**
+   * Generate and fetch official Shiprocket Shipping Label / Manifest PDF URL
+   */
+  generateShippingLabel: async (shipmentId, shiprocketOrderId) => {
+    const token = await getAuthToken();
+
+    if (!isConfigured || token.startsWith('mock_jwt_')) {
+      logger.info('SHIPROCKET_LABEL_MOCK_GENERATED', { shipmentId, shiprocketOrderId });
+      return {
+        labelUrl: `https://apiv2.shiprocket.in/v1/external/courier/generate/label?shipment_id=${shipmentId || shiprocketOrderId}&mock=1`
+      };
+    }
+
+    try {
+      if (shipmentId) {
+        const response = await axios.post(
+          `${config.shiprocket.baseUrl}/courier/generate/label`,
+          { shipment_id: [Number(shipmentId)] },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 15000
+          }
+        );
+
+        if (response.data && (response.data.label_url || response.data.url)) {
+          return { labelUrl: response.data.label_url || response.data.url };
+        }
+      }
+
+      return {
+        labelUrl: `https://app.shiprocket.in/orders/${shiprocketOrderId}`
+      };
+    } catch (err) {
+      logger.warn('SHIPROCKET_LABEL_GENERATION_FALLBACK', {
+        shipmentId,
+        shiprocketOrderId,
+        error: err.message
+      });
+
+      return {
+        labelUrl: `https://app.shiprocket.in/orders/${shiprocketOrderId}`
+      };
+    }
+  },
+
+  /**
    * Cancel an order/shipment directly on Shiprocket API
    */
   cancelOrder: async (shiprocketOrderId) => {

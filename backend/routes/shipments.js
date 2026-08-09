@@ -296,4 +296,57 @@ router.get('/:orderId/cancel', async (req, res, next) => {
   }
 });
 
+/**
+ * GET /api/shipments/:orderId/label
+ * Fetch or redirect to official Shiprocket Shipping Label / Manifest PDF
+ */
+router.get('/:orderId/label', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { redirect } = req.query;
+    const order = await firebaseService.getOrder(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'ORDER_NOT_FOUND',
+          message: 'Order was not found.'
+        }
+      });
+    }
+
+    const srOrderId = order.shipping ? order.shipping.shiprocketOrderId : null;
+    const shipmentId = order.shipping ? order.shipping.shipmentId : null;
+
+    if (!srOrderId && !shipmentId) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'SHIPMENT_NOT_CREATED',
+          message: 'Shipping label is not available because shipment has not been created.'
+        }
+      });
+    }
+
+    const result = await shiprocketService.generateShippingLabel(shipmentId, srOrderId);
+
+    if (redirect === 'true' || redirect === '1') {
+      return res.redirect(result.labelUrl);
+    }
+
+    res.json({
+      success: true,
+      data: {
+        orderId: order.orderId,
+        shiprocketOrderId: srOrderId,
+        shipmentId: shipmentId,
+        labelUrl: result.labelUrl
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
