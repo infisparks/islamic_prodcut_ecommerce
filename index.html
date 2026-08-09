@@ -360,17 +360,23 @@
         </div>
     </div>
 
-    <!-- CART / CHECKOUT DRAWER (Optimized Compact Mobile View: Full Address Directly in Screen) -->
+    <!-- CART / CHECKOUT DRAWER -->
     <div id="cart-drawer" onclick="if(event.target === this) toggleCartDrawer(false)" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity flex items-end sm:items-stretch justify-center sm:justify-end">
-        <div class="w-full sm:max-w-md bg-white shadow-2xl flex flex-col justify-between rounded-t-3xl sm:rounded-none max-h-[92vh] sm:max-h-full h-auto sm:h-full border-t border-gold-400 sm:border-t-0 overflow-hidden" onclick="event.stopPropagation()">
+        <div class="w-full sm:max-w-md bg-white shadow-2xl flex flex-col justify-between rounded-t-2xl sm:rounded-none max-h-[96dvh] sm:max-h-full h-full border-t border-gold-400 sm:border-t-0 overflow-hidden" onclick="event.stopPropagation()">
             <!-- Header -->
-            <div class="bg-onyx text-pearl p-3 px-4 border-b border-gold-500/30 flex items-center justify-between flex-shrink-0">
+            <div class="sticky top-0 z-50 bg-onyx text-pearl p-3 px-3.5 border-b border-gold-500/30 flex items-center justify-between flex-shrink-0 shadow-md">
                 <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping text-gold-400 text-sm"></i>
-                    <span class="font-cinzel font-bold text-xs sm:text-sm">Checkout & Delivery</span>
+                    <button onclick="toggleCartDrawer(false)" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95 border border-gold-500/30" title="Back to store">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span>Back</span>
+                    </button>
+                    <div class="flex items-center gap-1.5 ml-1">
+                        <i class="fa-solid fa-bag-shopping text-gold-400 text-xs sm:text-sm"></i>
+                        <span class="font-cinzel font-bold text-xs sm:text-sm tracking-wide">Checkout & Delivery</span>
+                    </div>
                 </div>
-                <button onclick="toggleCartDrawer(false)" class="w-7 h-7 rounded-full bg-white/10 hover:bg-gold-500 hover:text-onyx text-gray-300 flex items-center justify-center transition-colors">
-                    <i class="fa-solid fa-xmark text-xs font-bold"></i>
+                <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-gold-500 hover:text-onyx text-gray-300 flex items-center justify-center transition-colors" title="Close Drawer">
+                    <i class="fa-solid fa-xmark text-sm font-bold"></i>
                 </button>
             </div>
 
@@ -484,6 +490,11 @@
                 <button id="checkout-submit-btn" onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all">
                     <i class="fa-solid fa-lock text-xs"></i>
                     <span id="checkout-btn-text">PAY NOW WITH RAZORPAY (UPI/CARD)</span>
+                </button>
+
+                <button onclick="toggleCartDrawer(false)" class="w-full bg-gray-100 hover:bg-gray-200 text-onyx font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors border border-gray-300 mt-2">
+                    <i class="fa-solid fa-arrow-left text-xs text-gold-600"></i>
+                    <span>Continue Shopping (Back to Store)</span>
                 </button>
             </div>
         </div>
