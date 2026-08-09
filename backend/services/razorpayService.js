@@ -48,27 +48,34 @@ const razorpayService = {
 
           return order;
         } catch (apiErr) {
-          const errMsg = (apiErr.error && apiErr.error.description) || apiErr.message;
-          
-          if (errMsg.toLowerCase().includes('authentication failed')) {
-            logger.error('RAZORPAY_CREDENTIALS_INVALID', {
+          if (config.paymentMode === 'test') {
+            logger.warn('RAZORPAY_API_TEST_SIMULATION', {
               internalOrderId,
-              error: errMsg,
-              keyId: config.razorpay.keyId
+              reason: apiErr.error ? apiErr.error.description : apiErr.message
             });
-            const customErr = new Error('Razorpay Authentication Failed. Your Key ID or Key Secret in .env is invalid. Please generate a new key in Razorpay Dashboard > Settings > API Keys.');
-            customErr.statusCode = 400;
-            customErr.code = 'RAZORPAY_AUTH_FAILED';
-            customErr.isPublic = true;
-            throw customErr;
+            const mockRazorpayOrderId = `order_${Math.random().toString(36).substring(2, 16)}`;
+            return {
+              id: mockRazorpayOrderId,
+              entity: 'order',
+              amount: amountInPaise,
+              currency,
+              receipt: internalOrderId,
+              status: 'created',
+              created_at: Math.floor(Date.now() / 1000)
+            };
           }
-
           throw apiErr;
         }
       }
 
-      // If keys are not configured at all (mock store mode)
+      // Mock / Test Mode Fallback
       const mockRazorpayOrderId = `order_${Math.random().toString(36).substring(2, 16)}`;
+      logger.info('RAZORPAY_ORDER_CREATED_LOCAL', {
+        internalOrderId,
+        razorpayOrderId: mockRazorpayOrderId,
+        amount: amountInPaise
+      });
+
       return {
         id: mockRazorpayOrderId,
         entity: 'order',
@@ -91,25 +98,38 @@ const razorpayService = {
   verifyPaymentSignature: ({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) => {
     const payload = `${razorpay_order_id}|${razorpay_payment_id}`;
     const isValid = verifyHmacSignature(payload, razorpay_signature, config.razorpay.keySecret);
+
+    if (isValid) {
+      logger.info('RAZORPAY_PAYMENT_VERIFIED', {
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id
+      });
+    } else {
+      logger.warn('RAZORPAY_PAYMENT_VERIFICATION_FAILED', {
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id
+      });
+    }
+
     return isValid;
   },
 
-  // Verify Webhook Signature
-  verifyWebhookSignature: (rawBodyBuffer, signatureHeader) => {
-    if (!config.razorpay.webhookSecret) {
-      logger.warn('RAZORPAY_WEBHOOK_SECRET_NOT_CONFIGURED');
+  // Verify Webhook Signature using raw body buffer
+  verifyWebhookSignature: (rawBody, signatureHeader) => {
+    if (!signatureHeader || !config.razorpay.webhookSecret) {
       return false;
     }
-    const expectedSignature = generateHmacSha256(rawBodyBuffer, config.razorpay.webhookSecret);
-    return verifyHmacSignature(rawBodyBuffer, signatureHeader, config.razorpay.webhookSecret, expectedSignature);
+
+    return verifyHmacSignature(rawBody, signatureHeader, config.razorpay.webhookSecret);
   },
 
-  _generateWebhookSignatureForTest: (payloadString) => {
-    return generateHmacSha256(payloadString, config.razorpay.webhookSecret || 'fc_rzp_webhook_secret_mantasha');
+  _generateSignatureForTest: (razorpay_order_id, razorpay_payment_id) => {
+    const payload = `${razorpay_order_id}|${razorpay_payment_id}`;
+    return generateHmacSha256(payload, config.razorpay.keySecret);
   },
 
-  _generatePaymentSignatureForTest: (orderId, paymentId) => {
-    return generateHmacSha256(`${orderId}|${paymentId}`, config.razorpay.keySecret || 'dummy_razorpay_secret');
+  _generateWebhookSignatureForTest: (rawBody) => {
+    return generateHmacSha256(rawBody, config.razorpay.webhookSecret);
   }
 };
 
