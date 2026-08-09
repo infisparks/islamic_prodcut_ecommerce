@@ -198,4 +198,54 @@ router.post('/:orderId/retry', async (req, res, next) => {
   }
 });
 
+/**
+ * GET /api/shipments/:orderId/invoice
+ * Fetch or redirect to official Shiprocket Tax Invoice PDF
+ */
+router.get('/:orderId/invoice', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { redirect } = req.query;
+    const order = await firebaseService.getOrder(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          code: 'ORDER_NOT_FOUND',
+          message: 'Order was not found.'
+        }
+      });
+    }
+
+    const srOrderId = order.shipping ? order.shipping.shiprocketOrderId : null;
+    if (!srOrderId) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'SHIPMENT_NOT_CREATED',
+          message: 'Tax invoice is not yet available because shipment has not been created.'
+        }
+      });
+    }
+
+    const result = await shiprocketService.generateTaxInvoice(srOrderId, order);
+
+    if (redirect === 'true' || redirect === '1') {
+      return res.redirect(result.invoiceUrl);
+    }
+
+    res.json({
+      success: true,
+      data: {
+        orderId: order.orderId,
+        shiprocketOrderId: srOrderId,
+        invoiceUrl: result.invoiceUrl
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

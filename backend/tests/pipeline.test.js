@@ -507,6 +507,46 @@ async function runTests() {
     assert.ok(orderInDb.events.some(e => e.event === 'ORDER_CANCELLED_BY_ADMIN'));
   });
 
+  // SCENARIO 16: Tax Invoice Generation -> Retrieves Shiprocket invoice URL
+  await test('Scenario 16: Tax Invoice Generation -> Retrieves Shiprocket invoice URL', async () => {
+    const createRes = await makeRequest('POST', '/api/orders/create', {
+      customer: mockCustomer,
+      items: [{ sku: 'fati_001', quantity: 1 }],
+      paymentMethod: 'cod'
+    });
+    const { orderId } = createRes.body.data;
+
+    const invoiceRes = await makeRequest('GET', `/api/shipments/${orderId}/invoice`);
+    assert.strictEqual(invoiceRes.status, 200);
+    assert.strictEqual(invoiceRes.body.success, true);
+    assert.ok(invoiceRes.body.data.invoiceUrl);
+  });
+
+  // SCENARIO 17: COD Daily Limit Protection -> Blocks 4th COD order within 24 hours
+  await test('Scenario 17: COD Daily Limit Protection -> Blocks 4th COD order within 24 hours', async () => {
+    const spamCustomer = {
+      ...mockCustomer,
+      phone: '9888877777'
+    };
+
+    // Place 3 COD orders (allowed)
+    for (let i = 0; i < 3; i++) {
+      const res = await makeRequest('POST', '/api/orders/create', {
+        customer: spamCustomer,
+        items: [{ sku: 'fati_001', quantity: 1 }],
+        paymentMethod: 'cod'
+      });
+      assert.strictEqual(res.status, 201);
+    }
+
+    // 4th COD OTP request must be rejected with COD_DAILY_LIMIT_EXCEEDED
+    const otpRes = await makeRequest('POST', '/api/orders/send-cod-otp', {
+      phone: spamCustomer.phone
+    });
+    assert.strictEqual(otpRes.status, 400);
+    assert.strictEqual(otpRes.body.error.code, 'COD_DAILY_LIMIT_EXCEEDED');
+  });
+
   console.log('\n===============================================================');
   console.log(`📊 TEST SUITE SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log('===============================================================\n');

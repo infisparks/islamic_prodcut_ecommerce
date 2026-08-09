@@ -399,6 +399,63 @@ const shiprocketService = {
 
   _setForceFailNextShipment: (val) => {
     forceFailNextShipment = val;
+  },
+
+  /**
+   * Generate and fetch official Shiprocket Tax Invoice URL
+   */
+  generateTaxInvoice: async (shiprocketOrderId, order) => {
+    if (!shiprocketOrderId) {
+      throw new Error('Shiprocket Order ID is required to generate a tax invoice.');
+    }
+
+    const token = await getAuthToken();
+
+    // If in test mode or using mock tokens
+    if (!isConfigured || token.startsWith('mock_jwt_')) {
+      logger.info('SHIPROCKET_INVOICE_MOCK_GENERATED', { shiprocketOrderId });
+      return {
+        invoiceUrl: `https://apiv2.shiprocket.in/v1/external/orders/print/invoice?ids=${shiprocketOrderId}&mock=1`
+      };
+    }
+
+    try {
+      const response = await axios.post(
+        `${config.shiprocket.baseUrl}/orders/print/invoice`,
+        { ids: [Number(shiprocketOrderId)] },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          timeout: 15000
+        }
+      );
+
+      if (response.data && response.data.invoice_url) {
+        logger.info('SHIPROCKET_INVOICE_GENERATED_SUCCESS', {
+          shiprocketOrderId,
+          invoiceUrl: response.data.invoice_url
+        });
+        return {
+          invoiceUrl: response.data.invoice_url
+        };
+      } else if (response.data && response.data.is_invoice_created) {
+        const invoiceUrl = response.data.invoice_url || response.data.url;
+        return { invoiceUrl };
+      }
+
+      return {
+        invoiceUrl: `https://app.shiprocket.in/orders/${shiprocketOrderId}`
+      };
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || err.message;
+      logger.warn('SHIPROCKET_INVOICE_GENERATION_FALLBACK', {
+        shiprocketOrderId,
+        error: errorMsg
+      });
+
+      return {
+        invoiceUrl: `https://app.shiprocket.in/orders/${shiprocketOrderId}`
+      };
+    }
   }
 };
 

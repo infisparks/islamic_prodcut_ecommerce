@@ -166,9 +166,8 @@
         <!-- Background Image with Clear Visibility & Soft Overlay -->
         <div class="absolute inset-0 z-0">
             <picture>
-                <source srcset="/hero.webp" type="image/webp">
                 <source srcset="hero.webp" type="image/webp">
-                <img src="/hero.png" alt="Hero Background" class="w-full h-full object-cover object-center opacity-80" onerror="this.onerror=null; this.src='/hero2.png';">
+                <img src="hero.png" alt="Hero Background" class="w-full h-full object-cover object-center opacity-80" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='hero.webp';} else if(this.dataset.tried==='1'){this.dataset.tried='2'; this.src='hero2.png';} else if(this.dataset.tried==='2'){this.dataset.tried='3'; this.src='hero2.webp';}">
             </picture>
             <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-onyx/95"></div>
         </div>
@@ -1796,13 +1795,17 @@
                         <div class="truncate"><span class="text-gray-500">Delivery:</span> ${customer.address1}, ${customer.city}, ${customer.state} - <b>${customer.pincode}</b></div>
                     </div>
 
-                    ${trackingUrl ? `
-                        <div class="pt-1 text-center">
-                            <a href="${trackingUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[10px] font-bold text-gold-700 hover:text-gold-800 underline">
-                                <i class="fa-solid fa-location-crosshairs"></i> Track Shipment Live
+                    <div class="pt-2 text-center flex flex-col gap-2">
+                        <a href="/api/shipments/${orderId}/invoice?redirect=1" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-all text-xs cursor-pointer shadow-xs">
+                            <i class="fa-solid fa-file-invoice text-emerald-600 text-sm"></i>
+                            <span>Download Official Tax Invoice</span>
+                        </a>
+                        ${trackingUrl ? `
+                            <a href="${trackingUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1 text-[11px] font-bold text-gold-700 hover:text-gold-800 underline">
+                                <i class="fa-solid fa-location-crosshairs"></i> Track Shipment Live on Shiprocket
                             </a>
-                        </div>
-                    ` : ''}
+                        ` : ''}
+                    </div>
                 </div>
             `;
 
@@ -2204,9 +2207,9 @@
             // Save details to storage
             saveCustomerDetailsToStorage();
 
-            // If Cash on Delivery (COD) selected, trigger WhatsApp OTP verification modal first
+            // If Cash on Delivery (COD) selected, check 3-order daily limit and trigger WhatsApp OTP modal
             if (selectedPaymentMethod === 'cod') {
-                setCheckoutButtonLoading(true, "Sending WhatsApp Verification OTP...");
+                setCheckoutButtonLoading(true, "Checking COD Availability & Sending WhatsApp OTP...");
                 try {
                     const otpRes = await fetch('/api/orders/send-cod-otp', {
                         method: 'POST',
@@ -2217,11 +2220,20 @@
                     if (otpRes.ok && otpData.success) {
                         openWhatsAppOtpModal(cleanPhone);
                     } else {
-                        showErrorFeedback(otpData.error?.message || 'Failed to send WhatsApp verification OTP.', 'WhatsApp OTP Error');
+                        const errCode = otpData.error?.code;
+                        const errMsg = otpData.error?.message || 'Failed to send WhatsApp verification OTP.';
+                        if (errCode === 'COD_DAILY_LIMIT_EXCEEDED') {
+                            showErrorFeedback(
+                                '⚠️ Daily COD Order Limit Reached (Max 3 Orders per 24 Hours):\n\n' + errMsg,
+                                'COD Order Limit Reached'
+                            );
+                        } else {
+                            showErrorFeedback(errMsg, 'WhatsApp Verification Error');
+                        }
                         setCheckoutButtonLoading(false);
                     }
                 } catch (err) {
-                    showErrorFeedback('Could not connect to WhatsApp OTP service. Please try again.', 'Connection Error');
+                    showErrorFeedback('Could not connect to WhatsApp verification service. Please check your connection and try again.', 'Connection Error');
                     setCheckoutButtonLoading(false);
                 }
                 return;

@@ -338,6 +338,44 @@ const firebaseService = {
     }
   },
 
+  // Count active COD orders placed by a phone number within the last 24 hours
+  getCodOrderCountInLast24Hours: async (phone) => {
+    if (!phone) return 0;
+    const cleanPhone = String(phone).replace(/\D/g, '');
+    const cutoff = Date.now() - (24 * 60 * 60 * 1000); // 24 hours ago
+    let orders = [];
+
+    if (useDatabaseSecret) {
+      try {
+        const res = await axios.get(getDbUrl('orders'), { timeout: 10000 });
+        if (res.data) orders = Object.values(res.data);
+      } catch (err) {}
+    } else if (db) {
+      try {
+        const snapshot = await db.ref('orders').once('value');
+        if (snapshot.exists()) orders = Object.values(snapshot.val());
+      } catch (err) {}
+    }
+
+    if (orders.length === 0) {
+      orders = Object.values(mockStore.orders);
+    }
+
+    let count = 0;
+    for (const order of orders) {
+      if (!order || !order.customer || !order.createdAt) continue;
+      const orderPhone = String(order.customer.phone || '').replace(/\D/g, '');
+      const orderTime = new Date(order.createdAt).getTime();
+      const isCod = order.payment && order.payment.provider === 'COD';
+      const isNotCancelled = order.status !== 'CANCELLED';
+
+      if (orderPhone === cleanPhone && isCod && isNotCancelled && orderTime >= cutoff) {
+        count++;
+      }
+    }
+    return count;
+  },
+
   // Clear mock data (for testing)
   _resetMockStore: () => {
     mockStore.orders = {};

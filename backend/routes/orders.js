@@ -33,6 +33,19 @@ router.post('/send-cod-otp', async (req, res, next) => {
       });
     }
 
+    // Check 24-hour daily COD limit (Max 3 COD orders per phone number per day)
+    const existingCodCount = await firebaseService.getCodOrderCountInLast24Hours(cleanPhone);
+    if (existingCodCount >= 3) {
+      logger.warn('COD_DAILY_LIMIT_EXCEEDED', { phone: cleanPhone, count: existingCodCount });
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'COD_DAILY_LIMIT_EXCEEDED',
+          message: 'You have reached the maximum limit of 3 Cash on Delivery (COD) orders per day. Please choose Online Payment via Razorpay or try again tomorrow.'
+        }
+      });
+    }
+
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
 
@@ -138,11 +151,24 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
     const { customer, items, paymentMethod, verificationToken } = req.sanitizedOrder;
     const reqVerificationToken = req.body.verificationToken || verificationToken;
 
-    // Verify mandatory COD OTP before proceeding
+    // Verify mandatory COD OTP & Daily limit before proceeding
     if (paymentMethod === 'cod') {
       const cleanPhone = String(customer.phone || '').replace(/\D/g, '');
-      const record = codOtpStore.get(cleanPhone);
 
+      // Verify 24-hour daily COD limit (Max 3 COD orders per phone number per day)
+      const existingCodCount = await firebaseService.getCodOrderCountInLast24Hours(cleanPhone);
+      if (existingCodCount >= 3) {
+        logger.warn('COD_DAILY_LIMIT_EXCEEDED_CREATE', { phone: cleanPhone, count: existingCodCount });
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'COD_DAILY_LIMIT_EXCEEDED',
+            message: 'You have reached the maximum limit of 3 Cash on Delivery (COD) orders per day. Please choose Online Payment via Razorpay or try again tomorrow.'
+          }
+        });
+      }
+
+      const record = codOtpStore.get(cleanPhone);
       const isValidToken = record && record.verified && (record.verificationToken === reqVerificationToken || process.env.NODE_ENV === 'development');
       if (!isValidToken && process.env.NODE_ENV !== 'test') {
         return res.status(400).json({

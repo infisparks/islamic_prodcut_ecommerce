@@ -554,6 +554,11 @@
                         <td class="py-3 px-4">${statusBadge}</td>
                         <td class="py-3 px-4 text-right">
                             <div class="flex items-center justify-end gap-1.5">
+                                ${order.shipping && order.shipping.shiprocketOrderId ? `
+                                    <a href="/api/shipments/${orderId}/invoice?redirect=1" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1" title="Download Tax Invoice">
+                                        <i class="fa-solid fa-file-invoice text-xs"></i> Invoice
+                                    </a>
+                                ` : ''}
                                 <button onclick="openOrderDetail('${orderId}')" class="px-2 py-1 bg-white hover:bg-gray-100 border border-[#E5E7EB] text-[#111827] rounded text-[11px] font-medium transition-colors" title="View full details">
                                     View
                                 </button>
@@ -643,6 +648,7 @@
                             <div>AWB: <b class="font-mono">${order.shipping?.awb || 'None'}</b></div>
                             <div>Shipping Status: <b>${order.shipping?.status || 'NOT_BOOKED'}</b></div>
                             ${order.shipping?.trackingUrl ? `<div><a href="${order.shipping.trackingUrl}" target="_blank" class="text-indigo-600 underline font-semibold">Track on Shiprocket</a></div>` : ''}
+                            ${order.shipping?.shiprocketOrderId ? `<div class="pt-1"><a href="/api/shipments/${order.orderId}/invoice?redirect=1" target="_blank" class="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-bold underline"><i class="fa-solid fa-file-invoice text-xs"></i> Download Tax Invoice</a></div>` : ''}
                         </div>
                     </div>
                 </div>
