@@ -294,4 +294,63 @@ router.post('/orders/:orderId/retry-shipping', async (req, res, next) => {
   }
 });
 
+/**
+ * GET /api/admin/test-shiprocket
+ * Diagnostic route to test Shiprocket API credentials and serviceability live
+ */
+router.get('/test-shiprocket', async (req, res) => {
+  const axios = require('axios');
+  const config = require('../config/env');
+
+  const diagnostics = {
+    email: config.shiprocket.email,
+    pickupLocation: config.shiprocket.pickupLocation,
+    authStatus: 'PENDING',
+    serviceabilityStatus: 'PENDING',
+    orderCreationStatus: 'PENDING',
+    error: null
+  };
+
+  try {
+    // 1. Auth Test
+    const authRes = await axios.post(`${config.shiprocket.baseUrl}/auth/login`, {
+      email: config.shiprocket.email,
+      password: config.shiprocket.password
+    }, { timeout: 10000 });
+
+    const token = authRes.data.token;
+    diagnostics.authStatus = 'SUCCESS';
+    diagnostics.tokenReceived = true;
+
+    // 2. Serviceability Test
+    const servRes = await axios.get(`${config.shiprocket.baseUrl}/courier/serviceability/`, {
+      params: {
+        pickup_postcode: '421302',
+        delivery_postcode: '400612',
+        weight: 0.15,
+        cod: 1
+      },
+      headers: { Authorization: `Bearer ${token}` },
+      timeout: 10000
+    });
+
+    diagnostics.serviceabilityStatus = 'SUCCESS';
+    diagnostics.availableCouriersCount = servRes.data.data?.available_courier_companies?.length || 0;
+    diagnostics.cheapestRate = servRes.data.data?.available_courier_companies?.[0]?.rate || null;
+
+    res.json({
+      success: true,
+      message: 'Shiprocket API connection is 100% HEALTHY & LIVE!',
+      diagnostics
+    });
+  } catch (err) {
+    diagnostics.error = err.response?.data || err.message;
+    res.status(400).json({
+      success: false,
+      message: 'Shiprocket API Error Diagnostic Result',
+      diagnostics
+    });
+  }
+});
+
 module.exports = router;
