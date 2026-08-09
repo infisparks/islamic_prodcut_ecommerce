@@ -10,9 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome & Tailwind CDN -->
+    <!-- FontAwesome, Tailwind & Razorpay Checkout CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
     <script>
         tailwind.config = {
@@ -192,7 +193,7 @@
 
             <!-- Direct Action CTA Button -->
             <a href="#products-grid" class="gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-[10px] xs:text-[11px] sm:text-xs tracking-tight py-3.5 px-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-1.5 hover:opacity-95 active:scale-95 transition-transform w-full whitespace-nowrap overflow-hidden">
-                <span class="whitespace-nowrap">SHOP ALL 7 UMRAH PRODUCTS (UP TO 50% OFF)</span>
+                <span class="whitespace-nowrap">SHOP ALL UMRAH DUA CARDS (UP TO 50% OFF)</span>
                 <i class="fa-solid fa-arrow-down text-xs flex-shrink-0"></i>
             </a>
 
@@ -205,26 +206,26 @@
         </div>
     </section>
 
-    <!-- SECTION TITLE: 7 PRODUCTS (CARDS & STICKERS) -->
+    <!-- SECTION TITLE: UMRAH DUA CARDS COLLECTION -->
     <section id="products-grid" class="pt-6 pb-2 px-4 max-w-6xl mx-auto">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-gold-200 pb-2.5 mb-3">
             <div>
                 <span class="text-[10px] uppercase tracking-widest text-gold-700 font-extrabold block">Authentic Collection</span>
-                <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">7 Umrah Products (Cards & Stickers)</h2>
+                <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">Umrah Dua & Guide Cards</h2>
             </div>
-            <span class="text-[11px] text-gray-500 mt-1 sm:mt-0">Available in English, Hindi, Roman & Urdu varieties.</span>
+            <span class="text-[11px] text-gray-500 mt-1 sm:mt-0">Available in Urdu, English, Hindi & Roman English editions.</span>
         </div>
 
         <!-- Filter Category Tabs -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-2 no-scrollbar" id="category-filter-bar">
+        <div class="hidden items-center gap-2 overflow-x-auto pb-2 mb-2 no-scrollbar" id="category-filter-bar">
             <button onclick="filterProducts('all')" id="filter-all" class="filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs">
-                All Products (7)
+                All Products (4)
             </button>
             <button onclick="filterProducts('card')" id="filter-card" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
                 💳 Umrah Cards (4)
             </button>
-            <button onclick="filterProducts('sticker')" id="filter-sticker" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
-                🏷️ Umrah Stickers (3)
+            <button onclick="filterProducts('sticker')" id="filter-sticker" class="hidden filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
+                🏷️ Dua Stickers (3)
             </button>
         </div>
     </section>
@@ -534,22 +535,38 @@
                 <div class="mb-3">
                     <label class="text-[9px] uppercase font-bold text-gray-500 block mb-1">Select Payment Method</label>
                     <div class="grid grid-cols-2 gap-2 text-xs">
-                        <label class="border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer">
-                            <input type="radio" name="payment" checked class="accent-gold-600">
-                            <span class="font-bold text-onyx">Cash on Delivery</span>
+                        <label id="payment-label-razorpay" class="border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors">
+                            <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" checked onchange="handlePaymentMethodSelect('razorpay')" class="accent-gold-600">
+                            <span class="font-bold text-onyx">UPI / Card Pay</span>
                         </label>
-                        <label class="border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70">
-                            <input type="radio" name="payment" class="accent-gold-600">
-                            <span>UPI / Card Pay</span>
+                        <label id="payment-label-cod" class="border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70 transition-colors">
+                            <input type="radio" name="payment" id="payment-method-cod" value="cod" onchange="handlePaymentMethodSelect('cod')" class="accent-gold-600">
+                            <span class="font-bold text-onyx">Cash on Delivery</span>
                         </label>
                     </div>
                 </div>
 
-                <button onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-bold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-transform">
+                <button id="checkout-submit-btn" onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-bold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all">
                     <i class="fa-solid fa-lock text-xs"></i>
-                    <span>CONFIRM & PLACE ORDER (COD)</span>
+                    <span id="checkout-btn-text">PAY NOW WITH RAZORPAY (UPI/CARD)</span>
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- ERROR FEEDBACK MODAL -->
+    <div id="error-feedback-modal" onclick="if(event.target === this) closeErrorFeedbackModal()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center border border-gold-400 shadow-2xl relative" onclick="event.stopPropagation()">
+            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h3 class="font-cinzel text-lg font-bold text-onyx mb-1" id="error-modal-title">Payment / Order Notice</h3>
+            <p class="text-xs text-gray-600 mb-4 leading-relaxed" id="error-modal-message">
+                Something went wrong. Please check your information and try again.
+            </p>
+            <button onclick="closeErrorFeedbackModal()" class="w-full bg-onyx text-gold-400 font-bold py-2.5 rounded-xl text-xs hover:bg-gold-500 hover:text-onyx transition-colors">
+                OKAY, UNDERSTOOD
+            </button>
         </div>
     </div>
 
@@ -804,8 +821,9 @@
             },
             {
                 id: 5,
-                name: "Umrah Dua Sticker (English)",
+                name: "Dua Sticker (English)",
                 category: "sticker",
+                hidden: true,
                 language: "English",
                 brand: "fatimacalligrapher27",
                 hsn: "4910",
@@ -822,13 +840,14 @@
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "STICKER • ENGLISH",
                 rating: "(720)",
-                desc: "High-quality waterproof adhesive stickers featuring essential Umrah supplications in English.",
+                desc: "High-quality waterproof adhesive stickers featuring essential supplications in English.",
                 features: ["Premium Vinyl Waterproof Sticker", "Clear English Script", "Strong Adhesive Backing", "Compact & Portable"]
             },
             {
                 id: 6,
-                name: "Umrah Dua Sticker (Hindi / हिंदी)",
+                name: "Dua Sticker (Hindi / हिंदी)",
                 category: "sticker",
+                hidden: true,
                 language: "Hindi",
                 brand: "fatimacalligrapher27",
                 hsn: "4910",
@@ -845,13 +864,14 @@
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "STICKER • HINDI",
                 rating: "(640)",
-                desc: "Waterproof Umrah dua stickers with Hindi text and Arabic supplications for easy reference anywhere.",
+                desc: "Waterproof dua stickers with Hindi text and Arabic supplications for easy reference anywhere.",
                 features: ["Clear Hindi Translation", "Waterproof & Scratch Proof", "Easy to Peel & Stick", "Essential Tawaf & Sa'i Prayers"]
             },
             {
                 id: 7,
-                name: "Umrah Dua Sticker (Urdu / اردو)",
+                name: "Dua Sticker (Urdu / اردو)",
                 category: "sticker",
+                hidden: true,
                 language: "Urdu",
                 brand: "fatimacalligrapher27",
                 hsn: "4910",
@@ -868,7 +888,7 @@
                 video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
                 badge: "STICKER • URDU",
                 rating: "(810)",
-                desc: "Authentic Umrah Dua stickers in Urdu script with durable laminate surface and strong adhesive.",
+                desc: "Authentic Dua stickers in Urdu script with durable laminate surface and strong adhesive.",
                 features: ["Authentic Urdu Script", "Weather & Water Resistant", "Perfect for Travel & Daily Reference", "High Resolution Print"]
             }
         ];
@@ -909,9 +929,10 @@
             const container = document.getElementById('products-catalog-container');
             if (!container) return;
 
+            const visibleProducts = products.filter(p => !p.hidden && p.category !== 'sticker');
             const filtered = filter === 'all' 
-                ? products 
-                : products.filter(p => p.category === filter);
+                ? visibleProducts 
+                : visibleProducts.filter(p => p.category === filter);
 
             container.innerHTML = filtered.map(p => {
                 const hasVariants = p.variants && p.variants.length > 0;
@@ -985,17 +1006,17 @@
             const btnCard = document.getElementById('filter-card');
             const btnSticker = document.getElementById('filter-sticker');
 
-            if (!btnAll || !btnCard || !btnSticker) return;
-
             [btnAll, btnCard, btnSticker].forEach(btn => {
-                btn.className = "filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors";
+                if (btn) {
+                    btn.className = "filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors";
+                }
             });
 
-            if (category === 'all') {
+            if (category === 'all' && btnAll) {
                 btnAll.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
-            } else if (category === 'card') {
+            } else if (category === 'card' && btnCard) {
                 btnCard.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
-            } else if (category === 'sticker') {
+            } else if (category === 'sticker' && btnSticker) {
                 btnSticker.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
             }
         }
@@ -1581,9 +1602,171 @@
             }
         }
 
-        function processOrder() {
+        let selectedPaymentMethod = 'razorpay';
+        let isProcessingOrder = false;
+
+        function handlePaymentMethodSelect(method) {
+            selectedPaymentMethod = method;
+            const rzpLabel = document.getElementById('payment-label-razorpay');
+            const codLabel = document.getElementById('payment-label-cod');
+            const btnText = document.getElementById('checkout-btn-text');
+
+            if (method === 'razorpay') {
+                if (rzpLabel) {
+                    rzpLabel.className = "border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors";
+                }
+                if (codLabel) {
+                    codLabel.className = "border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70 transition-colors";
+                }
+                if (btnText) btnText.textContent = "PAY NOW WITH RAZORPAY (UPI/CARD)";
+            } else {
+                if (codLabel) {
+                    codLabel.className = "border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors";
+                }
+                if (rzpLabel) {
+                    rzpLabel.className = "border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70 transition-colors";
+                }
+                if (btnText) btnText.textContent = "CONFIRM & PLACE ORDER (COD)";
+            }
+        }
+
+        function setCheckoutButtonLoading(loading, message = "") {
+            isProcessingOrder = loading;
+            const btn = document.getElementById('checkout-submit-btn');
+            const btnText = document.getElementById('checkout-btn-text');
+            if (!btn || !btnText) return;
+
+            if (loading) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+                btnText.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> ${message || 'Processing Order...'}`;
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnText.textContent = selectedPaymentMethod === 'razorpay'
+                    ? "PAY NOW WITH RAZORPAY (UPI/CARD)"
+                    : "CONFIRM & PLACE ORDER (COD)";
+            }
+        }
+
+        function showErrorFeedback(message, title = "Payment / Order Notice") {
+            const modal = document.getElementById('error-feedback-modal');
+            const titleEl = document.getElementById('error-modal-title');
+            const msgEl = document.getElementById('error-modal-message');
+
+            if (titleEl) titleEl.textContent = title;
+            if (msgEl) msgEl.textContent = message;
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeErrorFeedbackModal() {
+            const modal = document.getElementById('error-feedback-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function showSuccessOrder(orderData) {
+            const container = document.getElementById('success-order-details');
+            if (!container) return;
+
+            const orderId = orderData.orderId || 'FC-CONFIRMED';
+            const isCod = orderData.payment && orderData.payment.provider === 'COD';
+            const paymentStatusLabel = isCod ? 'Pending (Cash on Delivery)' : '✓ Paid (Razorpay)';
+            const shippingStatusLabel = orderData.shipping && orderData.shipping.status !== 'NOT_BOOKED'
+                ? `✓ Shipment ${orderData.shipping.status === 'BOOKED' || orderData.shipping.status === 'AWB_ASSIGNED' ? 'Booked' : orderData.shipping.status}`
+                : 'Processing Express Booking';
+
+            const courierName = (orderData.shipping && orderData.shipping.courierName) || 'Shiprocket Express Partner';
+            const awbNumber = (orderData.shipping && orderData.shipping.awb) || 'Assigned after dispatch';
+            const trackingUrl = orderData.shipping && orderData.shipping.trackingUrl;
+
+            const customer = orderData.customer || {
+                name: document.getElementById('ship-name').value.trim(),
+                phone: document.getElementById('ship-phone').value.trim(),
+                address1: document.getElementById('ship-address1').value.trim(),
+                address2: document.getElementById('ship-address2').value.trim(),
+                city: document.getElementById('ship-city').value.trim(),
+                state: document.getElementById('ship-state').value.trim(),
+                pincode: document.getElementById('ship-pincode').value.trim()
+            };
+
+            const itemsList = orderData.items && orderData.items.length > 0
+                ? orderData.items
+                : cart;
+
+            const itemsHtml = itemsList.map(item => `
+                <div class="flex justify-between items-center text-[10px] text-gray-700 py-0.5">
+                    <span class="truncate pr-2">${item.name || item.variantName} (${item.sku}) × ${item.quantity || item.qty}</span>
+                    <span class="font-bold text-onyx whitespace-nowrap">Rs. ${(item.unitPrice || item.price) * (item.quantity || item.qty)}</span>
+                </div>
+            `).join('');
+
+            const totalAmount = orderData.pricing ? orderData.pricing.total : itemsList.reduce((s, i) => s + ((i.unitPrice || i.price) * (i.quantity || i.qty)), 0);
+
+            container.innerHTML = `
+                <div class="bg-sand/80 border border-gold-300 p-3 rounded-xl text-left text-xs space-y-1.5 my-3">
+                    <div class="flex justify-between items-center border-b border-gold-200 pb-1 font-bold">
+                        <span class="text-onyx">Order ID:</span>
+                        <span class="text-gold-700 font-mono select-all font-extrabold">${orderId}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-1 py-1 border-b border-gold-200/70 text-[11px]">
+                        <div>
+                            <span class="text-gray-500 block text-[9px] uppercase font-semibold">Payment Status:</span>
+                            <span class="font-bold text-emerald-700">${paymentStatusLabel}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[9px] uppercase font-semibold">Shipping Status:</span>
+                            <span class="font-bold text-gold-700">${shippingStatusLabel}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-1 py-1 border-b border-gold-200/70 text-[11px]">
+                        <div>
+                            <span class="text-gray-500 block text-[9px] uppercase font-semibold">Courier Partner:</span>
+                            <span class="font-bold text-onyx truncate">${courierName}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[9px] uppercase font-semibold">Shiprocket AWB:</span>
+                            <span class="font-bold font-mono text-onyx select-all">${awbNumber}</span>
+                        </div>
+                    </div>
+
+                    <div class="border-b border-gold-200/70 pb-1 pt-0.5">
+                        <div class="text-[9px] font-bold uppercase text-gray-500 mb-0.5">Items Ordered:</div>
+                        ${itemsHtml}
+                        <div class="flex justify-between items-center text-xs font-bold text-onyx pt-1 mt-1 border-t border-gray-200">
+                            <span>Total Amount:</span>
+                            <span class="text-gold-700 font-extrabold">Rs. ${totalAmount}</span>
+                        </div>
+                    </div>
+
+                    <div class="text-[11px] pt-0.5">
+                        <div><span class="text-gray-500">Recipient:</span> <b>${customer.name}</b> (${customer.phone})</div>
+                        <div class="truncate"><span class="text-gray-500">Delivery:</span> ${customer.address1}, ${customer.city}, ${customer.state} - <b>${customer.pincode}</b></div>
+                    </div>
+
+                    ${trackingUrl ? `
+                        <div class="pt-1 text-center">
+                            <a href="${trackingUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[10px] font-bold text-gold-700 hover:text-gold-800 underline">
+                                <i class="fa-solid fa-location-crosshairs"></i> Track Shipment Live
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            // Reset cart state
+            cart = [];
+            updateCartUI();
+            toggleCartDrawer(false);
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+
+        async function processOrder() {
+            if (isProcessingOrder) return;
+
             if (cart.length === 0) {
-                alert("Your cart is empty. Please add items before placing order.");
+                showErrorFeedback("Your cart is currently empty. Please select products before placing an order.", "Cart is Empty");
                 return;
             }
 
@@ -1595,57 +1778,157 @@
             const city = document.getElementById('ship-city').value.trim();
             const state = document.getElementById('ship-state').value.trim();
 
-            if (!name || !phone || !pincode || !address1 || !city || !state) {
-                alert("Please fill in all required delivery address details for Shiprocket shipping.");
+            if (!name || name.length < 2) {
+                showErrorFeedback("Please enter the recipient full name (at least 2 characters).", "Name Required");
                 return;
             }
 
-            if (phone.length < 10) {
-                alert("Please enter a valid 10-digit mobile number.");
+            const cleanPhone = phone.replace(/\D/g, '');
+            if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+                showErrorFeedback("Please enter a valid 10-digit Indian mobile number (starting with 6, 7, 8 or 9).", "Invalid Mobile Number");
                 return;
             }
 
-            if (pincode.length !== 6 || isNaN(pincode)) {
-                alert("Please enter a valid 6-digit Indian Pincode.");
+            const cleanPincode = pincode.replace(/\D/g, '');
+            if (cleanPincode.length !== 6 || !/^[1-9][0-9]{5}$/.test(cleanPincode)) {
+                showErrorFeedback("Please enter a valid 6-digit Indian delivery pincode.", "Invalid Pincode");
                 return;
             }
 
-            const orderId = "SR-" + Math.floor(100000 + Math.random() * 900000);
-            const itemsSummary = cart.map(item => `
-                <div class="flex justify-between items-center text-[10px] text-gray-700 py-0.5">
-                    <span class="truncate pr-2">${item.name} (${item.sku}) x ${item.qty}</span>
-                    <span class="font-bold text-onyx whitespace-nowrap">Rs. ${item.price * item.qty}</span>
-                </div>
-            `).join('');
+            if (!address1 || address1.length < 5) {
+                showErrorFeedback("Please enter your complete flat / house / building address.", "Address Required");
+                return;
+            }
 
-            const orderTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            if (!city || city.length < 2) {
+                showErrorFeedback("Please enter your City / District name.", "City Required");
+                return;
+            }
 
-            document.getElementById('success-order-details').innerHTML = `
-                <div class="bg-sand/80 border border-gold-300 p-3 rounded-xl text-left text-xs space-y-1.5 my-3">
-                    <div class="flex justify-between items-center border-b border-gold-200 pb-1 font-bold">
-                        <span class="text-onyx">Shiprocket AWB:</span>
-                        <span class="text-gold-700 font-mono">${orderId}</span>
-                    </div>
-                    <div class="border-b border-gold-200/70 pb-1 pt-0.5">
-                        <div class="text-[9px] font-bold uppercase text-gray-500 mb-0.5">Items Ordered:</div>
-                        ${itemsSummary}
-                        <div class="flex justify-between items-center text-xs font-bold text-onyx pt-1 mt-1 border-t border-gray-200">
-                            <span>Total (COD):</span>
-                            <span class="text-gold-700">Rs. ${orderTotal}</span>
-                        </div>
-                    </div>
-                    <div><span class="text-gray-500">Recipient:</span> <b>${name}</b> (${phone})</div>
-                    <div><span class="text-gray-500">Address:</span> ${address1}, ${address2 ? address2 + ', ' : ''}${city}, ${state} - <b>${pincode}</b></div>
-                    <div class="text-[10px] text-emerald-700 font-bold flex items-center gap-1 pt-0.5">
-                        <i class="fa-solid fa-truck-ramp-box"></i> Courier Partner: Delhivery / BlueDart (COD Express)
-                    </div>
-                </div>
-            `;
+            if (!state || state.length < 2) {
+                showErrorFeedback("Please enter your State name.", "State Required");
+                return;
+            }
 
-            cart = [];
-            updateCartUI();
-            toggleCartDrawer(false);
-            document.getElementById('success-modal').classList.remove('hidden');
+            // Lock UI
+            setCheckoutButtonLoading(true, "Securing Order with Server...");
+
+            const orderPayload = {
+                customer: {
+                    name,
+                    phone: cleanPhone,
+                    pincode: cleanPincode,
+                    address1,
+                    address2,
+                    city,
+                    state
+                },
+                items: cart.map(item => ({
+                    productId: item.id,
+                    sku: item.sku,
+                    quantity: item.qty
+                })),
+                paymentMethod: selectedPaymentMethod
+            };
+
+            try {
+                const response = await fetch('/api/orders/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderPayload)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    const errorMsg = (result.error && result.error.message) || 'Failed to create order. Please try again.';
+                    showErrorFeedback(errorMsg, "Order Creation Error");
+                    setCheckoutButtonLoading(false);
+                    return;
+                }
+
+                // Handle COD Flow
+                if (selectedPaymentMethod === 'cod') {
+                    setCheckoutButtonLoading(false);
+                    showSuccessOrder(result.data);
+                    return;
+                }
+
+                // Handle Razorpay Flow
+                const orderData = result.data;
+                if (!window.Razorpay) {
+                    showErrorFeedback("Payment gateway is temporarily unavailable. Please check your internet connection or choose Cash on Delivery.", "Gateway Notice");
+                    setCheckoutButtonLoading(false);
+                    return;
+                }
+
+                setCheckoutButtonLoading(true, "Opening Razorpay Gateway...");
+
+                const rzpOptions = {
+                    key: orderData.razorpayKeyId,
+                    amount: orderData.amount,
+                    currency: orderData.currency || 'INR',
+                    name: "FATIMA CALLIGRAPHER",
+                    description: `Order ${orderData.orderId}`,
+                    image: "product/umrah_card_urdu.webp",
+                    order_id: orderData.razorpayOrderId,
+                    prefill: {
+                        name: name,
+                        contact: cleanPhone
+                    },
+                    theme: {
+                        color: "#D4AF37"
+                    },
+                    handler: async function (paymentResponse) {
+                        setCheckoutButtonLoading(true, "Verifying Payment & Booking Shipment...");
+                        try {
+                            const verifyRes = await fetch('/api/payments/razorpay/verify', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: paymentResponse.razorpay_order_id,
+                                    razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                                    razorpay_signature: paymentResponse.razorpay_signature
+                                })
+                            });
+
+                            const verifyResult = await verifyRes.json();
+
+                            if (verifyRes.ok && verifyResult.success) {
+                                showSuccessOrder(verifyResult.data);
+                            } else {
+                                const msg = (verifyResult.error && verifyResult.error.message) || "Payment verification could not be completed.";
+                                showErrorFeedback(msg, "Verification Notice");
+                            }
+                        } catch (verifyErr) {
+                            showErrorFeedback(
+                                `Your payment was received, but shipment booking is still processing. Please do not pay again. Your internal order ID is ${orderData.orderId}.`,
+                                "Payment Received"
+                            );
+                        } finally {
+                            setCheckoutButtonLoading(false);
+                        }
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            setCheckoutButtonLoading(false);
+                            showErrorFeedback("Payment was not completed. Your order remains pending and can be paid anytime.", "Payment Cancelled");
+                        }
+                    }
+                };
+
+                const razorpayClient = new window.Razorpay(rzpOptions);
+                razorpayClient.on('payment.failed', function (resp) {
+                    setCheckoutButtonLoading(false);
+                    const reason = (resp.error && resp.error.description) || "Payment transaction failed.";
+                    showErrorFeedback(`Payment Failed: ${reason}`, "Payment Error");
+                });
+
+                razorpayClient.open();
+            } catch (err) {
+                setCheckoutButtonLoading(false);
+                showErrorFeedback("A network connection error occurred while communicating with the server. Please check your connection and retry.", "Network Error");
+            }
         }
 
         function closeSuccessModal() {
@@ -1658,11 +1941,13 @@
                 closeQuickView();
                 toggleCartDrawer(false);
                 closeSuccessModal();
+                closeErrorFeedbackModal();
             }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts('all');
+            handlePaymentMethodSelect('razorpay');
         });
         renderProducts('all');
     </script>

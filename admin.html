@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatima Calligrapher — Store Admin Dashboard</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome & Tailwind -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Firebase App & Auth SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#EEF2FF',
+                            100: '#E0E7FF',
+                            500: '#6366F1',
+                            600: '#4F46E5',
+                            700: '#4338CA',
+                        },
+                        bgLight: '#F5F6F8',
+                        textPrimary: '#111827',
+                        textSecondary: '#6B7280',
+                        borderLight: '#E5E7EB',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #F5F6F8;
+            color: #111827;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-[#F5F6F8] text-[#111827] antialiased min-h-screen flex flex-col">
+
+    <!-- LOGIN OVERLAY / SCREEN -->
+    <div id="login-section" class="fixed inset-0 z-50 bg-[#F5F6F8] flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl border border-[#E5E7EB] shadow-sm max-w-md w-full p-6 sm:p-8">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mx-auto mb-3 border border-indigo-100">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h1 class="text-xl sm:text-2xl font-bold text-[#111827]">Store Admin Login</h1>
+                <p class="text-xs text-[#6B7280] mt-1">Sign in with your Firebase Admin account to manage orders</p>
+            </div>
+
+            <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-[#111827] mb-1">Admin Email <span class="text-red-500">*</span></label>
+                    <input type="email" id="login-email" required placeholder="admin@example.com" class="w-full px-3 py-2 text-sm rounded-lg border border-[#E5E7EB] focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white placeholder-gray-400">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-[#111827] mb-1">Password <span class="text-red-500">*</span></label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-3 py-2 text-sm rounded-lg border border-[#E5E7EB] focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white placeholder-gray-400">
+                </div>
+
+                <div id="login-error-msg" class="hidden p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700"></div>
+
+                <button type="submit" id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <span>Sign In to Dashboard</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </form>
+
+            <div class="mt-6 pt-4 border-t border-[#E5E7EB] text-center text-xs text-[#6B7280]">
+                Protected by Firebase Authentication & Realtime Database
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD WRAPPER -->
+    <div id="dashboard-section" class="hidden flex-grow flex flex-col md:flex-row min-h-screen">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-[#E5E7EB] flex flex-col justify-between flex-shrink-0">
+            <div>
+                <!-- Brand Header -->
+                <div class="p-4 border-b border-[#E5E7EB] flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
+                            FC
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-[#111827] leading-none">FATIMA</div>
+                            <div class="text-[10px] text-[#6B7280] font-medium tracking-wide">ADMIN PORTAL</div>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Live
+                    </span>
+                </div>
+
+                <!-- Nav Links -->
+                <nav class="p-3 space-y-1 text-sm font-medium">
+                    <a href="#orders" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 font-semibold transition-colors">
+                        <i class="fa-solid fa-boxes-stacked w-4 text-center"></i>
+                        <span>Orders Management</span>
+                    </a>
+                    <a href="/" target="_blank" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#6B7280] hover:bg-gray-50 hover:text-[#111827] transition-colors">
+                        <i class="fa-solid fa-arrow-up-right-from-square w-4 text-center"></i>
+                        <span>View Storefront</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- User Info & Logout -->
+            <div class="p-4 border-t border-[#E5E7EB] bg-gray-50/50">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center flex-shrink-0" id="user-avatar-initial">
+                            A
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-xs font-semibold text-[#111827] truncate" id="admin-user-email">admin@example.com</div>
+                            <div class="text-[10px] text-[#6B7280]">Store Manager</div>
+                        </div>
+                    </div>
+                    <button onclick="handleAdminLogout()" title="Logout" class="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+                        <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-grow flex flex-col min-w-0">
+            
+            <!-- TOP BAR -->
+            <header class="bg-white border-b border-[#E5E7EB] px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sticky top-0 z-20">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-bold text-[#111827]">Orders Dashboard</h2>
+                    <p class="text-xs text-[#6B7280]">Manage customer purchases, cancellations, and shipments</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="loadOrdersAndStats()" class="px-3 py-1.5 bg-white hover:bg-gray-50 border border-[#E5E7EB] rounded-lg text-xs font-medium text-[#111827] flex items-center gap-1.5 shadow-sm transition-colors" title="Refresh data">
+                        <i class="fa-solid fa-arrows-rotate text-gray-500"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- DASHBOARD BODY -->
+            <div class="p-4 sm:p-6 space-y-6 flex-grow">
+                
+                <!-- METRIC CARDS (HR DASHBOARD MINIMAL CLEAN STYLE) -->
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
+                        <div class="text-xs font-medium text-[#6B7280] mb-1">Total Orders</div>
+                        <div class="text-xl sm:text-2xl font-bold text-[#111827]" id="stat-total-orders">0</div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
+                        <div class="text-xs font-medium text-[#6B7280] mb-1">Total Revenue</div>
+                        <div class="text-xl sm:text-2xl font-bold text-indigo-600" id="stat-total-revenue">Rs. 0</div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
+                        <div class="text-xs font-medium text-[#6B7280] mb-1">Paid (Razorpay)</div>
+                        <div class="text-xl sm:text-2xl font-bold text-emerald-600" id="stat-paid-orders">0</div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
+                        <div class="text-xs font-medium text-[#6B7280] mb-1">Cash on Delivery</div>
+                        <div class="text-xl sm:text-2xl font-bold text-amber-600" id="stat-cod-orders">0</div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs col-span-2 lg:col-span-1">
+                        <div class="text-xs font-medium text-[#6B7280] mb-1">Cancelled Orders</div>
+                        <div class="text-xl sm:text-2xl font-bold text-rose-600" id="stat-cancelled-orders">0</div>
+                    </div>
+                </div>
+
+                <!-- ORDERS TABLE CARD -->
+                <div class="bg-white rounded-xl border border-[#E5E7EB] shadow-xs overflow-hidden">
+                    
+                    <!-- TOOLBAR & FILTERS -->
+                    <div class="p-4 border-b border-[#E5E7EB] flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        
+                        <!-- Search Box -->
+                        <div class="relative flex-grow max-w-md">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="text" id="order-search-input" oninput="debounceSearch()" placeholder="Search by Order ID, Name, Phone, AWB..." class="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-[#E5E7EB] focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white placeholder-gray-400">
+                        </div>
+
+                        <!-- Status & Provider Filters -->
+                        <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+                            <select id="filter-status" onchange="loadOrdersAndStats()" class="px-3 py-2 text-xs rounded-lg border border-[#E5E7EB] bg-white text-[#111827] focus:outline-none focus:border-indigo-600">
+                                <option value="all">All Order Statuses</option>
+                                <option value="PENDING_PAYMENT">Pending Payment</option>
+                                <option value="PAYMENT_CAPTURED">Payment Captured</option>
+                                <option value="SHIPMENT_BOOKED">Shipment Booked</option>
+                                <option value="SHIPPED">Shipped / In Transit</option>
+                                <option value="DELIVERED">Delivered</option>
+                                <option value="CANCELLED">Cancelled</option>
+                            </select>
+
+                            <select id="filter-provider" onchange="loadOrdersAndStats()" class="px-3 py-2 text-xs rounded-lg border border-[#E5E7EB] bg-white text-[#111827] focus:outline-none focus:border-indigo-600">
+                                <option value="all">All Payment Methods</option>
+                                <option value="razorpay">Razorpay (Online)</option>
+                                <option value="cod">Cash on Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- DATA TABLE -->
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs text-[#111827]">
+                            <thead class="bg-gray-50/80 text-[#6B7280] font-medium border-b border-[#E5E7EB]">
+                                <tr>
+                                    <th class="py-3 px-4">Order ID & Date</th>
+                                    <th class="py-3 px-4">Customer</th>
+                                    <th class="py-3 px-4">Items</th>
+                                    <th class="py-3 px-4">Total</th>
+                                    <th class="py-3 px-4">Payment</th>
+                                    <th class="py-3 px-4">Shipping / AWB</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body" class="divide-y divide-[#E5E7EB]">
+                                <tr>
+                                    <td colspan="8" class="text-center py-10 text-gray-400">
+                                        <i class="fa-solid fa-spinner fa-spin text-xl mb-2 text-indigo-600"></i>
+                                        <div>Loading orders...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- FOOTER / PAGINATION SUMMARY -->
+                    <div class="p-3.5 border-t border-[#E5E7EB] bg-gray-50/50 flex items-center justify-between text-xs text-[#6B7280]">
+                        <span id="table-count-summary">Showing 0 orders</span>
+                        <span>Auto-synced with Firebase</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ORDER DETAIL MODAL / DRAWER -->
+    <div id="order-detail-modal" onclick="if(event.target === this) closeOrderDetailModal()" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] flex flex-col border border-[#E5E7EB] shadow-xl overflow-hidden" onclick="event.stopPropagation()">
+            <div class="p-4 border-b border-[#E5E7EB] flex items-center justify-between bg-gray-50/80">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-sm text-[#111827]" id="modal-order-id">Order Details</h3>
+                    <span id="modal-order-badge"></span>
+                </div>
+                <button onclick="closeOrderDetailModal()" class="w-7 h-7 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-200/60 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+            
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-4 custom-scrollbar text-xs" id="modal-order-body">
+                <!-- Dynamically populated -->
+            </div>
+
+            <div class="p-3.5 border-t border-[#E5E7EB] bg-gray-50 flex items-center justify-between gap-2">
+                <button onclick="closeOrderDetailModal()" class="px-4 py-2 bg-white border border-[#E5E7EB] text-[#111827] rounded-lg text-xs font-medium hover:bg-gray-50">
+                    Close
+                </button>
+                <div id="modal-action-buttons" class="flex items-center gap-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCEL ORDER CONFIRMATION MODAL -->
+    <div id="cancel-confirm-modal" onclick="if(event.target === this) closeCancelModal()" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-sm w-full p-6 border border-[#E5E7EB] shadow-xl" onclick="event.stopPropagation()">
+            <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-xl mx-auto mb-3 border border-red-100">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="font-bold text-base text-[#111827] text-center mb-1">Cancel Order?</h3>
+            <p class="text-xs text-[#6B7280] text-center mb-4 leading-relaxed">
+                Are you sure you want to cancel order <b id="cancel-modal-order-id" class="text-red-700 font-mono"></b>? This will update the status to CANCELLED in Firebase and stop shipment dispatch.
+            </p>
+
+            <div class="mb-4">
+                <label class="block text-xs font-medium text-[#111827] mb-1">Cancellation Reason</label>
+                <input type="text" id="cancel-reason-input" placeholder="e.g. Test order / Customer request" class="w-full px-3 py-2 text-xs rounded-lg border border-[#E5E7EB] focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 bg-white">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="closeCancelModal()" class="w-full py-2 bg-white border border-[#E5E7EB] text-[#111827] rounded-lg text-xs font-medium hover:bg-gray-50">
+                    Keep Order
+                </button>
+                <button onclick="executeCancelOrder()" id="cancel-confirm-btn" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-colors">
+                    Yes, Cancel Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // User's Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvSefYMhfLIPkWGJeC2XNAgbMBuEZic-s",
+            authDomain: "mantasha-9b267.firebaseapp.com",
+            databaseURL: "https://mantasha-9b267-default-rtdb.firebaseio.com",
+            projectId: "mantasha-9b267",
+            storageBucket: "mantasha-9b267.firebasestorage.app",
+            messagingSenderId: "264438712753",
+            appId: "1:264438712753:web:5ea1a4e50bf9d8de825590"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+
+        let currentAdminToken = null;
+        let currentOrdersList = [];
+        let pendingCancelOrderId = null;
+        let searchDebounceTimer = null;
+
+        // Listen to Auth State
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    currentAdminToken = await user.getIdToken();
+                    document.getElementById('admin-user-email').textContent = user.email;
+                    document.getElementById('user-avatar-initial').textContent = (user.email[0] || 'A').toUpperCase();
+                    
+                    document.getElementById('login-section').classList.add('hidden');
+                    document.getElementById('dashboard-section').classList.remove('hidden');
+                    loadOrdersAndStats();
+                } catch (err) {
+                    console.error("Token error:", err);
+                    showLoginError("Could not retrieve authentication token.");
+                }
+            } else {
+                currentAdminToken = null;
+                document.getElementById('login-section').classList.remove('hidden');
+                document.getElementById('dashboard-section').classList.add('hidden');
+            }
+        });
+
+        // Admin Login Form Submit
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('login-btn');
+            const errBox = document.getElementById('login-error-msg');
+
+            errBox.classList.add('hidden');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...`;
+
+            try {
+                const cred = await auth.signInWithEmailAndPassword(email, password);
+                currentAdminToken = await cred.user.getIdToken();
+                // Auth state listener handles the UI transition
+            } catch (err) {
+                let msg = err.message;
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+                    msg = "Invalid email or password. Please check your credentials.";
+                } else if (err.code === 'auth/too-many-requests') {
+                    msg = "Too many failed attempts. Please wait a few minutes before trying again.";
+                }
+                showLoginError(msg);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Sign In to Dashboard</span> <i class="fa-solid fa-arrow-right text-xs"></i>`;
+            }
+        }
+
+        function showLoginError(msg) {
+            const errBox = document.getElementById('login-error-msg');
+            errBox.textContent = msg;
+            errBox.classList.remove('hidden');
+        }
+
+        // Admin Logout
+        async function handleAdminLogout() {
+            if (confirm("Are you sure you want to sign out?")) {
+                await auth.signOut();
+            }
+        }
+
+        // Fetch Orders and Metrics
+        async function loadOrdersAndStats() {
+            if (!currentAdminToken) return;
+
+            const status = document.getElementById('filter-status').value;
+            const provider = document.getElementById('filter-provider').value;
+            const search = document.getElementById('order-search-input').value.trim();
+
+            const queryParams = new URLSearchParams();
+            if (status !== 'all') queryParams.set('status', status);
+            if (provider !== 'all') queryParams.set('paymentProvider', provider);
+            if (search) queryParams.set('search', search);
+
+            try {
+                // 1. Fetch Orders
+                const ordersRes = await fetch(`/api/admin/orders?${queryParams.toString()}`, {
+                    headers: { 'Authorization': `Bearer ${currentAdminToken}` }
+                });
+
+                if (ordersRes.status === 401 || ordersRes.status === 403) {
+                    const errData = await ordersRes.json();
+                    alert(errData.error?.message || "Session expired or unauthorized.");
+                    auth.signOut();
+                    return;
+                }
+
+                const ordersData = await ordersRes.json();
+                if (ordersData.success) {
+                    currentOrdersList = ordersData.data || [];
+                    renderOrdersTable(currentOrdersList);
+                }
+
+                // 2. Fetch Aggregated Stats
+                const statsRes = await fetch('/api/admin/stats', {
+                    headers: { 'Authorization': `Bearer ${currentAdminToken}` }
+                });
+                const statsData = await statsRes.json();
+                if (statsData.success && statsData.data) {
+                    const s = statsData.data;
+                    document.getElementById('stat-total-orders').textContent = s.totalOrders;
+                    document.getElementById('stat-total-revenue').textContent = `Rs. ${s.totalRevenue.toLocaleString()}`;
+                    document.getElementById('stat-paid-orders').textContent = s.paidCount;
+                    document.getElementById('stat-cod-orders').textContent = s.codCount;
+                    document.getElementById('stat-cancelled-orders').textContent = s.cancelledCount;
+                }
+            } catch (err) {
+                console.error("Failed to load admin data:", err);
+            }
+        }
+
+        function debounceSearch() {
+            clearTimeout(searchDebounceTimer);
+            searchDebounceTimer = setTimeout(() => {
+                loadOrdersAndStats();
+            }, 300);
+        }
+
+        // Render Table Rows
+        function renderOrdersTable(orders) {
+            const tbody = document.getElementById('orders-table-body');
+            const summary = document.getElementById('table-count-summary');
+
+            if (!tbody) return;
+            summary.textContent = `Showing ${orders.length} ${orders.length === 1 ? 'order' : 'orders'}`;
+
+            if (orders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-12 text-gray-400">
+                            <i class="fa-solid fa-box-open text-2xl mb-2 text-gray-300"></i>
+                            <div class="text-xs font-medium">No matching orders found.</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => {
+                const orderId = order.orderId || 'N/A';
+                const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '-';
+                const customerName = (order.customer && order.customer.name) || 'Customer';
+                const customerPhone = (order.customer && order.customer.phone) || '-';
+                const customerCity = (order.customer && order.customer.city) || '';
+                const itemsCount = (order.items || []).reduce((s, i) => s + (i.quantity || 1), 0);
+                const itemsNames = (order.items || []).map(i => `${i.name || i.variantName} (x${i.quantity || 1})`).join(', ');
+                const total = order.pricing ? `Rs. ${order.pricing.total}` : 'Rs. 0';
+                
+                const isCod = order.payment && order.payment.provider === 'COD';
+                const paymentStatus = (order.payment && order.payment.status) || 'UNKNOWN';
+                const shippingStatus = (order.shipping && order.shipping.status) || 'NOT_BOOKED';
+                const awb = order.shipping && order.shipping.awb;
+                const status = (order.status || 'PENDING').toUpperCase();
+
+                // Badges
+                let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-700">${status}</span>`;
+                if (status === 'CANCELLED') {
+                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-red-50 text-red-700 border border-red-200">CANCELLED</span>`;
+                } else if (['SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status)) {
+                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">${status}</span>`;
+                } else if (status === 'PAYMENT_CAPTURED') {
+                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">PAID</span>`;
+                } else if (status === 'COD_PENDING') {
+                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">COD PENDING</span>`;
+                }
+
+                let paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-700">${isCod ? 'COD' : 'Online'}</span>`;
+                if (paymentStatus === 'CAPTURED') {
+                    paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700">✓ Paid</span>`;
+                } else if (isCod) {
+                    paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700">COD</span>`;
+                }
+
+                return `
+                    <tr class="hover:bg-gray-50/70 transition-colors">
+                        <td class="py-3 px-4 font-mono font-bold text-indigo-600">
+                            <button onclick="openOrderDetail('${orderId}')" class="hover:underline text-left">
+                                ${orderId}
+                            </button>
+                            <div class="text-[10px] font-normal text-gray-500 font-sans mt-0.5">${dateStr}</div>
+                        </td>
+                        <td class="py-3 px-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-gray-100 text-gray-700 font-bold text-[10px] flex items-center justify-center">
+                                    ${customerName[0] || 'C'}
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-[#111827]">${customerName}</div>
+                                    <div class="text-[10px] text-gray-500">${customerPhone} • ${customerCity}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 max-w-[180px]">
+                            <div class="font-medium truncate" title="${itemsNames}">${itemsNames || 'Items'}</div>
+                            <div class="text-[10px] text-gray-500">${itemsCount} ${itemsCount === 1 ? 'unit' : 'units'}</div>
+                        </td>
+                        <td class="py-3 px-4 font-bold text-[#111827]">${total}</td>
+                        <td class="py-3 px-4">${paymentBadge}</td>
+                        <td class="py-3 px-4">
+                            <div class="font-mono text-[11px]">${awb || '<span class="text-gray-400">Not Booked</span>'}</div>
+                            <div class="text-[10px] text-gray-500">${shippingStatus}</div>
+                        </td>
+                        <td class="py-3 px-4">${statusBadge}</td>
+                        <td class="py-3 px-4 text-right">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <button onclick="openOrderDetail('${orderId}')" class="px-2 py-1 bg-white hover:bg-gray-100 border border-[#E5E7EB] text-[#111827] rounded text-[11px] font-medium transition-colors" title="View full details">
+                                    View
+                                </button>
+                                ${status !== 'CANCELLED' ? `
+                                    <button onclick="promptCancelOrder('${orderId}')" class="px-2 py-1 bg-white hover:bg-red-50 border border-red-200 text-red-600 rounded text-[11px] font-medium transition-colors" title="Cancel this order">
+                                        Cancel
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Open Order Details Modal
+        function openOrderDetail(orderId) {
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            if (!order) return;
+
+            document.getElementById('modal-order-id').textContent = `Order ${order.orderId}`;
+            const isCancelled = order.status === 'CANCELLED';
+
+            const itemsHtml = (order.items || []).map(i => `
+                <div class="flex justify-between items-center py-1.5 border-b border-gray-100 text-xs">
+                    <div>
+                        <div class="font-bold text-[#111827]">${i.name} ${i.variantName ? `(${i.variantName})` : ''}</div>
+                        <div class="text-[10px] text-gray-500 font-mono">SKU: ${i.sku} • HSN: ${i.hsn || '4910'} • ${i.weightLabel || ''}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-[#111827]">Rs. ${i.totalPrice || (i.unitPrice * i.quantity)}</div>
+                        <div class="text-[10px] text-gray-500">Rs. ${i.unitPrice} × ${i.quantity}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            const eventsHtml = (order.events || []).map(e => `
+                <div class="flex gap-2 text-[11px] py-1 border-l-2 border-indigo-200 pl-2">
+                    <div class="text-gray-400 font-mono min-w-[70px]">${new Date(e.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    <div>
+                        <span class="font-semibold text-indigo-700">${e.event}</span>: 
+                        <span class="text-gray-600">${e.details || ''}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('modal-order-body').innerHTML = `
+                <!-- Customer Details -->
+                <div class="bg-gray-50 p-3 rounded-lg border border-[#E5E7EB]">
+                    <div class="font-semibold text-[#111827] mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot text-indigo-600"></i> Shipping / Delivery Information
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-gray-700">
+                        <div><b>Recipient:</b> ${order.customer?.name} (${order.customer?.phone})</div>
+                        <div><b>Pincode:</b> ${order.customer?.pincode} • ${order.customer?.city}, ${order.customer?.state}</div>
+                        <div class="sm:col-span-2"><b>Address:</b> ${order.customer?.address1} ${order.customer?.address2 ? ', ' + order.customer.address2 : ''}</div>
+                    </div>
+                </div>
+
+                <!-- Items Ordered -->
+                <div>
+                    <div class="font-semibold text-[#111827] mb-1">Items in this order:</div>
+                    <div class="bg-white border border-[#E5E7EB] rounded-lg p-2.5">
+                        ${itemsHtml}
+                        <div class="flex justify-between items-center pt-2 font-bold text-sm text-[#111827]">
+                            <span>Total Payable:</span>
+                            <span class="text-indigo-600">Rs. ${order.pricing?.total || 0}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment & Shipping Details -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-white p-3 rounded-lg border border-[#E5E7EB]">
+                        <div class="font-semibold text-[#111827] mb-1">Payment Info</div>
+                        <div class="text-[11px] space-y-1 text-gray-600">
+                            <div>Provider: <b>${order.payment?.provider?.toUpperCase() || 'N/A'}</b></div>
+                            <div>Status: <b>${order.payment?.status || 'N/A'}</b></div>
+                            ${order.payment?.razorpayPaymentId ? `<div>Payment ID: <b class="font-mono">${order.payment.razorpayPaymentId}</b></div>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-lg border border-[#E5E7EB]">
+                        <div class="font-semibold text-[#111827] mb-1">Shiprocket Info</div>
+                        <div class="text-[11px] space-y-1 text-gray-600">
+                            <div>Courier: <b>${order.shipping?.courierName || 'Not Assigned'}</b></div>
+                            <div>AWB: <b class="font-mono">${order.shipping?.awb || 'None'}</b></div>
+                            <div>Shipping Status: <b>${order.shipping?.status || 'NOT_BOOKED'}</b></div>
+                            ${order.shipping?.trackingUrl ? `<div><a href="${order.shipping.trackingUrl}" target="_blank" class="text-indigo-600 underline font-semibold">Track on Shiprocket</a></div>` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event History -->
+                <div>
+                    <div class="font-semibold text-[#111827] mb-1">Order Activity Timeline:</div>
+                    <div class="bg-gray-50 p-2.5 rounded-lg border border-[#E5E7EB] space-y-1">
+                        ${eventsHtml || '<div class="text-gray-400">No events logged.</div>'}
+                    </div>
+                </div>
+            `;
+
+            const actionContainer = document.getElementById('modal-action-buttons');
+            actionContainer.innerHTML = `
+                ${!isCancelled ? `
+                    <button onclick="closeOrderDetailModal(); promptCancelOrder('${order.orderId}');" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg text-xs font-semibold">
+                        <i class="fa-solid fa-ban mr-1"></i> Cancel Order
+                    </button>
+                ` : '<span class="text-xs text-red-600 font-semibold">Order is Cancelled</span>'}
+
+                ${order.shipping?.status === 'FAILED' ? `
+                    <button onclick="retryShipping('${order.orderId}')" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold">
+                        <i class="fa-solid fa-truck-fast mr-1"></i> Retry Shipping
+                    </button>
+                ` : ''}
+            `;
+
+            document.getElementById('order-detail-modal').classList.remove('hidden');
+        }
+
+        function closeOrderDetailModal() {
+            document.getElementById('order-detail-modal').classList.add('hidden');
+        }
+
+        // Prompt Cancel Modal
+        function promptCancelOrder(orderId) {
+            pendingCancelOrderId = orderId;
+            document.getElementById('cancel-modal-order-id').textContent = orderId;
+            document.getElementById('cancel-reason-input').value = '';
+            document.getElementById('cancel-confirm-modal').classList.remove('hidden');
+        }
+
+        function closeCancelModal() {
+            pendingCancelOrderId = null;
+            document.getElementById('cancel-confirm-modal').classList.add('hidden');
+        }
+
+        // Execute Cancel Order
+        async function executeCancelOrder() {
+            if (!pendingCancelOrderId || !currentAdminToken) return;
+
+            const orderId = pendingCancelOrderId;
+            const reason = document.getElementById('cancel-reason-input').value.trim() || 'Admin manual cancellation';
+            const btn = document.getElementById('cancel-confirm-btn');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Cancelling...`;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${orderId}/cancel`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({ reason })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    closeCancelModal();
+                    loadOrdersAndStats();
+                    alert(`Order ${orderId} has been successfully cancelled.`);
+                } else {
+                    alert(result.error?.message || "Failed to cancel order.");
+                }
+            } catch (err) {
+                alert("Network error while cancelling order.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Yes, Cancel Order";
+            }
+        }
+
+        // Retry Shipping
+        async function retryShipping(orderId) {
+            if (!currentAdminToken) return;
+            if (!confirm(`Retry Shiprocket shipment booking for ${orderId}?`)) return;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${orderId}/retry-shipping`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    }
+                });
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert("Shipment successfully created!");
+                    closeOrderDetailModal();
+                    loadOrdersAndStats();
+                } else {
+                    alert(result.error?.message || "Failed to create shipment on retry.");
+                }
+            } catch (err) {
+                alert("Network error while retrying shipment.");
+            }
+        }
+
+        // Global ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeOrderDetailModal();
+                closeCancelModal();
+            }
+        });
+    </script>
+</body>
+</html>

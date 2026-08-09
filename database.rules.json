@@ -1,0 +1,20 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "orders": {
+      "$orderId": {
+        ".read": false,
+        ".write": false
+      }
+    },
+    "webhookEvents": {
+      ".read": false,
+      ".write": false
+    },
+    "idempotencyLocks": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
