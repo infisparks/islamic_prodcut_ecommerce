@@ -132,7 +132,7 @@
     <!-- TOP ANNOUNCEMENT BAR (Always Single Row on Mobile) -->
     <div class="bg-onyx text-pearl text-[9px] min-[370px]:text-[10.5px] sm:text-xs font-semibold py-1.5 px-2 text-center border-b border-gold-500/30 flex items-center justify-center gap-1.5 whitespace-nowrap overflow-hidden tracking-tight">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
-        <span class="whitespace-nowrap truncate">🕋 <b>UMRAH SEASON OFFER</b>: Free Shipping + Free Tawaf Counter Tasbih</span>
+        <span class="whitespace-nowrap truncate">🕋 <b>UMRAH SEASON OFFER</b>: Free Shipping Above Rs. 2000 + Free Tawaf Counter Tasbih</span>
         <span class="hidden lg:inline-block bg-gold-500/20 text-gold-300 px-2 py-0.5 rounded text-[10px] font-mono border border-gold-500/30 flex-shrink-0" id="top-timer">Ends in 14:28</span>
     </div>
 
@@ -1023,7 +1023,6 @@
                                         <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${p.oldPrice}</span>
                                     `}
                                 </div>
-                                <span class="text-[8px] sm:text-[9px] text-red-600 font-bold bg-red-50 px-1.5 py-0.5 rounded border border-red-200 shrink-0">Special Offer</span>
                             </div>
                             <div class="grid grid-cols-2 gap-1.5">
                                 <button onclick="event.stopPropagation(); quickView(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 transition-all border border-gray-300">
@@ -1583,7 +1582,7 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             
             let effectiveFee = currentShippingFee;
-            if (subtotalPrice >= 499 && currentShippingFee !== null) {
+            if (subtotalPrice >= 2000 && currentShippingFee !== null) {
                 effectiveFee = 0;
             }
             const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;

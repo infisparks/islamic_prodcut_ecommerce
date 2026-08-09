@@ -65,6 +65,12 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode) {
       shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
     }
   }
+
+  // Free delivery ONLY if order subtotal is more than or equal to Rs. 2000
+  if (subtotal >= 2000) {
+    shipping = 0;
+  }
+
   const total = subtotal + shipping;
 
   return {
