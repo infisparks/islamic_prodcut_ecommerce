@@ -94,8 +94,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
 
     // 3. Handle COD flow
     if (paymentMethod === 'cod') {
-      await firebaseService.saveOrder(internalOrderId, orderRecord);
-      logger.info('ORDER_CREATED_COD', { internalOrderId });
+      logger.info('ORDER_CREATED_COD_INITIATED', { internalOrderId });
 
       // Automatically book Shiprocket for COD
       try {
@@ -108,34 +107,45 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         orderRecord.events.push({
           event: 'SHIPMENT_BOOKED',
           timestamp: new Date().toISOString(),
-          details: `Shiprocket shipment created with AWB ${shippingDetails.awb}`
+          details: `Shiprocket shipment confirmed with Order ID ${shippingDetails.shiprocketOrderId}`
         });
 
-        await firebaseService.updateOrder(internalOrderId, orderRecord);
+        await firebaseService.saveOrder(internalOrderId, orderRecord);
+        logger.info('ORDER_CREATED_COD_SUCCESS', { internalOrderId, shiprocketOrderId: shippingDetails.shiprocketOrderId });
+
+        return res.status(201).json({
+          success: true,
+          data: {
+            orderId: internalOrderId,
+            status: orderRecord.status,
+            payment: {
+              provider: 'COD',
+              status: 'COD_PENDING'
+            },
+            shipping: orderRecord.shipping,
+            pricing: trustedOrderData.pricing,
+            customer: orderRecord.customer
+          }
+        });
       } catch (shipErr) {
         logger.error('COD_SHIPMENT_FAILED', { internalOrderId, error: shipErr.message });
         orderRecord.shipping.status = 'FAILED';
+        orderRecord.status = 'SHIPMENT_FAILED';
         orderRecord.events.push({
           event: 'SHIPMENT_FAILED',
           timestamp: new Date().toISOString(),
           details: `Shipping booking failed: ${shipErr.message}`
         });
-        await firebaseService.updateOrder(internalOrderId, orderRecord);
-      }
+        await firebaseService.saveOrder(internalOrderId, orderRecord);
 
-      return res.status(201).json({
-        success: true,
-        data: {
-          orderId: internalOrderId,
-          status: orderRecord.status,
-          payment: {
-            provider: 'COD',
-            status: 'COD_PENDING'
-          },
-          shipping: orderRecord.shipping,
-          pricing: trustedOrderData.pricing
-        }
-      });
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'SHIPROCKET_CONFIRMATION_FAILED',
+            message: shipErr.message || 'Shiprocket could not confirm shipment booking.'
+          }
+        });
+      }
     }
   } catch (err) {
     next(err);

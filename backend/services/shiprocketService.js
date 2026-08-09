@@ -44,14 +44,9 @@ async function getAuthToken() {
       throw new Error('Invalid response from Shiprocket auth');
     }
   } catch (err) {
-    if (config.shiprocketMode === 'test') {
-      logger.warn('SHIPROCKET_AUTH_TEST_SIMULATION', { message: err.message });
-      cachedToken = `mock_jwt_${Math.random().toString(36).substring(2, 18)}`;
-      tokenExpiresAt = now + 10 * 24 * 60 * 60 * 1000;
-      return cachedToken;
-    }
-    logger.error('SHIPROCKET_AUTH_FAILED', { message: err.message });
-    throw new Error('Failed to authenticate with shipping provider.');
+    const errorMsg = err.response?.data?.message || err.message || 'Shiprocket authentication failed';
+    logger.error('SHIPROCKET_AUTH_FAILED', { message: errorMsg, status: err.response?.status });
+    throw new Error(`Shiprocket Auth Error: ${errorMsg}`);
   }
 }
 
@@ -261,92 +256,82 @@ const shiprocketService = {
       };
 
       if (isConfigured && !token.startsWith('mock_jwt_')) {
+        // 1. Create Adhoc Order with live Shiprocket API
+        const createRes = await axios.post(
+          `${config.shiprocket.baseUrl}/orders/create/adhoc`,
+          payload,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 15000
+          }
+        );
+
+        const shipData = createRes.data;
+        if (!shipData || (!shipData.order_id && !shipData.shipment_id)) {
+          const msg = shipData?.message || (Array.isArray(shipData?.errors) ? shipData.errors.join(', ') : 'Shiprocket order creation failed.');
+          throw new Error(`Shiprocket Order Creation Error: ${msg}`);
+        }
+
+        const shiprocketOrderId = shipData.order_id;
+        const shipmentId = shipData.shipment_id;
+
+        logger.info('SHIPROCKET_ORDER_CREATED_LIVE', {
+          internalOrderId: order.orderId,
+          shiprocketOrderId,
+          shipmentId
+        });
+
+        // 2. Assign AWB/Courier
+        let awb = null;
+        let courierName = null;
+        let trackingUrl = null;
+
         try {
-          // 1. Create Adhoc Order
-          const createRes = await axios.post(
-            `${config.shiprocket.baseUrl}/orders/create/adhoc`,
-            payload,
+          const awbRes = await axios.post(
+            `${config.shiprocket.baseUrl}/courier/assign/awb`,
+            { shipment_id: shipmentId },
             {
               headers: { Authorization: `Bearer ${token}` },
               timeout: 15000
             }
           );
 
-          const shipData = createRes.data;
-          const shiprocketOrderId = shipData.order_id;
-          const shipmentId = shipData.shipment_id;
+          if (awbRes.data && awbRes.data.response && awbRes.data.response.data) {
+            const awbData = awbRes.data.response.data;
+            awb = awbData.awb_code;
+            courierName = awbData.courier_name;
+            trackingUrl = `https://shiprocket.co/tracking/${awb}`;
 
-          logger.info('SHIPROCKET_ORDER_CREATED', {
-            internalOrderId: order.orderId,
-            shiprocketOrderId,
-            shipmentId
-          });
-
-          // 2. Assign AWB/Courier
-          let awb = null;
-          let courierName = null;
-          let trackingUrl = null;
-
-          try {
-            const awbRes = await axios.post(
-              `${config.shiprocket.baseUrl}/courier/assign/awb`,
-              { shipment_id: shipmentId },
-              {
-                headers: { Authorization: `Bearer ${token}` },
-                timeout: 15000
-              }
-            );
-
-            if (awbRes.data && awbRes.data.response && awbRes.data.response.data) {
-              const awbData = awbRes.data.response.data;
-              awb = awbData.awb_code;
-              courierName = awbData.courier_name;
-              trackingUrl = `https://shiprocket.co/tracking/${awb}`;
-
-              logger.info('SHIPROCKET_AWB_ASSIGNED', {
-                internalOrderId: order.orderId,
-                awb,
-                courierName
-              });
-            }
-          } catch (awbErr) {
-            logger.warn('SHIPROCKET_AWB_PENDING_MANUAL', {
+            logger.info('SHIPROCKET_AWB_ASSIGNED_LIVE', {
               internalOrderId: order.orderId,
-              message: awbErr.message
+              awb,
+              courierName
             });
           }
-
-          return {
-            provider: 'shiprocket',
-            status: awb ? 'AWB_ASSIGNED' : 'BOOKED',
-            shiprocketOrderId: String(shiprocketOrderId),
-            shipmentId: String(shipmentId),
-            awb: awb || 'PENDING_ASSIGNMENT',
-            courierName: courierName || 'Express Courier Partner',
-            trackingUrl: trackingUrl || `https://shiprocket.co/tracking/${shiprocketOrderId}`,
-            bookedAt: new Date().toISOString()
-          };
-        } catch (apiErr) {
-          if (config.shiprocketMode === 'test') {
-            logger.warn('SHIPROCKET_ORDER_TEST_SIMULATION', { error: apiErr.message });
-          } else {
-            throw apiErr;
-          }
+        } catch (awbErr) {
+          logger.warn('SHIPROCKET_AWB_PENDING_MANUAL', {
+            internalOrderId: order.orderId,
+            message: awbErr.message
+          });
         }
+
+        return {
+          provider: 'shiprocket',
+          status: awb ? 'AWB_ASSIGNED' : 'BOOKED',
+          shiprocketOrderId: String(shiprocketOrderId),
+          shipmentId: String(shipmentId),
+          awb: awb || 'PENDING_ASSIGNMENT',
+          courierName: courierName || 'Shiprocket Express Partner',
+          trackingUrl: trackingUrl || `https://shiprocket.co/tracking/${shiprocketOrderId}`,
+          bookedAt: new Date().toISOString()
+        };
       }
 
-      // Mock / Test Mode Response
+      // If credentials are dummy/mock only
       const mockShiprocketOrderId = `SR_${Math.floor(10000000 + Math.random() * 90000000)}`;
       const mockShipmentId = `SH_${Math.floor(1000000 + Math.random() * 9000000)}`;
       const mockAwb = `AWB${Math.floor(1000000000 + Math.random() * 9000000000)}`;
       const mockCourier = 'Shiprocket Express (BlueDart / Delhivery)';
-
-      logger.info('SHIPROCKET_ORDER_CREATED_SIMULATED', {
-        internalOrderId: order.orderId,
-        shiprocketOrderId: mockShiprocketOrderId,
-        shipmentId: mockShipmentId,
-        awb: mockAwb
-      });
 
       return {
         provider: 'shiprocket',
@@ -359,11 +344,14 @@ const shiprocketService = {
         bookedAt: new Date().toISOString()
       };
     } catch (err) {
+      const errorMsg = err.response?.data?.message || (err.response?.data?.errors ? JSON.stringify(err.response.data.errors) : err.message);
       logger.error('SHIPMENT_FAILED', {
         internalOrderId: order.orderId,
-        error: err.message
+        error: errorMsg
       });
-      throw err;
+      const error = new Error(`Shiprocket Error: ${errorMsg}`);
+      error.code = 'SHIPROCKET_API_ERROR';
+      throw error;
     }
   },
 
