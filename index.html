@@ -166,10 +166,11 @@
         <!-- Background Image with Clear Visibility & Soft Overlay -->
         <div class="absolute inset-0 z-0">
             <picture>
+                <source srcset="/hero.webp" type="image/webp">
                 <source srcset="hero.webp" type="image/webp">
-                <img src="hero.png" alt="Hero Background" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='hero.png';">
+                <img src="/hero.png" alt="Hero Background" class="w-full h-full object-cover object-center opacity-80" onerror="this.onerror=null; this.src='/hero2.png';">
             </picture>
-            <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/20 to-onyx/90"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-onyx/95"></div>
         </div>
 
         <!-- Glow accents -->
@@ -407,13 +408,18 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Mobile <span class="text-red-500">*</span></label>
+                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Primary Mobile <span class="text-red-500">*</span></label>
                                 <input type="tel" id="ship-phone" maxlength="10" oninput="saveCustomerDetailsToStorage()" placeholder="10-digit Mobile" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Pincode <span class="text-red-500">*</span></label>
-                                <input type="text" id="ship-pincode" maxlength="6" oninput="handlePincodeAutoCheck(this.value); saveCustomerDetailsToStorage();" placeholder="6-digit Pincode" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
+                                <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Emergency Mobile <span class="text-gray-400 font-normal">(Optional)</span></label>
+                                <input type="tel" id="ship-emergency-phone" maxlength="10" oninput="saveCustomerDetailsToStorage()" placeholder="Alt Contact No" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
                             </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-semibold text-gray-700 mb-0.5">Delivery Pincode <span class="text-red-500">*</span></label>
+                            <input type="text" id="ship-pincode" maxlength="6" oninput="handlePincodeAutoCheck(this.value); saveCustomerDetailsToStorage();" placeholder="6-digit Pincode" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:border-gold-500 text-onyx text-xs bg-white">
                         </div>
 
                         <!-- Live Pincode Serviceability Badge -->
@@ -848,7 +854,6 @@
                 id: 5,
                 name: "Dua Sticker (English)",
                 category: "sticker",
-                hidden: true,
                 language: "English",
                 brand: "fatimacalligrapher27",
                 hsn: "4910",
@@ -872,7 +877,6 @@
                 id: 6,
                 name: "Dua Sticker (Hindi / हिंदी)",
                 category: "sticker",
-                hidden: true,
                 language: "Hindi",
                 brand: "fatimacalligrapher27",
                 hsn: "4910",
@@ -896,7 +900,6 @@
                 id: 7,
                 name: "Dua Sticker (Urdu / اردو)",
                 category: "sticker",
-                hidden: true,
                 language: "Urdu",
                 brand: "fatimacalligrapher27",
                 hsn: "4910",
@@ -1929,6 +1932,7 @@
                 const details = {
                     name: document.getElementById('ship-name')?.value || '',
                     phone: document.getElementById('ship-phone')?.value || '',
+                    emergencyPhone: document.getElementById('ship-emergency-phone')?.value || '',
                     pincode: document.getElementById('ship-pincode')?.value || '',
                     address1: document.getElementById('ship-address1')?.value || '',
                     address2: document.getElementById('ship-address2')?.value || '',
@@ -1947,6 +1951,9 @@
                 const details = JSON.parse(saved);
                 if (details.name) document.getElementById('ship-name').value = details.name;
                 if (details.phone) document.getElementById('ship-phone').value = details.phone;
+                if (details.emergencyPhone && document.getElementById('ship-emergency-phone')) {
+                    document.getElementById('ship-emergency-phone').value = details.emergencyPhone;
+                }
                 if (details.pincode) {
                     document.getElementById('ship-pincode').value = details.pincode;
                     handlePincodeAutoCheck(details.pincode);
@@ -2227,6 +2234,7 @@
         async function executeOrderCreation(verificationToken) {
             const name = document.getElementById('ship-name').value.trim();
             const phone = document.getElementById('ship-phone').value.trim();
+            const emergencyPhone = document.getElementById('ship-emergency-phone')?.value.trim() || '';
             const pincode = document.getElementById('ship-pincode').value.trim();
             const address1 = document.getElementById('ship-address1').value.trim();
             const address2 = document.getElementById('ship-address2').value.trim();
@@ -2234,6 +2242,7 @@
             const state = document.getElementById('ship-state').value.trim();
 
             const cleanPhone = phone.replace(/\D/g, '');
+            const cleanEmergencyPhone = emergencyPhone ? emergencyPhone.replace(/\D/g, '') : '';
             const cleanPincode = pincode.replace(/\D/g, '');
 
             // Lock UI
@@ -2243,6 +2252,7 @@
                 customer: {
                     name,
                     phone: cleanPhone,
+                    emergencyPhone: cleanEmergencyPhone || null,
                     pincode: cleanPincode,
                     address1,
                     address2,

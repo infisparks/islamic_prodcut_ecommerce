@@ -146,11 +146,14 @@ function validateOrderCreation(req, res, next) {
     });
   }
 
+  const emergencyPhone = customer.emergencyPhone ? sanitizeString(customer.emergencyPhone, 15) : null;
+
   // Attach sanitized data to request
   req.sanitizedOrder = {
     customer: {
       name,
       phone,
+      emergencyPhone,
       pincode,
       address1,
       address2,
