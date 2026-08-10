@@ -1509,6 +1509,12 @@
             });
         }
 
+        function applyOfferComboAndOpen() {
+            applyCouponCode('RAB112');
+            showToastNotification('🎉 Coupon RAB112 Applied! Add 2 or more products (Total ₹999+) for 12% OFF + FREE Delivery!');
+            toggleCartDrawer(true);
+        }
+
         function renderProducts(filter = 'all') {
             const container = document.getElementById('products-catalog-container');
             if (!container) return;
@@ -1518,7 +1524,7 @@
                 ? visibleProducts 
                 : visibleProducts.filter(p => p.category === filter);
 
-            container.innerHTML = filtered.map(p => {
+            let cardsHTML = filtered.map(p => {
                 const hasVariants = p.variants && p.variants.length > 0;
                 const minPrice = hasVariants ? p.variants[p.variants.length - 1].price : p.price;
                 const maxPrice = hasVariants ? p.variants[0].price : p.price;
@@ -1582,6 +1588,49 @@
                 </div>
                 `;
             }).join('');
+
+            // 8th Special Combo Offer Promo Card
+            const offerCardHTML = `
+                <div onclick="applyOfferComboAndOpen()" class="bg-gradient-to-br from-onyx via-gray-900 to-onyx rounded-2xl overflow-hidden border-2 border-gold-500/80 shadow-2xl shadow-gold-glow flex flex-col justify-between p-3 sm:p-3.5 text-white relative group banner-shine-container cursor-pointer transition-all duration-300 hover:scale-[1.02]">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="bg-gold-500 text-onyx font-extrabold text-[8.5px] sm:text-[9.5px] px-2 py-0.5 rounded-full uppercase shadow-gold-glow tracking-wider">
+                            🔥 SPECIAL COMBO OFFER
+                        </span>
+                        <span class="bg-white/10 text-gold-300 text-[8px] sm:text-[8.5px] font-bold px-2 py-0.5 rounded-full border border-gold-500/30">
+                            Limited Time
+                        </span>
+                    </div>
+
+                    <div class="my-auto text-center py-1.5">
+                        <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gold-500/20 border border-gold-400/50 mb-1.5 shadow-inner">
+                            <i class="fa-solid fa-gift text-gold-400 text-lg animate-bounce"></i>
+                        </div>
+
+                        <h3 class="font-cinzel text-xs sm:text-sm font-extrabold text-gold-400 leading-tight mb-1">
+                            Buy 2 & Get <span class="text-white underline decoration-gold-400">12% OFF</span>
+                        </h3>
+
+                        <div class="my-1.5 inline-block bg-gold-500/20 border-2 border-dashed border-gold-400/80 px-2.5 py-0.5 rounded-xl">
+                            <span class="text-[8.5px] text-gray-300 font-bold block uppercase tracking-wider">Use Coupon Code</span>
+                            <span class="font-extrabold text-xs sm:text-sm text-gold-300 font-mono tracking-widest">RAB112</span>
+                        </div>
+
+                        <div class="bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[8.5px] sm:text-[9px] font-bold py-0.5 px-2 rounded-lg mt-1 inline-flex items-center gap-1">
+                            <i class="fa-solid fa-truck-fast text-emerald-400 text-[10px]"></i>
+                            <span>FREE Delivery Above ₹999</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 pt-2 border-t border-gold-500/30">
+                        <button onclick="event.stopPropagation(); applyOfferComboAndOpen();" class="w-full gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1.5 rounded-xl shadow-gold-glow flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all">
+                            <i class="fa-solid fa-tag text-[9px]"></i>
+                            <span>APPLY RAB112 & SHOP NOW</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = cardsHTML + offerCardHTML;
         }
 
         function filterProducts(category) {
