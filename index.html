@@ -339,22 +339,21 @@
             </div>
 
             <!-- FANNED DENSE CARD DECK INTERACTIVE CONTAINER -->
-            <div class="flex flex-col items-center justify-center">
-                <!-- Card Fan Container (Mobile Responsive Offsets) -->
+            <div class="flex flex-col items-center just                <!-- Card Fan Container (Mobile Responsive Offsets) -->
                 <div class="relative w-full max-w-xl h-[265px] sm:h-[315px] flex items-center justify-center perspective-1000 my-0.5 overflow-visible" id="cards-fan-container">
                     
                     <!-- Fanned Card -4 (Far Left Outer) -->
-                    <div class="absolute w-[145px] sm:w-[195px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/70 shadow-lg transform -rotate-[20deg] -translate-x-20 sm:-translate-x-44 opacity-60 scale-85 z-0 pointer-events-none hidden sm:block">
+                    <div onclick="openUmrahDeckModal(4)" class="absolute w-[145px] sm:w-[195px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/70 shadow-lg transform -rotate-[20deg] -translate-x-20 sm:-translate-x-44 opacity-60 scale-85 z-0 hover:z-25 hover:opacity-100 transition-all duration-300 cursor-pointer hidden sm:block">
                         <div class="bg-gray-200 text-onyx text-[8.5px] font-bold py-0.5 px-2 rounded-full text-center mb-1">
-                            Ihram & Niyyah Dua (#1)
+                            Ehram Ki Niyyat (#4)
                         </div>
                         <div class="font-arabic text-xs font-bold text-right mb-1" dir="rtl">اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ</div>
                     </div>
 
                     <!-- Fanned Card -3 (Left Outer) -->
-                    <div class="absolute w-[150px] sm:w-[205px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/80 shadow-xl transform -rotate-[15deg] -translate-x-14 sm:-translate-x-32 scale-90 sm:scale-95 z-5 hover:scale-100 hover:z-25 transition-all duration-300 select-none">
+                    <div onclick="openUmrahDeckModal(11)" class="absolute w-[150px] sm:w-[205px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/80 shadow-xl transform -rotate-[15deg] -translate-x-14 sm:-translate-x-32 scale-90 sm:scale-95 z-5 hover:scale-105 hover:z-25 transition-all duration-300 cursor-pointer select-none">
                         <div class="bg-gray-200 text-onyx text-[8.5px] sm:text-[9.5px] font-bold py-0.5 px-1.5 rounded-full text-center mb-1 shadow-inner truncate">
-                            Talbiyah (#4)
+                            Talbiyah (#11)
                         </div>
                         <div class="font-arabic text-[11px] sm:text-sm font-bold text-right mb-1 leading-snug truncate" dir="rtl">
                             لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ
@@ -368,15 +367,15 @@
                     </div>
 
                     <!-- Fanned Card -2 (Left Mid) -->
-                    <div class="absolute w-[155px] sm:w-[215px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform -rotate-[10deg] -translate-x-9 sm:-translate-x-20 z-10 hover:scale-105 hover:z-25 transition-all duration-300 select-none">
+                    <div onclick="openUmrahDeckModal(5)" class="absolute w-[155px] sm:w-[215px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform -rotate-[10deg] -translate-x-9 sm:-translate-x-20 z-10 hover:scale-105 hover:z-25 transition-all duration-300 cursor-pointer select-none">
                         <div class="bg-gray-200 text-onyx text-[9px] sm:text-[10px] font-bold py-0.5 px-1.5 rounded-full text-center mb-1 shadow-inner truncate">
-                            Masjid se Nikalna (#5)
+                            Ehram Mana Cheezein (#5)
                         </div>
-                        <div class="font-arabic text-[11px] sm:text-sm font-bold text-right mb-1 leading-snug truncate" dir="rtl">
-                            اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ
+                        <div class="text-[9.5px] sm:text-[10.5px] font-bold text-red-700 text-left mb-1 leading-tight truncate">
+                            • Topi, Itr, Baal & Nakhun
                         </div>
                         <div class="bg-gray-100 p-1 rounded text-[8px] sm:text-[9px] font-serif text-gray-800 mb-1 truncate">
-                            Allahumma inni as'aluka min fadlik
+                            Ehram rules & restrictions...
                         </div>
                         <div class="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border border-gray-400 bg-gray-200 mx-auto mt-0.5 flex items-center justify-center">
                             <div class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-onyx"></div>
@@ -384,7 +383,7 @@
                     </div>
 
                     <!-- Fanned Card -1 (Left Inner) -->
-                    <div class="absolute w-[160px] sm:w-[220px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform -rotate-[5deg] -translate-x-4 sm:-translate-x-10 z-15 hover:scale-105 hover:z-25 transition-all duration-300 select-none">
+                    <div onclick="openUmrahDeckModal(6)" class="absolute w-[160px] sm:w-[220px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform -rotate-[5deg] -translate-x-4 sm:-translate-x-10 z-15 hover:scale-105 hover:z-25 transition-all duration-300 cursor-pointer select-none">
                         <div class="bg-gray-200 text-onyx text-[9px] sm:text-[10px] font-bold py-0.5 px-1.5 rounded-full text-center mb-1 shadow-inner truncate">
                             Masjid Dakhil Hone (#6)
                         </div>
@@ -400,9 +399,9 @@
                     </div>
 
                     <!-- Fanned Card +1 (Right Inner) -->
-                    <div class="absolute w-[160px] sm:w-[220px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform rotate-[5deg] translate-x-4 sm:translate-x-10 z-15 hover:scale-105 hover:z-25 transition-all duration-300 select-none">
+                    <div onclick="openUmrahDeckModal(1)" class="absolute w-[160px] sm:w-[220px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform rotate-[5deg] translate-x-4 sm:translate-x-10 z-15 hover:scale-105 hover:z-25 transition-all duration-300 cursor-pointer select-none">
                         <div class="bg-gray-200 text-onyx text-[9px] sm:text-[10px] font-bold py-0.5 px-1.5 rounded-full text-center mb-1 shadow-inner truncate">
-                            Safar Ki Dua (#7)
+                            Safar Ki Dua (#1)
                         </div>
                         <div class="font-arabic text-[11px] sm:text-sm font-bold text-right mb-1 leading-snug truncate" dir="rtl">
                             سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا
@@ -416,15 +415,15 @@
                     </div>
 
                     <!-- Fanned Card +2 (Right Mid) -->
-                    <div class="absolute w-[155px] sm:w-[215px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform rotate-[10deg] translate-x-9 sm:translate-x-20 z-10 hover:scale-105 hover:z-25 transition-all duration-300 select-none">
+                    <div onclick="openUmrahDeckModal(7)" class="absolute w-[155px] sm:w-[215px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3.5 border-2 border-amber-400 shadow-xl transform rotate-[10deg] translate-x-9 sm:translate-x-20 z-10 hover:scale-105 hover:z-25 transition-all duration-300 cursor-pointer select-none">
                         <div class="bg-gray-200 text-onyx text-[9px] sm:text-[10px] font-bold py-0.5 px-1.5 rounded-full text-center mb-1 shadow-inner truncate">
-                            Tawaf & Sa'ee (#8)
+                            Hum Umrah Kaise Karein (#7)
                         </div>
-                        <div class="font-arabic text-[11px] sm:text-sm font-bold text-right mb-1 leading-snug truncate" dir="rtl">
-                            رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً
+                        <div class="text-[9.5px] sm:text-[10.5px] font-bold text-onyx text-left mb-1 leading-tight truncate">
+                            • Step-by-Step Umrah Guide
                         </div>
                         <div class="bg-gray-100 p-1 rounded text-[8px] sm:text-[9px] font-serif text-gray-800 mb-1 truncate">
-                            Rabbana atina fid-dunya...
+                            Ehram, Tawaf, Sa'i & Halq...
                         </div>
                         <div class="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border border-gray-400 bg-gray-200 mx-auto mt-0.5 flex items-center justify-center">
                             <div class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-onyx"></div>
@@ -432,9 +431,9 @@
                     </div>
 
                     <!-- Fanned Card +3 (Right Outer) -->
-                    <div class="absolute w-[150px] sm:w-[205px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/80 shadow-xl transform rotate-[15deg] translate-x-14 sm:translate-x-32 scale-90 sm:scale-95 z-5 hover:scale-100 hover:z-25 transition-all duration-300 select-none">
+                    <div onclick="openUmrahDeckModal(12)" class="absolute w-[150px] sm:w-[205px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/80 shadow-xl transform rotate-[15deg] translate-x-14 sm:translate-x-32 scale-90 sm:scale-95 z-5 hover:scale-105 hover:z-25 transition-all duration-300 cursor-pointer select-none">
                         <div class="bg-gray-200 text-onyx text-[8.5px] sm:text-[9.5px] font-bold py-0.5 px-1.5 rounded-full text-center mb-1 shadow-inner truncate">
-                            Zamzam Peene (#9)
+                            Zamzam Peene (#12)
                         </div>
                         <div class="font-arabic text-[11px] sm:text-sm font-bold text-right mb-1 leading-snug truncate" dir="rtl">
                             اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا
@@ -448,15 +447,15 @@
                     </div>
 
                     <!-- Fanned Card +4 (Far Right Outer) -->
-                    <div class="absolute w-[145px] sm:w-[195px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/70 shadow-lg transform rotate-[20deg] translate-x-20 sm:translate-x-44 opacity-60 scale-85 z-0 pointer-events-none hidden sm:block">
+                    <div onclick="openUmrahDeckModal(16)" class="absolute w-[145px] sm:w-[195px] bg-white text-onyx rounded-2xl p-2.5 sm:p-3 border-2 border-amber-400/70 shadow-lg transform rotate-[20deg] translate-x-20 sm:translate-x-44 opacity-60 scale-85 z-0 hover:z-25 hover:opacity-100 transition-all duration-300 cursor-pointer hidden sm:block">
                         <div class="bg-gray-200 text-onyx text-[8.5px] font-bold py-0.5 px-2 rounded-full text-center mb-1">
-                            Roza-e-Rasool (#13)
+                            Roza-e-Rasool (#16)
                         </div>
                         <div class="font-arabic text-xs font-bold text-right mb-1" dir="rtl">السَّلاَمُ عَلَيْكَ يَا رَسُولَ اللَّهِ</div>
                     </div>
 
                     <!-- CENTER MAIN COVER CARD (With Video Trigger Button & 16-Cards Stack Badge) -->
-                    <div id="deck-center-card" class="absolute w-[185px] sm:w-[235px] bg-white text-onyx rounded-2xl p-3 sm:p-4 border-2 border-amber-400 shadow-2xl z-30 transform rotate-0 scale-100 sm:scale-105 hover:scale-105 sm:hover:scale-110 transition-all duration-300 select-none shadow-gold-glow">
+                    <div onclick="openUmrahDeckModal(1)" id="deck-center-card" class="absolute w-[185px] sm:w-[235px] bg-white text-onyx rounded-2xl p-3 sm:p-4 border-2 border-amber-400 shadow-2xl z-30 transform rotate-0 scale-100 sm:scale-105 hover:scale-105 sm:hover:scale-110 transition-all duration-300 cursor-pointer select-none shadow-gold-glow">
                         
                         <!-- Top Grey Title Pill & 16 Deck Badge -->
                         <div class="bg-onyx text-gold-400 text-[10px] sm:text-xs font-extrabold py-0.5 sm:py-1 px-2 rounded-full text-center mb-1.5 border border-gold-500/50 shadow-sm flex items-center justify-center gap-1">
@@ -483,7 +482,7 @@
 
                         <!-- 16 CARDS COMPLETE DECK BADGE -->
                         <div class="bg-amber-100 text-amber-900 text-[9.5px] sm:text-[10.5px] font-extrabold py-0.5 sm:py-1 px-2.5 rounded-full text-center mb-1 border border-amber-300 shadow-inner flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-layer-group text-[9px] text-amber-700"></i> Full 16-Card Ring Deck
+                            <i class="fa-solid fa-layer-group text-[9px] text-amber-700"></i> Tap to Flip 16 Cards
                         </div>
 
                         <!-- Subtitle -->
@@ -516,12 +515,16 @@
                 </div>
 
                 <!-- CTA Button & Video Demo Button -->
-                <div class="mt-3 flex flex-col sm:flex-row items-center justify-center gap-2 w-full max-w-sm px-2">
-                    <button onclick="openCardVideoModal()" class="w-full bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx border border-gold-500/60 font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-circle-play text-gold-400 text-sm"></i>
-                        <span>WATCH CARD VIDEO</span>
+                <div class="mt-3 flex flex-col sm:flex-row items-center justify-center gap-2 w-full max-w-md px-2">
+                    <button onclick="openUmrahDeckModal(1)" class="w-full bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx border border-gold-500/60 font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                        <i class="fa-solid fa-expand text-gold-400 text-sm"></i>
+                        <span>FLIP & VIEW ALL 16 DUA CARDS</span>
                     </button>
                     <a href="#products-grid" class="w-full gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-1.5 whitespace-nowrap hover:opacity-95 active:scale-95 transition-all">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>SHOP DECK (RS. 491)</span>
+                    </a>
+                </div>d-bg-gradient text-onyx font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-1.5 whitespace-nowrap hover:opacity-95 active:scale-95 transition-all">
                         <i class="fa-solid fa-bag-shopping"></i>
                         <span>SHOP DECK (RS. 491)</span>
                     </a>
@@ -662,6 +665,73 @@
                     <i class="fa-solid fa-bag-shopping"></i> Order Card Deck Set (Rs. 491)
                 </a>
             </div>
+        </div>
+    </div>
+
+    <!-- REAL PHYSICAL-STYLE UMRAH DUA DECK VIEWER MODAL -->
+    <div id="umrah-deck-viewer-modal" onclick="if(event.target === this) closeUmrahDeckModal()" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+        <div class="bg-gradient-to-b from-[#18181B] via-[#09090B] to-[#18181B] rounded-3xl max-w-lg w-full relative border-2 border-gold-500/80 shadow-2xl overflow-hidden flex flex-col max-h-[96vh] my-auto" onclick="event.stopPropagation()">
+            
+            <!-- Top Header & Filter Controls -->
+            <div class="bg-onyx text-pearl p-3 px-4 border-b border-gold-500/40 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-gold-500/20 border border-gold-500/40 text-gold-400 flex items-center justify-center text-xs font-bold">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </span>
+                    <div>
+                        <h4 class="font-cinzel font-extrabold text-xs sm:text-sm text-white">Authentic Umrah Dua Cards Deck</h4>
+                        <p class="text-[9.5px] text-gold-400/90 font-mono">16 Ring-Bound Cards • Interactive Reader</p>
+                    </div>
+                </div>
+                <button onclick="closeUmrahDeckModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-gold-500 hover:text-onyx text-gray-300 flex items-center justify-center transition-colors shadow-md" title="Close Deck Viewer">
+                    <i class="fa-solid fa-xmark text-sm font-bold"></i>
+                </button>
+            </div>
+
+            <!-- Deck Filter Bar (Safar, Ehram Rules, Umrah Steps, All) -->
+            <div class="bg-black/60 px-3 py-2 border-b border-gold-500/20 flex items-center justify-between gap-1 overflow-x-auto no-scrollbar flex-shrink-0">
+                <div class="flex items-center gap-1.5" id="deck-filter-pills">
+                    <button onclick="filterDeckCards('all')" id="deck-filter-all" class="deck-filter-btn active-deck-filter text-[10px] font-bold px-2.5 py-1 rounded-lg bg-gold-500 text-onyx shadow-xs transition-all whitespace-nowrap">All (16 Cards)</button>
+                    <button onclick="filterDeckCards('safar')" id="deck-filter-safar" class="deck-filter-btn text-[10px] font-bold px-2.5 py-1 rounded-lg bg-onyx text-gray-300 border border-gold-500/30 hover:text-gold-400 transition-all whitespace-nowrap">Safar Duas</button>
+                    <button onclick="filterDeckCards('ehram')" id="deck-filter-ehram" class="deck-filter-btn text-[10px] font-bold px-2.5 py-1 rounded-lg bg-onyx text-gray-300 border border-gold-500/30 hover:text-gold-400 transition-all whitespace-nowrap">Ehram & Rules</button>
+                    <button onclick="filterDeckCards('steps')" id="deck-filter-steps" class="deck-filter-btn text-[10px] font-bold px-2.5 py-1 rounded-lg bg-onyx text-gray-300 border border-gold-500/30 hover:text-gold-400 transition-all whitespace-nowrap">Umrah Guide</button>
+                    <button onclick="filterDeckCards('umrah')" id="deck-filter-umrah" class="deck-filter-btn text-[10px] font-bold px-2.5 py-1 rounded-lg bg-onyx text-gray-300 border border-gold-500/30 hover:text-gold-400 transition-all whitespace-nowrap">Tawaf & Sa'i</button>
+                </div>
+            </div>
+
+            <!-- Main Interactive Card Canvas Area (Touch Swipable) -->
+            <div class="p-3 sm:p-5 overflow-y-auto flex-1 flex flex-col items-center justify-center custom-scrollbar relative select-none" id="umrah-deck-card-canvas">
+                <!-- Dynamic Card rendered via JavaScript -->
+            </div>
+
+            <!-- Bottom Navigation Bar & Order CTA -->
+            <div class="p-3 bg-onyx border-t border-gold-500/40 flex flex-col gap-2 flex-shrink-0">
+                <!-- Stepper Row -->
+                <div class="flex items-center justify-between gap-2">
+                    <button onclick="navigateDeckCard(-1)" class="px-3.5 py-2 rounded-xl bg-gray-900 hover:bg-gold-500 text-gold-400 hover:text-onyx text-xs font-extrabold transition-all border border-gold-500/30 flex items-center gap-1 active:scale-95">
+                        <i class="fa-solid fa-chevron-left text-[10px]"></i> Previous Card
+                    </button>
+
+                    <div class="flex items-center gap-1">
+                        <span id="deck-card-counter" class="text-[11px] font-mono font-extrabold text-gold-300 bg-gold-500/20 border border-gold-500/40 px-3 py-1.5 rounded-xl">Card 1 of 16</span>
+                    </div>
+
+                    <button onclick="navigateDeckCard(1)" class="px-3.5 py-2 rounded-xl bg-gray-900 hover:bg-gold-500 text-gold-400 hover:text-onyx text-xs font-extrabold transition-all border border-gold-500/30 flex items-center gap-1 active:scale-95">
+                        Next Card <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Action CTA Row -->
+                <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-800">
+                    <button onclick="copyCurrentDeckCardText()" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all border border-gray-700">
+                        <i class="fa-solid fa-copy text-gold-400"></i> Copy Card Text
+                    </button>
+                    <button onclick="closeUmrahDeckModal(); quickAddToCartOrBuy(1);" class="w-full gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-gold-glow active:scale-95 transition-all">
+                        <i class="fa-solid fa-cart-shopping text-xs"></i> Order Deck (Rs. 491)
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -3210,6 +3280,380 @@
             }
         }
 
+        // ----------------------------------------------------------------------
+        // COMPLETE 16-CARD UMRAH GUIDE DECK DATA & INTERACTIVE READER
+        // ----------------------------------------------------------------------
+        const umrahDeckCards = [
+            {
+                id: 1,
+                cardNumber: 1,
+                category: "safar",
+                title: "Safar Ki Duaien",
+                arabic: "سُبْحَانَ اللهِ سُبْحَانَ اللهِ سُبْحَانَ اللهِ\nاَلْحَمْدُ لِلَّهِ اَلْحَمْدُ لِلَّهِ اَلْحَمْدُ لِلَّهِ\nاللهُ اَكْبَرُ اللهُ اَكْبَرُ اللهُ اَكْبَرُ\nسُبْحٰنَ الَّذِيْ سَخَّرَ لَنَا هٰذَا وَمَا كُنَّا لَهُ مُقْرِنِيْنَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُوْنَ.",
+                romanArabic: "Subhanallah, Subhanallah, Subhanallah, Alhamdulillah, Alhamdulillah, Alhamdulillah, Allahu Akbar, Allahu Akbar, Allahu Akbar, Subhanallazi sakhkhara lana haza wa ma kunna lahu muqrineen, wa inna ila Rabbina lamunqaliboon.",
+                hindi: "Allah ki zaat paak hai tamam tareefien Allah ke liye hain. Allah bahot bada hai. Paak hai woh zaat ke jis ne hamare lie ise musakkhar farma diya aur hum ise musakkhar karne wale na the aur hum apne Rab ki taraf palat kr jane wale hain.",
+                reference: "(Az-Zukhruf 43:13-14)"
+            },
+            {
+                id: 2,
+                cardNumber: 2,
+                category: "safar",
+                title: "Safar Shuru Karne Ki Dua",
+                arabic: "اللَّهُمَّ بِكَ أَصُوْلُ وَبِكَ أَجُوْلُ وَبِكَ أَسِيْرُ",
+                romanArabic: "Allahumma bika asoolu wa bika ajoolu wa bika aseer.",
+                hindi: "Aie Allah! Main teri hi madad se hamla karta hun, teri hi madad se harakat karta hun aur teri hi taufiq se safar karta hun.",
+                reference: "(Sahih Ibn Hibban 2373)"
+            },
+            {
+                id: 3,
+                cardNumber: 3,
+                category: "safar",
+                title: "Safar Mein Hifazat Ki Dua",
+                arabic: "اَللَّهُمَّ إِنَّا نَسْأَلُكَ فِيْ سَفَرِنَا هٰذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى، اَللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هٰذَا وَاطْوِ عَنَّا بُعْدَهُ، اَللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيْفَةُ فِي الْأَهْلِ، اَللَّهُمَّ إِنِّيْ أَعُوْذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ وَكَآبَةِ الْمَنْظَرِ وَسُوْءِ الْمُنْقَلَبِ فِي الْمَالِ وَالْأَهْلِ.",
+                romanArabic: "Allahumma inna nas'aluka fee safarina hazal birra wat-taqwa, wa minal-'amali ma tarda. Allahumma hawwin 'alayna safarana haza, watwi 'anna bu'dahu. Allahumma Antas-sahibu fis-safari wal-khaleefatu fil-ahli. Allahumma inni a'oozu bika min wa'thaais-safar, wa kaa'batil-manzar, wa soo'il-munqalabi fil-maali wal-ahli.",
+                hindi: "Aie Allah! Hum is safar me tujh se neki aur takwe ka aur un aamal ka sawal karte hain jin se tu razi hota hai. Aie Allah! Hamare is safar ko hum par asan farma aur is ki masafat ko lapet de, Aie Allah! Tu hi is safar me hamara rafiq hai aur ghar walon ka nig-heban hai. Aie Allah! Main safar ki taklifon aur ranj o gum ke manzar se aur apne maal aur ghar walon me bure anjam se lautne se teri panah mangta hun.",
+                reference: "(Sahih Muslim 1342, Jami' at-Tirmidhi 3444)"
+            },
+            {
+                id: 4,
+                cardNumber: 4,
+                category: "ehram",
+                title: "Ehram Ki Niyyat",
+                arabic: "اللَّهُمَّ إِنِّيْ أُرِيْدُ الْعُمْرَةَ فَيَسِّرْهَا لِيْ وَتَقَبَّلْهَا مِنِّيْ",
+                romanArabic: "Allahumma inni ureedul 'umrata fa yassirha li wa taqabbalha minni.",
+                hindi: "Aie Allah! Main Umrah ki niyyat karta hun, ise mere liye asan farma aur ise meri taraf se qubool farma.",
+                reference: "(Sunan al-Kubra al-Bayhaqi)"
+            },
+            {
+                id: 5,
+                cardNumber: 5,
+                category: "ehram",
+                title: "Ehram mein mana cheezein",
+                isListCard: true,
+                points: [
+                    { num: 1, text: "Ehram mein mard <b class='text-red-700 font-bold'>qamees, pajama</b> waghera nahin pehnega.", ref: "(Sahih al-Bukhari 1542, Sahih Muslim 1177)" },
+                    { num: 2, text: "Pagri aur <b class='text-red-700 font-bold'>sar dhampne (Topi)</b> wali cheez na pehne - <span class='text-gray-600 font-semibold'>(Mardon ke liye)</span>", ref: "(Sahih Muslim 1177, Sahih al-Bukhari 1542)" },
+                    { num: 3, text: "Aur <b class='text-red-700 font-bold'>itr (khushboo)</b> ko haath na lagayein.", ref: "(Sahih al-Bukhari 1838)" },
+                    { num: 4, text: "Apne sar na mundao jab tak qurbani apni jagah tak na pahunch jaye. <span class='text-red-700 font-bold'>(Baal aur nakhun na kate)</span>", ref: "(Al-Baqarah 2:196)" },
+                    { num: 5, text: "Hajj (aur Ehram) mein na shahwat ki baat, na <b class='text-red-700 font-bold'>gunah</b>, na <b class='text-red-700 font-bold'>jhagra</b>.", ref: "(Al-Baqarah 2:197)" },
+                    { num: 6, text: "Ehram ki halat mein <b class='text-red-700 font-bold'>shikar</b> na karo.", ref: "(Al-Ma'idah 5:95)" },
+                    { num: 7, text: "Ehram mein na <b class='text-red-700 font-bold'>Nikah</b> kare aur na kisi ka nikah karwaye.", ref: "(Sahih Muslim 1409)" },
+                    { num: 8, text: "Ehram wali aurat na <b class='text-red-700 font-bold'>niqab</b> pehne (chehra khula ho) aur na <b class='text-red-700 font-bold'>dastane</b> pehne.", ref: "(Sahih al-Bukhari 1838)" },
+                    { num: 9, text: "Agar aurat ko Miqat par <b class='text-red-700 font-bold'>haiz</b> ho to woh ghusl kare, Ehram bandhe, Talbiyah padhe aur Makkah pahunch kar paak hone ka intezar kare - Paak hone ke baad poora Umrah ada kare, is tarah us ka Umrah mukammal ho jayega.", ref: "(Sahih al-Bukhari 304-305, Sahih Muslim 1211)" }
+                ]
+            },
+            {
+                id: 6,
+                cardNumber: 6,
+                category: "umrah",
+                title: "Masjid al-Haram Dakhil Hone Ki Dua",
+                arabic: "بِسْمِ اللهِ وَالصَّلاَةُ وَالسَّلاَمُ عَلَى رَسُوْلِ اللهِ، اَللَّهُمَّ افْتَحْ لِيْ أَبْوَابَ رَحْمَتِكَ",
+                romanArabic: "Bismillahi was-salatu was-salamu 'ala Rasulillah, Allahummaftah li abwaba rahmatik.",
+                hindi: "Allah ke naam ke saath aur durood o salam ho Allah ke Rasool par. Aie Allah! Mere liye apni rehmat ke darwaze khol de.",
+                reference: "(Sahih Muslim 713)"
+            },
+            {
+                id: 7,
+                cardNumber: 7,
+                category: "steps",
+                title: "Hum Umrah kaise karein?",
+                isStepCard: true,
+                points: [
+                    { text: "Ghar par ya <b class='text-red-700 font-bold'>Miqat</b> par pahunch kar Ehram bandhhein aur niyyat ka elan karein - Talbiyah Ehram bandhne se lekar Khana Kaaba pahunch kar Tawaf shuru karne se pehle tak padhte rahein." },
+                    { text: "Masjid al-Haram mein dayein paon dakhil karein aur masjid mein dakhil hone ki dua padhein - Kaaba ki taraf aajizi aur ehteram ke saath nazar daalein aur dil se apni duaein karein - <span class='text-amber-800 font-bold'>(Yeh waqt qubooliyat ka hota hai)</span>" },
+                    { text: "Tawaf shuru karne se pehle <b class='text-red-700 font-bold'>Iztiba</b> (dayein kandhe ko kholna) poore 7 chakkaron mein karein - <span class='text-gray-600 font-semibold'>(Mardon ke liye)</span>" },
+                    { text: "Agar mumkin ho to Hajr-e-Aswad ka bosa lein ya istilam karein, warna Hajr-e-Aswad ki taraf ishara karein aur Tawaf shuru karein - Pehle 3 chakkaron mein <b class='text-red-700 font-bold'>Ramal</b> (tez chalna) karein - <span class='text-gray-600 font-semibold'>(Mardon ke liye)</span>" },
+                    { text: "Dauran-e-Tawaf Rukn-e-Yamani ko choomna agar mumkin ho to sirf dayein haath se use choo lein aur <b class='font-arabic text-base text-onyx'>بِسْمِ اللهِ واللهُ أَكْبَرُ</b> kahein." }
+                ]
+            },
+            {
+                id: 8,
+                cardNumber: 8,
+                category: "umrah",
+                title: "Tawaf Shuru Karne Ki Dua",
+                arabic: "بِسْمِ اللهِ وَاللهُ أَكْبَرُ، اَللَّهُمَّ إِيْمَانًا بِكَ وَتَصْدِيْقًا بِكِتَابِكَ وَوَفَاءً بِعَهْدِكَ وَاتِّبَاعًا لِسُنَّةِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ",
+                romanArabic: "Bismillahi Allahu Akbar, Allahumma eemanan bika wa tasdeeqan bikitabika wa wafa'an bi'ahdika wattiba'an lisunnati Nabiyyika Muhammadin sallallahu 'alayhi wa sallam.",
+                hindi: "Allah ke naam se aur Allah sab se bada hai. Aie Allah! Tujh par iman late hue, teri kitab ki tasdeeq karte hue aur tere Nabi ki sunnat ki itteba karte hue Tawaf shuru karta hun.",
+                reference: "(Zaad al-Ma'ad)"
+            },
+            {
+                id: 9,
+                cardNumber: 9,
+                category: "umrah",
+                title: "Rukn-e-Yamani & Hajr-e-Aswad Dua",
+                arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+                romanArabic: "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'azaban-nar.",
+                hindi: "Aie hamare Parvardigar! Humein dunya me bhi bhalai ata farma aur akhirat me bhi bhalai ata farma aur humein aag (Jahannam) ke azab se bacha.",
+                reference: "(Sunan Abi Dawud 1892)"
+            },
+            {
+                id: 10,
+                cardNumber: 10,
+                category: "umrah",
+                title: "Maqam-e-Ibrahim Dua",
+                arabic: "وَاتَّخِذُوْا مِنْ مَقَامِ إِبْرَاهِيْمَ مُصَلًّى",
+                romanArabic: "Wattakhizoo min Maqami Ibraheema musalla.",
+                hindi: "Aur Maqam-e-Ibrahim ko namaz padhne ki jagah banao. (Tawaf ke baad 2 Rakat namaz ada karein).",
+                reference: "(Al-Baqarah 2:125, Sahih Muslim 1218)"
+            },
+            {
+                id: 11,
+                cardNumber: 11,
+                category: "umrah",
+                title: "Talbiyah",
+                arabic: "لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ.",
+                romanArabic: "Labbaika Allahumma Labbaik, Labbaika laa shareeka laka Labbaik, innal-hamda wan-ni'mata laka wal-mulk, laa shareeka lak.",
+                hindi: "Hazir hun! Aie Allah main hazir hun, hazir hun, tera koi shareek nahi, hazir hun. Beshak tamam tar hamd o sana, aur tamam tar rehmatien teri hain aur mulk bhi tera hi hai tera koi shareek nahi hai.",
+                note: "Talbiyah ke baad apni duaien krna masnoon hai.",
+                reference: "(Sahih al-Bukhari 1549, Sahih Muslim 1184)"
+            },
+            {
+                id: 12,
+                cardNumber: 12,
+                category: "umrah",
+                title: "Zamzam Paani Peene Ki Dua",
+                arabic: "اَللَّهُمَّ إِنِّيْ أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا وَاسِعًا وَشِفَاءً مِنْ كُلِّ دَاءٍ",
+                romanArabic: "Allahumma inni as'aluka 'ilman nafi'an wa rizqan wasi'an wa shifa'an min kulli da'in.",
+                hindi: "Aie Allah! Main tujh se nafa dene wale ilm, kushada rizq aur har bimari se shifa ka sawal karta hun.",
+                reference: "(Sunan al-Daraqutni 2738)"
+            },
+            {
+                id: 13,
+                cardNumber: 13,
+                category: "umrah",
+                title: "Safa Aur Marwah Dua (Sa'i)",
+                arabic: "إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللهِ، أَبْدَأُ بِمَا بَدَأَ اللهُ بِهِ",
+                romanArabic: "Innas-Safa wal-Marwata min sha'a'irillah. Abda'u bima bada'allahu bih.",
+                hindi: "Beshak Safa aur Marwah Allah ki nishaniyon me se hain. Main usi se shuru karta hun jis se Allah ne shuru kiya.",
+                reference: "(Sahih Muslim 1218)"
+            },
+            {
+                id: 14,
+                cardNumber: 14,
+                category: "umrah",
+                title: "Sa'i Chakar Ki Dua",
+                arabic: "رَبِّ اغْفِرْ وَارْحَمْ وَأَنْتَ الْأَعَزُّ الْأَكْرَمُ",
+                romanArabic: "Rabbighfir warham wa Antal-A'azzul-Akram.",
+                hindi: "Aie mere Rab! Mujhe maaf farma aur reham farma, Tu sab se zyada izzat wala aur kareem hai.",
+                reference: "(Musannaf Ibn Abi Shaybah)"
+            },
+            {
+                id: 15,
+                cardNumber: 15,
+                category: "umrah",
+                title: "Halq / Taqseer (Baal Katwane) Dua",
+                arabic: "اَلْحَمْدُ لِلَّهِ عَلَى مَا هَدَانَا، وَاَللَّهُمَّ اغْفِرْ لِلْمُحَلِّقِيْنَ وَالْمُقَصِّرِيْنَ",
+                romanArabic: "Alhamdulillah 'ala ma hadana, Allahummaghfir lil-muhalliqeena wal-muqassireen.",
+                hindi: "Tamam tareefien Allah ke liye hain jis ne humein hidayat di. Aie Allah! Sar mundwane walon aur baal katwane walon ko maaf farma.",
+                reference: "(Sahih al-Bukhari 1727)"
+            },
+            {
+                id: 16,
+                cardNumber: 16,
+                category: "madinah",
+                title: "Roza-e-Rasool ﷺ Par Salam",
+                arabic: "اَلسَّلاَمُ عَلَيْكَ يَا رَسُوْلَ اللهِ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ",
+                romanArabic: "Assalamu 'alayka ya Rasoolallahi wa rahmatullahi wa barakatuh.",
+                hindi: "Aap par salam ho aie Allah ke Rasool ﷺ aur Allah ki rehmat aur us ki barakatien ho.",
+                reference: "(Al-Adkar an-Nawawi)"
+            }
+        ];
+
+        let currentDeckFilter = 'all';
+        let currentDeckCardIndex = 0;
+        let deckTouchStartX = 0;
+        let deckTouchEndX = 0;
+
+        function openUmrahDeckModal(cardId = 1) {
+            const modal = document.getElementById('umrah-deck-viewer-modal');
+            if (!modal) return;
+
+            filterDeckCards('all');
+
+            const targetIdx = umrahDeckCards.findIndex(c => c.id === cardId);
+            if (targetIdx !== -1) {
+                currentDeckCardIndex = targetIdx;
+            } else {
+                currentDeckCardIndex = 0;
+            }
+
+            renderCurrentDeckCard();
+            modal.classList.remove('hidden');
+
+            setupDeckSwipeGestures();
+        }
+
+        function closeUmrahDeckModal() {
+            const modal = document.getElementById('umrah-deck-viewer-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function filterDeckCards(category) {
+            currentDeckFilter = category;
+            
+            const buttons = document.querySelectorAll('.deck-filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-gold-500', 'text-onyx', 'shadow-xs');
+                btn.classList.add('bg-onyx', 'text-gray-300', 'border', 'border-gold-500/30');
+            });
+
+            const activeBtn = document.getElementById(`deck-filter-${category}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-onyx', 'text-gray-300', 'border', 'border-gold-500/30');
+                activeBtn.classList.add('bg-gold-500', 'text-onyx', 'shadow-xs');
+            }
+
+            currentDeckCardIndex = 0;
+            renderCurrentDeckCard();
+        }
+
+        function getFilteredDeckCards() {
+            if (currentDeckFilter === 'all') return umrahDeckCards;
+            return umrahDeckCards.filter(c => c.category === currentDeckFilter);
+        }
+
+        function navigateDeckCard(dir) {
+            const filtered = getFilteredDeckCards();
+            if (filtered.length === 0) return;
+
+            currentDeckCardIndex += dir;
+            if (currentDeckCardIndex < 0) currentDeckCardIndex = filtered.length - 1;
+            if (currentDeckCardIndex >= filtered.length) currentDeckCardIndex = 0;
+
+            renderCurrentDeckCard();
+        }
+
+        function renderCurrentDeckCard() {
+            const container = document.getElementById('umrah-deck-card-canvas');
+            const counter = document.getElementById('deck-card-counter');
+            if (!container) return;
+
+            const filtered = getFilteredDeckCards();
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="text-white text-xs">No cards found in this category.</div>';
+                return;
+            }
+
+            const card = filtered[currentDeckCardIndex];
+
+            if (counter) {
+                counter.innerText = `Card ${currentDeckCardIndex + 1} of ${filtered.length} (#${card.cardNumber})`;
+            }
+
+            let cardContentHtml = '';
+
+            if (card.isListCard) {
+                const pointsHtml = card.points.map(p => `
+                    <div class="mb-2 text-[11px] sm:text-xs text-gray-900 leading-snug flex items-start gap-1.5 border-b border-gray-100 pb-1.5">
+                        <span class="font-bold text-red-700 min-w-[16px]">${p.num}.</span>
+                        <div class="flex-1">
+                            <div>${p.text}</div>
+                            <div class="text-[9.5px] text-gray-500 italic mt-0.5">${p.ref}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                cardContentHtml = `
+                    <div class="space-y-1 text-left my-1 max-h-[340px] overflow-y-auto custom-scrollbar px-1">
+                        ${pointsHtml}
+                    </div>
+                `;
+            } else if (card.isStepCard) {
+                const stepsHtml = card.points.map(p => `
+                    <div class="mb-2 text-[11px] sm:text-xs text-gray-900 leading-snug flex items-start gap-1.5 border-b border-gray-100 pb-1.5">
+                        <span class="text-gold-600 font-bold">•</span>
+                        <div class="flex-1">${p.text}</div>
+                    </div>
+                `).join('');
+
+                cardContentHtml = `
+                    <div class="space-y-1 text-left my-1 max-h-[340px] overflow-y-auto custom-scrollbar px-1">
+                        ${stepsHtml}
+                    </div>
+                `;
+            } else {
+                cardContentHtml = `
+                    <div class="bg-gray-50/90 p-3.5 rounded-xl border border-gray-200 text-right mb-2.5 shadow-inner">
+                        <p class="font-arabic text-xl sm:text-2xl font-bold leading-loose text-onyx" dir="rtl">
+                            ${card.arabic.replace(/\n/g, '<br>')}
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-200/90 text-onyx text-xs sm:text-[12.5px] font-bold px-3 py-2 rounded-xl border border-gray-300 text-center mb-2.5 shadow-xs font-serif leading-snug">
+                        ${card.romanArabic}
+                    </div>
+
+                    <div class="bg-gray-100/90 p-3 rounded-xl border border-gray-200 text-left text-xs sm:text-[13px] font-medium text-onyx leading-relaxed mb-2">
+                        <span class="font-bold text-gray-800 text-[10.5px] block mb-0.5">Urdu / Hindi Meaning:</span>
+                        ${card.hindi}
+                    </div>
+
+                    ${card.note ? `<div class="text-[10px] text-amber-800 font-bold bg-amber-50 p-1.5 rounded-lg border border-amber-200 text-center mb-1">${card.note}</div>` : ''}
+
+                    ${card.reference ? `<div class="text-[10px] text-gray-500 font-serif italic text-right mb-1">${card.reference}</div>` : ''}
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="bg-white text-onyx rounded-2xl p-4 sm:p-5 border-[3px] border-amber-400 shadow-2xl relative max-w-sm w-full mx-auto font-sans flex flex-col justify-between overflow-hidden transition-all duration-300 animate-fadeIn">
+                    <div>
+                        <div class="bg-gray-300/90 text-onyx font-extrabold text-xs sm:text-sm py-1.5 px-4 rounded-full text-center mb-3 border border-gray-400/70 shadow-inner max-w-[92%] mx-auto tracking-tight truncate">
+                            ${card.title}
+                        </div>
+
+                        ${cardContentHtml}
+                    </div>
+
+                    <div class="pt-3 border-t border-gray-200 flex items-center justify-between mt-2 relative">
+                        <div class="relative flex items-center justify-center mx-auto">
+                            <div class="w-4 h-4 rounded-full border-2 border-gray-400 bg-gray-200 shadow-inner flex items-center justify-center">
+                                <div class="w-1.5 h-1.5 rounded-full bg-onyx"></div>
+                            </div>
+                        </div>
+
+                        <div class="w-6 h-6 rounded-full bg-onyx text-white font-bold text-xs flex items-center justify-center font-mono border border-gold-400 absolute bottom-0 right-0 shadow-md">
+                            ${card.cardNumber}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function copyCurrentDeckCardText() {
+            const filtered = getFilteredDeckCards();
+            if (filtered.length === 0) return;
+            const card = filtered[currentDeckCardIndex];
+
+            let fullText = `${card.title}\n\n`;
+            if (card.arabic) fullText += `${card.arabic}\n\n`;
+            if (card.romanArabic) fullText += `${card.romanArabic}\n\n`;
+            if (card.hindi) fullText += `${card.hindi}\n\n`;
+            if (card.reference) fullText += `${card.reference}`;
+
+            navigator.clipboard.writeText(fullText).then(() => {
+                showToastNotification("Dua card details copied!");
+            });
+        }
+
+        function setupDeckSwipeGestures() {
+            const canvas = document.getElementById('umrah-deck-card-canvas');
+            if (!canvas || canvas.dataset.swipeSetup) return;
+            canvas.dataset.swipeSetup = "true";
+
+            canvas.addEventListener('touchstart', (e) => {
+                deckTouchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            canvas.addEventListener('touchend', (e) => {
+                deckTouchEndX = e.changedTouches[0].screenX;
+                const diff = deckTouchEndX - deckTouchStartX;
+                if (Math.abs(diff) > 40) {
+                    if (diff < 0) navigateDeckCard(1);
+                    else navigateDeckCard(-1);
+                }
+            }, { passive: true });
+        }
+
         function openCardVideoModal() {
             const modal = document.getElementById('card-video-modal');
             const video = document.getElementById('deck-demo-video');
@@ -3251,6 +3695,7 @@
                 closeTestPaymentModal();
                 closeDuaModal();
                 closeCardVideoModal();
+                closeUmrahDeckModal();
             }
         });
 
