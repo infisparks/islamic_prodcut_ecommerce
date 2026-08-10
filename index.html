@@ -169,10 +169,10 @@
             transform: rotateY(180deg);
         }
 
-        /* Premium Banner Gold Shine Sweep Effect (1.5s Interval) */
+        /* Premium Banner Gold Shine Sweep Effect (2.5s Interval + GPU Accelerated 0-Lag) */
         @keyframes shine-banner-sweep {
-            0% { transform: translateX(-150%) skewX(-25deg); }
-            100% { transform: translateX(250%) skewX(-25deg); }
+            0% { transform: translate3d(-150%, 0, 0) skewX(-25deg); }
+            45%, 100% { transform: translate3d(250%, 0, 0) skewX(-25deg); }
         }
         .banner-shine-container {
             position: relative;
@@ -188,11 +188,12 @@
             background: linear-gradient(
                 90deg,
                 rgba(255, 255, 255, 0) 0%,
-                rgba(255, 215, 0, 0.55) 50%,
+                rgba(255, 215, 0, 0.45) 50%,
                 rgba(255, 255, 255, 0) 100%
             );
-            transform: skewX(-25deg);
-            animation: shine-banner-sweep 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translate3d(-150%, 0, 0) skewX(-25deg);
+            will-change: transform;
+            animation: shine-banner-sweep 2.5s infinite ease-in-out;
             pointer-events: none;
         }
 
