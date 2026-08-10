@@ -140,10 +140,10 @@
             transform: rotateY(180deg);
         }
 
-        /* Premium Banner Gold Shine Sweep Effect */
+        /* Premium Banner Gold Shine Sweep Effect (1.5s Interval) */
         @keyframes shine-banner-sweep {
             0% { transform: translateX(-150%) skewX(-25deg); }
-            50%, 100% { transform: translateX(250%) skewX(-25deg); }
+            100% { transform: translateX(250%) skewX(-25deg); }
         }
         .banner-shine-container {
             position: relative;
@@ -159,11 +159,11 @@
             background: linear-gradient(
                 90deg,
                 rgba(255, 255, 255, 0) 0%,
-                rgba(255, 215, 0, 0.45) 50%,
+                rgba(255, 215, 0, 0.55) 50%,
                 rgba(255, 255, 255, 0) 100%
             );
             transform: skewX(-25deg);
-            animation: shine-banner-sweep 3.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            animation: shine-banner-sweep 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
         }
 
@@ -265,18 +265,6 @@
                 <span><i class="fa-solid fa-money-bill-wave text-gold-400 mr-1"></i> Cash on Delivery</span>
             </div>
 
-        </div>
-    </section>
-
-    <!-- SPECIAL OFFER BANNER SECTION (PRODUCT/OFFER.PNG WITH GOLD SHINE SWEEP EFFECT) -->
-    <section id="special-offer-banner" class="py-4 sm:py-6 px-3 sm:px-6 bg-onyx border-b border-gold-500/40 relative overflow-hidden">
-        <div class="max-w-5xl mx-auto">
-            <a href="#products-grid" class="block relative rounded-2xl sm:rounded-3xl border-2 border-gold-500/80 shadow-2xl shadow-gold-glow overflow-hidden group banner-shine-container cursor-pointer transition-transform duration-300 hover:scale-[1.01]">
-                <img src="product/offer.png" alt="Special Offer - Order Above ₹999 Free Delivery" class="w-full h-auto object-cover rounded-2xl sm:rounded-3xl drop-shadow-2xl" />
-                <!-- Premium Gold Metallic Border Shimmer Accent -->
-                <div class="absolute inset-0 rounded-2xl sm:rounded-3xl border border-gold-400/40 pointer-events-none"></div>
-            </a>
-        </div>
     </section>
 
     <!-- SECTION TITLE: UMRAH DUA CARDS & STICKERS COLLECTION -->
@@ -770,6 +758,22 @@
         </div>
     </div>
 
+    <!-- FLOATING BOTTOM-UP SPECIAL OFFER POPUP (OFFER.PNG WITH 1.5s SHINE SWEEP & CANCEL OPTION) -->
+    <div id="floating-offer-popup" class="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-5 z-40 max-w-sm sm:max-w-md w-auto transform translate-y-full opacity-0 pointer-events-none transition-all duration-500 ease-out">
+        <div class="bg-onyx/95 backdrop-blur-md rounded-2xl sm:rounded-3xl border-2 border-gold-500 p-2 sm:p-2.5 shadow-2xl shadow-gold-glow relative">
+            <!-- Close / Cancel Button -->
+            <button onclick="dismissFloatingOfferPopup()" class="absolute -top-2.5 -right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-onyx border-2 border-gold-400 text-gold-400 hover:bg-gold-500 hover:text-onyx flex items-center justify-center shadow-lg z-20 cursor-pointer transition-colors" title="Close Offer">
+                <i class="fa-solid fa-xmark text-xs sm:text-sm font-bold"></i>
+            </button>
+
+            <!-- Offer Image with 1.5s Shine Sweep -->
+            <a href="#products-grid" onclick="dismissFloatingOfferPopup()" class="block relative rounded-xl sm:rounded-2xl overflow-hidden banner-shine-container cursor-pointer">
+                <img src="product/offer.png" alt="Special Offer - Order Above ₹999 Free Delivery" class="w-full h-auto object-cover rounded-xl sm:rounded-2xl drop-shadow-md" />
+                <div class="absolute inset-0 rounded-xl sm:rounded-2xl border border-gold-400/40 pointer-events-none"></div>
+            </a>
+        </div>
+    </div>
+
     <!-- PILGRIM REVIEWS -->
     <section id="reviews" class="py-8 px-4 bg-pearl border-t border-gold-200">
         <div class="max-w-4xl mx-auto">
@@ -956,6 +960,11 @@
 
             <!-- Sticky Bottom CTA with Item Subtotal + Dynamic Shipping Fee Breakdown -->
             <div class="p-3 sm:p-4 bg-sand/80 border-t border-gold-300 flex-shrink-0">
+                <!-- Mini Special Offer Banner -->
+                <div class="mb-2 rounded-xl border border-gold-400 overflow-hidden shadow-sm relative banner-shine-container cursor-pointer" onclick="scrollToProductsAndClose()">
+                    <img src="product/offer.png" alt="Special Offer - Free Shipping Above ₹999" class="w-full h-auto object-cover rounded-xl" />
+                </div>
+
                 <div class="space-y-1 text-xs mb-2">
                     <div class="flex justify-between text-gray-600">
                         <span>Items Subtotal:</span>
@@ -3662,6 +3671,37 @@
             }
         });
 
+        // -------------------------------------------------------------
+        // FLOATING BOTTOM-UP OFFER POPUP SERVICE
+        // -------------------------------------------------------------
+        let isOfferPopupDismissed = false;
+
+        function dismissFloatingOfferPopup() {
+            isOfferPopupDismissed = true;
+            const popup = document.getElementById('floating-offer-popup');
+            if (popup) {
+                popup.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+                popup.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }
+        }
+
+        function checkOfferPopupScroll() {
+            if (isOfferPopupDismissed) return;
+            const popup = document.getElementById('floating-offer-popup');
+            if (!popup) return;
+
+            // Pops up automatically when user scrolls past hero section
+            if (window.scrollY > 180) {
+                popup.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+                popup.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            } else {
+                popup.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+                popup.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }
+        }
+
+        window.addEventListener('scroll', checkOfferPopupScroll);
+
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts('all');
             renderDuas('all');
@@ -3671,6 +3711,7 @@
             if (slider) {
                 slider.addEventListener('scroll', updateDuaSlideCounter);
             }
+            checkOfferPopupScroll();
         });
         renderProducts('all');
         renderDuas('all');
