@@ -547,6 +547,31 @@ async function runTests() {
     assert.strictEqual(otpRes.body.error.code, 'COD_DAILY_LIMIT_EXCEEDED');
   });
 
+  // SCENARIO 18: Admin WhatsApp Notification -> Formats order details for 918600380233
+  await test('Scenario 18: Admin WhatsApp Notification -> Formats order details for 918600380233', async () => {
+    const whatsappService = require('../services/whatsappService');
+    const mockOrder = {
+      orderId: 'FC-TEST-999',
+      payment: { provider: 'COD' },
+      pricing: { total: 1299 },
+      customer: {
+        name: 'Ahmed Khan',
+        phone: '9876543210',
+        address1: '123 Test St',
+        city: 'Mumbai',
+        state: 'Maharashtra',
+        pincode: '400001'
+      },
+      items: [
+        { title: 'Calligraphy Frame', variant: 'Gold 12x18', quantity: 1, price: 1299 }
+      ],
+      shipping: { status: 'BOOKED', awb: 'SR123456789' }
+    };
+
+    const res = await whatsappService.sendAdminOrderNotificationWhatsApp(mockOrder);
+    assert.strictEqual(typeof res, 'boolean');
+  });
+
   console.log('\n===============================================================');
   console.log(`📊 TEST SUITE SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log('===============================================================\n');

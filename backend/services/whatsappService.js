@@ -76,10 +76,58 @@ async function sendCodOtpWhatsApp(phone, otp) {
 }
 
 /**
+ * Send WhatsApp alert to Admin / Owner (918600380233) when a product is booked.
+ */
+async function sendAdminOrderNotificationWhatsApp(order) {
+  if (!order) return false;
+
+  const adminPhone = config.whatsapp.notifyNumber || '918600380233';
+
+  const itemsList = (order.items || [])
+    .map((i, idx) => `${idx + 1}. *${i.title || i.sku || 'Product'}* (${i.variant || 'Standard'}) x${i.quantity} - ₹${(i.price || 0) * i.quantity}`)
+    .join('\n');
+
+  const isCod = order.payment && order.payment.provider === 'COD';
+  const paymentMethod = isCod ? '💵 Cash on Delivery (COD)' : '💳 Online Payment (Razorpay)';
+
+  const customerName = order.customer?.name || 'N/A';
+  const customerPhone = order.customer?.phone || 'N/A';
+  const addressParts = [
+    order.customer?.address1,
+    order.customer?.address2,
+    order.customer?.city,
+    order.customer?.state,
+    order.customer?.pincode ? `PIN: ${order.customer.pincode}` : null
+  ].filter(Boolean);
+  const addressStr = addressParts.length > 0 ? addressParts.join(', ') : 'N/A';
+
+  const message =
+    `🔔 *NEW PRODUCT BOOKING RECEIVED!*\n\n` +
+    `📋 *Order ID:* #${order.orderId}\n` +
+    `💳 *Payment Method:* ${paymentMethod}\n` +
+    `💰 *Total Amount:* ₹${order.pricing?.total || 0}\n\n` +
+    `👤 *Customer Details:*\n` +
+    `• *Name:* ${customerName}\n` +
+    `• *Mobile:* ${customerPhone}\n` +
+    `• *Address:* ${addressStr}\n\n` +
+    `🛍️ *Ordered Products:*\n${itemsList}\n\n` +
+    `📦 *Shipment Status:* ${order.shipping?.status || 'NOT_BOOKED'} ${order.shipping?.awb ? `(AWB: ${order.shipping.awb})` : ''}\n` +
+    `⏰ *Booking Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`;
+
+  logger.info('SENDING_ADMIN_WHATSAPP_NOTIFICATION', { orderId: order.orderId, adminPhone });
+  return await sendTextMessage(adminPhone, message);
+}
+
+/**
  * Send Order Confirmation WhatsApp message.
  */
 async function sendOrderConfirmationWhatsApp(order) {
   if (!order || !order.customer || !order.customer.phone) return false;
+
+  // Always send Admin notification alert to 918600380233
+  sendAdminOrderNotificationWhatsApp(order).catch(err => {
+    logger.error('WHATSAPP_ADMIN_NOTIFY_FAILED', { orderId: order.orderId, error: err.message });
+  });
 
   const itemsList = (order.items || [])
     .map(i => `• *${i.title}* (${i.variant || 'Standard'}) x${i.quantity}`)
@@ -128,5 +176,6 @@ module.exports = {
   sendTextMessage,
   sendCodOtpWhatsApp,
   sendOrderConfirmationWhatsApp,
-  sendShippingConfirmationWhatsApp
+  sendShippingConfirmationWhatsApp,
+  sendAdminOrderNotificationWhatsApp
 };
