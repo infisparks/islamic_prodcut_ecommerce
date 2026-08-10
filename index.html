@@ -15,6 +15,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+    <!-- Ultra-Fast Preload for Critical WebP Assets -->
+    <link rel="preload" as="image" href="product/hero.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="product/cardoffer.webp">
+
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -217,8 +221,7 @@
         <div class="absolute inset-0 z-0">
             <picture>
                 <source srcset="product/hero.webp" type="image/webp">
-                <source srcset="hero.webp" type="image/webp">
-                <img src="product/hero.png" alt="Hero Background" class="w-full h-full object-cover object-center opacity-85" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='hero.png';} else if(this.dataset.tried==='1'){this.dataset.tried='2'; this.src='product/hero2.webp';} else if(this.dataset.tried==='2'){this.dataset.tried='3'; this.src='product/umrah_card_urdu.webp';}">
+                <img src="product/hero.webp" alt="Hero Background" fetchpriority="high" decoding="async" class="w-full h-full object-cover object-center opacity-85" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/hero.webp';}">
             </picture>
             <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-onyx/95"></div>
         </div>
@@ -509,7 +512,7 @@
 
                         <!-- Kaaba Graphic Container -->
                         <div class="my-1 p-1 bg-white rounded-xl border border-amber-200 flex items-center justify-center text-center relative overflow-hidden shadow-inner">
-                            <img src="product/card.png" alt="Makkah Mukarramah Kaaba Illustration" class="w-full h-14 sm:h-20 object-contain rounded-lg drop-shadow-sm" />
+                            <img src="product/card.webp" alt="Makkah Mukarramah Kaaba Illustration" decoding="async" loading="lazy" class="w-full h-14 sm:h-20 object-contain rounded-lg drop-shadow-sm" />
                         </div>
 
                         <!-- 16 CARDS COMPLETE DECK BADGE -->
@@ -776,7 +779,7 @@
 
             <!-- Modal Body Image Showcase -->
             <div class="p-2 sm:p-3 overflow-y-auto flex-grow flex items-center justify-center bg-onyx banner-shine-container relative">
-                <img src="product/cardoffer.png" alt="Special Offer Banner - 12% OFF Code RAB112" class="w-full h-auto object-contain rounded-xl max-h-[65vh] shadow-2xl" />
+                <img src="product/cardoffer.webp" alt="Special Offer Banner - 12% OFF Code RAB112" decoding="async" class="w-full h-auto object-contain rounded-xl max-h-[65vh] shadow-2xl" />
             </div>
 
             <!-- Modal Footer CTA Button -->
@@ -802,7 +805,7 @@
 
             <!-- Offer Image with 1.5s Shine Sweep -->
             <a href="#products-grid" onclick="dismissFloatingOfferPopup()" class="block relative rounded-xl sm:rounded-2xl overflow-hidden banner-shine-container cursor-pointer">
-                <img src="product/offer.png" alt="Special Offer - Order Above ₹999 Free Delivery" class="w-full h-auto object-cover rounded-xl sm:rounded-2xl drop-shadow-md" />
+                <img src="product/offer.webp" alt="Special Offer - Order Above ₹999 Free Delivery" decoding="async" class="w-full h-auto object-cover rounded-xl sm:rounded-2xl drop-shadow-md" />
                 <div class="absolute inset-0 rounded-xl sm:rounded-2xl border border-gold-400/40 pointer-events-none"></div>
             </a>
         </div>
@@ -1664,7 +1667,7 @@
                         </span>
                         
                         <div class="w-full h-full flex items-center justify-center overflow-hidden rounded-xl">
-                            <img src="product/cardoffer.png" alt="Rabi'ul Awwal Special Offer - 12% OFF Above ₹999 Code RAB112" class="w-full h-auto object-cover rounded-xl group-hover:scale-[1.02] transition-transform duration-300 drop-shadow-md" loading="lazy" />
+                            <img src="product/cardoffer.webp" alt="Rabi'ul Awwal Special Offer - 12% OFF Above ₹999 Code RAB112" decoding="async" loading="lazy" class="w-full h-auto object-cover rounded-xl group-hover:scale-[1.02] transition-transform duration-300 drop-shadow-md" />
                         </div>
                     </div>
                 </div>
@@ -3544,7 +3547,7 @@
                 cardNumber: 0,
                 title: "Umrah Dua's Or Guide Card Deck",
                 subtitle: "Full 16-Card Ring Deck Set",
-                image: "product/card.png",
+                image: "product/card.webp",
                 note: "Har duaien Quran aur hadees se sabit hain."
             },
             {
