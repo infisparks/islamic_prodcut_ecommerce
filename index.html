@@ -758,6 +758,40 @@
         </div>
     </div>
 
+    <!-- PROFESSIONAL SPECIAL OFFER IMAGE POPUP MODAL -->
+    <div id="offer-card-image-modal" class="fixed inset-0 bg-onyx/90 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-onyx rounded-2xl sm:rounded-3xl border-2 border-gold-500 shadow-2xl shadow-gold-glow max-w-md sm:max-w-lg w-full overflow-hidden relative flex flex-col max-h-[92vh] transform scale-95 transition-transform duration-300">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-3 sm:p-3.5 border-b border-gold-500/30 bg-onyx relative z-10">
+                <div class="flex items-center gap-2">
+                    <span class="bg-gold-500 text-onyx font-extrabold text-[8.5px] sm:text-[9.5px] px-2.5 py-0.5 rounded-full uppercase shadow-sm tracking-wider">
+                        🔥 SPECIAL OFFER
+                    </span>
+                    <span class="text-gold-400 font-cinzel font-bold text-xs sm:text-sm">Rabi'ul Awwal Special</span>
+                </div>
+                <button onclick="closeOfferCardModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center transition-colors cursor-pointer" title="Close Modal">
+                    <i class="fa-solid fa-xmark text-sm font-bold"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body Image Showcase -->
+            <div class="p-2 sm:p-3 overflow-y-auto flex-grow flex items-center justify-center bg-onyx banner-shine-container relative">
+                <img src="product/cardoffer.png" alt="Special Offer Banner - 12% OFF Code RAB112" class="w-full h-auto object-contain rounded-xl max-h-[65vh] shadow-2xl" />
+            </div>
+
+            <!-- Modal Footer CTA Button -->
+            <div class="p-3 sm:p-4 border-t border-gold-500/30 bg-onyx flex flex-col gap-1.5">
+                <button onclick="confirmOfferComboFromModal()" class="w-full gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-all cursor-pointer">
+                    <i class="fa-solid fa-tag text-sm"></i>
+                    <span>APPLY RAB112 & SHOP NOW</span>
+                </button>
+                <div class="text-[10px] text-gray-400 text-center font-medium">
+                    ✨ Automatically applies coupon RAB112 for 12% OFF on orders ≥ ₹999 + FREE Delivery!
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- FLOATING BOTTOM-UP SPECIAL OFFER POPUP (OFFER.PNG WITH 1.5s SHINE SWEEP & CANCEL OPTION) -->
     <div id="floating-offer-popup" class="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-5 z-40 max-w-sm sm:max-w-md w-auto transform translate-y-full opacity-0 pointer-events-none transition-all duration-500 ease-out">
         <div class="bg-onyx/95 backdrop-blur-md rounded-2xl sm:rounded-3xl border-2 border-gold-500 p-2 sm:p-2.5 shadow-2xl shadow-gold-glow relative">
@@ -1509,10 +1543,42 @@
             });
         }
 
-        function applyOfferComboAndOpen() {
+        function openOfferCardModal() {
+            applyCouponCode('RAB112');
+            const modal = document.getElementById('offer-card-image-modal');
+            if (modal) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.classList.add('opacity-100');
+                const content = modal.firstElementChild;
+                if (content) {
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                }
+            }
+        }
+
+        function closeOfferCardModal() {
+            const modal = document.getElementById('offer-card-image-modal');
+            if (modal) {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modal.classList.remove('opacity-100');
+                const content = modal.firstElementChild;
+                if (content) {
+                    content.classList.add('scale-95');
+                    content.classList.remove('scale-100');
+                }
+            }
+        }
+
+        function confirmOfferComboFromModal() {
+            closeOfferCardModal();
             applyCouponCode('RAB112');
             showToastNotification('🎉 Coupon RAB112 Applied! Add 2 or more products (Total ₹999+) for 12% OFF + FREE Delivery!');
             toggleCartDrawer(true);
+        }
+
+        function applyOfferComboAndOpen() {
+            openOfferCardModal();
         }
 
         function renderProducts(filter = 'all') {
@@ -1589,43 +1655,17 @@
                 `;
             }).join('');
 
-            // 8th Special Combo Offer Promo Card
+            // 8th Special Combo Offer Promo Card (using product/cardoffer.png image with matching dark onyx bg)
             const offerCardHTML = `
-                <div onclick="applyOfferComboAndOpen()" class="bg-gradient-to-br from-onyx via-gray-900 to-onyx rounded-2xl overflow-hidden border-2 border-gold-500/80 shadow-2xl shadow-gold-glow flex flex-col justify-between p-3 sm:p-3.5 text-white relative group banner-shine-container cursor-pointer transition-all duration-300 hover:scale-[1.02]">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="bg-gold-500 text-onyx font-extrabold text-[8.5px] sm:text-[9.5px] px-2 py-0.5 rounded-full uppercase shadow-gold-glow tracking-wider">
-                            🔥 SPECIAL COMBO OFFER
+                <div onclick="applyOfferComboAndOpen()" class="bg-onyx rounded-2xl overflow-hidden border-2 border-gold-500/80 shadow-md hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group banner-shine-container cursor-pointer">
+                    <div class="relative w-full h-full p-1 sm:p-1.5 flex flex-col items-center justify-between">
+                        <span class="absolute top-2.5 left-2.5 z-20 bg-gold-500 text-onyx text-[8px] sm:text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase shadow-md tracking-wider">
+                            🔥 Special Offer
                         </span>
-                        <span class="bg-white/10 text-gold-300 text-[8px] sm:text-[8.5px] font-bold px-2 py-0.5 rounded-full border border-gold-500/30">
-                            Limited Time
-                        </span>
-                    </div>
-
-                    <div class="my-auto text-center py-1.5">
-                        <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gold-500/20 border border-gold-400/50 mb-1.5 shadow-inner">
-                            <i class="fa-solid fa-gift text-gold-400 text-lg animate-bounce"></i>
+                        
+                        <div class="w-full h-full flex items-center justify-center overflow-hidden rounded-xl">
+                            <img src="product/cardoffer.png" alt="Rabi'ul Awwal Special Offer - 12% OFF Above ₹999 Code RAB112" class="w-full h-auto object-cover rounded-xl group-hover:scale-[1.02] transition-transform duration-300 drop-shadow-md" loading="lazy" />
                         </div>
-
-                        <h3 class="font-cinzel text-xs sm:text-sm font-extrabold text-gold-400 leading-tight mb-1">
-                            Buy 2 & Get <span class="text-white underline decoration-gold-400">12% OFF</span>
-                        </h3>
-
-                        <div class="my-1.5 inline-block bg-gold-500/20 border-2 border-dashed border-gold-400/80 px-2.5 py-0.5 rounded-xl">
-                            <span class="text-[8.5px] text-gray-300 font-bold block uppercase tracking-wider">Use Coupon Code</span>
-                            <span class="font-extrabold text-xs sm:text-sm text-gold-300 font-mono tracking-widest">RAB112</span>
-                        </div>
-
-                        <div class="bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[8.5px] sm:text-[9px] font-bold py-0.5 px-2 rounded-lg mt-1 inline-flex items-center gap-1">
-                            <i class="fa-solid fa-truck-fast text-emerald-400 text-[10px]"></i>
-                            <span>FREE Delivery Above ₹999</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-2 pt-2 border-t border-gold-500/30">
-                        <button onclick="event.stopPropagation(); applyOfferComboAndOpen();" class="w-full gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1.5 rounded-xl shadow-gold-glow flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all">
-                            <i class="fa-solid fa-tag text-[9px]"></i>
-                            <span>APPLY RAB112 & SHOP NOW</span>
-                        </button>
                     </div>
                 </div>
             `;
@@ -3812,6 +3852,7 @@
                 closeDuaModal();
                 closeCardVideoModal();
                 closeDeckFlipModal();
+                closeOfferCardModal();
             }
         });
 
