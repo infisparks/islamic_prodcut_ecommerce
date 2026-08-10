@@ -66,8 +66,8 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode) {
     }
   }
 
-  // Free delivery ONLY if order subtotal is more than or equal to Rs. 2000
-  if (subtotal >= 2000) {
+  // Free delivery ONLY if order subtotal is more than or equal to Rs. 999
+  if (subtotal >= 999) {
     shipping = 0;
   }
 
