@@ -304,6 +304,111 @@
         </div>
     </section>
 
+    <!-- ESSENTIAL SACRED DUAS SHOWCASE (Slidable & Responsive Premium Section) -->
+    <section id="duas-showcase" class="py-10 sm:py-14 px-3 sm:px-6 bg-gradient-to-b from-pearl via-white to-sand/50 border-t border-gold-300 relative overflow-hidden">
+        <!-- Background subtle glow accents -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <!-- Header Banner -->
+            <div class="text-center max-w-3xl mx-auto mb-5">
+                <div class="inline-flex items-center gap-2 bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1 rounded-full text-xs font-extrabold shadow-sm mb-2.5">
+                    <i class="fa-solid fa-kaaba text-gold-400"></i>
+                    <span>AUTHENTIC DUA COLLECTION</span>
+                </div>
+                <h2 class="font-cinzel text-2xl sm:text-3xl font-extrabold text-onyx mb-1.5 leading-tight">
+                    Essential Duas For <span class="gold-gradient-text">Makkah & Madinah</span>
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
+                    Authentic step-by-step supplications with Arabic calligraphy, transliteration & English meanings.
+                </p>
+            </div>
+
+            <!-- Filter Tabs & Slider Controls Bar -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-5 bg-white/95 backdrop-blur-md p-3 rounded-2xl border border-gold-300 shadow-sm">
+                <!-- Category Tabs -->
+                <div class="flex items-center gap-1.5 overflow-x-auto max-w-full no-scrollbar w-full sm:w-auto" id="dua-filter-tabs">
+                    <button onclick="filterDuas('all')" id="dua-tab-all" class="dua-tab-btn active-dua-tab bg-onyx text-gold-400 border border-gold-500/50 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-gold-glow whitespace-nowrap">
+                        <i class="fa-solid fa-layer-group text-[11px]"></i> All Sacred Duas (16)
+                    </button>
+                    <button onclick="filterDuas('umrah')" id="dua-tab-umrah" class="dua-tab-btn bg-white text-gray-700 hover:bg-gold-50 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all border border-gold-200 whitespace-nowrap">
+                        <span>✨ Umrah Duas (11)</span>
+                    </button>
+                    <button onclick="filterDuas('madinah')" id="dua-tab-madinah" class="dua-tab-btn bg-white text-gray-700 hover:bg-gold-50 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all border border-gold-200 whitespace-nowrap">
+                        <span>✨ Madinah Duas (5)</span>
+                    </button>
+                </div>
+
+                <!-- Slider Navigation Controls -->
+                <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-100">
+                    <span id="dua-slide-counter" class="text-[11px] font-bold text-onyx font-mono bg-gold-100/70 border border-gold-300 px-3 py-1.5 rounded-xl">1 / 16</span>
+
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="scrollDuaSlider(-1)" class="w-9 h-9 rounded-xl bg-onyx hover:bg-gold-500 text-gold-400 hover:text-onyx border border-gold-500/40 shadow-xs flex items-center justify-center transition-all active:scale-95 disabled:opacity-40" id="dua-slider-prev-btn" title="Previous Dua">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </button>
+                        <button onclick="scrollDuaSlider(1)" class="w-9 h-9 rounded-xl bg-onyx hover:bg-gold-500 text-gold-400 hover:text-onyx border border-gold-500/40 shadow-xs flex items-center justify-center transition-all active:scale-95 disabled:opacity-40" id="dua-slider-next-btn" title="Next Dua">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDABLE CAROUSEL CONTAINER (Scroll Snap X for Smooth Touch Swipe) -->
+            <div id="dua-slider-container" class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 pt-1 no-scrollbar scroll-smooth">
+                <!-- Dynamic 16 Dua Cards populated by JavaScript -->
+            </div>
+
+            <!-- BOTTOM CTA BANNER -->
+            <div class="mt-8 bg-onyx text-pearl rounded-2xl p-5 sm:p-6 border border-gold-500/40 shadow-xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-gold-500/10 to-transparent pointer-events-none"></div>
+                <div class="space-y-1 text-center sm:text-left z-10">
+                    <div class="text-[10px] uppercase font-bold tracking-widest text-gold-400">Sacred Pilgrim Companion</div>
+                    <h3 class="font-cinzel text-lg sm:text-xl font-bold text-white">Complete Umrah & Madinah Companion Cards</h3>
+                    <p class="text-xs text-gray-300">Step-by-step supplications, Tawaf tasbih counter & neck lanyard set.</p>
+                </div>
+                <a href="#products-grid" class="gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-xs py-3 px-6 rounded-xl shadow-gold-glow flex items-center gap-2 whitespace-nowrap hover:opacity-95 active:scale-95 transition-all z-10">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span>EXPLORE COMPANION SETS (FROM RS. 491)</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DUA FULL VIEW MODAL -->
+    <div id="dua-modal" onclick="if(event.target === this) closeDuaModal()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full relative border border-gold-400/80 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
+            <!-- Modal Header -->
+            <div class="bg-onyx text-pearl p-3.5 px-4 border-b border-gold-500/30 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span id="dua-modal-badge" class="bg-gold-500/20 text-gold-300 px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-gold-500/40"></span>
+                    <h4 id="dua-modal-title" class="font-cinzel font-bold text-xs sm:text-sm text-white"></h4>
+                </div>
+                <button onclick="closeDuaModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-gold-500 hover:text-onyx text-gray-300 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark text-xs font-bold"></i>
+                </button>
+            </div>
+            <!-- Modal Content Body -->
+            <div class="p-4 sm:p-5 overflow-y-auto space-y-3.5 text-xs" id="dua-modal-body"></div>
+            <!-- Modal Footer Actions -->
+            <div class="p-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="navigateModalDua(-1)" class="px-3 py-1.5 rounded-xl bg-onyx hover:bg-gold-500 text-gold-400 hover:text-onyx text-xs font-bold transition-colors border border-gold-500/30">
+                        <i class="fa-solid fa-chevron-left text-[10px]"></i> Prev
+                    </button>
+                    <button onclick="navigateModalDua(1)" class="px-3 py-1.5 rounded-xl bg-onyx hover:bg-gold-500 text-gold-400 hover:text-onyx text-xs font-bold transition-colors border border-gold-500/30">
+                        Next <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                </div>
+                <button onclick="copyDuaFromModal()" class="gold-bg-gradient text-onyx font-extrabold px-4 py-1.5 rounded-xl shadow-gold-glow flex items-center gap-1 text-xs hover:opacity-90 active:scale-95 transition-all">
+                    <i class="fa-solid fa-copy text-xs"></i>
+                    <span>Copy Dua</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- PILGRIM REVIEWS -->
     <section id="reviews" class="py-8 px-4 bg-pearl border-t border-gold-200">
         <div class="max-w-4xl mx-auto">
@@ -2549,6 +2654,417 @@
             document.getElementById('success-modal').classList.add('hidden');
         }
 
+        // ----------------------------------------------------
+        // ESSENTIAL SACRED DUAS SYSTEM (16 DUAS DECK SHOWCASE)
+        // ----------------------------------------------------
+        const sacredDuas = [
+            {
+                id: 1,
+                step: "Umrah Step 1",
+                category: "umrah",
+                title: "1. Before Leaving Home",
+                urduTitle: "Ghar Se Nikalte Waqt Ki Dua",
+                arabic: "بِسْمِ اللهِ تَوَكَّلْتُ عَلَى اللهِ، وَلاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللهِ",
+                transliteration: "Bismillahi, tawakkaltu 'alallahi, wa la hawla wa la quwwata illa billah.",
+                translation: "In the name of Allah, I place my trust in Allah; there is no power and no strength except with Allah.",
+                benefits: "Protection throughout the journey from home to sacred lands."
+            },
+            {
+                id: 2,
+                step: "Umrah Step 2",
+                category: "umrah",
+                title: "2. While Traveling (Plane or Car)",
+                urduTitle: "Safar Ki Dua",
+                arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَىٰ رَبِّنَا لَمُنقَلِبُونَ",
+                transliteration: "Subhan-alladhi sakhkhara lana hadha wa ma kunna lahu muqrinin, wa inna ila Rabbina lamunqalibun.",
+                translation: "Glory be to Him Who has subjected this to us, for we could never have accomplished this by ourselves. And surely to our Lord we shall return.",
+                benefits: "Recite when boarding flight, car or bus for safe arrival."
+            },
+            {
+                id: 3,
+                step: "Umrah Step 3",
+                category: "umrah",
+                title: "3. Intention of Umrah (Niyyah)",
+                urduTitle: "Umrah Ki Niyyat",
+                arabic: "اللَّهُمَّ إِنِّي أُرِيدُ الْعُمْرَةَ فَيَسِّرْهَا لِي وَتَقَبَّلْهَا مِنِّي",
+                transliteration: "Allahumma inni ureedul-'umrata fayassirha lee wa taqabbalha minnee.",
+                translation: "O Allah, I intend to perform Umrah, so make it easy for me and accept it from me.",
+                benefits: "Make intention at or before entering Miqat boundary in Ihram."
+            },
+            {
+                id: 4,
+                step: "Umrah Step 4",
+                category: "umrah",
+                title: "4. Talbiyah (The Sacred Call)",
+                urduTitle: "Labbayk (Talbiyah)",
+                arabic: "لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكُ، لاَ شَرِيكَ لَكَ",
+                transliteration: "Labbayk Allahumma labbayk, labbayka la sharika laka labbayk. Innal-hamda wan-ni'mata laka wal-mulk, la sharika lak.",
+                translation: "Here I am at Your service O Allah, here I am! You have no partner, here I am! Verily all praise, blessings, and sovereignty belong to You. You have no partner.",
+                benefits: "Chant continuously from Miqat until beginning Tawaf."
+            },
+            {
+                id: 5,
+                step: "Umrah Step 5",
+                category: "umrah",
+                title: "5. Entering Masjid al-Haram",
+                urduTitle: "Masjid al-Haram Me Dakhil Hone Ki Dua",
+                arabic: "بِسْمِ اللَّهِ وَالصَّلاَةُ وَالسَّلاَمُ عَلَى رَسُولِ اللَّهِ، اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+                transliteration: "Bismillahi was-salatu was-salamu 'ala Rasulillah. Allahumma-ftah lee abwaba rahmatik.",
+                translation: "In the name of Allah, and peace and blessings be upon the Messenger of Allah. O Allah, open for me the doors of Your mercy.",
+                benefits: "Enter with right foot into Masjid al-Haram in Makkah."
+            },
+            {
+                id: 6,
+                step: "Umrah Step 6",
+                category: "umrah",
+                title: "6. Seeing Ka'bah First Time",
+                urduTitle: "Pehli Baar Ka'bah Dekhne Ki Dua",
+                arabic: "اللَّهُمَّ زِدْ هَٰذَا الْبَيْتَ تَشْرِيفًا وَتَعْظِيمًا وَتَكْرِيمًا وَمَهَابَةً، وَزِدْ مَنْ شَرَّفَهُ وَكَرَّمَهُ مِمَّنْ حَجَّهُ أَوِ اعْتَمَرَهُ تَشْرِيفًا وَتَكْرِيمًا وَتَعْظِيمًا وَبِرًّا",
+                transliteration: "Allahumma zid hadhal-bayta tashreefan wa ta'dheeman wa takreeman wa mahabah, wa zid man sharrafahu wa karramahu mimman hajjahu awi-'tamarahu tashreefan wa takreeman wa ta'dheeman wa birra.",
+                translation: "O Allah, increase this House in honor, esteem, respect, and awe; and increase those who honor and respect it among those who perform Hajj or Umrah.",
+                benefits: "Supplications made upon first glance at the Holy Ka'bah are granted."
+            },
+            {
+                id: 7,
+                step: "Umrah Step 7",
+                category: "umrah",
+                title: "7. Tawaf & Istilam",
+                urduTitle: "Tawaf Aur Hajr-e-Aswad Ka Ishara",
+                arabic: "بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ، اللَّهُمَّ إِيمَانًا بِكَ وَتَصْدِيقًا بِكِتَابِكَ وَوَفَاءً بِعَهْدِكَ وَاتِّبَاعًا لِسُنَّةِ نَبِيِّكَ مُحَمَّدٍ ﷺ",
+                transliteration: "Bismillahi wallahu Akbar. Allahumma imanan bika wa tasdeeqan bikitabika wa wafa'an bi'ahdika wattiba'an lisunnati nabiyyika Muhammadin (SAW).",
+                translation: "In the name of Allah, Allah is the Greatest. O Allah, out of faith in You, belief in Your Book, and following the Sunnah of Prophet Muhammad (ﷺ).",
+                benefits: "Recite at the start of each of the 7 Tawaf rounds facing Black Stone."
+            },
+            {
+                id: 8,
+                step: "Umrah Step 8",
+                category: "umrah",
+                title: "8. Between Yamani & Hajr-e-Aswad",
+                urduTitle: "Rukn-e-Yamani Aur Hajr-e-Aswad Ke Darmiyan",
+                arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+                transliteration: "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar.",
+                translation: "Our Lord, grant us good in this world and good in the Hereafter, and save us from the punishment of the Fire.",
+                benefits: "Recite between Yamani Corner and the Black Stone during every Tawaf round."
+            },
+            {
+                id: 9,
+                step: "Umrah Step 9",
+                category: "umrah",
+                title: "9. Drinking Zamzam Water",
+                urduTitle: "Aab-e-Zamzam Peene Ki Dua",
+                arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا وَاسِعًا، وَشِفَاءً مِنْ كُلِّ دَاءٍ",
+                transliteration: "Allahumma inni as'aluka 'ilman nafi'an, wa rizqan wasi'an, wa shifa'an min kulli da'in.",
+                translation: "O Allah, I ask You for beneficial knowledge, abundant provision, and healing from every illness.",
+                benefits: "Zamzam water fulfills whatever righteous intention it is drunk for."
+            },
+            {
+                id: 10,
+                step: "Umrah Step 10",
+                category: "umrah",
+                title: "10. Intention of Sa'ee (at Safa)",
+                urduTitle: "Sa'ee Ki Niyyat Aur Safa Ki Ayat",
+                arabic: "إِنَّ الصَّفَا وَالْمَرْوَةَ مِن شَعَائِرِ اللَّهِ فَمَنْ حَجَّ الْبَيْتَ أَوِ اعْتَمَرَ فَلاَ جُنَاحَ عَلَيْهِ أَن يَطَّوَّفَ بِهِمَا",
+                transliteration: "Innas-Safa wal-Marwata min sha'a'irillahi faman hajjal-bayta awi-'tamara fala junaha 'alayhi an yattawwafa bihima. Nabda'u bima bada'allahu bih.",
+                translation: "Indeed, Safa and Marwah are among the symbols of Allah... We begin with what Allah has begun with.",
+                benefits: "Recite when reaching Mount Safa before beginning Sa'ee."
+            },
+            {
+                id: 11,
+                step: "Umrah Step 11",
+                category: "umrah",
+                title: "11. Dua at Safa Facing Ka'bah",
+                urduTitle: "Safa Par Ka'bah Ki Taraf Rukh Karke Dua",
+                arabic: "اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، اللَّهُ أَكْبَرُ، لاَ إِلَٰهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+                transliteration: "Allahu Akbar (3x). La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadeer.",
+                translation: "Allah is the Greatest (3x). There is no deity except Allah alone without partner. To Him belongs sovereignty and praise.",
+                benefits: "Stand on Safa & Marwah, face Ka'bah with raised hands for personal duas."
+            },
+            {
+                id: 12,
+                step: "Madinah Step 1",
+                category: "madinah",
+                title: "12. Entering Masjid An-Nabawi",
+                urduTitle: "Masjid-e-Nabawi Me Dakhil Hone Ki Dua",
+                arabic: "بِسْمِ اللَّهِ وَالصَّلاَةُ وَالسَّلاَمُ عَلَى رَسُولِ اللَّهِ، اللَّهُمَّ اغْفِرْ لِي ذُنُوبِي وَافْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+                transliteration: "Bismillahi was-salatu was-salamu 'ala Rasulillah. Allahumma-ghfir lee dhunoobee wa-ftah lee abwaba rahmatik.",
+                translation: "In the name of Allah, peace and blessings be upon the Messenger of Allah. O Allah, forgive my sins and open for me the gates of Your mercy.",
+                benefits: "Step in with right foot at the Prophet's Mosque in Madinah."
+            },
+            {
+                id: 13,
+                step: "Madinah Step 2",
+                category: "madinah",
+                title: "13. Salam to Prophet Muhammad (ﷺ)",
+                urduTitle: "Nabi Kareem (ﷺ) Par Salam",
+                arabic: "السَّلاَمُ عَلَيْكَ يَا رَسُولَ اللَّهِ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، أَشْهَدُ أَنَّكَ بَلَّغْتَ الرِّسَالَةَ وَأَدَّيْتَ الأَمَانَةَ",
+                transliteration: "Assalamu 'alayka ya Rasoolallahi wa rahmatullahi wa barakatuh. Ash-hadu annaka ballaghtar-risalata wa addaytal-amanah.",
+                translation: "Peace be upon you, O Messenger of Allah, and the mercy of Allah and His blessings. I bear witness that you conveyed the message and fulfilled the trust.",
+                benefits: "Recite at the Sacred Roza An-Nabawi facing the Prophet (ﷺ)."
+            },
+            {
+                id: 14,
+                step: "Madinah Step 3",
+                category: "madinah",
+                title: "14. Salam to Abu Bakr Siddiq (RA)",
+                urduTitle: "Hazrat Abu Bakr Siddiq (RA) Par Salam",
+                arabic: "السَّلاَمُ عَلَيْكَ يَا أَبَا بَكْرٍ الصِّدِّيقَ، السَّلاَمُ عَلَيْكَ يَا خَلِيفَةَ رَسُولِ اللَّهِ ﷺ",
+                transliteration: "Assalamu 'alayka ya Aba Bakrinis-Siddeeq, assalamu 'alayka ya khaleefata Rasoolillah.",
+                translation: "Peace be upon you, O Abu Bakr as-Siddiq. Peace be upon you, O Successor of the Messenger of Allah.",
+                benefits: "Step slightly right at Roza Mubarak to give Salam to Hazrat Abu Bakr (RA)."
+            },
+            {
+                id: 15,
+                step: "Madinah Step 4",
+                category: "madinah",
+                title: "15. Salam to Umar Farooq (RA)",
+                urduTitle: "Hazrat Umar Farooq (RA) Par Salam",
+                arabic: "السَّلاَمُ عَلَيْكَ يَا عُمَرَ الْفَارُوقَ، السَّلاَمُ عَلَيْكَ يَا أَمِيرَ الْمُؤْمِنِينَ",
+                transliteration: "Assalamu 'alayka ya 'Umaral-Farooq, assalamu 'alayka ya Ameeral-Mu'mineen.",
+                translation: "Peace be upon you, O Umar al-Farooq. Peace be upon you, O Leader of the Faithful.",
+                benefits: "Step further right at Roza Mubarak to give Salam to Hazrat Umar (RA)."
+            },
+            {
+                id: 16,
+                step: "Madinah Step 5",
+                category: "madinah",
+                title: "16. Bonus Duas for Blessed Journey",
+                urduTitle: "Mubarak Safar Ke Liye Khas Duayein",
+                arabic: "رَبِّ اجْعَلْنِي مُقِيمَ الصَّلاَةِ وَمِن ذُرِّيَّتِي رَبَّنَا وَتَقَبَّلْ دُعَاءِ، رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ",
+                transliteration: "Rabbij-'alnee muqeemas-salati wa min dhurriyyatee Rabbana wa taqabbal du'a'. Rabbana-ghfir lee wa liwalidayya wa lil-mu'mineena...",
+                translation: "My Lord, make me an establisher of prayer, and from my descendants. Our Lord, accept my supplication and forgive me and my parents.",
+                benefits: "Comprehensive Quranic supplications to recite at Rawdah and sacred sites."
+            }
+        ];
+
+        let currentDuaFilter = 'all';
+        let activeModalDuaId = 1;
+
+        function renderDuas(category = 'all') {
+            currentDuaFilter = category;
+            const container = document.getElementById('dua-slider-container');
+            if (!container) return;
+
+            const filtered = category === 'all' 
+                ? sacredDuas 
+                : sacredDuas.filter(d => d.category === category);
+
+            container.innerHTML = filtered.map((dua) => {
+                const isUmrah = dua.category === 'umrah';
+                const badgeColor = isUmrah ? 'bg-amber-100 text-amber-900 border-amber-300' : 'bg-emerald-100 text-emerald-900 border-emerald-300';
+                const stepIcon = isUmrah ? 'fa-kaaba text-amber-600' : 'fa-mosque text-emerald-600';
+
+                return `
+                    <div class="dua-card flex-shrink-0 w-[290px] sm:w-[320px] bg-white rounded-2xl p-4 border border-gold-300/80 shadow-md hover:shadow-xl hover:border-gold-500 transition-all duration-300 flex flex-col justify-between snap-center group relative overflow-hidden" data-id="${dua.id}">
+                        <!-- Top Gold Accent Line -->
+                        <div class="absolute top-0 left-0 right-0 h-1 ${isUmrah ? 'gold-bg-gradient' : 'bg-emerald-500'}"></div>
+                        
+                        <div>
+                            <!-- Header Row -->
+                            <div class="flex items-center justify-between mb-2 pt-1">
+                                <span class="text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md border ${badgeColor} flex items-center gap-1">
+                                    <i class="fa-solid ${stepIcon} text-[9px]"></i> ${dua.step}
+                                </span>
+                                <span class="text-[10px] text-gray-400 font-mono font-bold">Dua #${dua.id}</span>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="font-bold text-xs sm:text-sm text-onyx leading-tight mb-0.5 group-hover:text-gold-700 transition-colors">
+                                ${dua.title}
+                            </h3>
+                            <p class="text-[10px] text-gold-700 font-medium italic mb-2">
+                                ${dua.urduTitle}
+                            </p>
+
+                            <!-- Arabic Container -->
+                            <div class="bg-sand/40 p-3 rounded-xl border border-gold-200/80 mb-2.5 text-right relative group-hover:bg-gold-50/50 transition-colors">
+                                <p class="font-arabic text-lg sm:text-xl font-bold text-onyx leading-loose" dir="rtl">
+                                    ${dua.arabic}
+                                </p>
+                            </div>
+
+                            <!-- Transliteration -->
+                            <div class="text-[11px] text-gray-700 italic leading-snug mb-2 bg-gray-50 p-2 rounded-lg border border-gray-100">
+                                "${dua.transliteration}"
+                            </div>
+
+                            <!-- Translation -->
+                            <p class="text-[10px] text-gray-600 leading-normal line-clamp-2 mb-2">
+                                ${dua.translation}
+                            </p>
+                        </div>
+
+                        <!-- Card Footer / Quick Actions -->
+                        <div class="pt-2 border-t border-gray-100 flex items-center justify-between gap-1 text-[11px]">
+                            <button onclick="openDuaModal(${dua.id})" class="bg-onyx hover:bg-gold-500 text-gold-400 hover:text-onyx font-bold px-3 py-1.5 rounded-xl border border-gold-500/40 text-xs transition-all flex items-center gap-1.5">
+                                <i class="fa-solid fa-expand text-[10px]"></i> Full Card
+                            </button>
+                            <button onclick="copyDuaText('${escapeJsString(dua.title + '\n' + dua.arabic + '\n' + dua.translation)}', this)" class="bg-gold-50 hover:bg-gold-100 text-gold-900 font-bold px-3 py-1.5 rounded-xl border border-gold-300 text-xs transition-all flex items-center gap-1.5" title="Copy Dua">
+                                <i class="fa-solid fa-copy text-[11px]"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateDuaSlideCounter();
+        }
+
+        function escapeJsString(str) {
+            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        function filterDuas(category) {
+            // Update Active Tab UI
+            const buttons = document.querySelectorAll('.dua-tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-onyx', 'text-gold-400', 'border-gold-500/50', 'shadow-gold-glow');
+                btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-gold-50', 'border-gold-200');
+            });
+
+            const activeBtn = document.getElementById(`dua-tab-${category}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gold-50', 'border-gold-200');
+                activeBtn.classList.add('bg-onyx', 'text-gold-400', 'border-gold-500/50', 'shadow-gold-glow');
+            }
+
+            renderDuas(category);
+        }
+
+        function scrollDuaSlider(direction) {
+            const container = document.getElementById('dua-slider-container');
+            if (!container) return;
+
+            const cardWidth = container.firstElementChild ? container.firstElementChild.clientWidth + 16 : 300;
+            container.scrollBy({
+                left: direction * cardWidth * 1.5,
+                behavior: 'smooth'
+            });
+
+            setTimeout(updateDuaSlideCounter, 300);
+        }
+
+        function updateDuaSlideCounter() {
+            const container = document.getElementById('dua-slider-container');
+            const counter = document.getElementById('dua-slide-counter');
+            if (!container || !counter) return;
+
+            const filtered = currentDuaFilter === 'all' 
+                ? sacredDuas 
+                : sacredDuas.filter(d => d.category === currentDuaFilter);
+
+            const cardWidth = container.firstElementChild ? container.firstElementChild.clientWidth + 16 : 300;
+            const scrollIndex = Math.round(container.scrollLeft / cardWidth) + 1;
+            const currentIndex = Math.max(1, Math.min(scrollIndex, filtered.length));
+            counter.innerText = `${currentIndex} / ${filtered.length}`;
+        }
+
+        function openDuaModal(id) {
+            activeModalDuaId = id;
+            const dua = sacredDuas.find(d => d.id === id);
+            if (!dua) return;
+
+            const modal = document.getElementById('dua-modal');
+            const badge = document.getElementById('dua-modal-badge');
+            const title = document.getElementById('dua-modal-title');
+            const body = document.getElementById('dua-modal-body');
+
+            badge.innerText = dua.step;
+            title.innerText = dua.title;
+
+            body.innerHTML = `
+                <!-- Sacred Supplication Header -->
+                <div class="bg-gold-50 p-3 rounded-xl border border-gold-200 flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-gold-800 flex items-center gap-1.5">
+                        <i class="fa-solid fa-kaaba text-gold-600"></i> Sacred Supplication
+                    </span>
+                    <span class="text-gray-500 font-medium">${dua.urduTitle}</span>
+                </div>
+
+                <!-- Arabic Calligraphy Box -->
+                <div class="bg-onyx text-gold-300 p-4 rounded-xl border border-gold-500/50 shadow-inner text-right relative">
+                    <p class="font-arabic text-xl sm:text-2xl font-bold leading-loose text-amber-200" dir="rtl">
+                        ${dua.arabic}
+                    </p>
+                </div>
+
+                <!-- Transliteration -->
+                <div>
+                    <label class="font-bold text-onyx text-[11px] block mb-1">Roman English Transliteration:</label>
+                    <div class="bg-sand/60 p-2.5 rounded-xl border border-gold-200 italic font-serif text-gray-800 leading-relaxed">
+                        "${dua.transliteration}"
+                    </div>
+                </div>
+
+                <!-- Translation -->
+                <div>
+                    <label class="font-bold text-onyx text-[11px] block mb-1">English Meaning & Translation:</label>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-200 text-gray-700 leading-relaxed">
+                        ${dua.translation}
+                    </div>
+                </div>
+
+                <!-- Ritual Guidance -->
+                <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 flex items-start gap-2 text-amber-900">
+                    <i class="fa-solid fa-circle-info text-amber-600 text-sm mt-0.5"></i>
+                    <div>
+                        <div class="font-bold text-[11px]">Ritual Significance:</div>
+                        <p class="text-[10.5px] text-amber-800">${dua.benefits}</p>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeDuaModal() {
+            const modal = document.getElementById('dua-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function navigateModalDua(dir) {
+            const filtered = currentDuaFilter === 'all' 
+                ? sacredDuas 
+                : sacredDuas.filter(d => d.category === currentDuaFilter);
+
+            const currentIndex = filtered.findIndex(d => d.id === activeModalDuaId);
+            if (currentIndex === -1) return;
+
+            let nextIndex = currentIndex + dir;
+            if (nextIndex < 0) nextIndex = filtered.length - 1;
+            if (nextIndex >= filtered.length) nextIndex = 0;
+
+            openDuaModal(filtered[nextIndex].id);
+        }
+
+        function copyDuaText(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToastNotification("Dua copied to clipboard!");
+                if (btnElement) {
+                    const orig = btnElement.innerHTML;
+                    btnElement.innerHTML = '<i class="fa-solid fa-check text-emerald-600"></i> Copied';
+                    setTimeout(() => { btnElement.innerHTML = orig; }, 1500);
+                }
+            }).catch(() => {
+                showToastNotification("Dua copied!");
+            });
+        }
+
+        function copyDuaFromModal() {
+            const dua = sacredDuas.find(d => d.id === activeModalDuaId);
+            if (dua) {
+                const textToCopy = `${dua.title}\n\nArabic:\n${dua.arabic}\n\nTransliteration:\n${dua.transliteration}\n\nTranslation:\n${dua.translation}`;
+                copyDuaText(textToCopy, null);
+            }
+        }
+
+        function showToastNotification(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 z-50 bg-onyx text-white px-4 py-2.5 rounded-xl shadow-2xl border border-gold-500/40 text-xs font-bold flex items-center gap-2 animate-bounce';
+            toast.innerHTML = `<i class="fa-solid fa-check-circle text-gold-400"></i> ${msg}`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 2500);
+        }
+
         // Global ESC key listener to easily close any open modal/popup
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -2557,14 +3073,22 @@
                 closeSuccessModal();
                 closeErrorFeedbackModal();
                 closeTestPaymentModal();
+                closeDuaModal();
             }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts('all');
+            renderDuas('all');
             restoreCustomerDetailsFromStorage();
+
+            const slider = document.getElementById('dua-slider-container');
+            if (slider) {
+                slider.addEventListener('scroll', updateDuaSlideCounter);
+            }
         });
         renderProducts('all');
+        renderDuas('all');
     </script>
 </body>
 </html>
