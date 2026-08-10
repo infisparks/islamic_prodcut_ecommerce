@@ -572,6 +572,35 @@ async function runTests() {
     assert.strictEqual(typeof res, 'boolean');
   });
 
+  // SCENARIO 19: Coupon Code RAB112 -> 12% discount for orders >= 999 & rejection below 999
+  await test('Scenario 19: Coupon Code RAB112 -> 12% discount for subtotal >= 999', async () => {
+    const catalogService = require('../services/catalogService');
+    
+    // Subtotal >= 999 -> 12% discount + Free shipping
+    const validQuote = await catalogService.buildTrustedOrderItems([
+      { sku: 'FC-STICKER-GOLD-01', quantity: 1 }
+    ], '400001', 'RAB112');
+
+    assert.strictEqual(validQuote.pricing.subtotal, 1299);
+    assert.strictEqual(validQuote.pricing.discount, 156); // 12% of 1299 = 155.88 ~ 156
+    assert.strictEqual(validQuote.pricing.couponCode, 'RAB112');
+    assert.strictEqual(validQuote.pricing.shipping, 0); // Free shipping for >= 999
+    assert.strictEqual(validQuote.pricing.total, 1143); // 1299 - 156 = 1143
+
+    // Subtotal < 999 -> throws COUPON_MIN_AMOUNT_NOT_MET
+    let thrownErr = null;
+    try {
+      await catalogService.buildTrustedOrderItems([
+        { sku: 'FC-STICKER-URDU-01', quantity: 1 }
+      ], '400001', 'RAB112');
+    } catch (e) {
+      thrownErr = e;
+    }
+
+    assert.ok(thrownErr);
+    assert.strictEqual(thrownErr.code, 'COUPON_MIN_AMOUNT_NOT_MET');
+  });
+
   console.log('\n===============================================================');
   console.log(`📊 TEST SUITE SUMMARY: ${passed} PASSED, ${failed} FAILED`);
   console.log('===============================================================\n');

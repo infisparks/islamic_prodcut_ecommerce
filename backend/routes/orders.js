@@ -148,12 +148,42 @@ router.post('/verify-cod-otp', async (req, res, next) => {
 });
 
 /**
+ * POST /api/orders/quote
+ * Calculates trusted order pricing, discounts, and shipping fee live
+ */
+router.post('/quote', async (req, res, next) => {
+  try {
+    const { items, pincode, couponCode } = req.body;
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'EMPTY_CART', message: 'Cart items cannot be empty.' }
+      });
+    }
+
+    const trustedData = await buildTrustedOrderItems(items, pincode || null, couponCode || null);
+    return res.json({
+      success: true,
+      data: trustedData
+    });
+  } catch (err) {
+    if (err.isPublic) {
+      return res.status(err.statusCode || 400).json({
+        success: false,
+        error: { code: err.code || 'QUOTE_ERROR', message: err.message }
+      });
+    }
+    next(err);
+  }
+});
+
+/**
  * POST /api/orders/create
  * Creates a new order authoritatively from server catalog.
  */
 router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, res, next) => {
   try {
-    const { customer, items, paymentMethod, verificationToken } = req.sanitizedOrder;
+    const { customer, items, paymentMethod, verificationToken, couponCode } = req.sanitizedOrder;
     const reqVerificationToken = req.body.verificationToken || verificationToken;
 
     // Verify mandatory COD OTP & Daily limit before proceeding
@@ -187,7 +217,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
     }
 
     // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
-    const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode);
+    const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode);
     const internalOrderId = generateOrderId();
     const now = new Date().toISOString();
 

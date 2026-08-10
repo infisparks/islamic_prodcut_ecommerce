@@ -3,7 +3,7 @@ const { findItemBySku } = require('../config/catalog');
 /**
  * Authoritatively calculates cart items and total pricing from server catalog
  */
-async function buildTrustedOrderItems(rawItems, deliveryPincode) {
+async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = null) {
   let subtotal = 0;
   let totalWeightKg = 0;
   let maxDimensions = { length: 15, breadth: 10, height: 2.5 }; // base package dimensions
@@ -71,12 +71,39 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode) {
     shipping = 0;
   }
 
-  const total = subtotal + shipping;
+  // Coupon Code Validation (RAB112 -> 12% OFF for orders >= Rs. 999)
+  let discount = 0;
+  let appliedCoupon = null;
+
+  if (couponCode && typeof couponCode === 'string') {
+    const cleanCoupon = couponCode.trim().toUpperCase();
+    if (cleanCoupon === 'RAB112') {
+      if (subtotal < 999) {
+        const err = new Error('Coupon RAB112 requires a minimum order of ₹999.');
+        err.statusCode = 400;
+        err.code = 'COUPON_MIN_AMOUNT_NOT_MET';
+        err.isPublic = true;
+        throw err;
+      }
+      discount = Math.round(subtotal * 0.12);
+      appliedCoupon = 'RAB112';
+    } else {
+      const err = new Error(`Invalid coupon code [${couponCode}]. Use coupon RAB112.`);
+      err.statusCode = 400;
+      err.code = 'INVALID_COUPON';
+      err.isPublic = true;
+      throw err;
+    }
+  }
+
+  const total = Math.max(0, subtotal - discount + shipping);
 
   return {
     items,
     pricing: {
       subtotal,
+      discount,
+      couponCode: appliedCoupon,
       shipping,
       total,
       currency: 'INR'

@@ -165,7 +165,8 @@ function validateOrderCreation(req, res, next) {
       sku: sanitizeString(it.sku, 50),
       quantity: parseInt(it.quantity, 10)
     })),
-    paymentMethod: method
+    paymentMethod: method,
+    couponCode: req.body.couponCode ? sanitizeString(req.body.couponCode, 20) : null
   };
 
   next();

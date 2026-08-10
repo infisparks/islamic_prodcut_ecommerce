@@ -956,6 +956,30 @@
                         </label>
                     </div>
                 </div>
+
+                <!-- SMALL COUPON CODE ICON & TOGGLE SELECTOR -->
+                <div class="bg-amber-50/90 rounded-xl border border-amber-300 p-2 sm:p-2.5 shadow-xs">
+                    <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleCouponInput()">
+                        <div class="flex items-center gap-1.5 font-bold text-amber-900 text-xs">
+                            <i class="fa-solid fa-ticket text-gold-600 text-sm"></i>
+                            <span>Have a Coupon Code?</span>
+                        </div>
+                        <span id="coupon-toggle-badge" class="text-[9.5px] font-extrabold text-amber-900 bg-amber-200/90 px-2 py-0.5 rounded-full border border-amber-300">
+                            Tap to Apply RAB112
+                        </span>
+                    </div>
+
+                    <!-- Collapsible Input Box -->
+                    <div id="coupon-input-box" class="hidden mt-2 pt-2 border-t border-amber-200/80">
+                        <div class="flex items-center gap-1.5">
+                            <input type="text" id="coupon-code-input" placeholder="e.g. RAB112" class="flex-1 uppercase font-extrabold px-2.5 py-1.5 rounded-lg border border-amber-400 bg-white text-onyx text-xs focus:outline-none focus:border-gold-500">
+                            <button onclick="applyCouponCode()" class="bg-gold-500 hover:bg-gold-400 text-onyx font-extrabold text-xs px-3 py-1.5 rounded-lg shadow-sm active:scale-95 transition-all">
+                                Apply
+                            </button>
+                        </div>
+                        <div id="coupon-message" class="text-[10px] font-bold mt-1.5 hidden"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Sticky Bottom CTA with Item Subtotal + Dynamic Shipping Fee Breakdown -->
@@ -964,6 +988,10 @@
                     <div class="flex justify-between text-gray-600">
                         <span>Items Subtotal:</span>
                         <span id="cart-subtotal" class="font-bold text-onyx">Rs. 0.00</span>
+                    </div>
+                    <div id="cart-discount-row" class="hidden flex justify-between text-emerald-700 font-extrabold">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-tag text-xs"></i> Discount (RAB112 - 12% OFF):</span>
+                        <span id="cart-discount-amount">-Rs. 0.00</span>
                     </div>
                     <div class="flex justify-between text-emerald-800 font-semibold">
                         <span>Express Delivery:</span>
@@ -2101,12 +2129,83 @@
             }, 3000);
         }
 
+        // -------------------------------------------------------------
+        // COUPON CODE SERVICE (RAB112 -> 12% OFF for subtotal >= Rs. 999)
+        // -------------------------------------------------------------
+        let appliedCouponCode = null;
+
+        function toggleCouponInput() {
+            const box = document.getElementById('coupon-input-box');
+            if (box) {
+                if (box.classList.contains('hidden')) {
+                    box.classList.remove('hidden');
+                    const input = document.getElementById('coupon-code-input');
+                    if (input && !input.value) input.value = 'RAB112';
+                } else {
+                    box.classList.add('hidden');
+                }
+            }
+        }
+
+        function applyCouponCode(codeOverride) {
+            const input = document.getElementById('coupon-code-input');
+            const msgEl = document.getElementById('coupon-message');
+            const badgeEl = document.getElementById('coupon-toggle-badge');
+            
+            const rawCode = codeOverride || (input ? input.value : 'RAB112');
+            const cleanCode = (rawCode || '').trim().toUpperCase();
+
+            const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if (!cleanCode) {
+                if (msgEl) {
+                    msgEl.className = "text-[10px] font-bold text-red-600 mt-1.5 block";
+                    msgEl.textContent = "Please enter a coupon code.";
+                }
+                return;
+            }
+
+            if (cleanCode === 'RAB112') {
+                if (subtotalPrice < 999) {
+                    if (msgEl) {
+                        msgEl.className = "text-[10px] font-bold text-amber-800 bg-amber-100 p-1.5 rounded border border-amber-300 mt-1.5 block";
+                        msgEl.textContent = `⚠️ Coupon RAB112 requires a minimum order of ₹999. Add Rs. ${(999 - subtotalPrice).toFixed(0)} more items!`;
+                    }
+                    showToastNotification(`Add Rs. ${(999 - subtotalPrice).toFixed(0)} more for RAB112 12% OFF!`);
+                    return;
+                }
+
+                appliedCouponCode = 'RAB112';
+                const discount = Math.round(subtotalPrice * 0.12);
+
+                if (msgEl) {
+                    msgEl.className = "text-[10px] font-bold text-emerald-700 bg-emerald-50 p-1.5 rounded border border-emerald-300 mt-1.5 block";
+                    msgEl.textContent = `🎉 Coupon RAB112 Applied! You saved ₹${discount} (12% OFF)!`;
+                }
+
+                if (badgeEl) {
+                    badgeEl.className = "text-[9.5px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300";
+                    badgeEl.textContent = "RAB112 Applied ✓ (12% OFF)";
+                }
+
+                showToastNotification(`🎉 Coupon RAB112 Applied! Saved ₹${discount}`);
+                updateCartUI();
+            } else {
+                if (msgEl) {
+                    msgEl.className = "text-[10px] font-bold text-red-600 mt-1.5 block";
+                    msgEl.textContent = `Invalid coupon code "${cleanCode}". Use coupon RAB112.`;
+                }
+            }
+        }
+
         let currentShippingFee = null;
 
         function updateCartUI() {
             const container = document.getElementById('cart-items-container');
             const cartCountEl = document.getElementById('cart-count');
             const subtotalEl = document.getElementById('cart-subtotal');
+            const discountRowEl = document.getElementById('cart-discount-row');
+            const discountAmtEl = document.getElementById('cart-discount-amount');
             const shippingFeeEl = document.getElementById('cart-shipping-fee');
             const totalEl = document.getElementById('cart-total');
 
@@ -2117,12 +2216,25 @@
             const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             
+            // Calculate Coupon Discount
+            let discountAmount = 0;
+            if (appliedCouponCode === 'RAB112' && subtotalPrice >= 999) {
+                discountAmount = Math.round(subtotalPrice * 0.12);
+                if (discountRowEl) discountRowEl.classList.remove('hidden');
+                if (discountAmtEl) discountAmtEl.textContent = `-Rs. ${discountAmount.toFixed(2)}`;
+            } else {
+                if (discountRowEl) discountRowEl.classList.add('hidden');
+                if (subtotalPrice < 999 && appliedCouponCode === 'RAB112') {
+                    appliedCouponCode = null;
+                }
+            }
+
             let effectiveFee = currentShippingFee;
             if (subtotalPrice >= 999 && currentShippingFee !== null) {
                 effectiveFee = 0;
             }
             const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
-            const totalWithShipping = subtotalPrice > 0 ? (subtotalPrice + activeFee) : 0;
+            const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - discountAmount + activeFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
@@ -2909,7 +3021,8 @@
                     quantity: item.qty
                 })),
                 paymentMethod: selectedPaymentMethod,
-                verificationToken: verificationToken || null
+                verificationToken: verificationToken || null,
+                couponCode: appliedCouponCode || null
             };
 
             try {
