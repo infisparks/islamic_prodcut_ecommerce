@@ -8,6 +8,7 @@ const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
 const shiprocketService = require('../services/shiprocketService');
 const whatsappService = require('../services/whatsappService');
+const metaCapiService = require('../services/metaCapiService');
 const { generateOrderId } = require('../utils/crypto');
 const logger = require('../utils/logger');
 
@@ -286,6 +287,31 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         });
         whatsappService.sendShippingConfirmationWhatsApp(orderRecord).catch(err => {
           logger.error('WHATSAPP_COD_SHIPPING_FAIL', { orderId: internalOrderId, error: err.message });
+        });
+
+        // Dispatch Meta Conversions API (CAPI) Purchase Event from Backend
+        metaCapiService.sendEvent({
+          eventName: 'Purchase',
+          eventId: `ord_${internalOrderId}`,
+          eventSourceUrl: req.headers.referer || 'https://mantasha.store',
+          userData: {
+            name: customer.name,
+            phone: customer.phone,
+            city: customer.city,
+            state: customer.state,
+            zip: customer.pincode,
+            clientIp: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || req.ip,
+            clientUserAgent: req.headers['user-agent']
+          },
+          customData: {
+            currency: 'INR',
+            value: trustedOrderData.pricing.total,
+            order_id: internalOrderId,
+            content_type: 'product',
+            contents: trustedOrderData.items.map(i => ({ id: i.productId, quantity: i.quantity, item_price: i.price }))
+          }
+        }).catch(err => {
+          logger.error('META_CAPI_COD_PURCHASE_FAIL', { orderId: internalOrderId, error: err.message });
         });
 
         return res.status(201).json({

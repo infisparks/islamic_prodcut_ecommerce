@@ -39,6 +39,12 @@ const config = {
     apiKey: process.env.WHATSAPP_API_KEY || 'vR39h6avY69g7kAU3YQbS6V6XEvudson',
     instance: process.env.WHATSAPP_INSTANCE || 'mudassir',
   },
+
+  meta: {
+    pixelId: process.env.META_PIXEL_ID || '1565922841643245',
+    accessToken: process.env.META_ACCESS_TOKEN || '',
+    testEventCode: process.env.META_TEST_EVENT_CODE || '',
+  },
 };
 
 module.exports = config;

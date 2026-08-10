@@ -14,6 +14,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1565922841643245');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1565922841643245&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     
     <script>
         tailwind.config = {
@@ -964,6 +982,40 @@
         let isDraggingImage = false;
         let startX = 0, startY = 0, currentPanX = 0, currentPanY = 0;
 
+        /**
+         * Global Meta Tracking function (Browser Meta Pixel + Server Meta Conversions API (CAPI))
+         * Uses eventID deduplication so Meta counts exactly 1 event instead of double-counting.
+         */
+        function trackMetaEvent(eventName, customData = {}, userData = {}) {
+            const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            
+            // 1. Fire Browser Meta Pixel Event with eventID
+            if (typeof window.fbq === 'function') {
+                try {
+                    window.fbq('track', eventName, customData, { eventID: eventId });
+                } catch (e) {
+                    console.warn('[Meta Pixel Error]', e);
+                }
+            }
+            
+            // 2. Fire Server-Side Meta Conversions API (CAPI) Proxy Event
+            fetch('/api/meta/event', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    eventName: eventName,
+                    eventId: eventId,
+                    eventSourceUrl: window.location.href,
+                    userData: userData,
+                    customData: customData
+                })
+            }).then(res => res.json()).then(data => {
+                console.log(`[Meta CAPI Backend Response] ${eventName}:`, data);
+            }).catch(err => {
+                console.warn('[Meta CAPI Network Error]', err);
+            });
+        }
+
         function renderProducts(filter = 'all') {
             const container = document.getElementById('products-catalog-container');
             if (!container) return;
@@ -1093,8 +1145,15 @@
                 const vIdx = mediaList.findIndex(m => m.type === 'video');
                 currentSlideIndex = vIdx >= 0 ? vIdx : 1;
             } else {
-                currentSlideIndex = Math.min(targetIndex, mediaList.length - 1);
+            currentSlideIndex = Math.min(targetIndex, mediaList.length - 1);
             }
+
+            trackMetaEvent('ViewContent', {
+                content_name: p.name,
+                content_ids: [p.id],
+                value: p.price,
+                currency: 'INR'
+            });
 
             renderQuickViewModalContent();
             document.getElementById('quickview-modal').classList.remove('hidden');
@@ -1532,6 +1591,13 @@
             updateCartUI();
             const displayName = variant ? `${product.name} (${variant.shortName})` : product.name;
             showToast(displayName);
+
+            trackMetaEvent('AddToCart', {
+                content_name: product.name,
+                content_ids: [product.id],
+                value: variant ? variant.price : product.price,
+                currency: 'INR'
+            });
         }
 
         function buyNow(productId, variantIndex = 0) {
@@ -1845,6 +1911,25 @@
                     </div>
                 </div>
             `;
+
+            // Track Purchase event in Meta Pixel & CAPI
+            trackMetaEvent('Purchase', {
+                currency: 'INR',
+                value: totalAmount,
+                order_id: orderId,
+                content_type: 'product',
+                contents: itemsList.map(i => ({
+                    id: i.id || i.productId || i.sku,
+                    quantity: i.quantity || i.qty,
+                    item_price: i.unitPrice || i.price
+                }))
+            }, {
+                name: customer.name,
+                phone: customer.phone,
+                city: customer.city,
+                state: customer.state,
+                zip: customer.pincode
+            });
 
             // Reset cart state
             cart = [];
@@ -2321,6 +2406,18 @@
             const cleanPhone = phone.replace(/\D/g, '');
             const cleanEmergencyPhone = emergencyPhone ? emergencyPhone.replace(/\D/g, '') : '';
             const cleanPincode = pincode.replace(/\D/g, '');
+
+            trackMetaEvent('InitiateCheckout', {
+                currency: 'INR',
+                value: cart.reduce((s, i) => s + (i.price * i.qty), 0),
+                num_items: cart.reduce((s, i) => s + i.qty, 0)
+            }, {
+                name: name,
+                phone: cleanPhone,
+                city: city,
+                state: state,
+                zip: cleanPincode
+            });
 
             // Lock UI
             setCheckoutButtonLoading(true, "Securing Order with Server...");

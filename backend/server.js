@@ -13,10 +13,11 @@ const paymentsRouter = require('./routes/payments');
 const shipmentsRouter = require('./routes/shipments');
 const webhooksRouter = require('./routes/webhooks');
 const adminRouter = require('./routes/admin');
+const metaRouter = require('./routes/meta');
 
 const app = express();
 
-// 1. Security Headers with Helmet (Configured for inline onclick handlers, Razorpay SDK, Firebase & Tailwind)
+// 1. Security Headers with Helmet (Configured for inline onclick handlers, Razorpay SDK, Meta Pixel/CAPI, Firebase & Tailwind)
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -35,7 +36,9 @@ app.use(
           "https://*.gstatic.com",
           "https://*.googleapis.com",
           "https://static.cloudflareinsights.com",
-          "https://*.cloudflareinsights.com"
+          "https://*.cloudflareinsights.com",
+          "https://connect.facebook.net",
+          "https://*.facebook.net"
         ],
         scriptSrcElem: [
           "'self'",
@@ -49,7 +52,9 @@ app.use(
           "https://*.gstatic.com",
           "https://*.googleapis.com",
           "https://static.cloudflareinsights.com",
-          "https://*.cloudflareinsights.com"
+          "https://*.cloudflareinsights.com",
+          "https://connect.facebook.net",
+          "https://*.facebook.net"
         ],
         scriptSrcAttr: ["'unsafe-inline'"],
         frameSrc: [
@@ -58,7 +63,8 @@ app.use(
           "https://checkout.razorpay.com",
           "https://*.razorpay.com",
           "https://*.firebaseapp.com",
-          "https://*.hcaptcha.com"
+          "https://*.hcaptcha.com",
+          "https://www.facebook.com"
         ],
         connectSrc: [
           "'self'",
@@ -76,7 +82,10 @@ app.use(
           "https://*.stripe.network",
           "https://*.hcaptcha.com",
           "https://static.cloudflareinsights.com",
-          "https://*.cloudflareinsights.com"
+          "https://*.cloudflareinsights.com",
+          "https://www.facebook.com",
+          "https://*.facebook.com",
+          "https://graph.facebook.com"
         ],
         styleSrc: [
           "'self'",
@@ -96,7 +105,7 @@ app.use(
           "https://fonts.gstatic.com",
           "https://cdnjs.cloudflare.com"
         ],
-        imgSrc: ["'self'", "data:", "blob:", "https:"],
+        imgSrc: ["'self'", "data:", "blob:", "https:", "https://www.facebook.com"],
         mediaSrc: ["'self'", "https:", "https://commondatastorage.googleapis.com"]
       }
     },
@@ -144,6 +153,7 @@ app.use('/api/payments', paymentsRouter);
 app.use('/api/shipments', shipmentsRouter);
 app.use('/api/webhooks', webhooksRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/meta', metaRouter);
 
 // 7. Serve existing frontend static files & media directories
 const rootDir = path.resolve(__dirname, '..');

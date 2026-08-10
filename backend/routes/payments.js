@@ -6,6 +6,7 @@ const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
 const shiprocketService = require('../services/shiprocketService');
 const whatsappService = require('../services/whatsappService');
+const metaCapiService = require('../services/metaCapiService');
 const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
 
@@ -91,6 +92,31 @@ router.post('/razorpay/verify', validatePaymentVerification, async (req, res, ne
       // Trigger Order Confirmation WhatsApp message
       whatsappService.sendOrderConfirmationWhatsApp(freshOrder).catch(err => {
         logger.error('WHATSAPP_RAZORPAY_CONFIRM_FAIL', { orderId, error: err.message });
+      });
+
+      // Dispatch Meta Conversions API (CAPI) Purchase Event from Backend
+      metaCapiService.sendEvent({
+        eventName: 'Purchase',
+        eventId: `ord_${orderId}`,
+        eventSourceUrl: req.headers.referer || 'https://mantasha.store',
+        userData: {
+          name: freshOrder.customer?.name,
+          phone: freshOrder.customer?.phone,
+          city: freshOrder.customer?.city,
+          state: freshOrder.customer?.state,
+          zip: freshOrder.customer?.pincode,
+          clientIp: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || req.ip,
+          clientUserAgent: req.headers['user-agent']
+        },
+        customData: {
+          currency: 'INR',
+          value: freshOrder.pricing?.total || (freshOrder.payment?.amountPaise / 100),
+          order_id: orderId,
+          content_type: 'product',
+          contents: freshOrder.items?.map(i => ({ id: i.productId, quantity: i.quantity, item_price: i.price }))
+        }
+      }).catch(err => {
+        logger.error('META_CAPI_RAZORPAY_PURCHASE_FAIL', { orderId, error: err.message });
       });
 
       // 4. Book Shiprocket Shipment
