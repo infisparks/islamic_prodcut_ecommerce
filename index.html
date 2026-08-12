@@ -1010,13 +1010,19 @@
                 <div class="bg-sand/60 p-2.5 rounded-xl border border-gold-200">
                     <label class="text-[9px] uppercase font-bold text-gray-600 block mb-1">Select Payment Method</label>
                     <div class="grid grid-cols-2 gap-2 text-xs">
-                        <label id="payment-label-razorpay" class="border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors">
-                            <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" checked onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage();" class="accent-gold-600">
-                            <span class="font-bold text-onyx">UPI / Card Pay</span>
+                        <label id="payment-label-razorpay" onclick="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage();" class="border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs">
+                            <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" checked onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage();" class="accent-gold-600 w-4 h-4 cursor-pointer">
+                            <div class="leading-tight">
+                                <span class="font-bold text-onyx block text-xs">UPI / Online Pay</span>
+                                <span class="text-[9px] text-emerald-700 font-semibold block">GPay, PhonePe, Cards</span>
+                            </div>
                         </label>
-                        <label id="payment-label-cod" class="border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70 transition-colors">
-                            <input type="radio" name="payment" id="payment-method-cod" value="cod" onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage();" class="accent-gold-600">
-                            <span class="font-bold text-onyx">Cash on Delivery</span>
+                        <label id="payment-label-cod" onclick="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage();" class="border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100">
+                            <input type="radio" name="payment" id="payment-method-cod" value="cod" onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage();" class="accent-gold-600 w-4 h-4 cursor-pointer">
+                            <div class="leading-tight">
+                                <span class="font-bold text-onyx block text-xs">Cash on Delivery</span>
+                                <span class="text-[9px] text-gray-500 font-medium block">Pay at Doorstep</span>
+                            </div>
                         </label>
                     </div>
                 </div>
@@ -1064,7 +1070,7 @@
 
                 <button id="checkout-submit-btn" onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all">
                     <i class="fa-solid fa-lock text-xs"></i>
-                    <span id="checkout-btn-text">PAY NOW WITH RAZORPAY (UPI/CARD)</span>
+                    <span id="checkout-btn-text">PAY NOW WITH UPI / CARDS (ONLINE)</span>
                 </button>
 
                 <button onclick="toggleCartDrawer(false)" class="w-full bg-gray-100 hover:bg-gray-200 text-onyx font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors border border-gray-300 mt-2">
@@ -2465,29 +2471,41 @@
 
         let selectedPaymentMethod = 'razorpay';
         let isProcessingOrder = false;
+        let activeTestOrderData = null;
 
         function handlePaymentMethodSelect(method) {
-            selectedPaymentMethod = method;
+            selectedPaymentMethod = (method === 'cod') ? 'cod' : 'razorpay';
+            
+            // Explicitly sync the DOM radio inputs
+            const rzpRadio = document.getElementById('payment-method-razorpay');
+            const codRadio = document.getElementById('payment-method-cod');
+            if (rzpRadio) rzpRadio.checked = (selectedPaymentMethod === 'razorpay');
+            if (codRadio) codRadio.checked = (selectedPaymentMethod === 'cod');
+
             const rzpLabel = document.getElementById('payment-label-razorpay');
             const codLabel = document.getElementById('payment-label-cod');
             const btnText = document.getElementById('checkout-btn-text');
 
-            if (method === 'razorpay') {
+            if (selectedPaymentMethod === 'razorpay') {
                 if (rzpLabel) {
-                    rzpLabel.className = "border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors";
+                    rzpLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 }
                 if (codLabel) {
-                    codLabel.className = "border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70 transition-colors";
+                    codLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
                 }
-                if (btnText) btnText.textContent = "PAY NOW WITH RAZORPAY (UPI/CARD)";
+                if (btnText && !isProcessingOrder) {
+                    btnText.textContent = "PAY NOW WITH UPI / CARDS (ONLINE)";
+                }
             } else {
                 if (codLabel) {
-                    codLabel.className = "border border-gold-400 bg-gold-50/50 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer transition-colors";
+                    codLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 }
                 if (rzpLabel) {
-                    rzpLabel.className = "border border-gray-200 p-2 rounded-lg flex items-center gap-1.5 cursor-pointer opacity-70 transition-colors";
+                    rzpLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
                 }
-                if (btnText) btnText.textContent = "CONFIRM & PLACE ORDER (COD)";
+                if (btnText && !isProcessingOrder) {
+                    btnText.textContent = "CONFIRM & PLACE ORDER (COD)";
+                }
             }
         }
 
@@ -2504,9 +2522,37 @@
             } else {
                 btn.disabled = false;
                 btn.classList.remove('opacity-75', 'cursor-not-allowed');
-                btnText.textContent = selectedPaymentMethod === 'razorpay'
-                    ? "PAY NOW WITH RAZORPAY (UPI/CARD)"
+                const checkedRadio = document.querySelector('input[name="payment"]:checked');
+                const currentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
+                btnText.textContent = currentMethod === 'razorpay'
+                    ? "PAY NOW WITH UPI / CARDS (ONLINE)"
                     : "CONFIRM & PLACE ORDER (COD)";
+            }
+        }
+
+        function openTestPaymentModal(orderData) {
+            activeTestOrderData = orderData;
+            const modal = document.getElementById('test-payment-modal');
+            const orderIdEl = document.getElementById('test-pay-order-id');
+            const amountEl = document.getElementById('test-pay-amount');
+            if (orderIdEl && orderData) orderIdEl.textContent = orderData.orderId || 'N/A';
+            if (amountEl && orderData) amountEl.textContent = `Rs. ${((orderData.amount || 0) / 100).toFixed(2)}`;
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeTestPaymentModal() {
+            const modal = document.getElementById('test-payment-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        async function completeSimulatedPayment(type) {
+            if (!activeTestOrderData) return;
+            setCheckoutButtonLoading(true, "Verifying Simulated Payment...");
+            closeTestPaymentModal();
+            try {
+                showSuccessOrder(activeTestOrderData);
+            } finally {
+                setCheckoutButtonLoading(false);
             }
         }
 
@@ -2769,6 +2815,8 @@
         // LOCAL STORAGE AUTO-SAVE AND AUTO-FILL FOR CUSTOMER DETAILS
         function saveCustomerDetailsToStorage() {
             try {
+                const checkedRadio = document.querySelector('input[name="payment"]:checked');
+                const currentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
                 const rawPin = document.getElementById('ship-pincode')?.value || '';
                 const cleanPin = rawPin.replace(/\D/g, '').slice(0, 6);
                 const details = {
@@ -2780,7 +2828,7 @@
                     address2: document.getElementById('ship-address2')?.value || '',
                     city: document.getElementById('ship-city')?.value || '',
                     state: document.getElementById('ship-state')?.value || '',
-                    paymentMethod: selectedPaymentMethod || 'razorpay'
+                    paymentMethod: currentMethod
                 };
                 localStorage.setItem('fc_customer_details', JSON.stringify(details));
             } catch (e) {}
@@ -2789,26 +2837,31 @@
         function restoreCustomerDetailsFromStorage() {
             try {
                 const saved = localStorage.getItem('fc_customer_details');
-                if (!saved) return;
+                if (!saved) {
+                    handlePaymentMethodSelect('razorpay');
+                    return;
+                }
                 const details = JSON.parse(saved);
-                if (details.name) document.getElementById('ship-name').value = details.name;
-                if (details.phone) document.getElementById('ship-phone').value = details.phone;
+                if (details.name && document.getElementById('ship-name')) document.getElementById('ship-name').value = details.name;
+                if (details.phone && document.getElementById('ship-phone')) document.getElementById('ship-phone').value = details.phone;
                 if (details.emergencyPhone && document.getElementById('ship-emergency-phone')) {
                     document.getElementById('ship-emergency-phone').value = details.emergencyPhone;
                 }
-                if (details.pincode) {
+                if (details.pincode && document.getElementById('ship-pincode')) {
                     const cleanPin = String(details.pincode).replace(/\D/g, '').slice(0, 6);
                     document.getElementById('ship-pincode').value = cleanPin;
                     handlePincodeAutoCheck(cleanPin);
                 }
-                if (details.address1) document.getElementById('ship-address1').value = details.address1;
-                if (details.address2) document.getElementById('ship-address2').value = details.address2;
-                if (details.city) document.getElementById('ship-city').value = details.city;
-                if (details.state) document.getElementById('ship-state').value = details.state;
-                if (details.paymentMethod) {
-                    handlePaymentMethodSelect(details.paymentMethod);
-                }
-            } catch (e) {}
+                if (details.address1 && document.getElementById('ship-address1')) document.getElementById('ship-address1').value = details.address1;
+                if (details.address2 && document.getElementById('ship-address2')) document.getElementById('ship-address2').value = details.address2;
+                if (details.city && document.getElementById('ship-city')) document.getElementById('ship-city').value = details.city;
+                if (details.state && document.getElementById('ship-state')) document.getElementById('ship-state').value = details.state;
+                
+                const methodToRestore = (details.paymentMethod === 'cod') ? 'cod' : 'razorpay';
+                handlePaymentMethodSelect(methodToRestore);
+            } catch (e) {
+                handlePaymentMethodSelect('razorpay');
+            }
         }
 
         // ==========================================
@@ -3070,8 +3123,13 @@
             // Save details to storage
             saveCustomerDetailsToStorage();
 
+            // Always dynamically resolve the checked payment method from DOM
+            const checkedRadio = document.querySelector('input[name="payment"]:checked');
+            const activeMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
+            selectedPaymentMethod = activeMethod;
+
             // If Cash on Delivery (COD) selected, check 3-order daily limit and trigger WhatsApp OTP modal
-            if (selectedPaymentMethod === 'cod') {
+            if (activeMethod === 'cod') {
                 setCheckoutButtonLoading(true, "Checking COD Availability & Sending WhatsApp OTP...");
                 try {
                     const otpRes = await fetch('/api/orders/send-cod-otp', {
@@ -3120,6 +3178,11 @@
             const cleanEmergencyPhone = emergencyPhone ? emergencyPhone.replace(/\D/g, '') : '';
             const cleanPincode = pincode.replace(/\D/g, '');
 
+            // Dynamically resolve checked payment method
+            const checkedRadio = document.querySelector('input[name="payment"]:checked');
+            const effectivePaymentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
+            selectedPaymentMethod = effectivePaymentMethod;
+
             trackMetaEvent('InitiateCheckout', {
                 currency: 'INR',
                 value: cart.reduce((s, i) => s + (i.price * i.qty), 0),
@@ -3133,7 +3196,7 @@
             });
 
             // Lock UI
-            setCheckoutButtonLoading(true, "Securing Order with Server...");
+            setCheckoutButtonLoading(true, effectivePaymentMethod === 'cod' ? "Securing COD Order with Server..." : "Initiating Online Payment...");
 
             const orderPayload = {
                 customer: {
@@ -3151,7 +3214,7 @@
                     sku: item.sku,
                     quantity: item.qty
                 })),
-                paymentMethod: selectedPaymentMethod,
+                paymentMethod: effectivePaymentMethod,
                 verificationToken: verificationToken || null,
                 couponCode: appliedCouponCode || null
             };
@@ -3173,7 +3236,7 @@
                 }
 
                 // Handle COD Flow
-                if (selectedPaymentMethod === 'cod') {
+                if (effectivePaymentMethod === 'cod') {
                     setCheckoutButtonLoading(false);
                     showSuccessOrder(result.data);
                     return;
