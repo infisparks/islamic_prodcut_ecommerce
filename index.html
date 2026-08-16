@@ -1010,15 +1010,15 @@
                 <div class="bg-sand/60 p-2.5 rounded-xl border border-gold-200">
                     <label class="text-[9px] uppercase font-bold text-gray-600 block mb-1">Select Payment Method</label>
                     <div class="grid grid-cols-2 gap-2 text-xs">
-                        <label id="payment-label-razorpay" onclick="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage();" class="border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs">
-                            <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" checked onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage();" class="accent-gold-600 w-4 h-4 cursor-pointer">
+                        <label id="payment-label-razorpay" onclick="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage(true);" class="border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100">
+                            <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage(true);" class="accent-gold-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">UPI / Online Pay</span>
                                 <span class="text-[9px] text-emerald-700 font-semibold block">GPay, PhonePe, Cards</span>
                             </div>
                         </label>
-                        <label id="payment-label-cod" onclick="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage();" class="border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100">
-                            <input type="radio" name="payment" id="payment-method-cod" value="cod" onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage();" class="accent-gold-600 w-4 h-4 cursor-pointer">
+                        <label id="payment-label-cod" onclick="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs">
+                            <input type="radio" name="payment" id="payment-method-cod" value="cod" checked onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="accent-gold-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">Cash on Delivery</span>
                                 <span class="text-[9px] text-gray-500 font-medium block">Pay at Doorstep</span>
@@ -1070,7 +1070,7 @@
 
                 <button id="checkout-submit-btn" onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all">
                     <i class="fa-solid fa-lock text-xs"></i>
-                    <span id="checkout-btn-text">PAY NOW WITH UPI / CARDS (ONLINE)</span>
+                    <span id="checkout-btn-text">CONFIRM & PLACE ORDER (COD)</span>
                 </button>
 
                 <button onclick="toggleCartDrawer(false)" class="w-full bg-gray-100 hover:bg-gray-200 text-onyx font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors border border-gray-300 mt-2">
@@ -2337,7 +2337,7 @@
 
         let currentShippingFee = null;
 
-        function updateCartUI() {
+        function updateCartUI(renderItems = true) {
             const container = document.getElementById('cart-items-container');
             const cartCountEl = document.getElementById('cart-count');
             const subtotalEl = document.getElementById('cart-subtotal');
@@ -2399,7 +2399,7 @@
                 }
             }
 
-            if (!container) return;
+            if (!renderItems || !container) return;
 
             if (cart.length === 0) {
                 container.innerHTML = `
@@ -2450,7 +2450,7 @@
                 item.qty += delta;
                 if (item.qty <= 0) cart = cart.filter(i => i.cartKey !== cartKey);
             }
-            updateCartUI();
+            updateCartUI(true);
         }
 
         function toggleCartDrawer(forceOpen = false) {
@@ -2469,12 +2469,12 @@
             }
         }
 
-        let selectedPaymentMethod = 'razorpay';
+        let selectedPaymentMethod = 'cod';
         let isProcessingOrder = false;
         let activeTestOrderData = null;
 
         function handlePaymentMethodSelect(method) {
-            selectedPaymentMethod = (method === 'cod') ? 'cod' : 'razorpay';
+            selectedPaymentMethod = (method === 'razorpay') ? 'razorpay' : 'cod';
             
             // Explicitly sync the DOM radio inputs
             const rzpRadio = document.getElementById('payment-method-razorpay');
@@ -2523,7 +2523,7 @@
                 btn.disabled = false;
                 btn.classList.remove('opacity-75', 'cursor-not-allowed');
                 const checkedRadio = document.querySelector('input[name="payment"]:checked');
-                const currentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
+                const currentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'cod');
                 btnText.textContent = currentMethod === 'razorpay'
                     ? "PAY NOW WITH UPI / CARDS (ONLINE)"
                     : "CONFIRM & PLACE ORDER (COD)";
@@ -2725,7 +2725,7 @@
             if (clean.length < 6) {
                 badge.classList.add('hidden');
                 currentShippingFee = null;
-                updateCartUI();
+                updateCartUI(false);
                 return;
             }
 
@@ -2739,7 +2739,7 @@
 
                 if (result.isServiceable) {
                     currentShippingFee = result.shippingCharge || 50;
-                    updateCartUI();
+                    updateCartUI(false);
 
                     badge.className = 'text-[11px] p-2.5 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2';
                     badge.innerHTML = `
@@ -2812,11 +2812,13 @@
             }
         }
 
-        // LOCAL STORAGE AUTO-SAVE AND AUTO-FILL FOR CUSTOMER DETAILS
-        function saveCustomerDetailsToStorage() {
+        // LOCAL STORAGE AUTO-SAVE AND AUTO-FILL FOR CUSTOMER DETAILS (WITH DEBOUNCE FOR ZERO-LAG TYPING)
+        let saveCustomerStorageTimer = null;
+
+        function _executeSaveCustomerDetails() {
             try {
                 const checkedRadio = document.querySelector('input[name="payment"]:checked');
-                const currentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
+                const currentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'cod');
                 const rawPin = document.getElementById('ship-pincode')?.value || '';
                 const cleanPin = rawPin.replace(/\D/g, '').slice(0, 6);
                 const details = {
@@ -2834,11 +2836,20 @@
             } catch (e) {}
         }
 
+        function saveCustomerDetailsToStorage(immediate = false) {
+            clearTimeout(saveCustomerStorageTimer);
+            if (immediate) {
+                _executeSaveCustomerDetails();
+            } else {
+                saveCustomerStorageTimer = setTimeout(_executeSaveCustomerDetails, 200);
+            }
+        }
+
         function restoreCustomerDetailsFromStorage() {
             try {
                 const saved = localStorage.getItem('fc_customer_details');
                 if (!saved) {
-                    handlePaymentMethodSelect('razorpay');
+                    handlePaymentMethodSelect('cod');
                     return;
                 }
                 const details = JSON.parse(saved);
@@ -2857,10 +2868,10 @@
                 if (details.city && document.getElementById('ship-city')) document.getElementById('ship-city').value = details.city;
                 if (details.state && document.getElementById('ship-state')) document.getElementById('ship-state').value = details.state;
                 
-                const methodToRestore = (details.paymentMethod === 'cod') ? 'cod' : 'razorpay';
+                const methodToRestore = (details.paymentMethod === 'razorpay') ? 'razorpay' : 'cod';
                 handlePaymentMethodSelect(methodToRestore);
             } catch (e) {
-                handlePaymentMethodSelect('razorpay');
+                handlePaymentMethodSelect('cod');
             }
         }
 
@@ -3120,12 +3131,12 @@
                 return;
             }
 
-            // Save details to storage
-            saveCustomerDetailsToStorage();
+            // Save details to storage immediately on checkout attempt
+            saveCustomerDetailsToStorage(true);
 
             // Always dynamically resolve the checked payment method from DOM
             const checkedRadio = document.querySelector('input[name="payment"]:checked');
-            const activeMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
+            const activeMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'cod');
             selectedPaymentMethod = activeMethod;
 
             // If Cash on Delivery (COD) selected, check 3-order daily limit and trigger WhatsApp OTP modal
@@ -3180,7 +3191,7 @@
 
             // Dynamically resolve checked payment method
             const checkedRadio = document.querySelector('input[name="payment"]:checked');
-            const effectivePaymentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'razorpay');
+            const effectivePaymentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'cod');
             selectedPaymentMethod = effectivePaymentMethod;
 
             trackMetaEvent('InitiateCheckout', {
@@ -3986,6 +3997,7 @@
         // FLOATING BOTTOM-UP OFFER POPUP SERVICE
         // -------------------------------------------------------------
         let isOfferPopupDismissed = false;
+        let isOfferScrollTicking = false;
 
         function dismissFloatingOfferPopup() {
             isOfferPopupDismissed = true;
@@ -3997,21 +4009,24 @@
         }
 
         function checkOfferPopupScroll() {
-            if (isOfferPopupDismissed) return;
-            const popup = document.getElementById('floating-offer-popup');
-            if (!popup) return;
-
-            // Pops up automatically when user scrolls past hero section
-            if (window.scrollY > 180) {
-                popup.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
-                popup.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-            } else {
-                popup.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
-                popup.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-            }
+            if (isOfferPopupDismissed || isOfferScrollTicking) return;
+            isOfferScrollTicking = true;
+            requestAnimationFrame(() => {
+                const popup = document.getElementById('floating-offer-popup');
+                if (popup && !isOfferPopupDismissed) {
+                    if (window.scrollY > 180) {
+                        popup.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+                        popup.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+                    } else {
+                        popup.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+                        popup.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+                    }
+                }
+                isOfferScrollTicking = false;
+            });
         }
 
-        window.addEventListener('scroll', checkOfferPopupScroll);
+        window.addEventListener('scroll', checkOfferPopupScroll, { passive: true });
 
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts('all');
@@ -4020,12 +4035,10 @@
 
             const slider = document.getElementById('dua-slider-container');
             if (slider) {
-                slider.addEventListener('scroll', updateDuaSlideCounter);
+                slider.addEventListener('scroll', updateDuaSlideCounter, { passive: true });
             }
             checkOfferPopupScroll();
         });
-        renderProducts('all');
-        renderDuas('all');
     </script>
 </body>
 </html>
