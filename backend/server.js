@@ -176,6 +176,14 @@ app.get('/product', (req, res, next) => {
   next();
 });
 
+app.get('/checkout.html', (req, res) => {
+  res.sendFile(path.join(rootDir, 'checkout.html'));
+});
+
+app.get('/checkout', (req, res) => {
+  res.sendFile(path.join(rootDir, 'checkout.html'));
+});
+
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(rootDir, 'admin.html'));
 });

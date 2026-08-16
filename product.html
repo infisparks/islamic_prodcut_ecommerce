@@ -270,8 +270,26 @@
                         </span>
                     </div>
 
+                    <!-- ULTRA-COMPACT LANGUAGE SELECTOR (Slim Bar) -->
+                    <div id="pdp-language-selector-section" class="flex items-center gap-2 mb-3 bg-sand/70 p-1.5 rounded-xl border border-gold-300/60 shadow-xs flex-wrap sm:flex-nowrap">
+                        <span class="text-[11px] font-bold text-onyx flex items-center gap-1 pl-1 flex-shrink-0">
+                            <i class="fa-solid fa-language text-gold-600 text-xs"></i> Language:
+                        </span>
+                        <div class="flex items-center gap-1.5 flex-1 w-full sm:w-auto">
+                            <button type="button" onclick="switchProductLanguage('English')" id="lang-btn-English" class="flex-1 py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer border">
+                                <span>🇬🇧 English</span>
+                            </button>
+                            <button type="button" onclick="switchProductLanguage('Urdu')" id="lang-btn-Urdu" class="flex-1 py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer border">
+                                <span>🇵🇰 اردو</span>
+                            </button>
+                            <button type="button" onclick="switchProductLanguage('Hindi')" id="lang-btn-Hindi" class="flex-1 py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer border">
+                                <span>🇮🇳 हिंदी</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <h1 id="pdp-title" class="font-cinzel text-xl sm:text-2xl lg:text-3xl font-extrabold text-onyx leading-tight mb-2">
-                        Umrah Dua & Guide Cards (Urdu / اردو)
+                        Umrah Dua & Guide Cards (English)
                     </h1>
 
                     <!-- Dynamic Price Display -->
@@ -545,10 +563,10 @@
                     </div>
                 </div>
 
-                <button id="checkout-submit-btn" onclick="processOrder()" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all">
+                <a href="checkout.html" id="checkout-submit-btn" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all cursor-pointer">
                     <i class="fa-solid fa-lock text-xs"></i>
-                    <span id="checkout-btn-text">CONFIRM & PLACE ORDER (COD)</span>
-                </button>
+                    <span>PROCEED TO SECURE CHECKOUT</span>
+                </a>
 
                 <button onclick="toggleCartDrawer(false)" class="w-full bg-gray-100 hover:bg-gray-200 text-onyx font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors border border-gray-300 mt-2">
                     <i class="fa-solid fa-arrow-left text-xs text-gold-600"></i>
@@ -655,14 +673,14 @@
                 features: ["Authentic Urdu Translation", "Arabic Script & Ritual Guidance", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_001",
-                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-                        shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
+                        sku: "fati_003",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
                         oldPrice: 999,
-                        weight: "150gm",
-                        tag: "Best Value",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
                     },
                     {
                         sku: "fati_002",
@@ -675,14 +693,14 @@
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
-                        sku: "fati_003",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
+                        sku: "fati_001",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
                         oldPrice: 999,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
             },
@@ -706,14 +724,14 @@
                 features: ["Clear English Translation", "Arabic Script + Transliteration", "35+ Step-by-Step Duas", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_004",
-                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-                        shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
+                        sku: "fati_006",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
                         oldPrice: 999,
-                        weight: "150gm",
-                        tag: "Best Value",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
                     },
                     {
                         sku: "fati_005",
@@ -726,14 +744,14 @@
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
-                        sku: "fati_006",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
+                        sku: "fati_004",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
                         oldPrice: 999,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
             },
@@ -757,14 +775,14 @@
                 features: ["Full Hindi Translation", "Arabic Script & Transliteration", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_007",
-                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-                        shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
+                        sku: "fati_009",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
                         oldPrice: 999,
-                        weight: "150gm",
-                        tag: "Best Value",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
                     },
                     {
                         sku: "fati_008",
@@ -777,14 +795,14 @@
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
-                        sku: "fati_009",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
+                        sku: "fati_007",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
                         oldPrice: 999,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
             },
@@ -808,14 +826,14 @@
                 features: ["Roman Phonetic Pronunciation", "Step-by-Step Tawaf Guidance", "Stainless Binder Ring", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_010",
-                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-                        shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
+                        sku: "fati_012",
+                        name: "Essential Pack (Cards + Tawaf Tasbih)",
+                        shortName: "Cards + Tawaf Tasbih",
+                        price: 491,
                         oldPrice: 999,
-                        weight: "150gm",
-                        tag: "Best Value",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        weight: "100gm",
+                        tag: "Essential",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
                     },
                     {
                         sku: "fati_011",
@@ -828,14 +846,14 @@
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
-                        sku: "fati_012",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
+                        sku: "fati_010",
+                        name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch",
+                        price: 699,
                         oldPrice: 999,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
+                        weight: "150gm",
+                        tag: "Best Value",
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
             },
@@ -944,19 +962,35 @@
             }).catch(() => {});
         }
 
-        // INITIALIZE PRODUCT BASED ON URL PARAMS (e.g. product.html?id=2 or ?sku=fati_004)
+        function getCheapestVariantIndex(product) {
+            if (!product || !product.variants || product.variants.length === 0) return 0;
+            let minIdx = 0;
+            let minPrice = product.variants[0].price;
+            for (let i = 1; i < product.variants.length; i++) {
+                if (product.variants[i].price < minPrice) {
+                    minPrice = product.variants[i].price;
+                    minIdx = i;
+                }
+            }
+            return minIdx;
+        }
+
+        // INITIALIZE PRODUCT BASED ON URL PARAMS (e.g. product.html?id=2 or default to English Card)
         function initProductFromUrl() {
             const params = new URLSearchParams(window.location.search);
             const rawId = params.get('id') || params.get('product');
             const targetId = parseInt(rawId, 10);
-            const foundProduct = products.find(p => p.id === targetId) || products[0];
+            
+            // By default, if no ID in URL, default to English Card (ID: 2)
+            const foundProduct = (targetId ? products.find(p => p.id === targetId) : null) || products.find(p => p.id === 2) || products[0];
             currentProduct = foundProduct;
 
             const variantParam = parseInt(params.get('variant'), 10);
             if (!isNaN(variantParam) && foundProduct.variants && foundProduct.variants[variantParam]) {
                 currentVariantIndex = variantParam;
             } else {
-                currentVariantIndex = 0;
+                // By default keep cheapest variant selected (e.g. Rs. 491)
+                currentVariantIndex = getCheapestVariantIndex(foundProduct);
             }
 
             const mediaParam = params.get('media');
@@ -982,6 +1016,55 @@
                     buyPdpProductNow();
                 }, 300);
             }
+        }
+
+        // SWITCH PRODUCT LANGUAGE SEAMLESSLY WITHOUT RELOADING PAGE
+        function switchProductLanguage(lang) {
+            let targetProduct = null;
+            if (currentProduct.category === 'card' || !currentProduct.category) {
+                if (lang === 'English') targetProduct = products.find(p => p.id === 2);
+                else if (lang === 'Urdu') targetProduct = products.find(p => p.id === 1);
+                else if (lang === 'Hindi') targetProduct = products.find(p => p.id === 3);
+            } else {
+                if (lang === 'English') targetProduct = products.find(p => p.id === 5);
+                else if (lang === 'Urdu') targetProduct = products.find(p => p.id === 7);
+                else if (lang === 'Hindi') targetProduct = products.find(p => p.id === 6);
+            }
+
+            if (!targetProduct) {
+                targetProduct = products.find(p => p.language.toLowerCase() === lang.toLowerCase()) || products[0];
+            }
+
+            currentProduct = targetProduct;
+            
+            // Retain variant level or select cheapest
+            if (currentProduct.variants && currentProduct.variants.length > 0) {
+                if (currentVariantIndex >= currentProduct.variants.length) {
+                    currentVariantIndex = getCheapestVariantIndex(currentProduct);
+                }
+            } else {
+                currentVariantIndex = 0;
+            }
+
+            currentMediaIndex = 0;
+            currentZoom = 1;
+            currentPanX = 0;
+            currentPanY = 0;
+
+            // Smoothly update URL query param without page reload
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('id', currentProduct.id);
+            window.history.replaceState({ id: currentProduct.id }, '', newUrl.toString());
+
+            renderPdpView();
+
+            // Track ViewContent for newly switched product
+            trackMetaEvent('ViewContent', {
+                content_name: currentProduct.name,
+                content_ids: [currentProduct.id],
+                value: (currentProduct.variants ? currentProduct.variants[currentVariantIndex].price : currentProduct.price),
+                currency: 'INR'
+            });
         }
 
         function getPdpMediaList() {
@@ -1036,6 +1119,27 @@
             document.getElementById('spec-dimensions').textContent = `${activeWeight} • ${p.dimensions}`;
             document.getElementById('spec-material').textContent = p.material;
             document.getElementById('spec-hsn').textContent = `${p.hsn} • ${p.manufacturer}`;
+
+            // Update Language Switcher Buttons state
+            const langSection = document.getElementById('pdp-language-selector-section');
+            const languages = ['English', 'Urdu', 'Hindi'];
+            if (langSection) {
+                if (['English', 'Urdu', 'Hindi'].includes(p.language)) {
+                    langSection.classList.remove('hidden');
+                    languages.forEach(l => {
+                        const btn = document.getElementById(`lang-btn-${l}`);
+                        if (btn) {
+                            if (p.language === l) {
+                                btn.className = 'flex-1 py-1 px-2 rounded-lg text-[11px] font-extrabold bg-onyx text-gold-400 border border-gold-500 shadow-xs ring-1 ring-gold-400/50 flex items-center justify-center gap-1 cursor-pointer transition-all';
+                            } else {
+                                btn.className = 'flex-1 py-1 px-2 rounded-lg text-[11px] font-bold bg-white text-gray-700 hover:bg-gold-50 hover:border-gold-300 border border-gray-300 flex items-center justify-center gap-1 cursor-pointer transition-all';
+                            }
+                        }
+                    });
+                } else {
+                    langSection.classList.add('hidden');
+                }
+            }
 
             // Render Media
             renderPdpMediaView();
@@ -1337,7 +1441,7 @@
 
         function buyPdpProductNow() {
             addPdpProductToCart();
-            toggleCartDrawer(true);
+            window.location.href = `checkout.html?id=${currentProduct.id}&variant=${currentVariantIndex}`;
         }
 
         function showToast(msg) {

@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Secure Checkout | Fatima Calligrapher</title>
+    <meta name="description" content="Fast, secure, and hassle-free checkout for authentic Umrah Dua cards and Islamic supplications. Cash on Delivery and Online Payment available.">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#FDFBF7',
+                            100: '#FBF7EE',
+                            200: '#F5ECD6',
+                            300: '#EEDCBD',
+                            400: '#E2C792',
+                            500: '#D4AF37',
+                            600: '#AA8C2C',
+                            700: '#806921',
+                            800: '#554616',
+                            900: '#2B230B',
+                        },
+                        onyx: '#111827',
+                        pearl: '#FAF9F6',
+                        sand: '#F3EFE6',
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        arabic: ['Amiri', 'Traditional Arabic', 'serif']
+                    },
+                    boxShadow: {
+                        'gold-glow': '0 4px 20px -2px rgba(212, 175, 55, 0.25)',
+                        'card-premium': '0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Razorpay Live Checkout SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F6F8;
+            color: #111827;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .gold-bg-gradient {
+            background: linear-gradient(135deg, #E2C792 0%, #D4AF37 50%, #AA8C2C 100%);
+        }
+        input, select, textarea {
+            font-size: 15px !important; /* Prevents iOS auto-zoom on mobile inputs */
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xs">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+            <!-- Left: Back to Home & Store -->
+            <a href="index.html" class="flex items-center gap-1.5 text-xs font-bold text-gray-700 hover:text-gold-700 bg-gray-100 hover:bg-gold-50 py-1.5 px-3 rounded-xl border border-gray-200 transition-all active:scale-95">
+                <i class="fa-solid fa-arrow-left text-xs text-gold-600"></i>
+                <span>Store</span>
+            </a>
+
+            <!-- Center: Brand Logo -->
+            <a href="index.html" class="flex items-center gap-2 group">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-onyx border border-gold-500/60 flex items-center justify-center text-gold-400 font-cinzel font-bold text-xs sm:text-sm shadow-xs">
+                    FC
+                </div>
+                <div class="text-left">
+                    <span class="font-cinzel text-xs sm:text-sm font-bold tracking-wider text-onyx block">FATIMA CALLIGRAPHER</span>
+                    <span class="text-[8.5px] text-gold-600 font-semibold tracking-widest block uppercase -mt-0.5">Secure Checkout</span>
+                </div>
+            </a>
+
+            <!-- Right: Secure Guarantee Badge -->
+            <div class="flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
+                <i class="fa-solid fa-shield-halved text-xs text-emerald-600"></i>
+                <span class="hidden xs:inline">100% Secure</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CHECKOUT CONTAINER -->
+    <main class="flex-grow max-w-5xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-8">
+        
+        <!-- Breadcrumb / Status -->
+        <div class="flex items-center gap-2 text-xs text-gray-500 mb-4 flex-wrap">
+            <a href="index.html" class="hover:text-gold-600 flex items-center gap-1"><i class="fa-solid fa-house text-[10px]"></i> Home</a>
+            <i class="fa-solid fa-chevron-right text-[8px] text-gray-400"></i>
+            <span class="font-bold text-onyx">Fast Checkout</span>
+            <span class="ml-auto text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                <i class="fa-solid fa-truck-fast text-[10px] mr-1"></i> Pan-India Express
+            </span>
+        </div>
+
+        <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-start">
+            
+            <!-- LEFT COLUMN: SHIPPING ADDRESS & PAYMENT METHOD (lg:col-span-7) -->
+            <div class="lg:col-span-7 space-y-4">
+
+                <!-- SECTION 1: DELIVERY ADDRESS -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs">
+                    <div class="flex items-center justify-between pb-3 mb-3.5 border-b border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-onyx text-gold-400 flex items-center justify-center text-xs font-bold shadow-xs">
+                                1
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-sm sm:text-base text-onyx">Delivery Address</h2>
+                                <p class="text-[10px] text-gray-500">Enter where we should deliver your sacred parcel</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            Fast Dispatch
+                        </span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <!-- Full Name -->
+                        <div>
+                            <label for="cust-name" class="block text-xs font-bold text-onyx mb-1">
+                                Full Name <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="cust-name" required placeholder="e.g. Ahmed Khan" 
+                                class="w-full px-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400">
+                        </div>
+
+                        <!-- WhatsApp / Mobile Number -->
+                        <div>
+                            <label for="cust-phone" class="block text-xs font-bold text-onyx mb-1">
+                                WhatsApp / Mobile Number <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 text-xs font-bold text-gray-500 font-mono">+91</span>
+                                <input type="tel" id="cust-phone" required maxlength="10" placeholder="10-digit Mobile Number" 
+                                    class="w-full pl-12 pr-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx font-mono focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400">
+                            </div>
+                            <p class="text-[10px] text-gray-500 mt-1 flex items-center gap-1">
+                                <i class="fa-brands fa-whatsapp text-emerald-600"></i> Delivery updates & verification OTP will be sent here
+                            </p>
+                        </div>
+
+                        <!-- Pincode with live auto-lookup -->
+                        <div>
+                            <label for="cust-pincode" class="block text-xs font-bold text-onyx mb-1">
+                                6-Digit Pincode <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="text" id="cust-pincode" required maxlength="6" placeholder="e.g. 400001" 
+                                    oninput="handlePincodeChange(this.value)"
+                                    class="w-full px-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx font-mono font-bold focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400">
+                                <div id="pincode-spinner" class="hidden absolute right-3 top-2.5 text-gold-600">
+                                    <i class="fa-solid fa-spinner fa-spin text-xs"></i>
+                                </div>
+                            </div>
+                            <div id="pincode-feedback" class="hidden mt-1 text-[11px] font-medium p-2 rounded-lg transition-all"></div>
+                        </div>
+
+                        <!-- City & State (Auto-filled) -->
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label for="cust-city" class="block text-xs font-bold text-onyx mb-1">
+                                    City / District <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="cust-city" required placeholder="City name" 
+                                    class="w-full px-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400">
+                            </div>
+                            <div>
+                                <label for="cust-state" class="block text-xs font-bold text-onyx mb-1">
+                                    State <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="cust-state" required placeholder="State name" 
+                                    class="w-full px-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400">
+                            </div>
+                        </div>
+
+                        <!-- House / Street Address -->
+                        <div>
+                            <label for="cust-address1" class="block text-xs font-bold text-onyx mb-1">
+                                Flat / House No., Building, Street Address <span class="text-red-500">*</span>
+                            </label>
+                            <textarea id="cust-address1" required rows="2" placeholder="e.g. Flat 204, Al-Madina Heights, MG Road" 
+                                class="w-full px-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400"></textarea>
+                        </div>
+
+                        <!-- Landmark -->
+                        <div>
+                            <label for="cust-address2" class="block text-xs font-bold text-onyx mb-1">
+                                Landmark / Nearby Area (Optional)
+                            </label>
+                            <input type="text" id="cust-address2" placeholder="e.g. Near Jama Masjid" 
+                                class="w-full px-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: PAYMENT METHOD SELECTION -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs">
+                    <div class="flex items-center justify-between pb-3 mb-3.5 border-b border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-onyx text-gold-400 flex items-center justify-center text-xs font-bold shadow-xs">
+                                2
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-sm sm:text-base text-onyx">Payment Method</h2>
+                                <p class="text-[10px] text-gray-500">Choose Cash on Delivery or Instant Online Pay</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2.5">
+                        
+                        <!-- CASH ON DELIVERY (Default Selected) -->
+                        <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" 
+                            class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-gold-500 bg-gold-50/80 ring-2 ring-gold-400/30 cursor-pointer transition-all shadow-xs">
+                            <input type="radio" name="payment_method" value="cod" id="radio-cod" checked class="mt-1 text-gold-600 focus:ring-gold-500 accent-gold-600">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-1 flex-wrap">
+                                    <span class="font-extrabold text-xs sm:text-sm text-onyx flex items-center gap-1.5">
+                                        <i class="fa-solid fa-hand-holding-dollar text-emerald-600 text-sm"></i>
+                                        <span>Cash on Delivery (COD)</span>
+                                    </span>
+                                    <span class="text-[9.5px] font-extrabold text-onyx bg-gold-400 px-2 py-0.5 rounded-full uppercase shadow-xs">
+                                        ✓ Default
+                                    </span>
+                                </div>
+                                <p class="text-[11px] text-gray-600 mt-1 leading-snug">
+                                    Pay with cash when your package arrives safely at your doorstep. Verified via quick WhatsApp OTP.
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- ONLINE PAYMENT (Razorpay / UPI / Cards) -->
+                        <label id="payment-label-razorpay" onclick="selectPaymentMethod('razorpay')" 
+                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-gold-300 bg-white hover:bg-gold-50/20 cursor-pointer transition-all">
+                            <input type="radio" name="payment_method" value="razorpay" id="radio-razorpay" class="mt-1 text-gold-600 focus:ring-gold-500 accent-gold-600">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-1 flex-wrap">
+                                    <span class="font-bold text-xs sm:text-sm text-onyx flex items-center gap-1.5">
+                                        <i class="fa-solid fa-bolt text-indigo-600 text-sm"></i>
+                                        <span>Online Payment (UPI, Cards, NetBanking)</span>
+                                    </span>
+                                    <span class="text-[9.5px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
+                                        Instant Confirmation
+                                    </span>
+                                </div>
+                                <p class="text-[11px] text-gray-500 mt-1 leading-snug">
+                                    Google Pay, PhonePe, Paytm, BHIM UPI, Debit/Credit Cards & Net Banking via Razorpay secure gateway.
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: ORDER SUMMARY & SUBMIT (lg:col-span-5) -->
+            <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-20">
+
+                <!-- ORDER ITEMS SUMMARY CARD -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs">
+                    <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-bag-shopping text-gold-600 text-sm"></i>
+                            <h3 class="font-bold text-sm text-onyx">Order Items (<span id="cart-item-count">1</span>)</h3>
+                        </div>
+                        <a href="index.html#products-grid" class="text-[11px] font-bold text-gold-700 hover:underline">
+                            + Add Items
+                        </a>
+                    </div>
+
+                    <!-- Items List Container -->
+                    <div id="checkout-items-list" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
+
+                    <!-- Coupon Code Input -->
+                    <div class="mt-3.5 pt-3 border-t border-gray-100">
+                        <div class="flex items-center gap-1.5">
+                            <input type="text" id="coupon-input" placeholder="Coupon Code (e.g. RAB112)" 
+                                class="flex-1 px-3 py-2 bg-sand/30 border border-gray-300 rounded-xl text-xs uppercase font-mono font-bold focus:bg-white focus:outline-none focus:border-gold-500">
+                            <button type="button" onclick="applyCouponCode()" class="px-3.5 py-2 bg-onyx hover:bg-gold-600 text-gold-400 hover:text-onyx font-bold text-xs rounded-xl transition-all shadow-xs">
+                                Apply
+                            </button>
+                        </div>
+                        <div id="coupon-feedback" class="hidden text-[10px] mt-1 font-semibold"></div>
+                    </div>
+
+                    <!-- Pricing Breakdown -->
+                    <div class="mt-3.5 pt-3 border-t border-gray-200 space-y-1.5 text-xs text-gray-600">
+                        <div class="flex justify-between items-center">
+                            <span>Items Subtotal:</span>
+                            <span id="summary-subtotal" class="font-bold text-onyx">Rs. 491.00</span>
+                        </div>
+                        <div id="summary-discount-row" class="hidden flex justify-between items-center text-emerald-700 font-semibold">
+                            <span>Coupon Discount:</span>
+                            <span id="summary-discount">-Rs. 0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>Delivery & Handling:</span>
+                            <span id="summary-shipping" class="font-semibold text-gray-500">Enter Pincode</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm sm:text-base font-extrabold text-onyx pt-2 border-t border-gray-200">
+                            <span>Total Payable:</span>
+                            <span id="summary-total" class="text-gold-700 font-black">Rs. 491.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit CTA Button -->
+                    <button type="submit" id="btn-submit-order" class="w-full mt-4 gold-bg-gradient text-onyx font-extrabold py-3.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs sm:text-sm hover:opacity-95 active:scale-98 transition-all cursor-pointer">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                        <span id="btn-submit-text">CONFIRM & PLACE ORDER (COD)</span>
+                    </button>
+
+                    <p class="text-[10px] text-gray-500 text-center mt-2.5 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-shield-check text-emerald-600"></i> 100% Encrypted & Safe Checkout
+                    </p>
+                </div>
+
+                <!-- TRUST BADGES -->
+                <div class="bg-sand/60 rounded-2xl p-3.5 border border-gold-200/80 text-[11px] text-gray-700 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
+                        <span><b>100% Waterproof</b> authentic laminated Umrah Dua cards</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-ring text-purple-600 text-xs"></i>
+                        <span><b>Free Tawaf Tasbih</b> counter included with every package</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-truck-fast text-indigo-600 text-xs"></i>
+                        <span><b>Live Shiprocket Tracking</b> with SMS & WhatsApp updates</span>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </main>
+
+    <!-- MOBILE STICKY BOTTOM CONFIRM BAR (Visible only on small screens) -->
+    <div class="lg:hidden sticky bottom-0 left-0 right-0 bg-white/98 backdrop-blur-md border-t border-gold-300 p-2.5 px-4 z-40 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] flex items-center justify-between gap-3">
+        <div>
+            <div class="text-[10px] text-gray-500 uppercase font-semibold">Total Payable</div>
+            <div id="sticky-total-price" class="text-base font-extrabold text-gold-700">Rs. 491.00</div>
+        </div>
+        <button type="button" onclick="document.getElementById('checkout-form').requestSubmit()" class="gold-bg-gradient text-onyx font-black text-xs py-3 px-5 rounded-xl shadow-gold-glow flex items-center gap-1.5 active:scale-95 transition-all">
+            <i class="fa-solid fa-bolt text-xs"></i>
+            <span id="sticky-btn-text">CONFIRM ORDER</span>
+        </button>
+    </div>
+
+    <!-- WHATSAPP COD OTP VERIFICATION MODAL -->
+    <div id="whatsapp-otp-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 w-full max-w-sm border border-gold-300/40 shadow-2xl text-center" onclick="event.stopPropagation()">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 mx-auto flex items-center justify-center text-2xl mb-3 border border-emerald-500/30">
+                <i class="fa-brands fa-whatsapp"></i>
+            </div>
+            <h3 class="font-cinzel text-base sm:text-lg font-bold text-onyx">Confirm Cash on Delivery</h3>
+            <p class="text-xs text-gray-500 mt-1 mb-4">
+                We sent a 4-digit code to your WhatsApp: <b id="otp-phone-display" class="text-onyx">+91 XXXXX XXXXX</b>
+            </p>
+
+            <div class="flex justify-center gap-2.5 mb-4">
+                <input type="text" id="otp-1" maxlength="1" onkeyup="handleOtpInput(this, 'otp-2', null)" class="w-11 h-12 text-center text-lg font-bold rounded-xl border border-gray-300 bg-sand focus:border-gold-500 focus:outline-none">
+                <input type="text" id="otp-2" maxlength="1" onkeyup="handleOtpInput(this, 'otp-3', 'otp-1')" class="w-11 h-12 text-center text-lg font-bold rounded-xl border border-gray-300 bg-sand focus:border-gold-500 focus:outline-none">
+                <input type="text" id="otp-3" maxlength="1" onkeyup="handleOtpInput(this, 'otp-4', 'otp-2')" class="w-11 h-12 text-center text-lg font-bold rounded-xl border border-gray-300 bg-sand focus:border-gold-500 focus:outline-none">
+                <input type="text" id="otp-4" maxlength="1" onkeyup="handleOtpInput(this, null, 'otp-3')" class="w-11 h-12 text-center text-lg font-bold rounded-xl border border-gray-300 bg-sand focus:border-gold-500 focus:outline-none">
+            </div>
+
+            <div id="otp-status-msg" class="text-xs font-semibold text-red-500 mb-3 hidden"></div>
+
+            <button id="btn-verify-otp" onclick="verifyWhatsAppOtp()" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs">
+                <span id="btn-verify-text">Verify & Confirm COD Order</span>
+            </button>
+
+            <div class="mt-3 flex items-center justify-between text-[11px] text-gray-500">
+                <button id="btn-resend-otp" onclick="resendWhatsAppOtp()" disabled class="hover:text-onyx font-semibold disabled:opacity-50">Resend Code (10s)</button>
+                <button onclick="closeWhatsAppOtpModal()" class="text-gray-400 hover:text-onyx">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+    <div id="success-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 w-full max-w-md border border-gold-300/40 shadow-2xl text-center max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center text-2xl mb-3 border border-emerald-300">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="font-cinzel text-lg sm:text-xl font-bold text-onyx">Order Placed Successfully!</h3>
+            <p class="text-xs text-gray-600 mt-1">Alhamdulillah, your order has been confirmed and booked for express courier dispatch.</p>
+            <div id="success-order-details" class="my-4 text-left bg-sand/60 p-3 rounded-xl border border-gold-200 text-xs space-y-1"></div>
+            <a href="index.html" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs mt-2">
+                <i class="fa-solid fa-house"></i>
+                <span>Return to Home & Store</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ERROR NOTIFICATION MODAL -->
+    <div id="error-feedback-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 w-full max-w-sm border border-red-300 shadow-2xl text-center" onclick="event.stopPropagation()">
+            <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 mx-auto flex items-center justify-center text-xl mb-3 border border-red-300">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="error-modal-title" class="font-bold text-base text-onyx">Notice</h3>
+            <p id="error-modal-message" class="text-xs text-gray-600 mt-1 mb-4 leading-relaxed"></p>
+            <button onclick="closeErrorFeedbackModal()" class="w-full bg-onyx hover:bg-gold-600 text-white font-bold py-2.5 rounded-xl text-xs transition-colors">
+                Okay, Understood
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-onyx text-pearl mt-8 py-6 px-4 border-t border-gold-500/30 text-center text-xs">
+        <div class="max-w-5xl mx-auto space-y-2">
+            <p class="text-gray-400 text-[11px]">Authentic Umrah Dua Cards & Sacred Prophetic Supplications • Designed with reverence</p>
+            <p class="text-gray-500 text-[10px]">© 2026 Fatima Calligrapher. All rights reserved. Pan-India Express Delivery.</p>
+        </div>
+    </footer>
+
+    <!-- PRODUCT CATALOG & CHECKOUT ENGINE SCRIPT -->
+    <script>
+        const catalogProducts = [
+            {
+                id: 1,
+                name: "Umrah Dua & Guide Cards (Urdu / اردو)",
+                category: "card",
+                language: "Urdu",
+                image: "product/umrah_card_urdu.webp",
+                badge: "CARD • URDU",
+                variants: [
+                    { sku: "fati_003", name: "Essential Pack (Cards + Tawaf Tasbih)", shortName: "Cards + Tawaf Tasbih", price: 491, oldPrice: 999, weightKg: 0.10, weight: "100gm" },
+                    { sku: "fati_002", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 589, oldPrice: 999, weightKg: 0.12, weight: "120gm" },
+                    { sku: "fati_001", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 999, weightKg: 0.15, weight: "150gm" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Umrah Dua & Guide Cards (English)",
+                category: "card",
+                language: "English",
+                image: "product/umrah_card_english.webp",
+                badge: "CARD • ENGLISH",
+                variants: [
+                    { sku: "fati_006", name: "Essential Pack (Cards + Tawaf Tasbih)", shortName: "Cards + Tawaf Tasbih", price: 491, oldPrice: 999, weightKg: 0.10, weight: "100gm" },
+                    { sku: "fati_005", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 589, oldPrice: 999, weightKg: 0.12, weight: "120gm" },
+                    { sku: "fati_004", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 999, weightKg: 0.15, weight: "150gm" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Umrah Dua & Guide Cards (Hindi / हिंदी)",
+                category: "card",
+                language: "Hindi",
+                image: "product/umrah_card_hindi.webp",
+                badge: "CARD • HINDI",
+                variants: [
+                    { sku: "fati_009", name: "Essential Pack (Cards + Tawaf Tasbih)", shortName: "Cards + Tawaf Tasbih", price: 491, oldPrice: 999, weightKg: 0.10, weight: "100gm" },
+                    { sku: "fati_008", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 589, oldPrice: 999, weightKg: 0.12, weight: "120gm" },
+                    { sku: "fati_007", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 999, weightKg: 0.15, weight: "150gm" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Umrah Dua & Guide Cards (Roman English)",
+                category: "card",
+                language: "Roman",
+                image: "product/umrah_card_roman.webp",
+                badge: "CARD • ROMAN",
+                variants: [
+                    { sku: "fati_012", name: "Essential Pack (Cards + Tawaf Tasbih)", shortName: "Cards + Tawaf Tasbih", price: 491, oldPrice: 999, weightKg: 0.10, weight: "100gm" },
+                    { sku: "fati_011", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 589, oldPrice: 999, weightKg: 0.12, weight: "120gm" },
+                    { sku: "fati_010", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 999, weightKg: 0.15, weight: "150gm" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Dua Sticker (English)",
+                category: "sticker",
+                language: "English",
+                image: "product/umrah_Sticker_English.webp",
+                badge: "STICKER • ENGLISH",
+                sku: "fati_stk_01",
+                price: 199,
+                weightKg: 0.03
+            },
+            {
+                id: 6,
+                name: "Dua Sticker (Hindi / हिंदी)",
+                category: "sticker",
+                language: "Hindi",
+                image: "product/umrah_Sticker_hindi.webp",
+                badge: "STICKER • HINDI",
+                sku: "fati_stk_02",
+                price: 199,
+                weightKg: 0.03
+            },
+            {
+                id: 7,
+                name: "Dua Sticker (Urdu / اردو)",
+                category: "sticker",
+                language: "Urdu",
+                image: "product/umrah_Sticker_Urdu.webp",
+                badge: "STICKER • URDU",
+                sku: "fati_stk_03",
+                price: 199,
+                weightKg: 0.03
+            }
+        ];
+
+        let checkoutCart = [];
+        let selectedPaymentMethod = 'cod';
+        let currentShippingFee = null;
+        let appliedCoupon = null;
+        let isProcessing = false;
+        let activeCodOrderPayload = null;
+        let pincodeDebounceTimer = null;
+
+        // META TRACKING HELPER
+        function trackMetaEvent(eventName, customData = {}, userData = {}) {
+            const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            if (typeof window.fbq === 'function') {
+                try {
+                    window.fbq('track', eventName, customData, { eventID: eventId });
+                } catch (e) {}
+            }
+            fetch('/api/meta/event', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    eventName,
+                    eventId,
+                    eventSourceUrl: window.location.href,
+                    userData,
+                    customData
+                })
+            }).catch(() => {});
+        }
+
+        // INITIALIZE CHECKOUT
+        document.addEventListener('DOMContentLoaded', () => {
+            initCartFromParamsOrStorage();
+            restoreCustomerDetails();
+            renderCheckoutSummary();
+
+            // Track InitiateCheckout
+            const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+            trackMetaEvent('InitiateCheckout', {
+                num_items: checkoutCart.reduce((s, i) => s + i.qty, 0),
+                value: subtotal,
+                currency: 'INR'
+            });
+
+            // Trigger Pincode Check if present
+            const pinVal = document.getElementById('cust-pincode').value.trim().replace(/\D/g, '');
+            if (pinVal.length === 6) {
+                checkLivePincode(pinVal);
+            }
+        });
+
+        function initCartFromParamsOrStorage() {
+            const params = new URLSearchParams(window.location.search);
+            const prodId = parseInt(params.get('id') || params.get('product'), 10);
+            const variantIdx = parseInt(params.get('variant'), 10);
+
+            if (prodId) {
+                // Direct product checkout parameter
+                const p = catalogProducts.find(prod => prod.id === prodId) || catalogProducts[1];
+                const hasVariants = p.variants && p.variants.length > 0;
+                const v = hasVariants ? (p.variants[!isNaN(variantIdx) ? variantIdx : 0] || p.variants[0]) : null;
+
+                checkoutCart = [{
+                    cartKey: v ? `${p.id}_${v.sku}` : `${p.id}_default`,
+                    id: p.id,
+                    name: p.name,
+                    sku: v ? v.sku : p.sku,
+                    variantName: v ? v.shortName : '',
+                    price: v ? v.price : p.price,
+                    image: p.image,
+                    weightKg: v ? v.weightKg : (p.weightKg || 0.10),
+                    qty: 1
+                }];
+                localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
+            } else {
+                // Restore from localStorage
+                try {
+                    const saved = localStorage.getItem('fc_cart_items');
+                    if (saved) checkoutCart = JSON.parse(saved);
+                } catch (e) {}
+
+                // If still empty, default to English Card Essential Pack (Rs. 491)
+                if (!Array.isArray(checkoutCart) || checkoutCart.length === 0) {
+                    const defProd = catalogProducts[1]; // English
+                    const defVar = defProd.variants[0]; // Essential 491
+                    checkoutCart = [{
+                        cartKey: `${defProd.id}_${defVar.sku}`,
+                        id: defProd.id,
+                        name: defProd.name,
+                        sku: defVar.sku,
+                        variantName: defVar.shortName,
+                        price: defVar.price,
+                        image: defProd.image,
+                        weightKg: defVar.weightKg,
+                        qty: 1
+                    }];
+                }
+            }
+        }
+
+        function restoreCustomerDetails() {
+            try {
+                const raw = localStorage.getItem('fc_customer_data');
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                if (data.name) document.getElementById('cust-name').value = data.name;
+                if (data.phone) document.getElementById('cust-phone').value = data.phone;
+                if (data.pincode) document.getElementById('cust-pincode').value = data.pincode;
+                if (data.city) document.getElementById('cust-city').value = data.city;
+                if (data.state) document.getElementById('cust-state').value = data.state;
+                if (data.address1) document.getElementById('cust-address1').value = data.address1;
+                if (data.address2) document.getElementById('cust-address2').value = data.address2;
+            } catch (e) {}
+        }
+
+        function saveCustomerDetails() {
+            const data = {
+                name: document.getElementById('cust-name').value.trim(),
+                phone: document.getElementById('cust-phone').value.trim(),
+                pincode: document.getElementById('cust-pincode').value.trim(),
+                city: document.getElementById('cust-city').value.trim(),
+                state: document.getElementById('cust-state').value.trim(),
+                address1: document.getElementById('cust-address1').value.trim(),
+                address2: document.getElementById('cust-address2').value.trim()
+            };
+            try {
+                localStorage.setItem('fc_customer_data', JSON.stringify(data));
+            } catch (e) {}
+        }
+
+        // RENDER CHECKOUT ITEMS & SUMMARY
+        function renderCheckoutSummary() {
+            const listEl = document.getElementById('checkout-items-list');
+            const countEl = document.getElementById('cart-item-count');
+            const subtotalEl = document.getElementById('summary-subtotal');
+            const shippingEl = document.getElementById('summary-shipping');
+            const totalEl = document.getElementById('summary-total');
+            const stickyTotalEl = document.getElementById('sticky-total-price');
+
+            const totalQty = checkoutCart.reduce((s, i) => s + i.qty, 0);
+            const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+
+            countEl.textContent = totalQty;
+            subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
+
+            // Shipping logic: Free above 999
+            let effectiveShipping = currentShippingFee;
+            if (subtotal >= 999 && currentShippingFee !== null) {
+                effectiveShipping = 0;
+            }
+
+            if (effectiveShipping === null || effectiveShipping === undefined) {
+                shippingEl.className = "font-semibold text-gray-500";
+                shippingEl.textContent = 'Enter Pincode';
+            } else if (effectiveShipping === 0) {
+                shippingEl.className = "font-extrabold text-emerald-700";
+                shippingEl.textContent = 'FREE Delivery';
+            } else {
+                shippingEl.className = "font-bold text-onyx";
+                shippingEl.textContent = `Rs. ${effectiveShipping.toFixed(2)}`;
+            }
+
+            // Coupon discount
+            let discountAmount = 0;
+            const discountRow = document.getElementById('summary-discount-row');
+            if (appliedCoupon && appliedCoupon.percent) {
+                discountAmount = (subtotal * appliedCoupon.percent) / 100;
+                discountRow.classList.remove('hidden');
+                document.getElementById('summary-discount').textContent = `-Rs. ${discountAmount.toFixed(2)}`;
+            } else {
+                discountRow.classList.add('hidden');
+            }
+
+            const activeFee = (effectiveShipping !== null && effectiveShipping !== undefined) ? effectiveShipping : 0;
+            const finalTotal = Math.max(0, subtotal - discountAmount + activeFee);
+
+            totalEl.textContent = `Rs. ${finalTotal.toFixed(2)}`;
+            stickyTotalEl.textContent = `Rs. ${finalTotal.toFixed(2)}`;
+
+            if (checkoutCart.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-6 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-2xl mb-1 text-gold-300"></i>
+                        <p class="text-xs">Your cart is empty.</p>
+                        <a href="index.html#products-grid" class="inline-block mt-2 text-xs font-bold text-gold-700 underline">Browse Products</a>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = checkoutCart.map(item => `
+                <div class="flex items-center justify-between p-2.5 bg-sand/30 rounded-xl border border-gray-200 gap-2.5">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <img src="${item.image}" alt="${item.name}" class="w-10 h-10 object-contain bg-white rounded-lg border border-gray-200 p-0.5 flex-shrink-0">
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-xs text-onyx truncate">${item.name}</h4>
+                            ${item.variantName ? `<div class="text-[10px] text-gold-700 font-semibold truncate">${item.variantName}</div>` : ''}
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="text-xs text-onyx font-extrabold">Rs. ${item.price}</span>
+                                <span class="text-[9px] font-mono bg-gray-100 px-1 rounded text-gray-500">SKU: ${item.sku}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                        <button type="button" onclick="updateItemQty('${item.cartKey}', -1)" class="w-5 h-5 rounded bg-white hover:bg-gray-200 border border-gray-300 text-onyx font-bold text-xs flex items-center justify-center">-</button>
+                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                        <button type="button" onclick="updateItemQty('${item.cartKey}', 1)" class="w-5 h-5 rounded bg-white hover:bg-gray-200 border border-gray-300 text-onyx font-bold text-xs flex items-center justify-center">+</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateItemQty(cartKey, delta) {
+            const item = checkoutCart.find(i => i.cartKey === cartKey);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) {
+                checkoutCart = checkoutCart.filter(i => i.cartKey !== cartKey);
+            }
+            localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
+            renderCheckoutSummary();
+        }
+
+        // PINCODE LIVE LOOKUP & SHIPPING CALCULATION
+        function handlePincodeChange(val) {
+            const clean = val.replace(/\D/g, '').slice(0, 6);
+            document.getElementById('cust-pincode').value = clean;
+            saveCustomerDetails();
+
+            clearTimeout(pincodeDebounceTimer);
+            if (clean.length === 6 && /^[1-9][0-9]{5}$/.test(clean)) {
+                pincodeDebounceTimer = setTimeout(() => {
+                    checkLivePincode(clean);
+                }, 250);
+            }
+        }
+
+        async function checkLivePincode(pincode) {
+            const spinner = document.getElementById('pincode-spinner');
+            const feedback = document.getElementById('pincode-feedback');
+            const cityInput = document.getElementById('cust-city');
+            const stateInput = document.getElementById('cust-state');
+
+            spinner.classList.remove('hidden');
+            feedback.classList.remove('hidden');
+            feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-gray-100 text-gray-600';
+            feedback.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking serviceability & courier rates...`;
+
+            try {
+                const totalWeightKg = checkoutCart.reduce((s, i) => s + ((i.weightKg || 0.10) * i.qty), 0) || 0.15;
+                const res = await fetch(`/api/shipments/serviceability?pincode=${pincode}&isCod=${selectedPaymentMethod === 'cod'}&weightKg=${totalWeightKg}`);
+                const data = await res.json();
+
+                spinner.classList.add('hidden');
+
+                if (data.success && data.data && data.data.serviceable) {
+                    if (data.data.city && (!cityInput.value || cityInput.value === '')) cityInput.value = data.data.city;
+                    if (data.data.state && (!stateInput.value || stateInput.value === '')) stateInput.value = data.data.state;
+
+                    currentShippingFee = data.data.shippingCharge || 0;
+                    feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200';
+                    feedback.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable to <b>${data.data.city || ''}, ${data.data.state || ''}</b></span>
+                            <span class="font-bold">${currentShippingFee === 0 ? 'FREE' : '₹' + currentShippingFee}</span>
+                        </div>
+                    `;
+                } else {
+                    currentShippingFee = 49;
+                    feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200';
+                    feedback.innerHTML = `<i class="fa-solid fa-truck text-amber-600 mr-1"></i> Express Courier Delivery: Standard ₹49`;
+                }
+            } catch (err) {
+                spinner.classList.add('hidden');
+                currentShippingFee = 49;
+                feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Cash on Delivery available across India`;
+            }
+
+            renderCheckoutSummary();
+        }
+
+        // PAYMENT METHOD SELECTOR
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = (method === 'razorpay') ? 'razorpay' : 'cod';
+            
+            const radioCod = document.getElementById('radio-cod');
+            const radioRzp = document.getElementById('radio-razorpay');
+            const labelCod = document.getElementById('payment-label-cod');
+            const labelRzp = document.getElementById('payment-label-razorpay');
+            const btnText = document.getElementById('btn-submit-text');
+            const stickyBtnText = document.getElementById('sticky-btn-text');
+
+            if (selectedPaymentMethod === 'cod') {
+                radioCod.checked = true;
+                radioRzp.checked = false;
+                labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-gold-500 bg-gold-50/80 ring-2 ring-gold-400/30 cursor-pointer transition-all shadow-xs";
+                labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-gold-300 bg-white hover:bg-gold-50/20 cursor-pointer transition-all";
+                btnText.textContent = "CONFIRM & PLACE ORDER (COD)";
+                stickyBtnText.textContent = "CONFIRM (COD)";
+            } else {
+                radioCod.checked = false;
+                radioRzp.checked = true;
+                labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-gold-500 bg-gold-50/80 ring-2 ring-gold-400/30 cursor-pointer transition-all shadow-xs";
+                labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-gold-300 bg-white hover:bg-gold-50/20 cursor-pointer transition-all";
+                btnText.textContent = "PAY SECURELY VIA RAZORPAY (ONLINE)";
+                stickyBtnText.textContent = "PAY ONLINE";
+            }
+        }
+
+        // COUPON LOGIC
+        function applyCouponCode() {
+            const input = document.getElementById('coupon-input');
+            const feedback = document.getElementById('coupon-feedback');
+            const code = input.value.trim().toUpperCase();
+
+            if (!code) return;
+
+            const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+
+            if (code === 'RAB112') {
+                if (subtotal < 999) {
+                    feedback.classList.remove('hidden');
+                    feedback.className = "text-[10px] mt-1 font-semibold text-rose-600";
+                    feedback.textContent = "Coupon RAB112 is valid on orders above ₹999.";
+                    return;
+                }
+                appliedCoupon = { code: 'RAB112', percent: 12 };
+                feedback.classList.remove('hidden');
+                feedback.className = "text-[10px] mt-1 font-semibold text-emerald-600";
+                feedback.textContent = "✓ 12% Special Discount applied successfully!";
+            } else {
+                feedback.classList.remove('hidden');
+                feedback.className = "text-[10px] mt-1 font-semibold text-rose-600";
+                feedback.textContent = "Invalid coupon code.";
+                appliedCoupon = null;
+            }
+            renderCheckoutSummary();
+        }
+
+        // HANDLE FORM SUBMIT
+        async function handleCheckoutSubmit(e) {
+            e.preventDefault();
+
+            if (isProcessing) return;
+            saveCustomerDetails();
+
+            const name = document.getElementById('cust-name').value.trim();
+            const rawPhone = document.getElementById('cust-phone').value.trim();
+            const phone = rawPhone.replace(/\D/g, '');
+            const pincode = document.getElementById('cust-pincode').value.trim();
+            const city = document.getElementById('cust-city').value.trim();
+            const state = document.getElementById('cust-state').value.trim();
+            const address1 = document.getElementById('cust-address1').value.trim();
+            const address2 = document.getElementById('cust-address2').value.trim();
+
+            if (!name || name.length < 2) return showErrorModal("Invalid Name", "Please enter your full name.");
+            if (!phone || phone.length !== 10) return showErrorModal("Invalid Mobile Number", "Please enter a valid 10-digit Indian mobile number.");
+            if (!pincode || pincode.length !== 6 || !/^[1-9][0-9]{5}$/.test(pincode)) return showErrorModal("Invalid Pincode", "Please enter a valid 6-digit Indian delivery pincode.");
+            if (!address1 || address1.length < 5) return showErrorModal("Incomplete Address", "Please enter your full house/flat number, building, and street address.");
+
+            if (checkoutCart.length === 0) return showErrorModal("Cart Empty", "Please add at least one item to your cart.");
+
+            const customer = { name, phone, pincode, city, state, address1, address2 };
+            const items = checkoutCart.map(i => ({
+                productId: i.id,
+                sku: i.sku,
+                quantity: i.qty
+            }));
+
+            // COD FLOW: Trigger WhatsApp OTP First
+            if (selectedPaymentMethod === 'cod') {
+                activeCodOrderPayload = {
+                    customer,
+                    items,
+                    paymentMethod: 'cod',
+                    couponCode: appliedCoupon ? appliedCoupon.code : null
+                };
+                triggerWhatsAppOtp(phone);
+                return;
+            }
+
+            // ONLINE RAZORPAY FLOW
+            initiateOnlineRazorpayOrder(customer, items);
+        }
+
+        // RAZORPAY ORDER FLOW
+        async function initiateOnlineRazorpayOrder(customer, items) {
+            setSubmitButtonLoading(true);
+            try {
+                const res = await fetch('/api/orders/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer,
+                        items,
+                        paymentMethod: 'razorpay',
+                        couponCode: appliedCoupon ? appliedCoupon.code : null
+                    })
+                });
+
+                const orderData = await res.json();
+                if (!orderData.success) {
+                    throw new Error(orderData.error?.message || 'Could not initiate online payment order.');
+                }
+
+                const rzpDetails = orderData.data;
+
+                const options = {
+                    key: rzpDetails.razorpayKeyId,
+                    amount: rzpDetails.amount,
+                    currency: rzpDetails.currency || 'INR',
+                    name: 'Fatima Calligrapher',
+                    description: `Order #${rzpDetails.orderId}`,
+                    order_id: rzpDetails.razorpayOrderId,
+                    prefill: {
+                        name: customer.name,
+                        contact: customer.phone,
+                        email: customer.email || `${customer.phone}@fatimacalligrapher.com`
+                    },
+                    theme: { color: '#D4AF37' },
+                    handler: async function (response) {
+                        try {
+                            const verifyRes = await fetch('/api/payments/verify', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    orderId: rzpDetails.orderId,
+                                    razorpayOrderId: response.razorpay_order_id,
+                                    razorpayPaymentId: response.razorpay_payment_id,
+                                    razorpaySignature: response.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyRes.json();
+                            if (verifyData.success) {
+                                onOrderSuccess(verifyData.data || { orderId: rzpDetails.orderId, pricing: rzpDetails.pricing, customer });
+                            } else {
+                                showErrorModal("Payment Verification Failed", verifyData.error?.message || "Please contact support with your payment ID.");
+                            }
+                        } catch (vErr) {
+                            showErrorModal("Verification Error", vErr.message);
+                        }
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            setSubmitButtonLoading(false);
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (resp) {
+                    showErrorModal("Payment Failed", resp.error.description || "The payment transaction could not be completed.");
+                    setSubmitButtonLoading(false);
+                });
+                rzp.open();
+            } catch (err) {
+                setSubmitButtonLoading(false);
+                showErrorModal("Checkout Error", err.message);
+            }
+        }
+
+        // WHATSAPP OTP FUNCTIONS
+        async function triggerWhatsAppOtp(phone) {
+            setSubmitButtonLoading(true);
+            const statusMsg = document.getElementById('otp-status-msg');
+            statusMsg.classList.add('hidden');
+            document.getElementById('otp-phone-display').textContent = `+91 ${phone}`;
+
+            try {
+                const res = await fetch('/api/orders/send-cod-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone })
+                });
+
+                const data = await res.json();
+                setSubmitButtonLoading(false);
+
+                if (data.success) {
+                    document.getElementById('whatsapp-otp-modal').classList.remove('hidden');
+                    document.getElementById('otp-1').focus();
+                    startOtpResendCountdown(15);
+                } else {
+                    showErrorModal("OTP Error", data.error?.message || "Could not send OTP code to WhatsApp.");
+                }
+            } catch (err) {
+                setSubmitButtonLoading(false);
+                showErrorModal("Network Error", "Could not reach verification server. Please try again.");
+            }
+        }
+
+        function handleOtpInput(current, nextId, prevId) {
+            if (current.value.length >= 1 && nextId) {
+                document.getElementById(nextId).focus();
+            }
+        }
+
+        async function verifyWhatsAppOtp() {
+            const o1 = document.getElementById('otp-1').value;
+            const o2 = document.getElementById('otp-2').value;
+            const o3 = document.getElementById('otp-3').value;
+            const o4 = document.getElementById('otp-4').value;
+            const otpCode = `${o1}${o2}${o3}${o4}`.trim();
+
+            const statusMsg = document.getElementById('otp-status-msg');
+            const verifyBtn = document.getElementById('btn-verify-otp');
+            const btnText = document.getElementById('btn-verify-text');
+
+            if (otpCode.length !== 4) {
+                statusMsg.textContent = "Please enter the complete 4-digit code.";
+                statusMsg.classList.remove('hidden');
+                return;
+            }
+
+            statusMsg.classList.add('hidden');
+            verifyBtn.disabled = true;
+            btnText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying...`;
+
+            try {
+                const res = await fetch('/api/orders/verify-cod-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        phone: activeCodOrderPayload.customer.phone,
+                        otp: otpCode
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success && data.verificationToken) {
+                    // Create COD Order with valid verified token
+                    btnText.innerHTML = `<i class="fa-solid fa-check"></i> Booking Shipment...`;
+                    createVerifiedCodOrder(data.verificationToken);
+                } else {
+                    verifyBtn.disabled = false;
+                    btnText.textContent = "Verify & Confirm COD Order";
+                    statusMsg.textContent = data.error?.message || "Invalid OTP code. Please try again.";
+                    statusMsg.classList.remove('hidden');
+                }
+            } catch (err) {
+                verifyBtn.disabled = false;
+                btnText.textContent = "Verify & Confirm COD Order";
+                statusMsg.textContent = "Could not verify code. Please check your internet connection.";
+                statusMsg.classList.remove('hidden');
+            }
+        }
+
+        async function createVerifiedCodOrder(verificationToken) {
+            try {
+                const res = await fetch('/api/orders/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...activeCodOrderPayload,
+                        verificationToken
+                    })
+                });
+
+                const data = await res.json();
+                closeWhatsAppOtpModal();
+
+                if (data.success) {
+                    onOrderSuccess(data.data);
+                } else {
+                    showErrorModal("Order Creation Error", data.error?.message || "Could not confirm COD order.");
+                }
+            } catch (err) {
+                closeWhatsAppOtpModal();
+                showErrorModal("Server Error", "An error occurred while confirming your order.");
+            }
+        }
+
+        function startOtpResendCountdown(seconds) {
+            const resendBtn = document.getElementById('btn-resend-otp');
+            resendBtn.disabled = true;
+            let left = seconds;
+            const timer = setInterval(() => {
+                left -= 1;
+                resendBtn.textContent = `Resend Code (${left}s)`;
+                if (left <= 0) {
+                    clearInterval(timer);
+                    resendBtn.disabled = false;
+                    resendBtn.textContent = "Resend Code";
+                }
+            }, 1000);
+        }
+
+        function resendWhatsAppOtp() {
+            if (activeCodOrderPayload) {
+                triggerWhatsAppOtp(activeCodOrderPayload.customer.phone);
+            }
+        }
+
+        function closeWhatsAppOtpModal() {
+            document.getElementById('whatsapp-otp-modal').classList.add('hidden');
+            setSubmitButtonLoading(false);
+        }
+
+        // ORDER SUCCESS HANDLER
+        function onOrderSuccess(orderData) {
+            // Track Meta Pixel Purchase
+            const val = orderData.pricing ? orderData.pricing.total : (orderData.amount ? orderData.amount / 100 : 0);
+            trackMetaEvent('Purchase', {
+                value: val,
+                currency: 'INR',
+                order_id: orderData.orderId
+            });
+
+            // Clear Cart
+            checkoutCart = [];
+            localStorage.removeItem('fc_cart_items');
+
+            // Render Success Box
+            const detailsEl = document.getElementById('success-order-details');
+            detailsEl.innerHTML = `
+                <div><b>Order ID:</b> <span class="font-mono text-indigo-700 font-bold">${orderData.orderId}</span></div>
+                <div><b>Payment:</b> ${orderData.payment?.provider === 'COD' || selectedPaymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
+                <div><b>Total Amount:</b> <span class="font-bold text-onyx">Rs. ${orderData.pricing?.total || val}</span></div>
+                ${orderData.shipping?.awb ? `<div><b>Shiprocket AWB:</b> <span class="font-mono">${orderData.shipping.awb}</span></div>` : ''}
+                <div class="text-[10px] text-gray-500 pt-1 border-t border-gold-200">Confirmation SMS & WhatsApp dispatched.</div>
+            `;
+
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+
+        // UI HELPERS
+        function setSubmitButtonLoading(isLoading) {
+            isProcessing = isLoading;
+            const btn = document.getElementById('btn-submit-order');
+            const btnText = document.getElementById('btn-submit-text');
+            if (isLoading) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75');
+                btnText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-75');
+                selectPaymentMethod(selectedPaymentMethod);
+            }
+        }
+
+        function showErrorModal(title, msg) {
+            document.getElementById('error-modal-title').textContent = title;
+            document.getElementById('error-modal-message').textContent = msg;
+            document.getElementById('error-feedback-modal').classList.remove('hidden');
+        }
+
+        function closeErrorFeedbackModal() {
+            document.getElementById('error-feedback-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
