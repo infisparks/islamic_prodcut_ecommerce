@@ -774,40 +774,77 @@
 
             spinner.classList.remove('hidden');
             feedback.classList.remove('hidden');
-            feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-gray-100 text-gray-600';
-            feedback.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking serviceability & courier rates...`;
+            feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-gold-50 text-onyx border border-gold-300/60';
+            feedback.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gold-600 mr-1.5"></i> Checking Shiprocket rates & serviceability...`;
 
             try {
                 const totalWeightKg = checkoutCart.reduce((s, i) => s + ((i.weightKg || 0.10) * i.qty), 0) || 0.15;
-                const res = await fetch(`/api/shipments/serviceability?pincode=${pincode}&isCod=${selectedPaymentMethod === 'cod'}&weightKg=${totalWeightKg}`);
+                const isCod = selectedPaymentMethod === 'cod';
+                
+                // 1. Check backend Shiprocket serviceability
+                const res = await fetch(`/api/shipments/serviceability?pincode=${pincode}&isCod=${isCod}&cod=${isCod}&weightKg=${totalWeightKg}`);
                 const data = await res.json();
 
                 spinner.classList.add('hidden');
 
-                if (data.success && data.data && data.data.serviceable) {
-                    if (data.data.city && (!cityInput.value || cityInput.value === '')) cityInput.value = data.data.city;
-                    if (data.data.state && (!stateInput.value || stateInput.value === '')) stateInput.value = data.data.state;
+                const isServiceable = data.success && data.data && (data.data.serviceable || data.data.isServiceable);
+                
+                if (isServiceable) {
+                    const info = data.data;
+                    let city = info.city || '';
+                    let state = info.state || '';
 
-                    currentShippingFee = data.data.shippingCharge || 0;
-                    feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200';
+                    // Auto-fill City & State
+                    if (city && (!cityInput.value || cityInput.value === '')) cityInput.value = city;
+                    if (state && (!stateInput.value || stateInput.value === '')) stateInput.value = state;
+
+                    // If city or state still missing, fetch from Indian Postal API
+                    if (!cityInput.value || !stateInput.value) {
+                        fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+                            .then(r => r.json())
+                            .then(pData => {
+                                if (pData && pData[0] && pData[0].PostOffice && pData[0].PostOffice[0]) {
+                                    const po = pData[0].PostOffice[0];
+                                    if (!cityInput.value) cityInput.value = po.District || po.Taluk || po.Name;
+                                    if (!stateInput.value) stateInput.value = po.State;
+                                    saveCustomerDetails();
+                                }
+                            }).catch(() => {});
+                    }
+
+                    currentShippingFee = typeof info.shippingCharge === 'number' ? info.shippingCharge : 49;
+                    const courierName = info.deliveryType || (info.couriers && info.couriers[0]) || 'Express Courier';
+                    const etd = info.estimatedDays || '3-5 Days';
+
+                    feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <span><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable to <b>${data.data.city || ''}, ${data.data.state || ''}</b></span>
-                            <span class="font-bold">${currentShippingFee === 0 ? 'FREE' : '₹' + currentShippingFee}</span>
+                        <div class="flex items-center justify-between gap-1 flex-wrap">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                                <span><b>${cityInput.value || city || 'Serviceable'}</b> (${etd})</span>
+                            </span>
+                            <span class="font-black text-emerald-700">${currentShippingFee === 0 ? 'FREE' : '₹' + currentShippingFee}</span>
                         </div>
+                        <div class="text-[10px] text-emerald-700 mt-0.5">${courierName} • Cash on Delivery Available</div>
                     `;
                 } else {
                     currentShippingFee = 49;
-                    feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200';
-                    feedback.innerHTML = `<i class="fa-solid fa-truck text-amber-600 mr-1"></i> Express Courier Delivery: Standard ₹49`;
+                    feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
+                    feedback.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span><i class="fa-solid fa-truck-fast text-emerald-600 mr-1"></i> Pan-India Express Delivery</span>
+                            <span class="font-bold text-emerald-700">₹49</span>
+                        </div>
+                    `;
                 }
             } catch (err) {
                 spinner.classList.add('hidden');
                 currentShippingFee = 49;
-                feedback.className = 'mt-1 text-[11px] font-medium p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200';
-                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Cash on Delivery available across India`;
+                feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (Standard ₹49)`;
             }
 
+            saveCustomerDetails();
             renderCheckoutSummary();
         }
 

@@ -214,6 +214,7 @@ const shiprocketService = {
 
               return {
                 isServiceable: true,
+                serviceable: true,
                 pincode: cleanPincode,
                 city: locationInfo.city,
                 state: locationInfo.state,
@@ -231,6 +232,7 @@ const shiprocketService = {
 
           return {
             isServiceable: false,
+            serviceable: false,
             pincode: cleanPincode,
             city: locationInfo.city,
             state: locationInfo.state,
@@ -241,12 +243,19 @@ const shiprocketService = {
           console.log(`❌ Shiprocket API Error [${apiErr.response?.status || '500'}]:`, errorMsg);
           console.log('=============================================================\n');
 
+          // Fallback to zone calculated rate
+          const fallbackCharge = calculateShippingCharge(cleanPincode, weight);
           return {
-            isServiceable: false,
+            isServiceable: true,
+            serviceable: true,
             pincode: cleanPincode,
             city: locationInfo.city,
             state: locationInfo.state,
-            message: `Shiprocket serviceability error: ${errorMsg}`
+            shippingCharge: fallbackCharge,
+            estimatedDays: '3-5 Business Days',
+            codAvailable: true,
+            couriers: ['Delhivery Surface', 'BlueDart Express'],
+            deliveryType: 'Express Courier Partner'
           };
         }
       }
@@ -258,6 +267,7 @@ const shiprocketService = {
 
       return {
         isServiceable: true,
+        serviceable: true,
         pincode: cleanPincode,
         city: locationInfo.city,
         state: locationInfo.state,

@@ -12,7 +12,7 @@ const logger = require('../utils/logger');
  */
 router.get('/serviceability', async (req, res, next) => {
   try {
-    const { pincode, cod, weight } = req.query;
+    const { pincode, cod, isCod, weight, weightKg } = req.query;
     if (!pincode) {
       return res.status(400).json({
         success: false,
@@ -23,10 +23,10 @@ router.get('/serviceability', async (req, res, next) => {
       });
     }
 
-    const isCod = cod === 'true' || cod === '1';
-    const parsedWeight = parseFloat(weight) || 0.5;
+    const codFlag = isCod === 'true' || isCod === '1' || cod === 'true' || cod === '1';
+    const parsedWeight = parseFloat(weightKg || weight) || 0.15;
 
-    const result = await shiprocketService.checkServiceability(pincode, isCod, parsedWeight);
+    const result = await shiprocketService.checkServiceability(pincode, codFlag, parsedWeight);
 
     res.json({
       success: true,
