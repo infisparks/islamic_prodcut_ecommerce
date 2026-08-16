@@ -184,7 +184,7 @@ app.get('/checkout', (req, res) => {
   res.sendFile(path.join(rootDir, 'checkout.html'));
 });
 
-app.get('/admin', (req, res) => {
+app.get(['/admin.html', '/admin'], (req, res) => {
   res.sendFile(path.join(rootDir, 'admin.html'));
 });
 

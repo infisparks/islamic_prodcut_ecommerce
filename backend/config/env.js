@@ -1,8 +1,11 @@
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Load environment variables from .env file
+// Load environment variables from .env file across multiple potential locations
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config();
 
 const config = {
   port: parseInt(process.env.PORT, 10) || 3000,
