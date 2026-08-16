@@ -107,27 +107,33 @@ router.post('/verify-cod-otp', async (req, res, next) => {
       });
     }
 
-    if (record.attempts >= 3) {
+    if (record.attempts >= 10) {
       return res.status(400).json({
         success: false,
         error: {
           code: 'MAX_ATTEMPTS_EXCEEDED',
-          message: 'Maximum 3 incorrect attempts reached. Please click Resend OTP.'
+          message: 'Maximum 10 attempts exceeded. Please click Resend Code to receive a new OTP.'
         }
       });
     }
 
     if (record.otp !== cleanOtp) {
       record.attempts += 1;
-      const attemptsLeft = 3 - record.attempts;
+      const attemptsLeft = 10 - record.attempts;
+      
+      let message = 'Incorrect OTP code. Please check your WhatsApp.';
+      if (attemptsLeft <= 0) {
+        message = 'Maximum 10 attempts exceeded. Please click Resend Code to receive a new OTP.';
+      } else if (attemptsLeft <= 3) {
+        message = `⚠️ Warning: Incorrect OTP! Only ${attemptsLeft} attempt(s) remaining before lock.`;
+      }
+
       return res.status(400).json({
         success: false,
         attemptsLeft,
         error: {
           code: 'INVALID_OTP',
-          message: record.attempts >= 3
-            ? 'Maximum 3 attempts exceeded. Please click Resend OTP.'
-            : `Invalid OTP code. You have ${attemptsLeft} attempt(s) remaining.`
+          message
         }
       });
     }
