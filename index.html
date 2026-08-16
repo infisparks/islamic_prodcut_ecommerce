@@ -1633,14 +1633,14 @@
                 const oldPrice = hasVariants ? p.variants[0].oldPrice : p.oldPrice;
 
                 return `
-                <div onclick="quickView(${p.id})" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group cursor-pointer">
+                <div onclick="window.location.href='product.html?id=${p.id}'" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group cursor-pointer">
                     <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100 overflow-hidden rounded-t-2xl">
                         <span class="absolute top-2.5 left-2.5 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shadow-xs">
                             ${p.badge}
                         </span>
 
                         <!-- Watch Video Badge Button -->
-                        <button onclick="event.stopPropagation(); quickView(${p.id}, 'video');" class="absolute top-2.5 right-2.5 z-20 bg-onyx/90 hover:bg-gold-500 hover:text-onyx text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-gold-500/40 shadow-sm transition-all active:scale-95">
+                        <button onclick="event.stopPropagation(); window.location.href='product.html?id=${p.id}&media=video';" class="absolute top-2.5 right-2.5 z-20 bg-onyx/90 hover:bg-gold-500 hover:text-onyx text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-gold-500/40 shadow-sm transition-all active:scale-95">
                             <i class="fa-solid fa-circle-play text-gold-400"></i>
                             <span>Video</span>
                         </button>
@@ -1678,7 +1678,7 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-1.5">
-                                <button onclick="event.stopPropagation(); quickView(${p.id});" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 transition-all border border-gray-300">
+                                <button onclick="event.stopPropagation(); window.location.href='product.html?id=${p.id}';" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 transition-all border border-gray-300">
                                     <i class="fa-solid fa-sliders text-[9px]"></i> ${hasVariants ? 'Options' : 'View'}
                                 </button>
                                 <button onclick="event.stopPropagation(); quickAddToCartOrBuy(${p.id});" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
@@ -1748,33 +1748,12 @@
             return items;
         }
 
-        function quickView(id, targetType = 'image', targetIndex = 0, initialVariantIndex = 0) {
-            const p = products.find(prod => prod.id === id);
-            if (!p) return;
-
-            currentQuickViewProduct = p;
-            currentSelectedVariant = initialVariantIndex;
-            currentZoom = 1;
-            currentPanX = 0;
-            currentPanY = 0;
-
-            const mediaList = getMediaItems(p);
+        function quickView(id, targetType = 'image') {
             if (targetType === 'video') {
-                const vIdx = mediaList.findIndex(m => m.type === 'video');
-                currentSlideIndex = vIdx >= 0 ? vIdx : 1;
+                window.location.href = `product.html?id=${id}&media=video`;
             } else {
-            currentSlideIndex = Math.min(targetIndex, mediaList.length - 1);
+                window.location.href = `product.html?id=${id}`;
             }
-
-            trackMetaEvent('ViewContent', {
-                content_name: p.name,
-                content_ids: [p.id],
-                value: p.price,
-                currency: 'INR'
-            });
-
-            renderQuickViewModalContent();
-            document.getElementById('quickview-modal').classList.remove('hidden');
         }
 
         function selectProductVariant(variantIndex) {
@@ -2197,8 +2176,7 @@
             if (!product) return;
             
             if (product.variants && product.variants.length > 0) {
-                // Open quick view with options for user to select kit
-                quickView(productId);
+                window.location.href = `product.html?id=${productId}&buy=1`;
             } else {
                 buyNow(productId, 0);
             }
@@ -4029,6 +4007,13 @@
         window.addEventListener('scroll', checkOfferPopupScroll, { passive: true });
 
         document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const directProdId = urlParams.get('id') || urlParams.get('product') || urlParams.get('p');
+            if (directProdId) {
+                window.location.replace(`product.html?id=${directProdId}${urlParams.get('buy') === '1' ? '&buy=1' : ''}`);
+                return;
+            }
+
             renderProducts('all');
             renderDuas('all');
             restoreCustomerDetailsFromStorage();

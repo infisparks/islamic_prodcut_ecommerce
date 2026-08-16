@@ -165,6 +165,17 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(rootDir, 'index.html'));
 });
 
+app.get('/product.html', (req, res) => {
+  res.sendFile(path.join(rootDir, 'product.html'));
+});
+
+app.get('/product', (req, res, next) => {
+  if (req.accepts('html') || req.query.id || req.query.product) {
+    return res.sendFile(path.join(rootDir, 'product.html'));
+  }
+  next();
+});
+
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(rootDir, 'admin.html'));
 });
