@@ -55,11 +55,13 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1565922841643245');
+    fbq('init', '1357608825828557');
     fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1565922841643245&ev=PageView&noscript=1"
-    /></noscript>
+    <noscript>
+        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1565922841643245&ev=PageView&noscript=1"/>
+        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1357608825828557&ev=PageView&noscript=1"/>
+    </noscript>
     <!-- End Meta Pixel Code -->
     
     <script>
@@ -1545,6 +1547,11 @@
         let isDraggingImage = false;
         let startX = 0, startY = 0, currentPanX = 0, currentPanY = 0;
 
+        function getMetaCookie(name) {
+            const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+            return match ? decodeURIComponent(match[3]) : undefined;
+        }
+
         /**
          * Global Meta Tracking function (Browser Meta Pixel + Server Meta Conversions API (CAPI))
          * Uses eventID deduplication so Meta counts exactly 1 event instead of double-counting.
@@ -1552,6 +1559,12 @@
         function trackMetaEvent(eventName, customData = {}, userData = {}) {
             const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
             
+            const enrichedUserData = {
+                fbp: userData.fbp || getMetaCookie('_fbp'),
+                fbc: userData.fbc || getMetaCookie('_fbc'),
+                ...userData
+            };
+
             // 1. Fire Browser Meta Pixel Event with eventID
             if (typeof window.fbq === 'function') {
                 try {
@@ -1569,7 +1582,7 @@
                     eventName: eventName,
                     eventId: eventId,
                     eventSourceUrl: window.location.href,
-                    userData: userData,
+                    userData: enrichedUserData,
                     customData: customData
                 })
             }).then(res => res.json()).then(data => {
