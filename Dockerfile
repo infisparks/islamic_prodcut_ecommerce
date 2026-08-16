@@ -14,8 +14,10 @@ COPY package*.json ./
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy application source code and assets
-COPY index.html admin.html database.rules.json ./
+COPY *.html database.rules.json ./
 COPY product ./product
+COPY video ./video
+COPY hero* ./
 COPY backend ./backend
 
 # Use non-root node user for container security
