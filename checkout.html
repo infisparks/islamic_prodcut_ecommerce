@@ -296,16 +296,24 @@
                     <!-- Items List Container -->
                     <div id="checkout-items-list" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
 
-                    <!-- Coupon Code Input -->
+                    <!-- Collapsible Coupon Code Toggle -->
                     <div class="mt-3.5 pt-3 border-t border-gray-100">
-                        <div class="flex items-center gap-1.5">
-                            <input type="text" id="coupon-input" placeholder="Coupon Code (e.g. RAB112)" 
-                                class="flex-1 px-3 py-2 bg-sand/30 border border-gray-300 rounded-xl text-xs uppercase font-mono font-bold focus:bg-white focus:outline-none focus:border-gold-500">
-                            <button type="button" onclick="applyCouponCode()" class="px-3.5 py-2 bg-onyx hover:bg-gold-600 text-gold-400 hover:text-onyx font-bold text-xs rounded-xl transition-all shadow-xs">
-                                Apply
-                            </button>
+                        <button type="button" onclick="toggleCouponInput()" id="coupon-toggle-btn" class="w-full flex items-center gap-1.5 text-[11.5px] font-bold text-gold-700 hover:text-gold-800 transition-colors cursor-pointer group py-0.5">
+                            <i class="fa-solid fa-tag text-[11px] text-gold-600 group-hover:scale-110 transition-transform"></i>
+                            <span>Have a Coupon / Promo Code?</span>
+                            <i id="coupon-chevron" class="fa-solid fa-chevron-down text-[9px] text-gray-400 ml-auto group-hover:text-gold-600 transition-transform"></i>
+                        </button>
+
+                        <div id="coupon-box" class="hidden mt-2">
+                            <div class="flex items-center gap-1.5">
+                                <input type="text" id="coupon-input" placeholder="Enter Code (e.g. RAB112)" 
+                                    class="flex-1 px-3 py-2 bg-sand/30 border border-gray-300 rounded-xl text-xs uppercase font-mono font-bold focus:bg-white focus:outline-none focus:border-gold-500 placeholder-gray-400">
+                                <button type="button" onclick="applyCouponCode()" class="px-3.5 py-2 bg-onyx hover:bg-gold-600 text-gold-400 hover:text-onyx font-bold text-xs rounded-xl transition-all shadow-xs cursor-pointer">
+                                    Apply
+                                </button>
+                            </div>
+                            <div id="coupon-feedback" class="hidden text-[10px] mt-1.5 font-semibold"></div>
                         </div>
-                        <div id="coupon-feedback" class="hidden text-[10px] mt-1 font-semibold"></div>
                     </div>
 
                     <!-- Pricing Breakdown -->
@@ -877,6 +885,21 @@
         }
 
         // COUPON LOGIC
+        function toggleCouponInput() {
+            const box = document.getElementById('coupon-box');
+            const chevron = document.getElementById('coupon-chevron');
+            const isHidden = box.classList.contains('hidden');
+            if (isHidden) {
+                box.classList.remove('hidden');
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+                const input = document.getElementById('coupon-input');
+                if (input) input.focus();
+            } else {
+                box.classList.add('hidden');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
         function applyCouponCode() {
             const input = document.getElementById('coupon-input');
             const feedback = document.getElementById('coupon-feedback');
