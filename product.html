@@ -214,49 +214,6 @@
                     </button>
                 </div>
 
-                <!-- Thumbnail Carousel -->
-                <div id="pdp-thumbnails-strip" class="flex items-center gap-2.5 overflow-x-auto pb-1"></div>
-
-                <!-- Trust Badges List -->
-                <div class="bg-white rounded-2xl p-4 border border-gray-200 shadow-xs grid grid-cols-2 gap-3 text-xs">
-                    <div class="flex items-start gap-2.5">
-                        <div class="w-8 h-8 rounded-xl bg-gold-50 text-gold-700 flex items-center justify-center flex-shrink-0 border border-gold-200 text-sm">
-                            <i class="fa-solid fa-droplet-slash"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-onyx text-xs">100% Waterproof</div>
-                            <div class="text-[10px] text-gray-500">Premium heavy laminated cards</div>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 border border-emerald-200 text-sm">
-                            <i class="fa-solid fa-truck-fast"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-onyx text-xs">Cash on Delivery</div>
-                            <div class="text-[10px] text-gray-500">Pay cash at your doorstep</div>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                        <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center flex-shrink-0 border border-purple-200 text-sm">
-                            <i class="fa-solid fa-ring"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-onyx text-xs">Tasbih Counter Free</div>
-                            <div class="text-[10px] text-gray-500">Free Tawaf 7-bead tasbih</div>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-2.5">
-                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 border border-blue-200 text-sm">
-                            <i class="fa-solid fa-book-quran"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-onyx text-xs">Authentic Sunnah</div>
-                            <div class="text-[10px] text-gray-500">Authentic Hadith references</div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             <!-- RIGHT COLUMN: PRODUCT DETAILS & BUY ACTIONS (lg:col-span-6) -->
@@ -327,6 +284,46 @@
 
                         <!-- Inclusions Checklist Box -->
                         <div id="pdp-inclusions-box" class="mt-3 pt-2.5 border-t border-gray-200"></div>
+                    </div>
+
+                    <!-- TRUST & QUALITY GUARANTEE BADGES -->
+                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 border border-gray-200 shadow-xs grid grid-cols-2 gap-2.5 sm:gap-3 text-xs mb-4">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-gold-50 text-gold-700 flex items-center justify-center flex-shrink-0 border border-gold-200 text-sm">
+                                <i class="fa-solid fa-droplet-slash"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">100% Waterproof</div>
+                                <div class="text-[10px] text-gray-500">Premium laminated cards</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 border border-emerald-200 text-sm">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Cash on Delivery</div>
+                                <div class="text-[10px] text-gray-500">Pay cash at your doorstep</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center flex-shrink-0 border border-purple-200 text-sm">
+                                <i class="fa-solid fa-ring"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Tasbih Counter Free</div>
+                                <div class="text-[10px] text-gray-500">Free Tawaf 7-bead tasbih</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 border border-blue-200 text-sm">
+                                <i class="fa-solid fa-book-quran"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Authentic Sunnah</div>
+                                <div class="text-[10px] text-gray-500">Authentic Hadith references</div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- PINCODE SERVICEABILITY CHECKER WIDGET -->
@@ -1242,21 +1239,6 @@
                 mainImg.src = activeMedia.url;
                 mainImg.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
             }
-
-            // Render Thumbnails
-            const strip = document.getElementById('pdp-thumbnails-strip');
-            strip.innerHTML = mediaList.map((m, idx) => `
-                <button onclick="setPdpMediaSlide(${idx})" class="relative flex-shrink-0 w-16 h-16 sm:w-18 sm:h-18 rounded-2xl overflow-hidden border-2 transition-all p-1 bg-sand/40 ${idx === currentMediaIndex ? 'border-gold-500 ring-2 ring-gold-400/40 scale-105 shadow-md' : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'}">
-                    ${m.type === 'image' ? `
-                        <img src="${m.url}" class="w-full h-full object-contain rounded-xl">
-                    ` : `
-                        <div class="w-full h-full bg-onyx rounded-xl flex flex-col items-center justify-center text-gold-400 text-[10px] gap-0.5 border border-gold-500/30">
-                            <i class="fa-solid fa-circle-play text-base text-gold-500 animate-pulse"></i>
-                            <span class="text-[8px] font-extrabold uppercase text-white tracking-wide">Video</span>
-                        </div>
-                    `}
-                </button>
-            `).join('');
         }
 
         function setPdpMediaSlide(idx) {
