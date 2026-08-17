@@ -717,9 +717,9 @@
             countEl.textContent = totalQty;
             subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
-            // Shipping logic: Free above 999
+            // Shipping logic: Free above 299
             let effectiveShipping = currentShippingFee;
-            if (subtotal >= 999 && currentShippingFee !== null) {
+            if (subtotal >= 299 && currentShippingFee !== null) {
                 effectiveShipping = 0;
             }
 

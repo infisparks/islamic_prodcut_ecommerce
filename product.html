@@ -259,7 +259,7 @@
                             -30% OFF
                         </span>
                         <span class="text-[11px] text-emerald-800 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-300 flex items-center gap-1">
-                            <i class="fa-solid fa-bolt text-emerald-600"></i> Free Express Delivery on ₹999+
+                            <i class="fa-solid fa-bolt text-emerald-600"></i> Free Express Delivery on ₹299+
                         </span>
                     </div>
 
@@ -454,7 +454,7 @@
                     <i class="fa-solid fa-bag-shopping text-gold-400 text-base"></i>
                     <div>
                         <h3 class="font-cinzel text-sm sm:text-base font-bold text-gold-300">Instant Express Checkout</h3>
-                        <p class="text-[9px] text-gray-300">✓ Free Shipping above ₹999 • Cash on Delivery</p>
+                        <p class="text-[9px] text-gray-300">✓ Free Shipping above ₹299 • Cash on Delivery</p>
                     </div>
                 </div>
                 <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-pearl flex items-center justify-center text-xs cursor-pointer">
@@ -1475,7 +1475,7 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             let effectiveFee = currentShippingFee;
-            if (subtotalPrice >= 999 && currentShippingFee !== null) {
+            if (subtotalPrice >= 299 && currentShippingFee !== null) {
                 effectiveFee = 0;
             }
             const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
