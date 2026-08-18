@@ -158,7 +158,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
 
             <!-- LEFT COLUMN: MEDIA SHOWCASE & ZOOM GALLERY (lg:col-span-6) -->
-            <div class="lg:col-span-6 space-y-4">
+            <div class="lg:col-span-6 space-y-3">
                 
                 <!-- Main Media Frame -->
                 <div class="relative w-full aspect-square sm:aspect-[4/3] max-h-[380px] sm:max-h-[460px] rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border-2 border-gold-500/40 shadow-card-premium flex items-center justify-center select-none group">
@@ -173,6 +173,13 @@
                         </span>
                         <span id="pdp-weight-badge" class="bg-emerald-950/85 backdrop-blur-md text-emerald-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/40 shadow-md">
                             150gm
+                        </span>
+                    </div>
+
+                    <!-- Slide Counter Badge on Top-Right -->
+                    <div class="absolute top-3 right-3 z-20 pointer-events-none">
+                        <span id="pdp-media-counter" class="bg-black/80 backdrop-blur-md text-gold-300 font-mono text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-gold-500/40 shadow-md">
+                            1 / 1
                         </span>
                     </div>
 
@@ -191,10 +198,9 @@
                     </div>
 
                     <!-- Image View Container -->
-                    <div id="pdp-image-container" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-4"
-                         onmousedown="startPdpDrag(event)" onmousemove="dragPdpImage(event)" onmouseup="stopPdpDrag()" onmouseleave="stopPdpDrag()"
-                         ontouchstart="startPdpDrag(event)" ontouchmove="dragPdpImage(event)" ontouchend="stopPdpDrag()" ondblclick="togglePdpZoom()">
-                        <img id="pdp-main-image" src="product/umrah_card_urdu.webp" alt="Product View" class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-150 origin-center pointer-events-none">
+                    <div id="pdp-image-container" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-4 touch-none select-none"
+                         onmousedown="startPdpDrag(event)" onmousemove="dragPdpImage(event)" onmouseup="stopPdpDrag()" onmouseleave="stopPdpDrag()" ondblclick="togglePdpZoom()">
+                        <img id="pdp-main-image" src="product/umrah_card_urdu.webp" alt="Product View" class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-75 origin-center pointer-events-none select-none">
                     </div>
 
                     <!-- Video View Container (hidden when image selected) -->
@@ -206,12 +212,28 @@
                     </div>
 
                     <!-- Media Slide Arrows -->
-                    <button onclick="prevPdpMedia()" class="absolute left-2.5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Previous Media">
+                    <button onclick="prevPdpMedia()" class="absolute left-2.5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Previous Media">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextPdpMedia()" class="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl" title="Next Media">
+                    <button onclick="nextPdpMedia()" class="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Next Media">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
+                </div>
+
+                <!-- Horizontal Interactive Media Thumbnail Gallery -->
+                <div id="pdp-gallery-card" class="bg-white p-2 rounded-2xl border border-gray-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-1.5 px-1">
+                        <span class="text-[11px] font-bold text-onyx flex items-center gap-1">
+                            <i class="fa-solid fa-images text-gold-600 text-xs"></i>
+                            <span>All Cards & Demo Video</span>
+                        </span>
+                        <span id="pdp-gallery-hint" class="text-[9px] font-semibold text-gray-500">
+                            Click to view each card
+                        </span>
+                    </div>
+                    <div id="pdp-thumbnails-strip" class="flex items-center gap-2 overflow-x-auto pb-1 px-0.5 no-scrollbar scroll-smooth">
+                        <!-- Dynamically generated thumbnails -->
+                    </div>
                 </div>
 
             </div>
@@ -221,28 +243,39 @@
                 
                 <div>
                     <!-- Title & Rating -->
-                    <div class="flex items-center gap-2 text-xs text-amber-600 mb-1">
+                    <div class="flex items-center gap-2 text-xs text-amber-600 mb-1 flex-wrap">
                         <span class="font-bold">★★★★★</span>
-                        <span id="pdp-rating" class="font-semibold text-gray-600">(1,450 Verified Reviews)</span>
+                        <span id="pdp-rating" class="font-semibold text-gray-600">(614 Verified Reviews)</span>
+                        <span id="pdp-sold-badge" class="text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-300 text-[10px] flex items-center gap-1">
+                            <i class="fa-solid fa-fire text-amber-500"></i>
+                            <span id="pdp-sold-text">1,820 sold</span>
+                        </span>
                         <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 text-[10px]">
                             In Stock • Ready to Dispatch
                         </span>
                     </div>
 
                     <!-- ULTRA-COMPACT LANGUAGE SELECTOR (Slim Bar) -->
-                    <div id="pdp-language-selector-section" class="flex items-center gap-2 mb-3 bg-sand/70 p-1.5 rounded-xl border border-gold-300/60 shadow-xs flex-wrap sm:flex-nowrap">
-                        <span class="text-[11px] font-bold text-onyx flex items-center gap-1 pl-1 flex-shrink-0">
+                    <div id="pdp-language-selector-section" class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-3 bg-sand/70 p-2 rounded-xl border border-gold-300/60 shadow-xs">
+                        <span class="text-[11px] font-bold text-onyx flex items-center gap-1 pl-0.5 flex-shrink-0">
                             <i class="fa-solid fa-language text-gold-600 text-xs"></i> Language:
                         </span>
-                        <div class="flex items-center gap-1.5 flex-1 w-full sm:w-auto">
-                            <button type="button" onclick="switchProductLanguage('English')" id="lang-btn-English" class="flex-1 py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer border">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full flex-1">
+                            <button type="button" onclick="switchProductLanguage('English')" id="lang-btn-English" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
                                 <span>🇬🇧 English</span>
+                                <span class="text-[9px] font-semibold opacity-75">1,820 sold</span>
                             </button>
-                            <button type="button" onclick="switchProductLanguage('Urdu')" id="lang-btn-Urdu" class="flex-1 py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer border">
+                            <button type="button" onclick="switchProductLanguage('Urdu')" id="lang-btn-Urdu" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
                                 <span>🇵🇰 اردو</span>
+                                <span class="text-[9px] font-semibold opacity-75">1,450 sold</span>
                             </button>
-                            <button type="button" onclick="switchProductLanguage('Hindi')" id="lang-btn-Hindi" class="flex-1 py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer border">
+                            <button type="button" onclick="switchProductLanguage('Hindi')" id="lang-btn-Hindi" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
                                 <span>🇮🇳 हिंदी</span>
+                                <span class="text-[9px] font-semibold opacity-75">1,310 sold</span>
+                            </button>
+                            <button type="button" onclick="switchProductLanguage('Roman')" id="lang-btn-Roman" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
+                                <span>🔤 Roman</span>
+                                <span class="text-[9px] font-semibold opacity-75">1,540 sold</span>
                             </button>
                         </div>
                     </div>
@@ -636,6 +669,57 @@
         </div>
     </div>
 
+    <!-- PILGRIM REVIEWS -->
+    <section id="reviews" class="py-8 px-4 bg-white border-t border-gold-200">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-5">
+                <span class="text-[10px] uppercase tracking-widest text-gold-600 font-bold block mb-0.5">Pilgrim Feedback</span>
+                <h2 class="font-cinzel text-xl font-bold text-onyx">Loved By Pilgrims Across India</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="bg-sand/60 p-3.5 rounded-xl border border-gray-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 text-xs mb-1.5">★★★★★</div>
+                        <p class="text-gray-700 italic mb-2 leading-relaxed">
+                            "Tawaf me rounds yaad rakhna bohot aasan ho gaya! Pehle rounds bhul jate the, but Tasbih aur neck lanyard ne sab smooth kar diya. Alhamdulillah!"
+                        </p>
+                    </div>
+                    <div>
+                        <div class="font-bold text-onyx">— Tariq M., Mumbai</div>
+                        <div class="text-[9px] text-gray-500">Verified Buyer • Full Companion Kit (Urdu)</div>
+                    </div>
+                </div>
+
+                <div class="bg-sand/60 p-3.5 rounded-xl border border-gray-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 text-xs mb-1.5">★★★★★</div>
+                        <p class="text-gray-700 italic mb-2 leading-relaxed">
+                            "100% waterproof hai sach me. Zamzam water girne par bhi cards bilkul wipe clean ho gaye immediately. Font bohot clear aur bold hai."
+                        </p>
+                    </div>
+                    <div>
+                        <div class="font-bold text-onyx">— Aisha K., Hyderabad</div>
+                        <div class="text-[9px] text-gray-500">Verified Buyer • Standard Kit (English)</div>
+                    </div>
+                </div>
+
+                <div class="bg-sand/60 p-3.5 rounded-xl border border-gray-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 text-xs mb-1.5">★★★★★</div>
+                        <p class="text-gray-700 italic mb-2 leading-relaxed">
+                            "Bought the companion kit for my parents before their Umrah flight from Delhi. Roman transliteration & Hindi translations are super easy to read!"
+                        </p>
+                    </div>
+                    <div>
+                        <div class="font-bold text-onyx">— Mohammad R., Delhi</div>
+                        <div class="text-[9px] text-gray-500">Verified Buyer • Full Companion Kit (Roman)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER -->
     <footer class="bg-onyx text-pearl mt-auto py-8 px-4 border-t border-gold-500/30 text-center text-xs">
         <div class="max-w-6xl mx-auto space-y-3">
@@ -665,9 +749,26 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_urdu.webp",
+                images: [
+                    "product/umrah_card_urdu.webp",
+                    "product/prodcut_more/umrahcard_urdu_1.webp",
+                    "product/prodcut_more/umrahcard_urdu_2.webp",
+                    "product/prodcut_more/umrahcard_urdu_3.webp",
+                    "product/prodcut_more/umrahcard_urdu_4.webp",
+                    "product/prodcut_more/umrahcard_urdu_5.webp",
+                    "product/prodcut_more/umrahcard_urdu_6.webp",
+                    "product/prodcut_more/umrahcard_urdu_7.webp",
+                    "product/prodcut_more/umrahcard_urdu_8.webp",
+                    "product/prodcut_more/umrahcard_urdu_9.webp",
+                    "product/prodcut_more/umrahcard_urdu_10.webp",
+                    "product/prodcut_more/umrahcard_urdu_11.webp",
+                    "product/prodcut_more/umrahcard_urdu_12.webp",
+                    "product/prodcut_more/umrahcard_urdu_13.webp"
+                ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • URDU",
-                rating: "(1,450)",
+                soldCount: "1,450 sold",
+                rating: "(482)",
                 desc: "Authentic Umrah Dua cards with clear Urdu translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.",
                 features: ["Authentic Urdu Translation", "Arabic Script & Ritual Guidance", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
                 variants: [
@@ -716,9 +817,20 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_english.webp",
+                images: [
+                    "product/umrah_card_english.webp",
+                    "product/prodcut_more/umrahcard_english_1.webp",
+                    "product/prodcut_more/umrahcard_english_2.webp",
+                    "product/prodcut_more/umrahcard_english_3.webp",
+                    "product/prodcut_more/umrahcard_english_4.webp",
+                    "product/prodcut_more/umrahcard_english_5.webp",
+                    "product/prodcut_more/umrahcard_english_6.webp",
+                    "product/prodcut_more/umrahcard_english_7.webp"
+                ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ENGLISH",
-                rating: "(1,820)",
+                soldCount: "1,820 sold",
+                rating: "(614)",
                 desc: "Complete authentic Umrah Dua Card set in clear English translation with Arabic text & transliteration. Laminated & 100% waterproof.",
                 features: ["Clear English Translation", "Arabic Script + Transliteration", "35+ Step-by-Step Duas", "Tawaf Tasbih Counter Included"],
                 variants: [
@@ -767,9 +879,35 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_hindi.webp",
+                images: [
+                    "product/umrah_card_hindi.webp",
+                    "product/prodcut_more/umrahcard_hindi_1.webp",
+                    "product/prodcut_more/umrahcard_hindi_2.webp",
+                    "product/prodcut_more/umrahcard_hindi_3.webp",
+                    "product/prodcut_more/umrahcard_hindi_4.webp",
+                    "product/prodcut_more/umrahcard_hindi_5.webp",
+                    "product/prodcut_more/umrahcard_hindi_6.webp",
+                    "product/prodcut_more/umrahcard_hindi_7.webp",
+                    "product/prodcut_more/umrahcard_hindi_8.webp",
+                    "product/prodcut_more/umrahcard_hindi_9.webp",
+                    "product/prodcut_more/umrahcard_hindi_10.webp",
+                    "product/prodcut_more/umrahcard_hindi_11.webp",
+                    "product/prodcut_more/umrahcard_hindi_12.webp",
+                    "product/prodcut_more/umrahcard_hindi_13.webp",
+                    "product/prodcut_more/umrahcard_hindi_14.webp",
+                    "product/prodcut_more/umrahcard_hindi_15.webp",
+                    "product/prodcut_more/umrahcard_hindi_16.webp",
+                    "product/prodcut_more/umrahcard_hindi_17.webp",
+                    "product/prodcut_more/umrahcard_hindi_18.webp",
+                    "product/prodcut_more/umrahcard_hindi_19.webp",
+                    "product/prodcut_more/umrahcard_hindi_20.webp",
+                    "product/prodcut_more/umrahcard_hindi_21.webp",
+                    "product/prodcut_more/umrahcard_hindi_22.webp"
+                ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • HINDI",
-                rating: "(1,120)",
+                soldCount: "1,310 sold",
+                rating: "(439)",
                 desc: "Authentic Umrah prayer guide cards with easy-to-read Hindi translation and step-by-step ritual instructions.",
                 features: ["Full Hindi Translation", "Arabic Script & Transliteration", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
                 variants: [
@@ -818,9 +956,24 @@
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_card_roman.webp",
+                images: [
+                    "product/umrah_card_roman.webp",
+                    "product/prodcut_more/umrahcard_roman_1.webp",
+                    "product/prodcut_more/umrahcard_roman_2.webp",
+                    "product/prodcut_more/umrahcard_roman_3.webp",
+                    "product/prodcut_more/umrahcard_roman_4.webp",
+                    "product/prodcut_more/umrahcard_roman_5.webp",
+                    "product/prodcut_more/umrahcard_roman_6.webp",
+                    "product/prodcut_more/umrahcard_roman_7.webp",
+                    "product/prodcut_more/umrahcard_roman_8.webp",
+                    "product/prodcut_more/umrahcard_roman_9.webp",
+                    "product/prodcut_more/umrahcard_roman_10.webp",
+                    "product/prodcut_more/umrahcard_roman_11.webp"
+                ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ROMAN",
-                rating: "(940)",
+                soldCount: "1,540 sold",
+                rating: "(518)",
                 desc: "Umrah Dua Cards in Roman script for effortless Arabic pronunciation during Tawaf & Sa'i.",
                 features: ["Roman Phonetic Pronunciation", "Step-by-Step Tawaf Guidance", "Stainless Binder Ring", "Tawaf Tasbih Counter Included"],
                 variants: [
@@ -869,13 +1022,15 @@
                 material: "Premium Vinyl Waterproof Adhesive Sticker",
                 weight: "30gm",
                 sku: "fati_stk_01",
+                soldCount: "1,350 sold",
                 price: 199,
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
+                images: ["product/umrah_Sticker_English.webp"],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • ENGLISH",
-                rating: "(720)",
+                rating: "(453)",
                 desc: "High-quality waterproof adhesive stickers featuring essential supplications in English.",
                 features: ["Premium Vinyl Waterproof Sticker", "Clear English Script", "Strong Adhesive Backing", "Compact & Portable"]
             },
@@ -892,13 +1047,15 @@
                 material: "Premium Vinyl Waterproof Adhesive Sticker",
                 weight: "30gm",
                 sku: "fati_stk_02",
+                soldCount: "1,280 sold",
                 price: 199,
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
+                images: ["product/umrah_Sticker_hindi.webp"],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • HINDI",
-                rating: "(640)",
+                rating: "(427)",
                 desc: "Waterproof dua stickers with Hindi text and Arabic supplications for easy reference anywhere.",
                 features: ["Clear Hindi Translation", "Waterproof & Scratch Proof", "Easy to Peel & Stick", "Essential Tawaf & Sa'i Prayers"]
             },
@@ -915,13 +1072,15 @@
                 material: "Premium Vinyl Waterproof Adhesive Sticker",
                 weight: "30gm",
                 sku: "fati_stk_03",
+                soldCount: "1,490 sold",
                 price: 199,
                 oldPrice: 399,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_Urdu.webp",
+                images: ["product/umrah_Sticker_Urdu.webp"],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • URDU",
-                rating: "(810)",
+                rating: "(498)",
                 desc: "Beautiful Urdu calligraphy supplication stickers. Waterproof, scratch-resistant, and easily portable for Umrah pilgrimage.",
                 features: ["Clear Naskh & Nastaliq Script", "Waterproof Protective Coating", "Easy Peel Adhesive", "Contains Daily Essential Duas"]
             }
@@ -1006,7 +1165,9 @@
 
             const mediaParam = params.get('media');
             if (mediaParam === 'video' && foundProduct.video) {
-                currentMediaIndex = 1;
+                const mediaList = getPdpMediaList();
+                const videoIdx = mediaList.findIndex(m => m.type === 'video');
+                currentMediaIndex = videoIdx !== -1 ? videoIdx : 0;
             } else {
                 currentMediaIndex = 0;
             }
@@ -1036,10 +1197,12 @@
                 if (lang === 'English') targetProduct = products.find(p => p.id === 2);
                 else if (lang === 'Urdu') targetProduct = products.find(p => p.id === 1);
                 else if (lang === 'Hindi') targetProduct = products.find(p => p.id === 3);
+                else if (lang === 'Roman' || lang === 'Roman English') targetProduct = products.find(p => p.id === 4);
             } else {
                 if (lang === 'English') targetProduct = products.find(p => p.id === 5);
                 else if (lang === 'Urdu') targetProduct = products.find(p => p.id === 7);
                 else if (lang === 'Hindi') targetProduct = products.find(p => p.id === 6);
+                else if (lang === 'Roman' || lang === 'Roman English') targetProduct = products.find(p => p.id === 5);
             }
 
             if (!targetProduct) {
@@ -1080,8 +1243,20 @@
 
         function getPdpMediaList() {
             const items = [];
-            if (currentProduct.image) items.push({ type: 'image', url: currentProduct.image, title: 'Product Image' });
-            if (currentProduct.video) items.push({ type: 'video', url: currentProduct.video, title: 'Product Demo Video' });
+            if (currentProduct.images && Array.isArray(currentProduct.images) && currentProduct.images.length > 0) {
+                currentProduct.images.forEach((imgUrl, index) => {
+                    items.push({
+                        type: 'image',
+                        url: imgUrl,
+                        title: `${currentProduct.name} - View ${index + 1}`
+                    });
+                });
+            } else if (currentProduct.image) {
+                items.push({ type: 'image', url: currentProduct.image, title: 'Product Image' });
+            }
+            if (currentProduct.video) {
+                items.push({ type: 'video', url: currentProduct.video, title: 'Product Demo Video' });
+            }
             return items;
         }
 
@@ -1107,6 +1282,10 @@
             document.getElementById('pdp-badge').textContent = p.badge;
             document.getElementById('pdp-sku-badge').textContent = `SKU: ${activeSku}`;
             document.getElementById('pdp-weight-badge').textContent = activeWeight;
+            
+            // Sold Count Tag
+            const soldTextEl = document.getElementById('pdp-sold-text');
+            if (soldTextEl) soldTextEl.textContent = p.soldCount || '250 sold';
 
             // Pricing
             document.getElementById('pdp-price').textContent = `Rs. ${activePrice}`;
@@ -1133,17 +1312,17 @@
 
             // Update Language Switcher Buttons state
             const langSection = document.getElementById('pdp-language-selector-section');
-            const languages = ['English', 'Urdu', 'Hindi'];
+            const languages = ['English', 'Urdu', 'Hindi', 'Roman'];
             if (langSection) {
-                if (['English', 'Urdu', 'Hindi'].includes(p.language)) {
+                if (['English', 'Urdu', 'Hindi', 'Roman'].includes(p.language)) {
                     langSection.classList.remove('hidden');
                     languages.forEach(l => {
                         const btn = document.getElementById(`lang-btn-${l}`);
                         if (btn) {
                             if (p.language === l) {
-                                btn.className = 'flex-1 py-1 px-2 rounded-lg text-[11px] font-extrabold bg-onyx text-gold-400 border border-gold-500 shadow-xs ring-1 ring-gold-400/50 flex items-center justify-center gap-1 cursor-pointer transition-all';
+                                btn.className = 'py-1 px-2 rounded-lg text-[11px] font-extrabold bg-onyx text-gold-400 border border-gold-500 shadow-xs ring-1 ring-gold-400/50 flex items-center justify-between gap-1 cursor-pointer transition-all';
                             } else {
-                                btn.className = 'flex-1 py-1 px-2 rounded-lg text-[11px] font-bold bg-white text-gray-700 hover:bg-gold-50 hover:border-gold-300 border border-gray-300 flex items-center justify-center gap-1 cursor-pointer transition-all';
+                                btn.className = 'py-1 px-2 rounded-lg text-[11px] font-bold bg-white text-gray-700 hover:bg-gold-50 hover:border-gold-300 border border-gray-300 flex items-center justify-between gap-1 cursor-pointer transition-all';
                             }
                         }
                     });
@@ -1223,6 +1402,9 @@
 
         function renderPdpMediaView() {
             const mediaList = getPdpMediaList();
+            if (currentMediaIndex >= mediaList.length) {
+                currentMediaIndex = 0;
+            }
             const activeMedia = mediaList[currentMediaIndex] || mediaList[0];
             const isVideo = activeMedia.type === 'video';
 
@@ -1232,6 +1414,11 @@
             const mainImg = document.getElementById('pdp-main-image');
             const mainVid = document.getElementById('pdp-main-video');
             const vidSource = document.getElementById('pdp-video-source');
+            const counterEl = document.getElementById('pdp-media-counter');
+
+            if (counterEl) {
+                counterEl.textContent = `${currentMediaIndex + 1} / ${mediaList.length}`;
+            }
 
             if (isVideo) {
                 imgContainer.classList.add('hidden');
@@ -1251,6 +1438,55 @@
                 mainImg.src = activeMedia.url;
                 mainImg.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
             }
+
+            renderPdpThumbnails(mediaList);
+        }
+
+        function renderPdpThumbnails(mediaList) {
+            const strip = document.getElementById('pdp-thumbnails-strip');
+            const galleryCard = document.getElementById('pdp-gallery-card');
+            if (!strip) return;
+
+            if (!mediaList || mediaList.length <= 1) {
+                if (galleryCard) galleryCard.classList.add('hidden');
+                return;
+            }
+            if (galleryCard) galleryCard.classList.remove('hidden');
+
+            const hintEl = document.getElementById('pdp-gallery-hint');
+            if (hintEl) {
+                hintEl.textContent = `${mediaList.length} items • Click to switch`;
+            }
+
+            strip.innerHTML = mediaList.map((item, idx) => {
+                const isActive = idx === currentMediaIndex;
+                return `
+                    <button type="button" onclick="setPdpMediaSlide(${idx})" id="pdp-thumb-${idx}"
+                            class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all p-0.5 bg-neutral-900 cursor-pointer ${
+                                isActive 
+                                    ? 'border-gold-500 ring-2 ring-gold-400/60 scale-105 shadow-md opacity-100' 
+                                    : 'border-neutral-700/70 hover:border-gold-400/60 opacity-60 hover:opacity-100'
+                            }" title="${item.title || 'Slide ' + (idx + 1)}">
+                        ${item.type === 'image' ? `
+                            <img src="${item.url}" alt="Thumbnail ${idx + 1}" class="w-full h-full object-contain rounded-lg" loading="lazy">
+                        ` : `
+                            <div class="w-full h-full bg-onyx rounded-lg flex flex-col items-center justify-center text-gold-400 text-[9px] gap-0.5 border border-gold-500/30">
+                                <i class="fa-solid fa-circle-play text-sm text-gold-500"></i>
+                                <span class="text-[7px] font-extrabold uppercase text-white tracking-wider">Video</span>
+                            </div>
+                        `}
+                        <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-[8px] font-mono text-gold-300 px-1 rounded font-bold">${idx + 1}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // Scroll active thumbnail smoothly into view
+            setTimeout(() => {
+                const activeThumb = document.getElementById(`pdp-thumb-${currentMediaIndex}`);
+                if (activeThumb) {
+                    activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }, 50);
         }
 
         function setPdpMediaSlide(idx) {
@@ -1273,54 +1509,152 @@
             setPdpMediaSlide(currentMediaIndex);
         }
 
-        // ZOOM & DRAG FOR PDP IMAGE
-        function zoomPdpImage(factor) {
+        // ADVANCED 2-FINGER PINCH-TO-ZOOM, PAN & SWIPE ENGINE (MOBILE + DESKTOP)
+        let initialPinchDistance = null;
+        let initialZoomOnPinch = 1;
+        let lastTouchEndTime = 0;
+        let touchStartSwipeX = 0;
+        let touchStartSwipeY = 0;
+
+        function getTouchDistance(touches) {
+            return Math.hypot(
+                touches[0].clientX - touches[1].clientX,
+                touches[0].clientY - touches[1].clientY
+            );
+        }
+
+        function updatePdpTransform() {
             const img = document.getElementById('pdp-main-image');
             const label = document.getElementById('pdp-zoom-level');
             if (!img) return;
 
+            if (currentZoom > 1) {
+                const maxPan = (currentZoom - 1) * 180;
+                currentPanX = Math.max(Math.min(currentPanX, maxPan), -maxPan);
+                currentPanY = Math.max(Math.min(currentPanY, maxPan), -maxPan);
+            } else {
+                currentPanX = 0;
+                currentPanY = 0;
+            }
+
+            img.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
+            if (label) label.textContent = `${Math.round(currentZoom * 100)}%`;
+        }
+
+        function zoomPdpImage(factor) {
             if (factor === 'reset') {
                 currentZoom = 1;
                 currentPanX = 0;
                 currentPanY = 0;
             } else {
-                currentZoom = Math.min(Math.max(1, currentZoom + factor), 3.0);
+                currentZoom = Math.min(Math.max(1, currentZoom + factor), 3.5);
                 if (currentZoom === 1) {
                     currentPanX = 0;
                     currentPanY = 0;
                 }
             }
-            img.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
-            if (label) label.textContent = `${Math.round(currentZoom * 100)}%`;
+            updatePdpTransform();
         }
 
         function togglePdpZoom() {
-            zoomPdpImage(currentZoom === 1 ? 0.8 : 'reset');
+            zoomPdpImage(currentZoom === 1 ? 1.0 : 'reset');
         }
 
         function startPdpDrag(e) {
             if (currentZoom <= 1) return;
             isDragging = true;
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            startX = clientX - currentPanX;
-            startY = clientY - currentPanY;
+            startX = e.clientX - currentPanX;
+            startY = e.clientY - currentPanY;
         }
 
         function dragPdpImage(e) {
             if (!isDragging || currentZoom <= 1) return;
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            currentPanX = clientX - startX;
-            currentPanY = clientY - startY;
-            const img = document.getElementById('pdp-main-image');
-            if (img) {
-                img.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
-            }
+            currentPanX = e.clientX - startX;
+            currentPanY = e.clientY - startY;
+            updatePdpTransform();
         }
 
         function stopPdpDrag() {
             isDragging = false;
+        }
+
+        function initPdpTouchControls() {
+            const container = document.getElementById('pdp-image-container');
+            if (!container) return;
+
+            container.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 2) {
+                    // 2-Finger Pinch Zoom Initiation
+                    e.preventDefault();
+                    isDragging = false;
+                    initialPinchDistance = getTouchDistance(e.touches);
+                    initialZoomOnPinch = currentZoom;
+                } else if (e.touches.length === 1) {
+                    const touch = e.touches[0];
+                    touchStartSwipeX = touch.clientX;
+                    touchStartSwipeY = touch.clientY;
+
+                    if (currentZoom > 1) {
+                        e.preventDefault();
+                        isDragging = true;
+                        startX = touch.clientX - currentPanX;
+                        startY = touch.clientY - currentPanY;
+                    }
+                }
+            }, { passive: false });
+
+            container.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 2 && initialPinchDistance) {
+                    // 2-Finger Pinch Zooming
+                    e.preventDefault();
+                    const currentDist = getTouchDistance(e.touches);
+                    const scale = currentDist / initialPinchDistance;
+                    currentZoom = Math.min(Math.max(1, initialZoomOnPinch * scale), 3.5);
+                    updatePdpTransform();
+                } else if (e.touches.length === 1 && isDragging && currentZoom > 1) {
+                    // 1-Finger Panning when zoomed
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    currentPanX = touch.clientX - startX;
+                    currentPanY = touch.clientY - startY;
+                    updatePdpTransform();
+                }
+            }, { passive: false });
+
+            container.addEventListener('touchend', function(e) {
+                if (e.touches.length < 2) {
+                    initialPinchDistance = null;
+                }
+                if (e.touches.length === 0) {
+                    isDragging = false;
+                    
+                    // Snap back if zoom was slightly below threshold
+                    if (currentZoom < 1.05) {
+                        zoomPdpImage('reset');
+                    }
+
+                    // 1-Finger horizontal swipe navigation when not zoomed in
+                    if (currentZoom === 1 && e.changedTouches && e.changedTouches.length === 1) {
+                        const touchEnd = e.changedTouches[0];
+                        const diffX = touchEnd.clientX - touchStartSwipeX;
+                        const diffY = touchEnd.clientY - touchStartSwipeY;
+                        if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+                            if (diffX < 0) {
+                                nextPdpMedia();
+                            } else {
+                                prevPdpMedia();
+                            }
+                        }
+                    }
+
+                    // Double-tap zoom toggle on mobile
+                    const now = Date.now();
+                    if (now - lastTouchEndTime < 280) {
+                        togglePdpZoom();
+                    }
+                    lastTouchEndTime = now;
+                }
+            });
         }
 
         // RELATED PRODUCTS DISPLAY
@@ -2032,8 +2366,12 @@
         // DOM READY INITIALIZATION
         document.addEventListener('DOMContentLoaded', () => {
             initProductFromUrl();
+            initPdpTouchControls();
             restoreCustomerDetailsFromStorage();
         });
     </script>
+
+    <!-- Social Proof Recent Purchases Notification Engine -->
+    <script src="recent-purchases.js"></script>
 </body>
 </html>
