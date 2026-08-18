@@ -76,21 +76,23 @@
         style.textContent = `
             #recent-purchase-toast {
                 position: fixed !important;
-                bottom: 84px !important;
+                top: 14px !important;
                 left: 14px !important;
+                bottom: auto !important;
                 z-index: 9999999 !important;
                 max-width: 340px !important;
                 width: calc(100vw - 28px) !important;
                 opacity: 0 !important;
-                transform: translateY(24px) scale(0.95) !important;
+                transform: translateY(-24px) scale(0.95) !important;
                 pointer-events: none !important;
-                transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
             }
             @media (min-width: 640px) {
                 #recent-purchase-toast {
-                    bottom: 24px !important;
+                    top: 20px !important;
                     left: 24px !important;
+                    bottom: auto !important;
                     width: 340px !important;
                 }
             }
@@ -205,7 +207,7 @@
         toast.classList.add('toast-active');
         isToastVisible = true;
 
-        // Auto-hide after 5.2 seconds (unless hovered)
+        // Auto-hide after 2.5 seconds (unless hovered)
         if (toastTimer) clearTimeout(toastTimer);
         toastTimer = setTimeout(() => {
             if (!isPausedByHover) {
@@ -216,9 +218,9 @@
                         clearInterval(checkInterval);
                         hideToast();
                     }
-                }, 1000);
+                }, 500);
             }
-        }, 5200);
+        }, 2500);
     }
 
     // Hide Notification Toast
@@ -235,7 +237,7 @@
     // Schedule Next Popup
     function scheduleNext() {
         if (nextPopupTimer) clearTimeout(nextPopupTimer);
-        const intervalMs = Math.floor(Math.random() * 5000) + 7000; // 7s to 12s
+        const intervalMs = Math.floor(Math.random() * 5000) + 10000; // 10s to 15s
         nextPopupTimer = setTimeout(() => {
             showToast();
         }, intervalMs);
@@ -294,10 +296,11 @@
             setupTouchGesture(toast);
         }
 
-        // Show first notification after 1.8 seconds on page load
+        // Show first notification after 10-15 seconds on page load
+        const initialDelay = Math.floor(Math.random() * 5000) + 10000; // 10s to 15s
         setTimeout(() => {
             showToast();
-        }, 1800);
+        }, initialDelay);
     }
 
     // Global manual trigger for testing via browser console

@@ -843,8 +843,8 @@
         </div>
     </div>
 
-    <!-- INTERACTIVE UMRAH RITUAL JOURNEY MAP (PLACED AFTER DUA STICKERS) -->
-    <section id="umrah-journey-map" class="py-8 sm:py-14 px-3 sm:px-6 bg-gradient-to-b from-sand/60 via-white to-sand/40 border-t border-b border-gold-300 relative overflow-hidden">
+    <!-- INTERACTIVE UMRAH RITUAL JOURNEY MAP (HIDDEN) -->
+    <section id="umrah-journey-map" class="hidden" style="display: none !important;">
         <!-- Ambient Luxury Radial Glows -->
         <div class="absolute -top-32 -left-32 w-80 h-80 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -4757,21 +4757,23 @@
             style.textContent = `
                 #recent-purchase-toast {
                     position: fixed !important;
-                    bottom: 84px !important;
+                    top: 14px !important;
                     left: 14px !important;
+                    bottom: auto !important;
                     z-index: 9999999 !important;
                     max-width: 340px !important;
                     width: calc(100vw - 28px) !important;
                     opacity: 0 !important;
-                    transform: translateY(24px) scale(0.95) !important;
+                    transform: translateY(-24px) scale(0.95) !important;
                     pointer-events: none !important;
-                    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
                     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
                 }
                 @media (min-width: 640px) {
                     #recent-purchase-toast {
-                        bottom: 24px !important;
+                        top: 20px !important;
                         left: 24px !important;
+                        bottom: auto !important;
                         width: 340px !important;
                     }
                 }
@@ -4876,7 +4878,7 @@
                 if (!isPausedByHover) {
                     hideToast();
                 }
-            }, 5200);
+            }, 2500);
         }
 
         function hideToast() {
@@ -4888,7 +4890,7 @@
 
         function scheduleNext() {
             if (nextPopupTimer) clearTimeout(nextPopupTimer);
-            const intervalMs = Math.floor(Math.random() * 5000) + 7000;
+            const intervalMs = Math.floor(Math.random() * 5000) + 10000; // 10s to 15s
             nextPopupTimer = setTimeout(() => {
                 showToast();
             }, intervalMs);
@@ -4899,9 +4901,10 @@
             isInitialized = true;
             injectStyles();
             createToastElement();
+            const initialDelay = Math.floor(Math.random() * 5000) + 10000; // 10s to 15s
             setTimeout(() => {
                 showToast();
-            }, 1800);
+            }, initialDelay);
         }
 
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
