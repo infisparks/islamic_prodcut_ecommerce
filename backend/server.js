@@ -158,8 +158,11 @@ app.use('/api/meta', metaRouter);
 // 7. Serve existing frontend static files & media directories
 const rootDir = path.resolve(__dirname, '..');
 app.use('/product', express.static(path.join(rootDir, 'product')));
-app.use('/video', express.static(path.join(rootDir, 'video')));
 app.use(express.static(rootDir));
+
+app.get('/recent-purchases.js', (req, res) => {
+  res.type('application/javascript').sendFile(path.join(rootDir, 'recent-purchases.js'));
+});
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(rootDir, 'index.html'));
