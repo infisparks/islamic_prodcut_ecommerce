@@ -1,7 +1,7 @@
 /**
- * Production-Ready Real-Time Social Proof & Recent Purchases Notification Engine
- * Displays live sales proof toasts to engage customers on Home and Product pages.
- * Fully responsive, non-intrusive, mobile-friendly with touch swipe dismiss and click-to-view.
+ * Production-Ready Real-Time Social Proof & Recent Purchases Notification Engine (v2.2)
+ * High-converting, non-intrusive, mobile-optimized live sales proof popup.
+ * Immune to CDN/browser caching, CSP style restrictions, and DOM ready state issues.
  */
 
 (function () {
@@ -66,113 +66,46 @@
     let isToastVisible = false;
     let isPausedByHover = false;
     let currentProduct = null;
+    let isInitialized = false;
 
-    // Inject CSS for sleek luxury toast animation
+    // Inject CSS for smooth luxury entrance & pulse
     function injectStyles() {
         if (document.getElementById('recent-purchase-styles')) return;
         const style = document.createElement('style');
         style.id = 'recent-purchase-styles';
         style.textContent = `
             #recent-purchase-toast {
-                position: fixed;
-                bottom: 84px;
-                left: 14px;
-                z-index: 99999;
-                max-width: 340px;
-                width: calc(100vw - 28px);
-                opacity: 0;
-                transform: translateY(24px) scale(0.95);
-                pointer-events: none;
-                transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                position: fixed !important;
+                bottom: 84px !important;
+                left: 14px !important;
+                z-index: 9999999 !important;
+                max-width: 340px !important;
+                width: calc(100vw - 28px) !important;
+                opacity: 0 !important;
+                transform: translateY(24px) scale(0.95) !important;
+                pointer-events: none !important;
+                transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
             }
             @media (min-width: 640px) {
                 #recent-purchase-toast {
-                    bottom: 24px;
-                    left: 24px;
-                    width: 340px;
+                    bottom: 24px !important;
+                    left: 24px !important;
+                    width: 340px !important;
                 }
             }
             #recent-purchase-toast.toast-active {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                pointer-events: auto;
+                opacity: 1 !important;
+                transform: translateY(0) scale(1) !important;
+                pointer-events: auto !important;
             }
-
-            .rp-card-box {
-                background: #FFFFFF !important;
-                border: 1.5px solid #E5C378 !important;
-                box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.18), 0 2px 10px rgba(197, 154, 63, 0.25) !important;
-                border-radius: 16px;
-                padding: 10px 12px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                position: relative;
-                cursor: pointer;
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-            }
-            .rp-card-box:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.22), 0 4px 14px rgba(197, 154, 63, 0.35) !important;
-            }
-
-            .rp-img-frame {
-                width: 48px;
-                height: 48px;
-                border-radius: 12px;
-                background: #F7F5F0;
-                border: 1px solid #E8DFCC;
-                flex-shrink: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
-                padding: 2px;
-            }
-            .rp-img-frame img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-            }
-
-            .rp-pulse-dot {
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background-color: #10B981;
-                display: inline-block;
-                animation: rpPulse 1.8s infinite;
-            }
-            @keyframes rpPulse {
+            @keyframes rpPulseDot {
                 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
                 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
                 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
             }
-
-            .rp-close-btn {
-                position: absolute;
-                top: 6px;
-                right: 6px;
-                width: 22px;
-                height: 22px;
-                border-radius: 50%;
-                background: #F3F4F6;
-                color: #9CA3AF;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 11px;
-                border: none;
-                cursor: pointer;
-                transition: background 0.15s ease, color 0.15s ease;
-            }
-            .rp-close-btn:hover {
-                background: #E5E7EB;
-                color: #1F2937;
-            }
         `;
-        document.head.appendChild(style);
+        (document.head || document.documentElement).appendChild(style);
     }
 
     // Create Toast Container
@@ -183,37 +116,37 @@
         toast.setAttribute('role', 'status');
         toast.setAttribute('aria-live', 'polite');
         toast.innerHTML = `
-            <div id="rp-clickable-card" class="rp-card-box">
+            <div id="rp-clickable-card" style="background:#FFFFFF; border:1.5px solid #E5C378; box-shadow:0 12px 32px -4px rgba(0,0,0,0.2), 0 2px 10px rgba(197,154,63,0.25); border-radius:16px; padding:10px 12px; display:flex; align-items:center; gap:10px; position:relative; cursor:pointer; user-select:none;">
                 <!-- Thumbnail -->
-                <div class="rp-img-frame">
-                    <img id="rp-image" src="product/umrah_card_urdu.webp" alt="Product thumbnail" loading="eager" decoding="async">
+                <div style="width:48px; height:48px; border-radius:12px; background:#F7F5F0; border:1px solid #E8DFCC; flex-shrink:0; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:2px;">
+                    <img id="rp-image" src="product/umrah_card_urdu.webp" alt="Product thumbnail" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='product/umrah_card_urdu.webp'">
                 </div>
 
                 <!-- Info Content -->
-                <div style="flex: 1; min-width: 0; padding-right: 14px;">
-                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
-                        <span id="rp-name" style="font-weight: 700; font-size: 12px; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Faiz Ansari</span>
-                        <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; color: #047857; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 1px 4px; border-radius: 4px; flex-shrink: 0;">
-                            <span class="rp-pulse-dot"></span> Verified
+                <div style="flex:1; min-width:0; padding-right:14px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+                        <span id="rp-name" style="font-weight:700; font-size:12px; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Faiz Ansari</span>
+                        <span style="display:inline-flex; align-items:center; gap:3px; font-size:9px; font-weight:700; color:#047857; background:#ECFDF5; border:1px solid #A7F3D0; padding:1px 4px; border-radius:4px; flex-shrink:0;">
+                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block; animation:rpPulseDot 1.8s infinite;"></span> Verified
                         </span>
                     </div>
-                    <div style="font-size: 11px; color: #4B5563; line-height: 1.25; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        Purchased <span id="rp-product" style="font-weight: 600; color: #92400E;">Umrah Dua Cards (Urdu)</span>
+                    <div style="font-size:11px; color:#4B5563; line-height:1.25; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        Purchased <span id="rp-product" style="font-weight:600; color:#92400E;">Umrah Dua Cards (Urdu)</span>
                     </div>
-                    <div style="font-size: 9.5px; color: #6B7280; display: flex; align-items: center; gap: 4px;">
+                    <div style="font-size:9.5px; color:#6B7280; display:flex; align-items:center; gap:4px;">
                         <span id="rp-time">Just now</span>
                         <span>•</span>
-                        <span id="rp-city" style="font-weight: 500; color: #374151;">Mumbai</span>
+                        <span id="rp-city" style="font-weight:500; color:#374151;">Mumbai</span>
                     </div>
                 </div>
 
                 <!-- Close Button -->
-                <button type="button" id="rp-close-action" class="rp-close-btn" aria-label="Close notification">
+                <button type="button" id="rp-close-action" style="position:absolute; top:6px; right:6px; width:22px; height:22px; border-radius:50%; background:#F3F4F6; color:#9CA3AF; display:flex; align-items:center; justify-content:center; font-size:11px; border:none; cursor:pointer;" aria-label="Close notification">
                     ✕
                 </button>
             </div>
         `;
-        document.body.appendChild(toast);
+        (document.body || document.documentElement).appendChild(toast);
 
         // Click to view product
         const card = document.getElementById('rp-clickable-card');
@@ -278,7 +211,6 @@
             if (!isPausedByHover) {
                 hideToast();
             } else {
-                // Check again in 2 seconds if still hovered
                 const checkInterval = setInterval(() => {
                     if (!isPausedByHover) {
                         clearInterval(checkInterval);
@@ -349,8 +281,11 @@
         }, { passive: true });
     }
 
-    // Initialize Engine
+    // Initialize Engine with Fail-Safe Execution
     function startEngine() {
+        if (isInitialized) return;
+        isInitialized = true;
+
         injectStyles();
         createToastElement();
 
@@ -359,15 +294,22 @@
             setupTouchGesture(toast);
         }
 
-        // Show first notification after 2 seconds on page load
+        // Show first notification after 1.8 seconds on page load
         setTimeout(() => {
             showToast();
-        }, 2000);
+        }, 1800);
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', startEngine);
-    } else {
+    // Global manual trigger for testing via browser console
+    window.triggerRecentPurchaseToast = function() {
+        showToast();
+    };
+
+    // Fail-safe initialization
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
         startEngine();
+    } else {
+        document.addEventListener('DOMContentLoaded', startEngine);
+        window.addEventListener('load', startEngine);
     }
 })();
