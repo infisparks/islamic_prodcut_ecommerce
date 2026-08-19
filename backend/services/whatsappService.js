@@ -18,6 +18,20 @@ function sanitizePhone(phone) {
 }
 
 /**
+ * Calculate and format estimated delivery date as +2 days from base date.
+ */
+function formatEstimatedDeliveryDate(baseDate) {
+  const d = baseDate ? new Date(baseDate) : new Date();
+  d.setDate(d.getDate() + 2);
+  return d.toLocaleDateString('en-IN', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+}
+
+/**
  * Send a raw text message via WhatsApp Evolution API.
  */
 async function sendTextMessage(phone, text) {
@@ -70,7 +84,8 @@ async function sendCodOtpWhatsApp(phone, otp) {
   const message = 
     `🔒 *Fatima Calligrapher - COD Verification*\n\n` +
     `Your OTP code to confirm your Cash on Delivery (COD) order is: *${otp}*\n\n` +
-    `⏱️ Valid for 10 minutes. Please enter this code on the website to confirm your order. Do not share this OTP with anyone.`;
+    `⏱️ Valid for 10 minutes. Please enter this code on the website to confirm your order.\n\n` +
+    `📞 *Customer Support:* +91 99703 47703`;
 
   return await sendTextMessage(phone, message);
 }
@@ -84,11 +99,12 @@ async function sendAdminOrderNotificationWhatsApp(order) {
   const adminPhone = config.whatsapp.notifyNumber || '918600380233';
 
   const itemsList = (order.items || [])
-    .map((i, idx) => `${idx + 1}. *${i.title || i.sku || 'Product'}* (${i.variant || 'Standard'}) x${i.quantity} - ₹${(i.price || 0) * i.quantity}`)
+    .map((i, idx) => `${idx + 1}. *${i.name || i.title || i.sku || 'Product'}* (${i.variantName || i.variant || 'Standard'}) x${i.quantity || 1} - ₹${((i.unitPrice || i.price || 0) * (i.quantity || 1))}`)
     .join('\n');
 
-  const isCod = order.payment && order.payment.provider === 'COD';
+  const isCod = (order.payment && order.payment.provider === 'COD') || order.paymentMethod === 'cod';
   const paymentMethod = isCod ? '💵 Cash on Delivery (COD)' : '💳 Online Payment (Razorpay)';
+  const deliveryDate = formatEstimatedDeliveryDate(order.createdAt);
 
   const customerName = order.customer?.name || 'N/A';
   const customerPhone = order.customer?.phone || 'N/A';
@@ -112,6 +128,8 @@ async function sendAdminOrderNotificationWhatsApp(order) {
     `• *Address:* ${addressStr}\n\n` +
     `🛍️ *Ordered Products:*\n${itemsList}\n\n` +
     `📦 *Shipment Status:* ${order.shipping?.status || 'NOT_BOOKED'} ${order.shipping?.awb ? `(AWB: ${order.shipping.awb})` : ''}\n` +
+    `🚚 *Est. Delivery Date (+2 days):* ${deliveryDate}\n` +
+    `📞 *Support Helpline:* +91 99703 47703\n` +
     `⏰ *Booking Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`;
 
   logger.info('SENDING_ADMIN_WHATSAPP_NOTIFICATION', { orderId: order.orderId, adminPhone });
@@ -119,7 +137,7 @@ async function sendAdminOrderNotificationWhatsApp(order) {
 }
 
 /**
- * Send Order Confirmation WhatsApp message.
+ * Send Order Confirmation WhatsApp message to Customer.
  */
 async function sendOrderConfirmationWhatsApp(order) {
   if (!order || !order.customer || !order.customer.phone) return false;
@@ -129,29 +147,43 @@ async function sendOrderConfirmationWhatsApp(order) {
     logger.error('WHATSAPP_ADMIN_NOTIFY_FAILED', { orderId: order.orderId, error: err.message });
   });
 
+  const customerName = order.customer.name || 'Valued Customer';
   const itemsList = (order.items || [])
-    .map(i => `• *${i.title}* (${i.variant || 'Standard'}) x${i.quantity}`)
-    .join('\n');
+    .map(i => `• *${i.name || i.title || i.sku || 'Item'}* (${i.variantName || i.variant || 'Standard'}) x${i.quantity || 1}`)
+    .join('\n') || '• Authentic Umrah Duas Flashcard Collection';
 
-  const paymentType = order.payment && order.payment.provider === 'COD' 
-    ? 'Cash on Delivery (COD)' 
-    : 'Online Payment (Razorpay)';
+  const isCod = (order.payment && order.payment.provider === 'COD') || order.paymentMethod === 'cod';
+  const paymentType = isCod ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)';
+  const totalAmount = order.pricing?.total || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0);
+  const deliveryDate = formatEstimatedDeliveryDate(order.createdAt);
+
+  const addressParts = [
+    order.customer.address1,
+    order.customer.address2,
+    order.customer.city,
+    order.customer.state,
+    order.customer.pincode ? `PIN: ${order.customer.pincode}` : null
+  ].filter(Boolean);
+  const addressStr = addressParts.length > 0 ? addressParts.join(', ') : 'Provided on Checkout';
 
   const message =
-    `✨ *Order Confirmed!*\n` +
-    `Thank you for shopping with *Fatima Calligrapher*.\n\n` +
+    `Assalamu Alaikum / Hello ${customerName},\n\n` +
+    `🎉 *Your order is successfully placed with Fatima Calligrapher!*\n\n` +
     `📋 *Order ID:* #${order.orderId}\n` +
-    `💰 *Total Paid/Amount:* ₹${order.pricing?.total || 0}\n` +
-    `💳 *Payment Method:* ${paymentType}\n\n` +
+    `💳 *Payment Method:* ${paymentType}\n` +
+    `💰 *Total Amount:* ₹${totalAmount}\n\n` +
     `📦 *Items Ordered:*\n${itemsList}\n\n` +
-    `📍 *Delivery Address:* ${order.customer.name}, ${order.customer.address1}, ${order.customer.city} - ${order.customer.pincode}\n\n` +
-    `We are preparing your parcel for dispatch. You will receive tracking updates here once shipped! ❤️`;
+    `📍 *Delivery Address:* ${customerName}, ${addressStr}\n\n` +
+    `🚚 *Estimated Delivery Date:* *${deliveryDate}* (Within 2 Days)\n\n` +
+    `We are preparing your parcel for prompt dispatch. You will receive tracking updates here once shipped! ❤️\n\n` +
+    `📞 *For Support / Help Call:* +91 99703 47703\n` +
+    `*Fatima Calligrapher Team*`;
 
   return await sendTextMessage(order.customer.phone, message);
 }
 
 /**
- * Send Shipping Confirmation & Tracking WhatsApp message.
+ * Send Shipping Confirmation & Tracking WhatsApp message to Customer.
  */
 async function sendShippingConfirmationWhatsApp(order) {
   if (!order || !order.customer || !order.customer.phone) return false;
@@ -159,14 +191,17 @@ async function sendShippingConfirmationWhatsApp(order) {
   const courier = order.shipping?.courierName || 'Shiprocket Express Partner';
   const trackingUrl = order.shipping?.trackingUrl || `https://shiprocket.co/tracking/${order.shipping?.shiprocketOrderId || ''}`;
   const awb = order.shipping?.awb || 'Processing';
+  const deliveryDate = formatEstimatedDeliveryDate(order.shipping?.bookedAt || order.createdAt);
 
   const message =
     `🚚 *Shipment Dispatched!*\n` +
     `Your order *#${order.orderId}* is on its way!\n\n` +
     `📦 *Courier Partner:* ${courier}\n` +
     `🔖 *AWB / Tracking Code:* ${awb}\n` +
+    `🗓️ *Estimated Delivery:* *${deliveryDate}* (Within 2 Days)\n` +
     `🔗 *Live Tracking Link:* ${trackingUrl}\n\n` +
-    `Thank you for choosing Fatima Calligrapher! ✨`;
+    `📞 *Customer Support:* +91 99703 47703\n\n` +
+    `Thank you for choosing *Fatima Calligrapher*! ✨`;
 
   return await sendTextMessage(order.customer.phone, message);
 }

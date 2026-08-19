@@ -504,6 +504,7 @@
                 const awb = order.shipping && order.shipping.awb;
                 const courierName = order.shipping && order.shipping.courierName;
                 const status = (order.status || 'PENDING').toUpperCase();
+                const isPendingPayment = (status === 'PENDING_PAYMENT' || status === 'COD_PENDING' || paymentStatus !== 'CAPTURED') && status !== 'CANCELLED';
 
                 // Order General Status Badge
                 let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-700">${status}</span>`;
@@ -571,7 +572,7 @@
                 return `
                     <tr class="hover:bg-gray-50/70 transition-colors">
                         <td class="py-3 px-4 font-mono font-bold text-indigo-600">
-                            <button onclick="openOrderDetail('${orderId}')" class="hover:underline text-left">
+                            <button onclick="openOrderDetail('${orderId}')" class="hover:underline text-left cursor-pointer">
                                 ${orderId}
                             </button>
                             <div class="text-[10px] font-normal text-gray-500 font-sans mt-0.5">${dateStr}</div>
@@ -599,7 +600,16 @@
                         </td>
                         <td class="py-3 px-4">${statusBadge}</td>
                         <td class="py-3 px-4 text-right">
-                            <div class="flex items-center justify-end gap-1.5">
+                            <div class="flex items-center justify-end gap-1.5 flex-wrap">
+                                ${isPendingPayment ? `
+                                    <button onclick="sendOrderWhatsApp('${orderId}')" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Send WhatsApp Payment Link">
+                                        <i class="fa-brands fa-whatsapp text-amber-600 text-xs"></i> Pay Link
+                                    </button>
+                                ` : `
+                                    <button onclick="sendOrderWhatsApp('${orderId}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Send WhatsApp Order Confirmation">
+                                        <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i> WhatsApp
+                                    </button>
+                                `}
                                 ${order.shipping && order.shipping.shiprocketOrderId ? `
                                     <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1" title="Download Shipping Label">
                                         <i class="fa-solid fa-tag text-xs"></i> Label
@@ -608,11 +618,11 @@
                                         <i class="fa-solid fa-file-invoice text-xs"></i> Invoice
                                     </a>
                                 ` : ''}
-                                <button onclick="openOrderDetail('${orderId}')" class="px-2 py-1 bg-white hover:bg-gray-100 border border-[#E5E7EB] text-[#111827] rounded text-[11px] font-medium transition-colors" title="View full details">
+                                <button onclick="openOrderDetail('${orderId}')" class="px-2 py-1 bg-white hover:bg-gray-100 border border-[#E5E7EB] text-[#111827] rounded text-[11px] font-medium transition-colors cursor-pointer" title="View full details">
                                     View
                                 </button>
                                 ${status !== 'CANCELLED' ? `
-                                    <button onclick="promptCancelOrder('${orderId}')" class="px-2 py-1 bg-white hover:bg-red-50 border border-red-200 text-red-600 rounded text-[11px] font-medium transition-colors" title="Cancel this order">
+                                    <button onclick="promptCancelOrder('${orderId}')" class="px-2 py-1 bg-white hover:bg-red-50 border border-red-200 text-red-600 rounded text-[11px] font-medium transition-colors cursor-pointer" title="Cancel this order">
                                         Cancel
                                     </button>
                                 ` : ''}
@@ -629,7 +639,27 @@
             if (!order) return;
 
             document.getElementById('modal-order-id').textContent = `Order ${order.orderId}`;
+            
             const isCancelled = order.status === 'CANCELLED';
+            const isCod = (order.payment && order.payment.provider === 'COD') || (order.paymentMethod === 'cod');
+            const paymentStatus = (order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING');
+            const awb = order.shipping && order.shipping.awb;
+            const courierName = order.shipping && order.shipping.courierName;
+            const shippingStatus = (order.shipping && order.shipping.status) || (isCod && !awb ? 'OTP_NOT_VERIFIED' : 'NOT_BOOKED');
+            const status = (order.status || 'PENDING').toUpperCase();
+            const isPendingPayment = (status === 'PENDING_PAYMENT' || status === 'COD_PENDING' || paymentStatus !== 'CAPTURED') && status !== 'CANCELLED';
+
+            // Set badge in header
+            const badgeEl = document.getElementById('modal-order-badge');
+            if (badgeEl) {
+                let badgeClass = 'bg-gray-100 text-gray-700';
+                if (status === 'CANCELLED') badgeClass = 'bg-red-50 text-red-700 border border-red-200';
+                else if (['SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status)) badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+                else if (status === 'PAYMENT_CAPTURED') badgeClass = 'bg-indigo-50 text-indigo-700 border border-indigo-200';
+                else if (status === 'COD_PENDING' || status === 'PENDING_PAYMENT') badgeClass = 'bg-amber-50 text-amber-700 border border-amber-200';
+                badgeEl.className = `px-2 py-0.5 rounded text-[10px] font-semibold ${badgeClass}`;
+                badgeEl.textContent = status;
+            }
 
             const itemsHtml = (order.items || []).map(i => `
                 <div class="flex justify-between items-center py-1.5 border-b border-gray-100 text-xs">
@@ -655,15 +685,39 @@
             `).join('');
 
             document.getElementById('modal-order-body').innerHTML = `
+                <!-- WhatsApp Notification Card -->
+                ${!isCancelled ? `
+                    <div class="p-3 ${isPendingPayment ? 'bg-amber-50/90 border-amber-200' : 'bg-emerald-50/90 border-emerald-200'} rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-lg ${isPendingPayment ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'} flex items-center justify-center text-sm flex-shrink-0">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold ${isPendingPayment ? 'text-amber-950' : 'text-emerald-950'} text-xs">
+                                    ${isPendingPayment ? 'Payment is Pending' : 'Order Placed & Confirmed'}
+                                </div>
+                                <div class="text-[11px] ${isPendingPayment ? 'text-amber-800' : 'text-emerald-800'}">
+                                    ${isPendingPayment 
+                                        ? 'Send WhatsApp payment link with order details & support contact (+91 99703 47703).' 
+                                        : 'Send WhatsApp confirmation with +2 days delivery, COD/online info, and support contact.'}
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="sendOrderWhatsApp('${order.orderId}')" class="px-3 py-1.5 ${isPendingPayment ? 'bg-amber-600 hover:bg-amber-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer whitespace-nowrap">
+                            <i class="fa-brands fa-whatsapp"></i> ${isPendingPayment ? 'Send Payment Link' : 'Send Order Message'}
+                        </button>
+                    </div>
+                ` : ''}
+
                 <!-- Customer Details -->
                 <div class="bg-gray-50 p-3 rounded-lg border border-[#E5E7EB]">
                     <div class="font-semibold text-[#111827] mb-1 flex items-center gap-1.5">
                         <i class="fa-solid fa-location-dot text-indigo-600"></i> Shipping / Delivery Information
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-gray-700">
-                        <div><b>Recipient:</b> ${order.customer?.name} (${order.customer?.phone})</div>
-                        <div><b>Pincode:</b> ${order.customer?.pincode} • ${order.customer?.city}, ${order.customer?.state}</div>
-                        <div class="sm:col-span-2"><b>Address:</b> ${order.customer?.address1} ${order.customer?.address2 ? ', ' + order.customer.address2 : ''}</div>
+                        <div><b>Recipient:</b> ${order.customer?.name || 'N/A'} (${order.customer?.phone || 'N/A'})</div>
+                        <div><b>Pincode:</b> ${order.customer?.pincode || '-'} • ${order.customer?.city || ''}, ${order.customer?.state || ''}</div>
+                        <div class="sm:col-span-2"><b>Address:</b> ${order.customer?.address1 || ''} ${order.customer?.address2 ? ', ' + order.customer.address2 : ''}</div>
                     </div>
                 </div>
 
@@ -687,7 +741,7 @@
                             ${isCod ? '<span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">COD</span>' : '<span class="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Online / UPI</span>'}
                         </div>
                         <div class="text-[11px] space-y-1.5 text-gray-600">
-                            <div>Method: <b>${isCod ? 'Cash on Delivery' : 'Online Payment (UPI/Cards)'}</b></div>
+                            <div>Method: <b>${isCod ? 'Cash on Delivery (COD)' : 'Online Payment (UPI/Cards)'}</b></div>
                             <div>Payment Status: <b>${paymentStatus}</b></div>
                             ${order.payment?.razorpayPaymentId ? `<div>Payment ID: <b class="font-mono text-indigo-600">${order.payment.razorpayPaymentId}</b></div>` : ''}
                             ${!isCod && paymentStatus !== 'CAPTURED' ? `
@@ -739,19 +793,144 @@
             const actionContainer = document.getElementById('modal-action-buttons');
             actionContainer.innerHTML = `
                 ${!isCancelled ? `
-                    <button onclick="closeOrderDetailModal(); promptCancelOrder('${order.orderId}');" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg text-xs font-semibold">
+                    <button onclick="sendOrderWhatsApp('${order.orderId}')" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp Message
+                    </button>
+                    <button onclick="closeOrderDetailModal(); promptCancelOrder('${order.orderId}');" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg text-xs font-semibold cursor-pointer">
                         <i class="fa-solid fa-ban mr-1"></i> Cancel Order
                     </button>
                 ` : '<span class="text-xs text-red-600 font-semibold">Order is Cancelled</span>'}
 
                 ${order.shipping?.status === 'FAILED' ? `
-                    <button onclick="retryShipping('${order.orderId}')" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold">
+                    <button onclick="retryShipping('${order.orderId}')" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
                         <i class="fa-solid fa-truck-fast mr-1"></i> Retry Shipping
                     </button>
                 ` : ''}
             `;
 
             document.getElementById('order-detail-modal').classList.remove('hidden');
+        }
+
+        // Calculate +2 days estimated delivery string
+        function getEstimatedDeliveryDateStr(baseDate) {
+            const d = baseDate ? new Date(baseDate) : new Date();
+            d.setDate(d.getDate() + 2);
+            return d.toLocaleDateString('en-IN', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        // Direct WhatsApp Message Sender (Handles Booked, Confirmed, and Pending Orders)
+        function sendOrderWhatsApp(orderId) {
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            if (!order) {
+                alert("Order not found.");
+                return;
+            }
+
+            const phoneRaw = order.customer && order.customer.phone ? String(order.customer.phone).trim() : '';
+            let cleanPhone = phoneRaw.replace(/\D/g, '');
+            if (cleanPhone.length === 10) {
+                cleanPhone = '91' + cleanPhone;
+            } else if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
+                // already formatted
+            } else if (!cleanPhone) {
+                alert("Customer phone number is missing for this order.");
+                return;
+            }
+
+            const customerName = (order.customer && order.customer.name) || 'Valued Customer';
+            const totalAmount = order.pricing && order.pricing.total ? order.pricing.total : (order.payment && order.payment.amountPaise ? (order.payment.amountPaise / 100) : 0);
+            const itemsList = (order.items || []).map(i => `• ${i.name || i.variantName || 'Item'} (Qty: ${i.quantity || 1})`).join('\n') || '• Fatima Calligrapher Collection';
+            
+            const isCod = (order.payment && order.payment.provider === 'COD') || (order.paymentMethod === 'cod');
+            const paymentMethodStr = isCod ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)';
+            const status = (order.status || 'PENDING').toUpperCase();
+            const paymentStatus = (order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING');
+            const isPending = (status === 'PENDING_PAYMENT' || status === 'COD_PENDING' || paymentStatus !== 'CAPTURED') && status !== 'CANCELLED';
+
+            const addressParts = [
+                order.customer?.address1,
+                order.customer?.address2,
+                order.customer?.city,
+                order.customer?.state,
+                order.customer?.pincode ? `PIN: ${order.customer.pincode}` : null
+            ].filter(Boolean);
+            const addressStr = addressParts.length > 0 ? addressParts.join(', ') : 'Delivery Address';
+
+            const storeOrigin = window.location.origin;
+            const orderUrl = `${storeOrigin}/checkout.html?orderId=${encodeURIComponent(order.orderId)}`;
+            const deliveryDateStr = getEstimatedDeliveryDateStr(order.createdAt);
+
+            let message = '';
+
+            if (isPending) {
+                // Pending payment message
+                message = 
+`Assalamu Alaikum / Hello ${customerName},
+
+Thank you for choosing *Fatima Calligrapher*! 🌸
+
+We noticed that the payment for your order *#${order.orderId}* is currently pending.
+
+📦 *Order Summary:*
+• *Order ID:* #${order.orderId}
+${itemsList}
+• *Total Payable:* Rs. ${totalAmount}
+• *Payment Method:* ${paymentMethodStr}
+
+💳 *Complete Your Order & Payment:*
+Please click the secure link below to open your order and complete payment for immediate dispatch:
+👉 ${orderUrl}
+
+🚚 *Estimated Delivery Date:*
+Within 2 days of confirmation (*${deliveryDateStr}*)
+
+📞 *Need Support or have Questions?*
+Call / WhatsApp Support: *+91 99703 47703*
+
+Warm regards,
+*Fatima Calligrapher Support Team*`;
+            } else {
+                // Booked / Placed / Confirmed Order message
+                message = 
+`Assalamu Alaikum / Hello ${customerName},
+
+🎉 *Your order is successfully placed with Fatima Calligrapher!*
+
+📋 *Order Details:*
+• *Order ID:* #${order.orderId}
+• *Payment Method:* ${paymentMethodStr}
+• *Total Amount:* Rs. ${totalAmount}
+
+📦 *Items Ordered:*
+${itemsList}
+
+📍 *Delivery Address:*
+${customerName}, ${addressStr}
+
+🚚 *Estimated Delivery Date:*
+*${deliveryDateStr}* (Within 2 Days)
+
+🔗 *Direct Order Page / Tracking:*
+👉 ${orderUrl}
+
+📞 *For Support / Help Call:*
+*+91 99703 47703*
+
+Thank you for shopping with *Fatima Calligrapher*! ❤️`;
+            }
+
+            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Backwards compatibility alias
+        function sendPendingPaymentWhatsApp(orderId) {
+            sendOrderWhatsApp(orderId);
         }
 
         function closeOrderDetailModal() {

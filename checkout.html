@@ -135,6 +135,23 @@
             </span>
         </div>
 
+        <!-- PENDING ORDER RESUMPTION BANNER -->
+        <div id="pending-order-banner" class="hidden mb-5 p-4 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-950 flex items-start gap-3.5 shadow-sm">
+            <div class="w-9 h-9 rounded-xl bg-amber-200/70 text-amber-800 flex items-center justify-center flex-shrink-0 text-base">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <div class="flex-grow min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="font-bold text-xs sm:text-sm text-onyx">Complete Pending Order:</span>
+                    <span id="banner-order-id" class="font-mono bg-white px-2 py-0.5 rounded-md text-xs font-bold text-indigo-700 border border-amber-200"></span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-200 text-amber-900 px-2 py-0.5 rounded">Payment Pending</span>
+                </div>
+                <p class="text-[11px] text-amber-900 mt-1 leading-relaxed">
+                    We have loaded your saved items and shipping address. Select your preferred payment method below to finalize your booking and guarantee fast delivery.
+                </p>
+            </div>
+        </div>
+
         <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-start">
             
             <!-- LEFT COLUMN: SHIPPING ADDRESS & PAYMENT METHOD (lg:col-span-7) -->
@@ -603,10 +620,11 @@
         }
 
         // INITIALIZE CHECKOUT
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             initCartFromParamsOrStorage();
             restoreCustomerDetails();
             renderCheckoutSummary();
+            await checkAndLoadPendingOrder();
 
             // Track InitiateCheckout
             const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
@@ -622,6 +640,70 @@
                 checkLivePincode(pinVal);
             }
         });
+
+        async function checkAndLoadPendingOrder() {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('orderId') || params.get('order');
+            if (!orderId) return;
+
+            try {
+                const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`);
+                const json = await res.json();
+                if (json.success && json.data) {
+                    const order = json.data;
+                    const status = (order.status || '').toUpperCase();
+
+                    // If order is completed/paid, directly show success & live tracking details
+                    if (['PAYMENT_CAPTURED', 'SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status)) {
+                        onOrderSuccess(order);
+                        return;
+                    }
+
+                    // Restore Cart Items from order
+                    if (Array.isArray(order.items) && order.items.length > 0) {
+                        checkoutCart = order.items.map(i => ({
+                            cartKey: `${i.id || 1}_${i.sku || 'default'}`,
+                            id: i.id || 1,
+                            name: i.name,
+                            sku: i.sku,
+                            variantName: i.variantName || '',
+                            price: i.unitPrice || i.price,
+                            image: i.image || 'hero.png',
+                            weightKg: i.weightKg || 0.10,
+                            qty: i.quantity || 1
+                        }));
+                        localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
+                    }
+
+                    // Restore Customer Details
+                    if (order.customer) {
+                        if (order.customer.name) document.getElementById('cust-name').value = order.customer.name;
+                        if (order.customer.phone) document.getElementById('cust-phone').value = String(order.customer.phone).replace(/^91/, '').replace(/\D/g, '');
+                        if (order.customer.pincode) document.getElementById('cust-pincode').value = order.customer.pincode;
+                        if (order.customer.city) document.getElementById('cust-city').value = order.customer.city;
+                        if (order.customer.state) document.getElementById('cust-state').value = order.customer.state;
+                        if (order.customer.address1) document.getElementById('cust-address1').value = order.customer.address1;
+                        if (order.customer.address2) document.getElementById('cust-address2').value = order.customer.address2;
+
+                        if (order.customer.pincode && String(order.customer.pincode).length === 6) {
+                            checkLivePincode(order.customer.pincode);
+                        }
+                    }
+
+                    // Show Banner
+                    const banner = document.getElementById('pending-order-banner');
+                    const bannerId = document.getElementById('banner-order-id');
+                    if (banner && bannerId) {
+                        bannerId.textContent = order.orderId;
+                        banner.classList.remove('hidden');
+                    }
+
+                    renderCheckoutSummary();
+                }
+            } catch (err) {
+                console.error("Could not fetch pending order:", err);
+            }
+        }
 
         function initCartFromParamsOrStorage() {
             const params = new URLSearchParams(window.location.search);
@@ -1268,13 +1350,21 @@
             localStorage.removeItem('fc_cart_items');
 
             // Render Success Box
+            const d = new Date();
+            d.setDate(d.getDate() + 2);
+            const estDateStr = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+
             const detailsEl = document.getElementById('success-order-details');
             detailsEl.innerHTML = `
                 <div><b>Order ID:</b> <span class="font-mono text-indigo-700 font-bold">${orderData.orderId}</span></div>
-                <div><b>Payment:</b> ${orderData.payment?.provider === 'COD' || selectedPaymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
+                <div><b>Payment Method:</b> ${orderData.payment?.provider === 'COD' || selectedPaymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
                 <div><b>Total Amount:</b> <span class="font-bold text-onyx">Rs. ${orderData.pricing?.total || val}</span></div>
+                <div><b>Estimated Delivery:</b> <span class="font-bold text-emerald-700">${estDateStr} (Within 2 Days)</span></div>
                 ${orderData.shipping?.awb ? `<div><b>Shiprocket AWB:</b> <span class="font-mono">${orderData.shipping.awb}</span></div>` : ''}
-                <div class="text-[10px] text-gray-500 pt-1 border-t border-gold-200">Confirmation SMS & WhatsApp dispatched.</div>
+                <div class="text-[11px] text-gray-600 pt-1.5 border-t border-gold-200 flex items-center justify-between">
+                    <span>Confirmation WhatsApp dispatched.</span>
+                    <a href="tel:+919970347703" class="text-indigo-600 font-bold hover:underline"><i class="fa-solid fa-phone text-[10px] mr-0.5"></i> Support: +91 99703 47703</a>
+                </div>
             `;
 
             document.getElementById('success-modal').classList.remove('hidden');
