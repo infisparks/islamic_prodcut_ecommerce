@@ -50,9 +50,11 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Calculate dynamic shipping fee live via Shiprocket courier API
+  // Calculate dynamic shipping fee (FREE for Online Payment, Paid for Cash on Delivery)
   let shipping = 0;
-  if (deliveryPincode) {
+  const isOnlinePayment = (paymentMethod !== 'cod');
+
+  if (!isOnlinePayment && deliveryPincode) {
     const shiprocketService = require('./shiprocketService');
     try {
       const servRes = await shiprocketService.checkServiceability(deliveryPincode, true, finalWeightKg);
@@ -93,15 +95,12 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
 
   const subtotalAfterCoupon = Math.max(0, subtotal - discount);
 
-  // Online Payment Discount (5% OFF) vs Cash on Delivery (COD) Extra Fee (₹21)
-  const isOnlinePayment = (paymentMethod !== 'cod');
+  // Online: 100% FREE Delivery | COD: Standard Delivery fee
   let onlineDiscount = 0;
   let codCharge = 0;
 
   if (isOnlinePayment) {
-    onlineDiscount = Math.round(subtotalAfterCoupon * 0.05);
-  } else {
-    codCharge = 21;
+    shipping = 0; // 100% Free delivery for Online payment
   }
 
   const total = Math.max(0, subtotalAfterCoupon - onlineDiscount + codCharge + shipping);

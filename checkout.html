@@ -262,7 +262,7 @@
                             </div>
                             <div>
                                 <h2 class="font-bold text-sm sm:text-base text-onyx">Payment Method</h2>
-                                <p class="text-[10px] text-gray-500">Choose Online (5% OFF) or Cash on Delivery (+₹21 COD fee)</p>
+                                <p class="text-[10px] text-gray-500">Choose Online (5% OFF + FREE Delivery) or Cash on Delivery</p>
                             </div>
                         </div>
                     </div>
@@ -294,7 +294,7 @@
                             </div>
                         </label>
 
-                        <!-- CASH ON DELIVERY (+Rs. 21 COD Fee) -->
+                        <!-- CASH ON DELIVERY (Pay on Doorstep) -->
                         <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" 
                             class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-gold-300 bg-white hover:bg-gold-50/20 cursor-pointer transition-all">
                             <input type="radio" name="payment_method" value="cod" id="radio-cod" class="mt-1 text-gold-600 focus:ring-gold-500 accent-gold-600">
@@ -304,16 +304,16 @@
                                         <i class="fa-solid fa-hand-holding-dollar text-amber-600 text-sm"></i>
                                         <span>Cash on Delivery (COD)</span>
                                     </span>
-                                    <span class="text-[9.5px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full">
-                                        +Rs. 21 COD Fee
+                                    <span class="text-[9.5px] font-bold text-stone-700 bg-stone-100 border border-stone-300 px-2 py-0.5 rounded-full">
+                                        Standard Delivery
                                     </span>
                                 </div>
                                 <p class="text-[11px] text-gray-500 mt-1 leading-snug">
-                                    Pay with cash when package arrives at your doorstep. Verified via WhatsApp OTP. Includes ₹21 handling fee.
+                                    Pay with cash when package arrives at your doorstep. Verified via WhatsApp OTP.
                                 </p>
                                 <div class="mt-1.5 flex items-center gap-2">
                                     <span id="badge-cod-price" class="text-[11px] font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md border border-gray-200">
-                                        Pay Rs. 512.00
+                                        Pay Rs. 491.00
                                     </span>
                                 </div>
                             </div>
@@ -375,10 +375,6 @@
                             <span>Online Payment (5% OFF):</span>
                             <span id="summary-online-discount">-Rs. 24.55</span>
                         </div>
-                        <div id="summary-cod-row" class="hidden flex justify-between items-center text-amber-800 font-bold">
-                            <span>COD Handling Charge:</span>
-                            <span id="summary-cod-charge">+Rs. 21.00</span>
-                        </div>
                         <div class="flex justify-between items-center">
                             <span>Delivery & Handling:</span>
                             <span id="summary-shipping" class="font-semibold text-gray-500">Enter Pincode</span>
@@ -437,7 +433,7 @@
                 class="w-full flex flex-col justify-between px-2.5 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/50 cursor-pointer h-[46px]">
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="font-black text-[10.5px] text-onyx tracking-tight">PAY ONLINE</span>
-                    <span class="bg-emerald-700 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded uppercase leading-none tracking-wide whitespace-nowrap">5% OFF</span>
+                    <span class="bg-emerald-700 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded uppercase leading-none tracking-wide whitespace-nowrap">⚡ 5% + FREE DEL</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="text-[8.5px] text-onyx/75 font-semibold">UPI • Cards</span>
@@ -450,11 +446,11 @@
                 class="w-full flex flex-col justify-between px-2.5 py-1.5 rounded-xl bg-onyx hover:bg-black text-white shadow-sm active:scale-[0.98] transition-all border border-gray-700/80 cursor-pointer h-[46px]">
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="font-bold text-[10.5px] text-white tracking-tight">PAY COD</span>
-                    <span class="bg-stone-800 text-amber-300 border border-amber-400/40 text-[7.5px] font-bold px-1.5 py-0.5 rounded leading-none whitespace-nowrap">+₹21</span>
+                    <span class="bg-stone-800 text-stone-300 border border-stone-700 text-[7.5px] font-bold px-1.5 py-0.5 rounded leading-none whitespace-nowrap">Doorstep</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
-                    <span class="text-[8.5px] text-gray-400 font-medium">At Doorstep</span>
-                    <span id="mobile-cod-price" class="text-[11.5px] font-bold text-amber-300 font-mono">Rs. 512.00</span>
+                    <span class="text-[8.5px] text-gray-400 font-medium">Cash on Delivery</span>
+                    <span id="mobile-cod-price" class="text-[11.5px] font-bold text-amber-300 font-mono">Rs. 491.00</span>
                 </div>
             </button>
 
@@ -880,34 +876,41 @@
 
             const subtotalAfterCoupon = Math.max(0, subtotal - discountAmount);
             const onlineDiscount = Math.round(subtotalAfterCoupon * 0.05);
-            const codCharge = 21;
-            const activeFee = (effectiveShipping !== null && effectiveShipping !== undefined) ? effectiveShipping : 0;
+            const codShippingFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 49;
 
-            // Calculations for both Online and COD
-            const onlineTotal = Math.max(0, subtotalAfterCoupon - onlineDiscount + activeFee);
-            const codTotal = Math.max(0, subtotalAfterCoupon + codCharge + activeFee);
+            // Calculations: Online = 5% OFF + Free Delivery (Rs. 0) | COD = Subtotal + Courier Shipping
+            const onlineTotal = Math.max(0, subtotalAfterCoupon - onlineDiscount);
+            const codTotal = Math.max(0, subtotalAfterCoupon + codShippingFee);
 
             // Update badge prices in Section 2
             const onlineBadgePrice = document.getElementById('badge-online-price');
             const codBadgePrice = document.getElementById('badge-cod-price');
-            if (onlineBadgePrice) onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Save Rs. ${onlineDiscount.toFixed(2)})`;
-            if (codBadgePrice) codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)} (+Rs. 21 COD Fee)`;
+            if (onlineBadgePrice) onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Save Rs. ${onlineDiscount.toFixed(2)} + Free Shipping)`;
+            if (codBadgePrice) codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)} (Delivery: Rs. ${codShippingFee.toFixed(2)})`;
 
-            // Update summary discount / charge rows
+            // Update summary discount / shipping display
             const onlineRow = document.getElementById('summary-online-row');
-            const codRow = document.getElementById('summary-cod-row');
             const onlineDiscountEl = document.getElementById('summary-online-discount');
-            const codChargeEl = document.getElementById('summary-cod-charge');
 
             if (selectedPaymentMethod === 'razorpay') {
                 if (onlineRow) onlineRow.classList.remove('hidden');
-                if (codRow) codRow.classList.add('hidden');
                 if (onlineDiscountEl) onlineDiscountEl.textContent = `-Rs. ${onlineDiscount.toFixed(2)}`;
+                if (shippingEl) {
+                    shippingEl.className = "font-extrabold text-emerald-700";
+                    shippingEl.textContent = "FREE Delivery (Online Offer)";
+                }
                 if (totalEl) totalEl.textContent = `Rs. ${onlineTotal.toFixed(2)}`;
             } else {
                 if (onlineRow) onlineRow.classList.add('hidden');
-                if (codRow) codRow.classList.remove('hidden');
-                if (codChargeEl) codChargeEl.textContent = `+Rs. ${codCharge.toFixed(2)}`;
+                if (shippingEl) {
+                    if (currentShippingFee === null || currentShippingFee === undefined) {
+                        shippingEl.className = "font-semibold text-gray-500";
+                        shippingEl.textContent = 'Enter Pincode';
+                    } else {
+                        shippingEl.className = "font-bold text-onyx";
+                        shippingEl.textContent = `Rs. ${codShippingFee.toFixed(2)}`;
+                    }
+                }
                 if (totalEl) totalEl.textContent = `Rs. ${codTotal.toFixed(2)}`;
             }
 
@@ -916,7 +919,7 @@
             const btnSubmitSub = document.getElementById('btn-submit-sub');
             if (btnSubmitText) {
                 if (selectedPaymentMethod === 'razorpay') {
-                    btnSubmitText.innerHTML = `<span>PAY ONLINE & SAVE 5%</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitText.innerHTML = `<span>PAY ONLINE & GET FREE DELIVERY</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
                 } else {
                     btnSubmitText.innerHTML = `<span>CONFIRM CASH ON DELIVERY</span> <span class="text-xs opacity-90 font-bold">(Rs. ${codTotal.toFixed(2)})</span>`;
                 }
@@ -925,7 +928,7 @@
                 if (selectedPaymentMethod === 'razorpay') {
                     btnSubmitSub.innerHTML = `<span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">Or choose <b>Cash on Delivery</b> (Rs. ${codTotal.toFixed(2)})</span>`;
                 } else {
-                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Save 5% (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Save 5% + FREE Delivery (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
                 }
             }
 
