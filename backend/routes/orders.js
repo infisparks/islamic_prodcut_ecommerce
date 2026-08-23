@@ -159,7 +159,7 @@ router.post('/verify-cod-otp', async (req, res, next) => {
  */
 router.post('/quote', async (req, res, next) => {
   try {
-    const { items, pincode, couponCode } = req.body;
+    const { items, pincode, couponCode, paymentMethod } = req.body;
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
@@ -167,7 +167,7 @@ router.post('/quote', async (req, res, next) => {
       });
     }
 
-    const trustedData = await buildTrustedOrderItems(items, pincode || null, couponCode || null);
+    const trustedData = await buildTrustedOrderItems(items, pincode || null, couponCode || null, paymentMethod || 'razorpay');
     return res.json({
       success: true,
       data: trustedData
@@ -223,7 +223,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
     }
 
     // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
-    const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode);
+    const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode, paymentMethod);
     const internalOrderId = generateOrderId();
     const now = new Date().toISOString();
 

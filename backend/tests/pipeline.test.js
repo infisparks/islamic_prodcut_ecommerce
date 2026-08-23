@@ -105,7 +105,7 @@ async function runTests() {
 
     assert.strictEqual(createRes.status, 201);
     assert.strictEqual(createRes.body.success, true);
-    assert.strictEqual(createRes.body.data.amount, 85000); // Rs 699 + Rs 151 live Shiprocket shipping = 85000 paise
+    assert.strictEqual(createRes.body.data.amount, 66400); // Rs 699 - 5% (Rs 35) = 66400 paise
     assert.ok(createRes.body.data.orderId.startsWith('FC-'));
 
     const { orderId, razorpayOrderId } = createRes.body.data;
@@ -150,14 +150,14 @@ async function runTests() {
       customer: mockCustomer,
       items: [
         { productId: 1, sku: 'fati_001', quantity: 2 }, // 699 * 2 = 1398
-        { productId: 5, sku: 'fati_stk_01', quantity: 1 } // 199 * 1 = 199 -> Subtotal = 1597 + 151 = 1748
+        { productId: 5, sku: 'fati_stk_01', quantity: 1 } // 199 * 1 = 199 -> Subtotal = 1597, -5% (80) = 1517
       ],
       paymentMethod: 'razorpay'
     });
 
     assert.strictEqual(createRes.status, 201);
-    assert.strictEqual(createRes.body.data.pricing.total, 1748);
-    assert.strictEqual(createRes.body.data.amount, 174800);
+    assert.strictEqual(createRes.body.data.pricing.total, 1517);
+    assert.strictEqual(createRes.body.data.amount, 151700);
 
     const { razorpayOrderId } = createRes.body.data;
     const paymentId = 'pay_cart_mult_999';
@@ -576,22 +576,32 @@ async function runTests() {
   await test('Scenario 19: Coupon Code RAB112 -> 12% discount for subtotal >= 999', async () => {
     const catalogService = require('../services/catalogService');
     
-    // Subtotal >= 999 -> 12% discount + Free shipping
+    // Subtotal >= 999 -> 12% discount + Free shipping + 5% online discount
     const validQuote = await catalogService.buildTrustedOrderItems([
-      { sku: 'FC-STICKER-GOLD-01', quantity: 1 }
-    ], '400001', 'RAB112');
+      { sku: 'fati_001', quantity: 2 }
+    ], '400001', 'RAB112', 'razorpay');
 
-    assert.strictEqual(validQuote.pricing.subtotal, 1299);
-    assert.strictEqual(validQuote.pricing.discount, 156); // 12% of 1299 = 155.88 ~ 156
+    assert.strictEqual(validQuote.pricing.subtotal, 1398);
+    assert.strictEqual(validQuote.pricing.discount, 168); // 12% of 1398 = 167.76 ~ 168
     assert.strictEqual(validQuote.pricing.couponCode, 'RAB112');
-    assert.strictEqual(validQuote.pricing.shipping, 0); // Free shipping for >= 999
-    assert.strictEqual(validQuote.pricing.total, 1143); // 1299 - 156 = 1143
+    assert.strictEqual(validQuote.pricing.shipping, 0); // Free shipping for >= 299
+    assert.strictEqual(validQuote.pricing.onlineDiscount, 62); // 5% of (1398-168=1230) = 61.5 ~ 62
+    assert.strictEqual(validQuote.pricing.total, 1168); // 1230 - 62 = 1168
+
+    // Subtotal with COD payment -> +₹21 codCharge
+    const codQuote = await catalogService.buildTrustedOrderItems([
+      { sku: 'fati_001', quantity: 1 }
+    ], '400001', null, 'cod');
+    assert.strictEqual(codQuote.pricing.subtotal, 699);
+    assert.strictEqual(codQuote.pricing.codCharge, 21);
+    assert.strictEqual(codQuote.pricing.onlineDiscount, 0);
+    assert.strictEqual(codQuote.pricing.total, 720); // 699 + 21 = 720
 
     // Subtotal < 999 -> throws COUPON_MIN_AMOUNT_NOT_MET
     let thrownErr = null;
     try {
       await catalogService.buildTrustedOrderItems([
-        { sku: 'FC-STICKER-URDU-01', quantity: 1 }
+        { sku: 'fati_003', quantity: 1 }
       ], '400001', 'RAB112');
     } catch (e) {
       thrownErr = e;

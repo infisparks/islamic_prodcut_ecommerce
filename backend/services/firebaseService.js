@@ -376,6 +376,28 @@ const firebaseService = {
     return count;
   },
 
+  // Permanently delete order
+  deleteOrder: async (orderId) => {
+    delete mockStore.orders[orderId];
+
+    if (useDatabaseSecret) {
+      try {
+        await axios.delete(getDbUrl(`orders/${orderId}`), { timeout: 10000 });
+        return true;
+      } catch (err) {
+        logger.error('FIREBASE_REST_DELETE_ERROR', { error: err.message, orderId });
+      }
+    }
+
+    if (db) {
+      const ref = db.ref(`orders/${orderId}`);
+      await ref.remove();
+      return true;
+    }
+
+    return true;
+  },
+
   // Clear mock data (for testing)
   _resetMockStore: () => {
     mockStore.orders = {};

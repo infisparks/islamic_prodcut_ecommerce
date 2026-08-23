@@ -3,7 +3,7 @@ const { findItemBySku } = require('../config/catalog');
 /**
  * Authoritatively calculates cart items and total pricing from server catalog
  */
-async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = null) {
+async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = null, paymentMethod = 'razorpay') {
   let subtotal = 0;
   let totalWeightKg = 0;
   let maxDimensions = { length: 15, breadth: 10, height: 2.5 }; // base package dimensions
@@ -96,7 +96,20 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
     }
   }
 
-  const total = Math.max(0, subtotal - discount + shipping);
+  const subtotalAfterCoupon = Math.max(0, subtotal - discount);
+
+  // Online Payment Discount (5% OFF) vs Cash on Delivery (COD) Extra Fee (₹21)
+  const isOnlinePayment = (paymentMethod !== 'cod');
+  let onlineDiscount = 0;
+  let codCharge = 0;
+
+  if (isOnlinePayment) {
+    onlineDiscount = Math.round(subtotalAfterCoupon * 0.05);
+  } else {
+    codCharge = 21;
+  }
+
+  const total = Math.max(0, subtotalAfterCoupon - onlineDiscount + codCharge + shipping);
 
   return {
     items,
@@ -104,6 +117,8 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
       subtotal,
       discount,
       couponCode: appliedCoupon,
+      onlineDiscount,
+      codCharge,
       shipping,
       total,
       currency: 'INR'
