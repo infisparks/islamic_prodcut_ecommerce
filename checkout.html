@@ -845,11 +845,8 @@
             if (countEl) countEl.textContent = totalQty;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
-            // Shipping logic: Free above 299
+            // Shipping fee calculated from pincode lookup
             let effectiveShipping = currentShippingFee;
-            if (subtotal >= 299 && currentShippingFee !== null) {
-                effectiveShipping = 0;
-            }
 
             if (effectiveShipping === null || effectiveShipping === undefined) {
                 if (shippingEl) {
@@ -1427,6 +1424,7 @@
             } catch (err) {
                 closeWhatsAppOtpModal();
                 showErrorModal("Server Error", "An error occurred while confirming your order.");
+            }
         }
 
         function startOtpResendCountdown(seconds) {

@@ -2564,9 +2564,6 @@
             }
 
             let effectiveFee = currentShippingFee;
-            if (subtotalPrice >= 299 && currentShippingFee !== null) {
-                effectiveFee = 0;
-            }
             const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
             const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - discountAmount + activeFee) : 0;
 

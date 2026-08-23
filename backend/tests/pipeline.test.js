@@ -576,7 +576,7 @@ async function runTests() {
   await test('Scenario 19: Coupon Code RAB112 -> 12% discount for subtotal >= 999', async () => {
     const catalogService = require('../services/catalogService');
     
-    // Subtotal >= 999 -> 12% discount + Free shipping + 5% online discount
+    // Subtotal >= 999 -> 12% discount + Dynamic shipping + 5% online discount
     const validQuote = await catalogService.buildTrustedOrderItems([
       { sku: 'fati_001', quantity: 2 }
     ], '400001', 'RAB112', 'razorpay');
@@ -584,18 +584,19 @@ async function runTests() {
     assert.strictEqual(validQuote.pricing.subtotal, 1398);
     assert.strictEqual(validQuote.pricing.discount, 168); // 12% of 1398 = 167.76 ~ 168
     assert.strictEqual(validQuote.pricing.couponCode, 'RAB112');
-    assert.strictEqual(validQuote.pricing.shipping, 0); // Free shipping for >= 299
+    assert.strictEqual(validQuote.pricing.shipping, 40); // 400001 Mumbai local zone = Rs. 40
     assert.strictEqual(validQuote.pricing.onlineDiscount, 62); // 5% of (1398-168=1230) = 61.5 ~ 62
-    assert.strictEqual(validQuote.pricing.total, 1168); // 1230 - 62 = 1168
+    assert.strictEqual(validQuote.pricing.total, 1208); // 1230 - 62 + 40 = 1208
 
-    // Subtotal with COD payment -> +₹21 codCharge
+    // Subtotal with COD payment -> +₹21 codCharge + ₹40 shipping
     const codQuote = await catalogService.buildTrustedOrderItems([
       { sku: 'fati_001', quantity: 1 }
     ], '400001', null, 'cod');
     assert.strictEqual(codQuote.pricing.subtotal, 699);
+    assert.strictEqual(codQuote.pricing.shipping, 40);
     assert.strictEqual(codQuote.pricing.codCharge, 21);
     assert.strictEqual(codQuote.pricing.onlineDiscount, 0);
-    assert.strictEqual(codQuote.pricing.total, 720); // 699 + 21 = 720
+    assert.strictEqual(codQuote.pricing.total, 760); // 699 + 21 + 40 = 760
 
     // Subtotal < 999 -> throws COUPON_MIN_AMOUNT_NOT_MET
     let thrownErr = null;

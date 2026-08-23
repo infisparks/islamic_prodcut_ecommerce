@@ -1809,9 +1809,6 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             let effectiveFee = currentShippingFee;
-            if (subtotalPrice >= 299 && currentShippingFee !== null) {
-                effectiveFee = 0;
-            }
             const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
             const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice + activeFee) : 0;
 
