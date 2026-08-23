@@ -18,9 +18,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-    <!-- Chart.js for Responsive Booking & Revenue Graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
     <!-- SheetJS (Excel .xlsx Export) -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -323,62 +320,6 @@
                     </div>
                 </div>
 
-                <!-- INTERACTIVE BOOKING & REVENUE GRAPHS -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    
-                    <!-- Left: Booking & Revenue Trend Chart (Area / Line) -->
-                    <div class="lg:col-span-2 bg-white p-4 sm:p-5 rounded-xl border border-[#E5E7EB] shadow-xs flex flex-col justify-between">
-                        <div class="flex items-center justify-between pb-3 mb-2 border-b border-[#E5E7EB] flex-wrap gap-2">
-                            <div>
-                                <h3 class="text-sm font-bold text-[#111827] flex items-center gap-1.5">
-                                    <i class="fa-solid fa-chart-area text-indigo-600"></i>
-                                    <span>Booking & Revenue Timeline</span>
-                                </h3>
-                                <p class="text-[11px] text-[#6B7280]">Daily orders volume and gross revenue progression</p>
-                            </div>
-                            <div class="flex items-center gap-2 text-[11px]">
-                                <span class="inline-flex items-center gap-1 font-semibold text-indigo-600">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span> Revenue (₹)
-                                </span>
-                                <span class="inline-flex items-center gap-1 font-semibold text-emerald-600">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Bookings
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="relative w-full h-56 sm:h-64">
-                            <canvas id="bookingTimelineChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Right: Delivery & Payment Breakdown Doughnut Chart -->
-                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-[#E5E7EB] shadow-xs flex flex-col justify-between">
-                        <div class="pb-3 mb-2 border-b border-[#E5E7EB]">
-                            <h3 class="text-sm font-bold text-[#111827] flex items-center gap-1.5">
-                                <i class="fa-solid fa-chart-pie text-emerald-600"></i>
-                                <span>Delivery Settlement Ratio</span>
-                            </h3>
-                            <p class="text-[11px] text-[#6B7280]">Realized delivered vs in-transit & returns</p>
-                        </div>
-
-                        <div class="relative w-full h-48 sm:h-52 flex items-center justify-center">
-                            <canvas id="deliveryStatusChart"></canvas>
-                        </div>
-
-                        <div class="pt-3 border-t border-[#E5E7EB] grid grid-cols-2 gap-2 text-center text-xs">
-                            <div class="bg-emerald-50/60 p-2 rounded-lg border border-emerald-200/60">
-                                <div class="text-[10px] text-emerald-800 font-bold uppercase">Delivered %</div>
-                                <div class="text-base font-black text-emerald-700" id="chart-delivered-percent">0%</div>
-                            </div>
-                            <div class="bg-indigo-50/60 p-2 rounded-lg border border-indigo-200/60">
-                                <div class="text-[10px] text-indigo-800 font-bold uppercase">In-Transit %</div>
-                                <div class="text-base font-black text-indigo-700" id="chart-intransit-percent">0%</div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
                 <!-- ORDERS TABLE CARD -->
                 <div class="bg-white rounded-xl border border-[#E5E7EB] shadow-xs overflow-hidden">
                     
@@ -573,10 +514,6 @@
         let searchDebounceTimer = null;
         let activeDatePreset = 'all';
 
-        // Chart.js Instances
-        let timelineChartInstance = null;
-        let deliveryChartInstance = null;
-
         // Listen to Auth State
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -750,7 +687,6 @@
                 if (ordersData.success) {
                     currentOrdersList = ordersData.data || [];
                     renderOrdersTable(currentOrdersList, ordersData.summary);
-                    renderBookingCharts(currentOrdersList);
                 }
 
                 // 2. Fetch Filter-aware Aggregated Stats
@@ -790,200 +726,6 @@
             searchDebounceTimer = setTimeout(() => {
                 loadOrdersAndStats();
             }, 300);
-        }
-
-        // ==========================================
-        // RENDER INTERACTIVE BOOKING & REVENUE GRAPHS
-        // ==========================================
-        function renderBookingCharts(orders) {
-            if (!window.Chart) return;
-
-            // 1. Group Data by Date (Chronological)
-            const dateMap = {};
-            let deliveredCount = 0;
-            let inTransitCount = 0;
-            let pendingCount = 0;
-            let cancelledCount = 0;
-
-            // Sort ascending for charts
-            const chronologicalOrders = [...orders].sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
-
-            for (const o of chronologicalOrders) {
-                const status = (o.status || '').toUpperCase();
-                const total = o.pricing?.total || 0;
-                const isCancelled = status === 'CANCELLED';
-
-                if (status === 'DELIVERED') deliveredCount++;
-                else if (['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(status)) inTransitCount++;
-                else if (isCancelled) cancelledCount++;
-                else pendingCount++;
-
-                const d = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : 'Unknown';
-                if (!dateMap[d]) {
-                    dateMap[d] = { date: d, revenue: 0, orders: 0 };
-                }
-                if (!isCancelled) {
-                    dateMap[d].revenue += total;
-                }
-                dateMap[d].orders += 1;
-            }
-
-            const labels = Object.keys(dateMap);
-            const revenueData = labels.map(k => dateMap[k].revenue);
-            const ordersData = labels.map(k => dateMap[k].orders);
-
-            // Calculate ratios
-            const totalStatusCount = Math.max(1, deliveredCount + inTransitCount + pendingCount + cancelledCount);
-            const deliveredPercent = Math.round((deliveredCount / totalStatusCount) * 100);
-            const inTransitPercent = Math.round((inTransitCount / totalStatusCount) * 100);
-
-            const delPercentEl = document.getElementById('chart-delivered-percent');
-            const inTransPercentEl = document.getElementById('chart-intransit-percent');
-            if (delPercentEl) delPercentEl.textContent = `${deliveredPercent}%`;
-            if (inTransPercentEl) inTransPercentEl.textContent = `${inTransitPercent}%`;
-
-            // Destroy previous timeline chart if exists
-            if (timelineChartInstance) {
-                timelineChartInstance.destroy();
-            }
-
-            // Timeline Area Chart
-            const ctxTimeline = document.getElementById('bookingTimelineChart');
-            if (ctxTimeline) {
-                timelineChartInstance = new Chart(ctxTimeline, {
-                    type: 'line',
-                    data: {
-                        labels: labels.length > 0 ? labels : ['No Data'],
-                        datasets: [
-                            {
-                                label: 'Revenue (Rs.)',
-                                data: revenueData.length > 0 ? revenueData : [0],
-                                borderColor: '#4F46E5', // Indigo 600
-                                backgroundColor: 'rgba(79, 70, 229, 0.12)',
-                                fill: true,
-                                tension: 0.35,
-                                yAxisID: 'y',
-                                borderWidth: 2.5,
-                                pointBackgroundColor: '#4F46E5',
-                                pointRadius: 3,
-                                pointHoverRadius: 5
-                            },
-                            {
-                                label: 'Orders Booked',
-                                data: ordersData.length > 0 ? ordersData : [0],
-                                borderColor: '#10B981', // Emerald 500
-                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                                type: 'bar',
-                                yAxisID: 'y1',
-                                borderRadius: 6,
-                                maxBarThickness: 16
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            mode: 'index',
-                            intersect: false,
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                backgroundColor: '#111827',
-                                titleFont: { size: 12, weight: 'bold' },
-                                bodyFont: { size: 11 },
-                                padding: 10,
-                                cornerRadius: 8,
-                                callbacks: {
-                                    label: function(context) {
-                                        if (context.dataset.label === 'Revenue (Rs.)') {
-                                            return ` Revenue: Rs. ${context.raw.toLocaleString('en-IN')}`;
-                                        }
-                                        return ` Bookings: ${context.raw} orders`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { size: 10 }, color: '#6B7280' }
-                            },
-                            y: {
-                                type: 'linear',
-                                display: true,
-                                position: 'left',
-                                grid: { color: 'rgba(229, 231, 235, 0.8)' },
-                                ticks: {
-                                    font: { size: 10 },
-                                    color: '#4F46E5',
-                                    callback: (val) => '₹' + val.toLocaleString('en-IN')
-                                }
-                            },
-                            y1: {
-                                type: 'linear',
-                                display: true,
-                                position: 'right',
-                                grid: { drawOnChartArea: false },
-                                ticks: {
-                                    font: { size: 10 },
-                                    color: '#10B981',
-                                    stepSize: 1
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Destroy previous delivery chart if exists
-            if (deliveryChartInstance) {
-                deliveryChartInstance.destroy();
-            }
-
-            // Delivery Status Donut Chart
-            const ctxDelivery = document.getElementById('deliveryStatusChart');
-            if (ctxDelivery) {
-                deliveryChartInstance = new Chart(ctxDelivery, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Delivered', 'In-Transit', 'Pending', 'Cancelled'],
-                        datasets: [{
-                            data: [deliveredCount, inTransitCount, pendingCount, cancelledCount],
-                            backgroundColor: ['#10B981', '#6366F1', '#F59E0B', '#EF4444'],
-                            borderWidth: 2,
-                            borderColor: '#ffffff',
-                            hoverOffset: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '72%',
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    boxWidth: 10,
-                                    font: { size: 10, weight: 'bold' },
-                                    padding: 8
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: '#111827',
-                                cornerRadius: 8,
-                                padding: 8,
-                                callbacks: {
-                                    label: function(context) {
-                                        return ` ${context.label}: ${context.raw} orders`;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
         }
 
         // ==========================================
@@ -1080,35 +822,44 @@
                 const itemsNames = (order.items || []).map(i => `${i.name || i.variantName} (x${i.quantity || 1})`).join(', ');
                 const total = order.pricing ? `Rs. ${parseFloat(order.pricing.total).toFixed(2)}` : 'Rs. 0.00';
                 
-                // Payment & Shipping Status Evaluation
-                const isCod = (order.payment && order.payment.provider === 'COD') || (order.paymentMethod === 'cod');
-                const paymentStatus = (order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING');
-                const shippingStatus = (order.shipping && order.shipping.status) || 'NOT_BOOKED';
+                // Robust Payment Method & COD Detection (Case-insensitive & field fallback)
+                const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
+                const hasCodCharge = (order.pricing?.codCharge || 0) > 0;
+                const hasCodEvent = (order.events || []).some(e => (e.event || '').includes('COD'));
+                const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
+
+                const paymentStatus = ((order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING')).toUpperCase();
+                const shippingStatus = ((order.shipping && order.shipping.status) || 'NOT_BOOKED').toUpperCase();
                 const awb = order.shipping && order.shipping.awb;
                 const courierName = order.shipping && order.shipping.courierName;
                 const status = (order.status || 'PENDING').toUpperCase();
                 const isDelivered = status === 'DELIVERED';
-                const isOnlinePendingPayment = !isCod && (status === 'PENDING_PAYMENT' || paymentStatus !== 'CAPTURED') && status !== 'CANCELLED';
+                const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || (order.payment && order.payment.razorpayPaymentId));
+                const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED';
 
                 let paymentBadge = '';
                 let shippingDisplay = '';
 
                 if (isCod) {
-                    if (isDelivered || ['SHIPMENT_BOOKED', 'SHIPPED'].includes(status) || awb || (order.shipping && order.shipping.shiprocketOrderId)) {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">COD (+₹21)</span>`;
+                    paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">COD (+₹21)</span>`;
+                    if (isDelivered) {
                         shippingDisplay = `
-                            <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Booked'}</div>
-                            <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> OTP Verified</div>
+                            <div class="font-mono text-[11px] font-bold text-emerald-700">${awb || 'Delivered'}</div>
+                            <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> Settled</div>
+                        `;
+                    } else if (awb || (order.shipping && order.shipping.shiprocketOrderId) || ['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT'].includes(status)) {
+                        shippingDisplay = `
+                            <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Shiprocket Booked'}</div>
+                            <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> ${courierName || 'OTP Verified'}</div>
                         `;
                     } else if (status === 'CANCELLED') {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">COD (Cancelled)</span>`;
                         shippingDisplay = `<span class="text-[10px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">COD (Unverified)</span>`;
-                        shippingDisplay = `<span class="text-[10px] text-amber-800 font-semibold"><i class="fa-solid fa-clock text-[9px]"></i> OTP Pending</span>`;
+                        shippingDisplay = `<span class="text-[10px] text-amber-800 font-semibold"><i class="fa-solid fa-clock text-[9px]"></i> Processing Dispatch</span>`;
                     }
                 } else {
-                    if (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || isDelivered || ['SHIPMENT_BOOKED', 'SHIPPED'].includes(status)) {
+                    // Online (Razorpay)
+                    if (isOnlinePaid || isDelivered) {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (5% OFF)</span>`;
                         if (awb || (order.shipping && order.shipping.shiprocketOrderId)) {
                             shippingDisplay = `
@@ -1118,9 +869,12 @@
                         } else {
                             shippingDisplay = `<span class="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Ready to Dispatch</span>`;
                         }
+                    } else if (status === 'CANCELLED') {
+                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">Online (Cancelled)</span>`;
+                        shippingDisplay = `<span class="text-[10px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">⏳ Payment Pending</span>`;
-                        shippingDisplay = `<span class="text-[10px] font-semibold text-gray-500">Payment Pending</span>`;
+                        shippingDisplay = `<span class="text-[10px] font-semibold text-gray-400">Awaiting Online Payment</span>`;
                     }
                 }
 
@@ -1452,13 +1206,18 @@
             
             const isCancelled = order.status === 'CANCELLED';
             const isDelivered = order.status === 'DELIVERED';
-            const isCod = (order.payment && order.payment.provider === 'COD') || (order.paymentMethod === 'cod');
-            const paymentStatus = (order.payment && order.payment.status) || (isCod ? (isDelivered ? 'CAPTURED' : 'COD_PENDING') : 'PENDING');
+            const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
+            const hasCodCharge = (order.pricing?.codCharge || 0) > 0;
+            const hasCodEvent = (order.events || []).some(e => (e.event || '').includes('COD'));
+            const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
+
+            const paymentStatus = ((order.payment && order.payment.status) || (isCod ? (isDelivered ? 'CAPTURED' : 'COD_PENDING') : 'PENDING')).toUpperCase();
             const awb = order.shipping && order.shipping.awb;
             const courierName = order.shipping && order.shipping.courierName;
-            const shippingStatus = (order.shipping && order.shipping.status) || (isCod && !awb ? 'OTP_NOT_VERIFIED' : 'NOT_BOOKED');
+            const shippingStatus = ((order.shipping && order.shipping.status) || (isCod && !awb ? 'OTP_NOT_VERIFIED' : 'NOT_BOOKED')).toUpperCase();
             const status = (order.status || 'PENDING').toUpperCase();
-            const isOnlinePendingPayment = !isCod && (status === 'PENDING_PAYMENT' || paymentStatus !== 'CAPTURED') && status !== 'CANCELLED';
+            const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || (order.payment && order.payment.razorpayPaymentId));
+            const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED';
 
             // Set badge in header
             const badgeEl = document.getElementById('modal-order-badge');
