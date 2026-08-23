@@ -41,6 +41,22 @@ async function getAllFromLocalOrDb() {
 }
 
 /**
+ * Helper to parse date strings (YYYY-MM-DD) in Indian Standard Time (IST, UTC+5:30)
+ * Ensures orders placed in Indian time correctly match Today, Yesterday, etc.
+ */
+function parseISTTimestamp(dateStr, isEndOfDay = false) {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+  const trimmed = dateStr.trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const ts = new Date(trimmed).getTime();
+    return isNaN(ts) ? null : ts;
+  }
+  const timePart = isEndOfDay ? '23:59:59.999+05:30' : '00:00:00.000+05:30';
+  const ts = new Date(`${trimmed}T${timePart}`).getTime();
+  return isNaN(ts) ? null : ts;
+}
+
+/**
  * GET /api/admin/orders
  * Fetch all orders with search, date range & status filters
  */
@@ -54,16 +70,16 @@ router.get('/orders', async (req, res, next) => {
       orders = Object.values(firebaseService._getMockStore ? firebaseService._getMockStore().orders : {});
     }
 
-    // Filter by Date Range
+    // Filter by Date Range (IST Aware)
     if (startDate) {
-      const startTimestamp = new Date(`${startDate}T00:00:00`).getTime();
-      if (!isNaN(startTimestamp)) {
+      const startTimestamp = parseISTTimestamp(startDate, false);
+      if (startTimestamp !== null) {
         orders = orders.filter(o => new Date(o.createdAt || 0).getTime() >= startTimestamp);
       }
     }
     if (endDate) {
-      const endTimestamp = new Date(`${endDate}T23:59:59.999`).getTime();
-      if (!isNaN(endTimestamp)) {
+      const endTimestamp = parseISTTimestamp(endDate, true);
+      if (endTimestamp !== null) {
         orders = orders.filter(o => new Date(o.createdAt || 0).getTime() <= endTimestamp);
       }
     }
@@ -111,7 +127,7 @@ router.get('/orders', async (req, res, next) => {
                awb.includes(q) || 
                city.includes(q) || 
                pincode.includes(q) || 
-               courier.includes(q) ||
+               courier.includes(q) || 
                itemMatches;
       });
     }
@@ -119,7 +135,6 @@ router.get('/orders', async (req, res, next) => {
     // Sort newest first
     orders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
-    // Calculate Summary Totals for the current filtered result
     let filteredRevenue = 0;
     let filteredDeliveredRevenue = 0;
     let filteredInTransitRevenue = 0;
@@ -188,16 +203,16 @@ router.get('/stats', async (req, res, next) => {
       orders = Object.values(firebaseService._getMockStore ? firebaseService._getMockStore().orders : {});
     }
 
-    // Filter by Date Range if provided
+    // Filter by Date Range if provided (IST Aware)
     if (startDate) {
-      const startTimestamp = new Date(`${startDate}T00:00:00`).getTime();
-      if (!isNaN(startTimestamp)) {
+      const startTimestamp = parseISTTimestamp(startDate, false);
+      if (startTimestamp !== null) {
         orders = orders.filter(o => new Date(o.createdAt || 0).getTime() >= startTimestamp);
       }
     }
     if (endDate) {
-      const endTimestamp = new Date(`${endDate}T23:59:59.999`).getTime();
-      if (!isNaN(endTimestamp)) {
+      const endTimestamp = parseISTTimestamp(endDate, true);
+      if (endTimestamp !== null) {
         orders = orders.filter(o => new Date(o.createdAt || 0).getTime() <= endTimestamp);
       }
     }
