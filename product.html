@@ -2175,10 +2175,27 @@
                     const otpRes = await fetch('/api/orders/send-cod-otp', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone: cleanPhone })
+                        body: JSON.stringify({
+                            phone: cleanPhone,
+                            customer: {
+                                name,
+                                phone: cleanPhone,
+                                emergencyPhone: cleanEmergencyPhone,
+                                address1,
+                                address2,
+                                city,
+                                state,
+                                pincode: cleanPincode
+                            },
+                            items: cart.map(i => ({
+                                sku: i.sku,
+                                quantity: i.qty
+                            }))
+                        })
                     });
                     const otpData = await otpRes.json();
                     if (otpRes.ok && otpData.success) {
+                        window.currentDraftCodOrderId = otpData.orderId || null;
                         openWhatsAppOtpModal(cleanPhone);
                     } else {
                         showErrorFeedback(otpData.error?.message || 'Failed to send WhatsApp OTP.', 'COD Verification Error');
@@ -2235,7 +2252,8 @@
                     quantity: i.qty
                 })),
                 paymentMethod: effectivePaymentMethod,
-                verificationToken: verificationToken || undefined
+                verificationToken: verificationToken || undefined,
+                draftOrderId: window.currentDraftCodOrderId || undefined
             };
 
             try {

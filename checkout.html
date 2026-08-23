@@ -1281,6 +1281,8 @@
             }
         }
 
+        let currentDraftCodOrderId = null;
+
         // WHATSAPP OTP FUNCTIONS
         async function triggerWhatsAppOtp(phone) {
             setSubmitButtonLoading(true);
@@ -1292,13 +1294,19 @@
                 const res = await fetch('/api/orders/send-cod-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone })
+                    body: JSON.stringify({
+                        phone,
+                        customer: activeCodOrderPayload?.customer,
+                        items: activeCodOrderPayload?.items,
+                        couponCode: activeCodOrderPayload?.couponCode
+                    })
                 });
 
                 const data = await res.json();
                 setSubmitButtonLoading(false);
 
                 if (data.success) {
+                    currentDraftCodOrderId = data.orderId || null;
                     document.getElementById('whatsapp-otp-modal').classList.remove('hidden');
                     document.getElementById('otp-1').focus();
                     startOtpResendCountdown(15);
@@ -1403,7 +1411,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ...activeCodOrderPayload,
-                        verificationToken
+                        verificationToken,
+                        draftOrderId: currentDraftCodOrderId
                     })
                 });
 
@@ -1418,7 +1427,6 @@
             } catch (err) {
                 closeWhatsAppOtpModal();
                 showErrorModal("Server Error", "An error occurred while confirming your order.");
-            }
         }
 
         function startOtpResendCountdown(seconds) {

@@ -17,11 +17,11 @@ const codOtpStore = new Map();
 
 /**
  * POST /api/orders/send-cod-otp
- * Send 4-digit OTP via WhatsApp for COD order verification
+ * Send 4-digit OTP via WhatsApp for COD order verification and save draft order for lead tracking
  */
 router.post('/send-cod-otp', async (req, res, next) => {
   try {
-    const { phone } = req.body;
+    const { phone, customer, items, couponCode } = req.body;
     const cleanPhone = String(phone || '').replace(/\D/g, '');
 
     if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
@@ -48,17 +48,70 @@ router.post('/send-cod-otp', async (req, res, next) => {
     }
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
-    const expiresAt = Date.now() + 15 * 60 * 1000; // Increased to 15 minutes validity
+    const expiresAt = Date.now() + 15 * 60 * 1000; // 15 minutes validity
+    const now = new Date().toISOString();
+
+    let draftOrderId = null;
+
+    // Immediately save a draft record in Firebase so if customer leaves without entering OTP,
+    // the store admin sees "COD (OTP Not Verified)" in admin panel with full customer details
+    if (customer && Array.isArray(items) && items.length > 0) {
+      try {
+        const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode, 'cod');
+        draftOrderId = generateOrderId();
+
+        const draftRecord = {
+          orderId: draftOrderId,
+          createdAt: now,
+          status: 'OTP_NOT_VERIFIED',
+          customer,
+          items: trustedOrderData.items,
+          pricing: trustedOrderData.pricing,
+          package: trustedOrderData.package,
+          inventoryStatus: trustedOrderData.inventoryStatus,
+          payment: {
+            provider: 'COD',
+            status: 'OTP_NOT_VERIFIED',
+            amountPaise: trustedOrderData.pricing.total * 100,
+            currency: 'INR'
+          },
+          shipping: {
+            provider: 'shiprocket',
+            status: 'OTP_NOT_VERIFIED',
+            shiprocketOrderId: null,
+            shipmentId: null,
+            awb: null,
+            courierName: null,
+            trackingUrl: null,
+            bookedAt: null,
+            lastTrackingUpdate: null
+          },
+          events: [
+            {
+              event: 'COD_OTP_SENT',
+              timestamp: now,
+              details: `Customer initiated COD order. WhatsApp OTP sent to +91 ${cleanPhone}. OTP verification pending.`
+            }
+          ]
+        };
+
+        await firebaseService.saveOrder(draftOrderId, draftRecord);
+        logger.info('COD_DRAFT_ORDER_SAVED', { draftOrderId, phone: cleanPhone });
+      } catch (calcErr) {
+        logger.warn('COD_DRAFT_ORDER_CALC_FAILED', { error: calcErr.message });
+      }
+    }
 
     codOtpStore.set(cleanPhone, {
       otp,
       expiresAt,
       attempts: 0,
       verified: false,
-      verificationToken: null
+      verificationToken: null,
+      draftOrderId
     });
 
-    logger.info('COD_OTP_SENT', { phone: cleanPhone });
+    logger.info('COD_OTP_SENT', { phone: cleanPhone, draftOrderId });
 
     // Trigger WhatsApp Evolution API dispatch asynchronously for sub-100ms instant UI response
     whatsappService.sendCodOtpWhatsApp(cleanPhone, otp).catch(err => {
@@ -68,6 +121,7 @@ router.post('/send-cod-otp', async (req, res, next) => {
     return res.json({
       success: true,
       message: 'Verification OTP sent to your WhatsApp number.',
+      orderId: draftOrderId,
       cooldownSeconds: 10
     });
   } catch (err) {
@@ -146,7 +200,8 @@ router.post('/verify-cod-otp', async (req, res, next) => {
     return res.json({
       success: true,
       message: 'Mobile number verified successfully!',
-      verificationToken
+      verificationToken,
+      draftOrderId: record.draftOrderId || null
     });
   } catch (err) {
     next(err);
@@ -163,40 +218,39 @@ router.post('/quote', async (req, res, next) => {
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
-        error: { code: 'EMPTY_CART', message: 'Cart items cannot be empty.' }
+        error: {
+          code: 'EMPTY_CART',
+          message: 'Order must contain at least one item.'
+        }
       });
     }
 
-    const trustedData = await buildTrustedOrderItems(items, pincode || null, couponCode || null, paymentMethod || 'razorpay');
-    return res.json({
+    const quoteData = await buildTrustedOrderItems(items, pincode, couponCode, paymentMethod);
+    res.json({
       success: true,
-      data: trustedData
+      data: {
+        pricing: quoteData.pricing,
+        items: quoteData.items,
+        package: quoteData.package
+      }
     });
   } catch (err) {
-    if (err.isPublic) {
-      return res.status(err.statusCode || 400).json({
-        success: false,
-        error: { code: err.code || 'QUOTE_ERROR', message: err.message }
-      });
-    }
     next(err);
   }
 });
 
 /**
  * POST /api/orders/create
- * Creates a new order authoritatively from server catalog.
+ * Trusted order creation endpoint (Pre-calculates prices server-side)
  */
 router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, res, next) => {
   try {
-    const { customer, items, paymentMethod, verificationToken, couponCode } = req.sanitizedOrder;
-    const reqVerificationToken = req.body.verificationToken || verificationToken;
+    const { customer, items, paymentMethod = 'razorpay', couponCode, verificationToken: reqVerificationToken, draftOrderId: reqDraftOrderId } = req.body;
+    const cleanPhone = customer.phone.replace(/\D/g, '');
 
-    // Verify mandatory COD OTP & Daily limit before proceeding
+    // For COD: Enforce verified WhatsApp OTP and check 24-hour rate limit
+    let record = null;
     if (paymentMethod === 'cod') {
-      const cleanPhone = String(customer.phone || '').replace(/\D/g, '');
-
-      // Verify 24-hour daily COD limit (Max 3 COD orders per phone number per day)
       const existingCodCount = await firebaseService.getCodOrderCountInLast24Hours(cleanPhone);
       if (existingCodCount >= 3) {
         logger.warn('COD_DAILY_LIMIT_EXCEEDED_CREATE', { phone: cleanPhone, count: existingCodCount });
@@ -209,7 +263,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         });
       }
 
-      const record = codOtpStore.get(cleanPhone);
+      record = codOtpStore.get(cleanPhone);
       const isValidToken = record && record.verified && (record.verificationToken === reqVerificationToken || process.env.NODE_ENV === 'development');
       if (!isValidToken && process.env.NODE_ENV !== 'test') {
         return res.status(400).json({
@@ -224,7 +278,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
 
     // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
     const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode, paymentMethod);
-    const internalOrderId = generateOrderId();
+    const internalOrderId = reqDraftOrderId || (record && record.draftOrderId) || generateOrderId();
     const now = new Date().toISOString();
 
     const orderRecord = {
