@@ -121,12 +121,17 @@ router.get('/orders', async (req, res, next) => {
 
     // Calculate Summary Totals for the current filtered result
     let filteredRevenue = 0;
+    let filteredDeliveredRevenue = 0;
+    let filteredInTransitRevenue = 0;
     let filteredPaidRevenue = 0;
     let filteredCodRevenue = 0;
+    let filteredDeliveredCount = 0;
+    let filteredInTransitCount = 0;
     let filteredItemsCount = 0;
 
     for (const o of orders) {
-      const isCancelled = (o.status || '').toUpperCase() === 'CANCELLED';
+      const orderStatus = (o.status || '').toUpperCase();
+      const isCancelled = orderStatus === 'CANCELLED';
       const orderTotal = o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0);
       const isPaid = (o.payment?.status || '').toUpperCase() === 'CAPTURED';
       const isCod = (o.payment?.provider || o.paymentMethod || '').toLowerCase() === 'cod';
@@ -135,6 +140,14 @@ router.get('/orders', async (req, res, next) => {
         filteredRevenue += orderTotal;
         if (isPaid) filteredPaidRevenue += orderTotal;
         if (isCod) filteredCodRevenue += orderTotal;
+
+        if (orderStatus === 'DELIVERED') {
+          filteredDeliveredRevenue += orderTotal;
+          filteredDeliveredCount++;
+        } else if (['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(orderStatus)) {
+          filteredInTransitRevenue += orderTotal;
+          filteredInTransitCount++;
+        }
       }
 
       for (const item of (o.items || [])) {
@@ -147,8 +160,12 @@ router.get('/orders', async (req, res, next) => {
       totalCount: orders.length,
       summary: {
         filteredRevenue,
+        filteredDeliveredRevenue,
+        filteredInTransitRevenue,
         filteredPaidRevenue,
         filteredCodRevenue,
+        filteredDeliveredCount,
+        filteredInTransitCount,
         filteredItemsCount,
         avgOrderValue: orders.length > 0 ? Math.round(filteredRevenue / orders.length) : 0
       },
@@ -186,6 +203,8 @@ router.get('/stats', async (req, res, next) => {
     }
 
     let totalRevenue = 0;
+    let deliveredRevenue = 0;
+    let inTransitRevenue = 0;
     let paidRevenue = 0;
     let codExpectedRevenue = 0;
     let pendingCount = 0;
@@ -209,6 +228,12 @@ router.get('/stats', async (req, res, next) => {
         if (isPaid) paidRevenue += orderTotal;
         if (isCod) codExpectedRevenue += orderTotal;
 
+        if (orderStatus === 'DELIVERED') {
+          deliveredRevenue += orderTotal;
+        } else if (['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(orderStatus)) {
+          inTransitRevenue += orderTotal;
+        }
+
         for (const item of (o.items || [])) {
           totalItemsSold += (item.quantity || 1);
         }
@@ -230,6 +255,8 @@ router.get('/stats', async (req, res, next) => {
       data: {
         totalOrders: orders.length,
         totalRevenue,
+        deliveredRevenue,
+        inTransitRevenue,
         paidRevenue,
         codExpectedRevenue,
         avgOrderValue,
@@ -241,6 +268,77 @@ router.get('/stats', async (req, res, next) => {
         cancelledCount,
         codCount
       }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/admin/orders/:orderId/toggle-delivered
+ * 1-click toggle between DELIVERED and previous/reverted status
+ */
+router.post('/orders/:orderId/toggle-delivered', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { markDelivered } = req.body;
+
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+    const events = order.events || [];
+    const isCod = (order.payment && order.payment.provider === 'COD') || (order.paymentMethod === 'cod');
+
+    let newStatus, newShippingStatus, newPaymentStatus;
+
+    if (markDelivered === true || (markDelivered === undefined && order.status !== 'DELIVERED')) {
+      newStatus = 'DELIVERED';
+      newShippingStatus = 'DELIVERED';
+      newPaymentStatus = isCod ? 'CAPTURED' : (order.payment?.status || 'CAPTURED');
+
+      events.push({
+        event: 'MARKED_DELIVERED_BY_ADMIN',
+        timestamp: now,
+        details: `Order marked as DELIVERED manually by ${adminEmail}.`
+      });
+    } else {
+      // Reverting / unchecking delivered status
+      const hasAwb = order.shipping && order.shipping.awb;
+      newStatus = hasAwb ? 'SHIPPED' : (isCod ? 'SHIPMENT_BOOKED' : 'PAYMENT_CAPTURED');
+      newShippingStatus = hasAwb ? 'IN_TRANSIT' : 'BOOKED';
+      newPaymentStatus = isCod ? 'COD_PENDING' : (order.payment?.status || 'CAPTURED');
+
+      events.push({
+        event: 'DELIVERY_STATUS_REVERTED_BY_ADMIN',
+        timestamp: now,
+        details: `Delivery status reverted to [${newStatus}] by ${adminEmail}.`
+      });
+    }
+
+    const updates = {
+      status: newStatus,
+      'shipping/status': newShippingStatus,
+      events
+    };
+
+    if (isCod) {
+      updates['payment/status'] = newPaymentStatus;
+    }
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, updates);
+    logger.info('ORDER_DELIVERY_TOGGLED', { orderId, newStatus, adminEmail });
+
+    res.json({
+      success: true,
+      message: `Order #${orderId} status updated to ${newStatus}`,
+      data: updatedOrder
     });
   } catch (err) {
     next(err);

@@ -18,6 +18,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
+    <!-- Chart.js for Responsive Booking & Revenue Graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <!-- SheetJS (Excel .xlsx Export) -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -167,8 +170,8 @@
             <!-- TOP BAR -->
             <header class="bg-white border-b border-[#E5E7EB] px-4 sm:px-6 py-3.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3 sticky top-0 z-20 shadow-2xs">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-bold text-[#111827]">Orders & Financial Analytics</h2>
-                    <p class="text-xs text-[#6B7280]">Realtime revenue tracking, multi-criteria filters, and instant exports</p>
+                    <h2 class="text-lg sm:text-xl font-bold text-[#111827]">Orders & Realtime Analytics</h2>
+                    <p class="text-xs text-[#6B7280]">Realtime revenue tracking, interactive booking graphs, and manual delivery settlement</p>
                 </div>
 
                 <!-- Export & Refresh Actions Toolbar -->
@@ -250,30 +253,40 @@
                     </div>
                 </div>
 
-                <!-- METRIC CARDS & FINANCIAL TOTALS -->
-                <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+                <!-- METRIC CARDS & FINANCIAL TOTALS (6-Card Grid) -->
+                <div class="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
                     
-                    <!-- Total Orders & Units -->
+                    <!-- 1. Total Orders & Units -->
                     <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
                         <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Total Orders</span>
+                            <span>Total Booked</span>
                             <i class="fa-solid fa-boxes-stacked text-indigo-500"></i>
                         </div>
                         <div class="text-xl sm:text-2xl font-bold text-[#111827]" id="stat-total-orders">0</div>
                         <div class="text-[10.5px] text-[#6B7280] mt-1" id="stat-items-sold">0 units sold</div>
                     </div>
 
-                    <!-- Gross Revenue -->
+                    <!-- 2. Gross Booked Revenue -->
                     <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
                         <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Gross Revenue</span>
-                            <i class="fa-solid fa-indian-rupee-sign text-emerald-600"></i>
+                            <span>Gross Booked</span>
+                            <i class="fa-solid fa-indian-rupee-sign text-indigo-600"></i>
                         </div>
-                        <div class="text-xl sm:text-2xl font-bold text-emerald-600" id="stat-total-revenue">Rs. 0</div>
+                        <div class="text-xl sm:text-2xl font-bold text-indigo-600" id="stat-total-revenue">Rs. 0</div>
                         <div class="text-[10.5px] text-[#6B7280] mt-1" id="stat-aov">AOV: Rs. 0 / order</div>
                     </div>
 
-                    <!-- Online Paid (Razorpay) -->
+                    <!-- 3. REALIZED DELIVERED REVENUE (Calculates only marked DELIVERED) -->
+                    <div class="bg-white p-4 rounded-xl border-2 border-emerald-500/80 bg-emerald-50/30 shadow-xs">
+                        <div class="flex items-center justify-between text-xs font-bold text-emerald-900 mb-1">
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-600"></i> Delivered Total</span>
+                            <span class="bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase">Realized</span>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-emerald-700" id="stat-delivered-revenue">Rs. 0</div>
+                        <div class="text-[10.5px] text-emerald-800 font-bold mt-1" id="stat-delivered-count-text">0 Orders Delivered</div>
+                    </div>
+
+                    <!-- 4. Online Paid (Razorpay) -->
                     <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
                         <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
                             <span>Paid Online</span>
@@ -283,34 +296,87 @@
                         <div class="text-[10.5px] text-indigo-700 font-semibold mt-1" id="stat-paid-orders">0 Orders</div>
                     </div>
 
-                    <!-- COD Expected Revenue -->
+                    <!-- 5. COD Expected Revenue -->
                     <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
                         <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Cash on Delivery</span>
+                            <span>COD Expected</span>
                             <i class="fa-solid fa-hand-holding-dollar text-amber-600"></i>
                         </div>
                         <div class="text-xl sm:text-2xl font-bold text-amber-600" id="stat-cod-revenue">Rs. 0</div>
                         <div class="text-[10.5px] text-amber-800 font-semibold mt-1" id="stat-cod-orders">0 Orders</div>
                     </div>
 
-                    <!-- Delivery & Cancellations Status Breakdown -->
+                    <!-- 6. Delivery & Cancellations Status Breakdown -->
                     <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs col-span-2 lg:col-span-1">
                         <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Order Statuses</span>
+                            <span>Fulfillment</span>
                             <i class="fa-solid fa-truck-fast text-blue-600"></i>
                         </div>
-                        <div class="flex items-center gap-1.5 flex-wrap mt-1">
-                            <span class="px-2 py-0.5 rounded text-[10.5px] font-bold bg-blue-50 text-blue-700 border border-blue-200" title="Shipped / In Transit">
-                                <span id="stat-shipped-orders">0</span> Shipped
+                        <div class="flex items-center gap-1 flex-wrap mt-1">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200" title="Shipped / In Transit">
+                                <span id="stat-shipped-orders">0</span> In-Transit
                             </span>
-                            <span class="px-2 py-0.5 rounded text-[10.5px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200" title="Delivered">
-                                <span id="stat-delivered-orders">0</span> Delivered
-                            </span>
-                            <span class="px-2 py-0.5 rounded text-[10.5px] font-bold bg-rose-50 text-rose-700 border border-rose-200" title="Cancelled">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200" title="Cancelled">
                                 <span id="stat-cancelled-orders">0</span> Cancelled
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <!-- INTERACTIVE BOOKING & REVENUE GRAPHS -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    
+                    <!-- Left: Booking & Revenue Trend Chart (Area / Line) -->
+                    <div class="lg:col-span-2 bg-white p-4 sm:p-5 rounded-xl border border-[#E5E7EB] shadow-xs flex flex-col justify-between">
+                        <div class="flex items-center justify-between pb-3 mb-2 border-b border-[#E5E7EB] flex-wrap gap-2">
+                            <div>
+                                <h3 class="text-sm font-bold text-[#111827] flex items-center gap-1.5">
+                                    <i class="fa-solid fa-chart-area text-indigo-600"></i>
+                                    <span>Booking & Revenue Timeline</span>
+                                </h3>
+                                <p class="text-[11px] text-[#6B7280]">Daily orders volume and gross revenue progression</p>
+                            </div>
+                            <div class="flex items-center gap-2 text-[11px]">
+                                <span class="inline-flex items-center gap-1 font-semibold text-indigo-600">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span> Revenue (₹)
+                                </span>
+                                <span class="inline-flex items-center gap-1 font-semibold text-emerald-600">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Bookings
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="relative w-full h-56 sm:h-64">
+                            <canvas id="bookingTimelineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Right: Delivery & Payment Breakdown Doughnut Chart -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-[#E5E7EB] shadow-xs flex flex-col justify-between">
+                        <div class="pb-3 mb-2 border-b border-[#E5E7EB]">
+                            <h3 class="text-sm font-bold text-[#111827] flex items-center gap-1.5">
+                                <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+                                <span>Delivery Settlement Ratio</span>
+                            </h3>
+                            <p class="text-[11px] text-[#6B7280]">Realized delivered vs in-transit & returns</p>
+                        </div>
+
+                        <div class="relative w-full h-48 sm:h-52 flex items-center justify-center">
+                            <canvas id="deliveryStatusChart"></canvas>
+                        </div>
+
+                        <div class="pt-3 border-t border-[#E5E7EB] grid grid-cols-2 gap-2 text-center text-xs">
+                            <div class="bg-emerald-50/60 p-2 rounded-lg border border-emerald-200/60">
+                                <div class="text-[10px] text-emerald-800 font-bold uppercase">Delivered %</div>
+                                <div class="text-base font-black text-emerald-700" id="chart-delivered-percent">0%</div>
+                            </div>
+                            <div class="bg-indigo-50/60 p-2 rounded-lg border border-indigo-200/60">
+                                <div class="text-[10px] text-indigo-800 font-bold uppercase">In-Transit %</div>
+                                <div class="text-base font-black text-indigo-700" id="chart-intransit-percent">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- ORDERS TABLE CARD -->
@@ -329,11 +395,11 @@
                         <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 flex-wrap">
                             <select id="filter-status" onchange="loadOrdersAndStats()" class="px-3 py-2 text-xs rounded-lg border border-[#E5E7EB] bg-white text-[#111827] focus:outline-none focus:border-indigo-600">
                                 <option value="all">All Order Statuses</option>
-                                <option value="PENDING_PAYMENT">Pending Payment</option>
-                                <option value="PAYMENT_CAPTURED">Payment Captured</option>
-                                <option value="SHIPMENT_BOOKED">Shipment Booked</option>
+                                <option value="DELIVERED">✓ Delivered (Settled)</option>
                                 <option value="SHIPPED">Shipped / In Transit</option>
-                                <option value="DELIVERED">Delivered</option>
+                                <option value="SHIPMENT_BOOKED">Shipment Booked</option>
+                                <option value="PAYMENT_CAPTURED">Payment Captured</option>
+                                <option value="PENDING_PAYMENT">Pending Payment</option>
                                 <option value="CANCELLED">Cancelled</option>
                             </select>
 
@@ -360,7 +426,7 @@
                                     <th class="py-3 px-4">Total Amount</th>
                                     <th class="py-3 px-4">Payment Method</th>
                                     <th class="py-3 px-4">Shipping / AWB</th>
-                                    <th class="py-3 px-4">Order Status</th>
+                                    <th class="py-3 px-4">Delivery Settlement</th>
                                     <th class="py-3 px-4 text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -380,9 +446,11 @@
                         <div class="flex items-center gap-3 flex-wrap">
                             <span id="table-count-summary" class="font-bold text-[#111827]">Showing 0 orders</span>
                             <span class="text-gray-300">•</span>
-                            <span id="table-revenue-summary" class="text-emerald-700 font-bold">Filtered Revenue: Rs. 0.00</span>
+                            <span id="table-revenue-summary" class="text-indigo-700 font-bold">Filtered Booked: Rs. 0.00</span>
                             <span class="text-gray-300">•</span>
-                            <span id="table-items-summary" class="text-indigo-700 font-semibold">0 Total Units</span>
+                            <span id="table-delivered-summary" class="text-emerald-700 font-bold bg-emerald-100/70 px-2 py-0.5 rounded">Delivered: Rs. 0.00</span>
+                            <span class="text-gray-300">•</span>
+                            <span id="table-items-summary" class="text-gray-600 font-medium">0 Total Units</span>
                         </div>
                         <div class="text-[11px] text-gray-400 flex items-center gap-1">
                             <i class="fa-solid fa-cloud-arrow-down"></i> Auto-synced with Firebase Database
@@ -410,7 +478,7 @@
                 <!-- Dynamically populated -->
             </div>
 
-            <div class="p-3.5 border-t border-[#E5E7EB] bg-gray-50 flex items-center justify-between gap-2">
+            <div class="p-3.5 border-t border-[#E5E7EB] bg-gray-50 flex items-center justify-between gap-2 flex-wrap">
                 <button onclick="closeOrderDetailModal()" class="px-4 py-2 bg-white border border-[#E5E7EB] text-[#111827] rounded-lg text-xs font-medium hover:bg-gray-50 cursor-pointer">
                     Close
                 </button>
@@ -504,6 +572,10 @@
         let pendingDeleteOrderId = null;
         let searchDebounceTimer = null;
         let activeDatePreset = 'all';
+
+        // Chart.js Instances
+        let timelineChartInstance = null;
+        let deliveryChartInstance = null;
 
         // Listen to Auth State
         auth.onAuthStateChanged(async (user) => {
@@ -623,7 +695,6 @@
         }
 
         function onCustomDateChange() {
-            // Deselect preset buttons when custom input is changed
             document.querySelectorAll('.date-preset-btn').forEach(btn => {
                 btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer";
             });
@@ -679,6 +750,7 @@
                 if (ordersData.success) {
                     currentOrdersList = ordersData.data || [];
                     renderOrdersTable(currentOrdersList, ordersData.summary);
+                    renderBookingCharts(currentOrdersList);
                 }
 
                 // 2. Fetch Filter-aware Aggregated Stats
@@ -694,6 +766,8 @@
                     const s = statsData.data;
                     document.getElementById('stat-total-orders').textContent = s.totalOrders || 0;
                     document.getElementById('stat-total-revenue').textContent = `Rs. ${(s.totalRevenue || 0).toLocaleString('en-IN', { minimumFractionDigits: 0 })}`;
+                    document.getElementById('stat-delivered-revenue').textContent = `Rs. ${(s.deliveredRevenue || 0).toLocaleString('en-IN', { minimumFractionDigits: 0 })}`;
+                    document.getElementById('stat-delivered-count-text').textContent = `${s.deliveredCount || 0} Orders Delivered`;
                     document.getElementById('stat-paid-revenue').textContent = `Rs. ${(s.paidRevenue || 0).toLocaleString('en-IN', { minimumFractionDigits: 0 })}`;
                     document.getElementById('stat-paid-orders').textContent = `${s.paidCount || 0} Orders`;
                     document.getElementById('stat-cod-revenue').textContent = `Rs. ${(s.codExpectedRevenue || 0).toLocaleString('en-IN', { minimumFractionDigits: 0 })}`;
@@ -702,7 +776,6 @@
                     document.getElementById('stat-aov').textContent = `AOV: Rs. ${(s.avgOrderValue || 0).toLocaleString('en-IN')} / order`;
                     
                     document.getElementById('stat-shipped-orders').textContent = s.shippedCount || 0;
-                    document.getElementById('stat-delivered-orders').textContent = s.deliveredCount || 0;
                     document.getElementById('stat-cancelled-orders').textContent = s.cancelledCount || 0;
                 }
             } catch (err) {
@@ -719,21 +792,254 @@
             }, 300);
         }
 
+        // ==========================================
+        // RENDER INTERACTIVE BOOKING & REVENUE GRAPHS
+        // ==========================================
+        function renderBookingCharts(orders) {
+            if (!window.Chart) return;
+
+            // 1. Group Data by Date (Chronological)
+            const dateMap = {};
+            let deliveredCount = 0;
+            let inTransitCount = 0;
+            let pendingCount = 0;
+            let cancelledCount = 0;
+
+            // Sort ascending for charts
+            const chronologicalOrders = [...orders].sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+
+            for (const o of chronologicalOrders) {
+                const status = (o.status || '').toUpperCase();
+                const total = o.pricing?.total || 0;
+                const isCancelled = status === 'CANCELLED';
+
+                if (status === 'DELIVERED') deliveredCount++;
+                else if (['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(status)) inTransitCount++;
+                else if (isCancelled) cancelledCount++;
+                else pendingCount++;
+
+                const d = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : 'Unknown';
+                if (!dateMap[d]) {
+                    dateMap[d] = { date: d, revenue: 0, orders: 0 };
+                }
+                if (!isCancelled) {
+                    dateMap[d].revenue += total;
+                }
+                dateMap[d].orders += 1;
+            }
+
+            const labels = Object.keys(dateMap);
+            const revenueData = labels.map(k => dateMap[k].revenue);
+            const ordersData = labels.map(k => dateMap[k].orders);
+
+            // Calculate ratios
+            const totalStatusCount = Math.max(1, deliveredCount + inTransitCount + pendingCount + cancelledCount);
+            const deliveredPercent = Math.round((deliveredCount / totalStatusCount) * 100);
+            const inTransitPercent = Math.round((inTransitCount / totalStatusCount) * 100);
+
+            const delPercentEl = document.getElementById('chart-delivered-percent');
+            const inTransPercentEl = document.getElementById('chart-intransit-percent');
+            if (delPercentEl) delPercentEl.textContent = `${deliveredPercent}%`;
+            if (inTransPercentEl) inTransPercentEl.textContent = `${inTransitPercent}%`;
+
+            // Destroy previous timeline chart if exists
+            if (timelineChartInstance) {
+                timelineChartInstance.destroy();
+            }
+
+            // Timeline Area Chart
+            const ctxTimeline = document.getElementById('bookingTimelineChart');
+            if (ctxTimeline) {
+                timelineChartInstance = new Chart(ctxTimeline, {
+                    type: 'line',
+                    data: {
+                        labels: labels.length > 0 ? labels : ['No Data'],
+                        datasets: [
+                            {
+                                label: 'Revenue (Rs.)',
+                                data: revenueData.length > 0 ? revenueData : [0],
+                                borderColor: '#4F46E5', // Indigo 600
+                                backgroundColor: 'rgba(79, 70, 229, 0.12)',
+                                fill: true,
+                                tension: 0.35,
+                                yAxisID: 'y',
+                                borderWidth: 2.5,
+                                pointBackgroundColor: '#4F46E5',
+                                pointRadius: 3,
+                                pointHoverRadius: 5
+                            },
+                            {
+                                label: 'Orders Booked',
+                                data: ordersData.length > 0 ? ordersData : [0],
+                                borderColor: '#10B981', // Emerald 500
+                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                type: 'bar',
+                                yAxisID: 'y1',
+                                borderRadius: 6,
+                                maxBarThickness: 16
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#111827',
+                                titleFont: { size: 12, weight: 'bold' },
+                                bodyFont: { size: 11 },
+                                padding: 10,
+                                cornerRadius: 8,
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.dataset.label === 'Revenue (Rs.)') {
+                                            return ` Revenue: Rs. ${context.raw.toLocaleString('en-IN')}`;
+                                        }
+                                        return ` Bookings: ${context.raw} orders`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 10 }, color: '#6B7280' }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                grid: { color: 'rgba(229, 231, 235, 0.8)' },
+                                ticks: {
+                                    font: { size: 10 },
+                                    color: '#4F46E5',
+                                    callback: (val) => '₹' + val.toLocaleString('en-IN')
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                grid: { drawOnChartArea: false },
+                                ticks: {
+                                    font: { size: 10 },
+                                    color: '#10B981',
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Destroy previous delivery chart if exists
+            if (deliveryChartInstance) {
+                deliveryChartInstance.destroy();
+            }
+
+            // Delivery Status Donut Chart
+            const ctxDelivery = document.getElementById('deliveryStatusChart');
+            if (ctxDelivery) {
+                deliveryChartInstance = new Chart(ctxDelivery, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Delivered', 'In-Transit', 'Pending', 'Cancelled'],
+                        datasets: [{
+                            data: [deliveredCount, inTransitCount, pendingCount, cancelledCount],
+                            backgroundColor: ['#10B981', '#6366F1', '#F59E0B', '#EF4444'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '72%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 10,
+                                    font: { size: 10, weight: 'bold' },
+                                    padding: 8
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#111827',
+                                cornerRadius: 8,
+                                padding: 8,
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` ${context.label}: ${context.raw} orders`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==========================================
+        // TOGGLE DELIVERED STATUS (1-CLICK SET/REVERT)
+        // ==========================================
+        async function toggleDeliveredStatus(orderId, markDelivered) {
+            if (!currentAdminToken) return;
+
+            const actionText = markDelivered ? 'mark as DELIVERED' : 'uncheck/revert DELIVERED status';
+            if (!confirm(`Are you sure you want to ${actionText} for Order #${orderId}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/toggle-delivered`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({ markDelivered })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    loadOrdersAndStats();
+                } else {
+                    alert(result.error?.message || "Failed to update order status.");
+                }
+            } catch (err) {
+                alert("Network error: " + err.message);
+            }
+        }
+
         // Render Table Rows
         function renderOrdersTable(orders, summary) {
             const tbody = document.getElementById('orders-table-body');
             const countSummary = document.getElementById('table-count-summary');
             const revSummary = document.getElementById('table-revenue-summary');
+            const deliveredSummary = document.getElementById('table-delivered-summary');
             const itemsSummary = document.getElementById('table-items-summary');
 
             if (!tbody) return;
 
-            // Calculate live totals from list if summary not provided
+            // Calculate live totals from list
             let totalRev = 0;
+            let deliveredRev = 0;
             let totalUnits = 0;
             for (const o of orders) {
-                if ((o.status || '').toUpperCase() !== 'CANCELLED') {
-                    totalRev += (o.pricing?.total || 0);
+                const isCancelled = (o.status || '').toUpperCase() === 'CANCELLED';
+                const total = o.pricing?.total || 0;
+                if (!isCancelled) {
+                    totalRev += total;
+                    if ((o.status || '').toUpperCase() === 'DELIVERED') {
+                        deliveredRev += total;
+                    }
                 }
                 for (const item of (o.items || [])) {
                     totalUnits += (item.quantity || 1);
@@ -742,11 +1048,13 @@
 
             if (summary && summary.filteredRevenue !== undefined) {
                 totalRev = summary.filteredRevenue;
+                deliveredRev = summary.filteredDeliveredRevenue || deliveredRev;
                 totalUnits = summary.filteredItemsCount;
             }
 
             if (countSummary) countSummary.textContent = `Showing ${orders.length} ${orders.length === 1 ? 'order' : 'orders'}`;
-            if (revSummary) revSummary.textContent = `Filtered Revenue: Rs. ${totalRev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            if (revSummary) revSummary.textContent = `Filtered Booked: Rs. ${totalRev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+            if (deliveredSummary) deliveredSummary.textContent = `Delivered: Rs. ${deliveredRev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
             if (itemsSummary) itemsSummary.textContent = `${totalUnits} Total Units`;
 
             if (orders.length === 0) {
@@ -779,27 +1087,14 @@
                 const awb = order.shipping && order.shipping.awb;
                 const courierName = order.shipping && order.shipping.courierName;
                 const status = (order.status || 'PENDING').toUpperCase();
+                const isDelivered = status === 'DELIVERED';
                 const isOnlinePendingPayment = !isCod && (status === 'PENDING_PAYMENT' || paymentStatus !== 'CAPTURED') && status !== 'CANCELLED';
-
-                // Order General Status Badge
-                let statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-700">${status}</span>`;
-                if (status === 'CANCELLED') {
-                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">CANCELLED</span>`;
-                } else if (['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(status)) {
-                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">${status}</span>`;
-                } else if (status === 'DELIVERED') {
-                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">DELIVERED</span>`;
-                } else if (status === 'PAYMENT_CAPTURED') {
-                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">PAID</span>`;
-                } else if (status === 'COD_PENDING') {
-                    statusBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">COD PENDING</span>`;
-                }
 
                 let paymentBadge = '';
                 let shippingDisplay = '';
 
                 if (isCod) {
-                    if (['SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status) || awb || (order.shipping && order.shipping.shiprocketOrderId)) {
+                    if (isDelivered || ['SHIPMENT_BOOKED', 'SHIPPED'].includes(status) || awb || (order.shipping && order.shipping.shiprocketOrderId)) {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">COD (+₹21)</span>`;
                         shippingDisplay = `
                             <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Booked'}</div>
@@ -807,47 +1102,52 @@
                         `;
                     } else if (status === 'CANCELLED') {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">COD (Cancelled)</span>`;
-                        shippingDisplay = `
-                            <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
-                                Cancelled
-                            </span>
-                        `;
+                        shippingDisplay = `<span class="text-[10px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">COD (Unverified)</span>`;
-                        shippingDisplay = `
-                            <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-                                <i class="fa-solid fa-clock text-[9px]"></i> OTP Pending
-                            </span>
-                        `;
+                        shippingDisplay = `<span class="text-[10px] text-amber-800 font-semibold"><i class="fa-solid fa-clock text-[9px]"></i> OTP Pending</span>`;
                     }
                 } else {
-                    // Online Payment / UPI / Card
-                    if (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || ['SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status)) {
+                    if (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || isDelivered || ['SHIPMENT_BOOKED', 'SHIPPED'].includes(status)) {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (5% OFF)</span>`;
                         if (awb || (order.shipping && order.shipping.shiprocketOrderId)) {
                             shippingDisplay = `
                                 <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Booked'}</div>
-                                <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-truck-fast text-[9px]"></i> ${courierName || 'Shiprocket Booked'}</div>
+                                <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-truck-fast text-[9px]"></i> ${courierName || 'Shiprocket'}</div>
                             `;
                         } else {
-                            shippingDisplay = `
-                                <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
-                                    <i class="fa-solid fa-clock text-[9px]"></i> Ready for Dispatch
-                                </span>
-                            `;
+                            shippingDisplay = `<span class="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Ready to Dispatch</span>`;
                         }
                     } else {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">⏳ Payment Pending</span>`;
-                        shippingDisplay = `
-                            <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-600 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">
-                                Payment Pending
-                            </span>
-                        `;
+                        shippingDisplay = `<span class="text-[10px] font-semibold text-gray-500">Payment Pending</span>`;
                     }
                 }
 
+                // 1-Click Delivered Toggle Button Cell
+                let deliveredActionCell = '';
+                if (status === 'CANCELLED') {
+                    deliveredActionCell = `<span class="px-2 py-1 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">CANCELLED</span>`;
+                } else if (isDelivered) {
+                    deliveredActionCell = `
+                        <button onclick="toggleDeliveredStatus('${orderId}', false)" class="px-2.5 py-1 bg-emerald-600 hover:bg-rose-600 text-white rounded-lg text-[11px] font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer group" title="Click to Uncheck / Revert Delivery status">
+                            <i class="fa-solid fa-circle-check text-xs group-hover:hidden"></i>
+                            <i class="fa-solid fa-rotate-left text-xs hidden group-hover:inline"></i>
+                            <span class="group-hover:hidden">Delivered</span>
+                            <span class="hidden group-hover:inline">Revert</span>
+                        </button>
+                    `;
+                } else {
+                    deliveredActionCell = `
+                        <button onclick="toggleDeliveredStatus('${orderId}', true)" class="px-2.5 py-1 bg-white hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 border border-gray-300 hover:border-emerald-500 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Click to mark this order as Delivered">
+                            <i class="fa-regular fa-circle-check text-gray-400"></i>
+                            <span>Mark Delivered</span>
+                        </button>
+                    `;
+                }
+
                 return `
-                    <tr class="hover:bg-gray-50/70 transition-colors">
+                    <tr class="hover:bg-gray-50/70 transition-colors ${isDelivered ? 'bg-emerald-50/20' : ''}">
                         <td class="py-3 px-4 font-mono font-bold text-indigo-600">
                             <button onclick="openOrderDetail('${orderId}')" class="hover:underline text-left cursor-pointer">
                                 ${orderId}
@@ -874,7 +1174,9 @@
                         <td class="py-3 px-4">
                             ${shippingDisplay}
                         </td>
-                        <td class="py-3 px-4">${statusBadge}</td>
+                        <td class="py-3 px-4">
+                            ${deliveredActionCell}
+                        </td>
                         <td class="py-3 px-4 text-right">
                             <div class="flex items-center justify-end gap-1.5 flex-wrap">
                                 ${isOnlinePendingPayment ? `
@@ -947,8 +1249,7 @@
                     'Total Amount (Rs)': pricing.total || 0,
                     'Payment Method': order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (Razorpay)',
                     'Payment Status': payment.status || (order.paymentMethod === 'cod' ? 'COD_PENDING' : 'PENDING'),
-                    'Payment ID / Rzp Order ID': payment.razorpayPaymentId || payment.razorpayOrderId || '',
-                    'Order Status': order.status || 'PENDING',
+                    'Delivery Settlement': order.status === 'DELIVERED' ? 'DELIVERED (Realized)' : (order.status || 'PENDING'),
                     'Courier Partner': shipping.courierName || '',
                     'AWB Tracking Number': shipping.awb || '',
                     'Shiprocket Order ID': shipping.shiprocketOrderId || ''
@@ -956,8 +1257,6 @@
             });
 
             const ws = XLSX.utils.json_to_sheet(exportData);
-            
-            // Auto column widths
             const colWidths = Object.keys(exportData[0] || {}).map(k => ({ wch: Math.max(k.length + 3, 14) }));
             ws['!cols'] = colWidths;
 
@@ -980,7 +1279,7 @@
             const headers = [
                 'Order ID', 'Date', 'Customer Name', 'Phone', 'Email', 'Address', 'City', 'State', 'Pincode',
                 'Items', 'Units', 'Subtotal', 'Coupon', 'Coupon Discount', 'Online Discount', 'COD Fee',
-                'Shipping Fee', 'Total Amount', 'Payment Method', 'Payment Status', 'Order Status', 'Courier', 'AWB'
+                'Shipping Fee', 'Total Amount', 'Payment Method', 'Payment Status', 'Delivery Settlement', 'Courier', 'AWB'
             ];
 
             const rows = currentOrdersList.map(order => {
@@ -1053,7 +1352,7 @@
             const todayStr = new Date().toLocaleString('en-IN');
 
             // Header Banner
-            doc.setFillColor(79, 70, 229); // Indigo 600
+            doc.setFillColor(79, 70, 229);
             doc.rect(0, 0, 842, 60, 'F');
 
             doc.setTextColor(255, 255, 255);
@@ -1067,14 +1366,17 @@
 
             // Metrics Summary Info
             let totalRevenue = 0;
-            let paidCount = 0;
-            let codCount = 0;
+            let deliveredRevenue = 0;
+            let deliveredCount = 0;
             for (const o of currentOrdersList) {
+                const total = o.pricing?.total || 0;
                 if ((o.status || '').toUpperCase() !== 'CANCELLED') {
-                    totalRevenue += (o.pricing?.total || 0);
+                    totalRevenue += total;
+                    if ((o.status || '').toUpperCase() === 'DELIVERED') {
+                        deliveredRevenue += total;
+                        deliveredCount++;
+                    }
                 }
-                if (o.paymentMethod === 'cod') codCount++;
-                else paidCount++;
             }
 
             doc.setTextColor(17, 24, 39);
@@ -1084,7 +1386,7 @@
 
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(9);
-            doc.text(`Total Filtered Orders: ${currentOrdersList.length} | Gross Revenue: Rs. ${totalRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })} | Online Orders: ${paidCount} | COD Orders: ${codCount}`, 30, 98);
+            doc.text(`Total Filtered Orders: ${currentOrdersList.length} | Gross Booked: Rs. ${totalRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })} | Delivered Realized: Rs. ${deliveredRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })} (${deliveredCount} Delivered)`, 30, 98);
 
             // Prepare Table Data
             const tableRows = currentOrdersList.map((order, idx) => {
@@ -1105,7 +1407,7 @@
                     order.paymentMethod === 'cod' ? 'COD' : 'Online',
                     `Rs. ${(pricing.total || 0).toFixed(0)}`,
                     shipping.awb || 'Not Booked',
-                    order.status || 'PENDING'
+                    order.status === 'DELIVERED' ? 'DELIVERED ✓' : (order.status || 'PENDING')
                 ];
             });
 
@@ -1130,7 +1432,6 @@
                     10: { cellWidth: 70 }
                 },
                 didDrawPage: function (data) {
-                    // Footer
                     const str = "Page " + doc.internal.getNumberOfPages();
                     doc.setFontSize(8);
                     doc.setTextColor(150);
@@ -1150,8 +1451,9 @@
             document.getElementById('modal-order-id').textContent = `Order ${order.orderId}`;
             
             const isCancelled = order.status === 'CANCELLED';
+            const isDelivered = order.status === 'DELIVERED';
             const isCod = (order.payment && order.payment.provider === 'COD') || (order.paymentMethod === 'cod');
-            const paymentStatus = (order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING');
+            const paymentStatus = (order.payment && order.payment.status) || (isCod ? (isDelivered ? 'CAPTURED' : 'COD_PENDING') : 'PENDING');
             const awb = order.shipping && order.shipping.awb;
             const courierName = order.shipping && order.shipping.courierName;
             const shippingStatus = (order.shipping && order.shipping.status) || (isCod && !awb ? 'OTP_NOT_VERIFIED' : 'NOT_BOOKED');
@@ -1163,7 +1465,8 @@
             if (badgeEl) {
                 let badgeClass = 'bg-gray-100 text-gray-700';
                 if (status === 'CANCELLED') badgeClass = 'bg-rose-50 text-rose-700 border border-rose-200';
-                else if (['SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status)) badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+                else if (isDelivered) badgeClass = 'bg-emerald-600 text-white font-black';
+                else if (['SHIPMENT_BOOKED', 'SHIPPED'].includes(status)) badgeClass = 'bg-blue-50 text-blue-700 border border-blue-200';
                 else if (status === 'PAYMENT_CAPTURED') badgeClass = 'bg-indigo-50 text-indigo-700 border border-indigo-200';
                 badgeEl.className = `px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}`;
                 badgeEl.textContent = status;
@@ -1235,12 +1538,12 @@
                 <!-- Shipping & Shiprocket Details -->
                 <div class="bg-gray-50 p-3.5 rounded-lg border border-[#E5E7EB] space-y-1.5">
                     <div class="font-bold text-[#111827] text-xs mb-1 flex items-center gap-1.5">
-                        <i class="fa-solid fa-truck text-indigo-600"></i> Shipment Status
+                        <i class="fa-solid fa-truck text-indigo-600"></i> Shipment & Delivery Settlement
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div><b>Courier:</b> ${courierName || 'Pending'}</div>
                         <div><b>AWB:</b> <span class="font-mono font-bold text-indigo-600">${awb || 'Not Generated'}</span></div>
-                        <div><b>Status:</b> ${shippingStatus}</div>
+                        <div><b>Delivery Status:</b> <span class="font-bold ${isDelivered ? 'text-emerald-700' : 'text-gray-700'}">${status}</span></div>
                         <div><b>Shiprocket Order:</b> #${order.shipping?.shiprocketOrderId || 'None'}</div>
                     </div>
                 </div>
@@ -1256,9 +1559,17 @@
 
             const actionContainer = document.getElementById('modal-action-buttons');
             actionContainer.innerHTML = `
+                <!-- 1-Click Delivered Toggle in Modal -->
+                ${status !== 'CANCELLED' ? `
+                    <button onclick="closeOrderDetailModal(); toggleDeliveredStatus('${order.orderId}', ${!isDelivered});" class="px-3.5 py-2 ${isDelivered ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300' : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'} rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid ${isDelivered ? 'fa-rotate-left' : 'fa-circle-check'}"></i>
+                        <span>${isDelivered ? 'Uncheck / Revert Delivery' : 'Mark as Delivered (Settled)'}</span>
+                    </button>
+                ` : ''}
+
                 ${isOnlinePendingPayment ? `
                     <button onclick="sendPendingPaymentWhatsApp('${order.orderId}')" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
-                        <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp Payment Link
+                        <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp Link
                     </button>
                 ` : ''}
 
@@ -1271,12 +1582,6 @@
                 <button onclick="closeOrderDetailModal(); promptPermanentDeleteOrder('${order.orderId}');" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-lg text-xs font-semibold cursor-pointer flex items-center gap-1" title="Permanently delete from database">
                     <i class="fa-solid fa-trash-can text-xs"></i> Permanent Delete
                 </button>
-
-                ${order.shipping?.status === 'FAILED' ? `
-                    <button onclick="retryShipping('${order.orderId}')" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold cursor-pointer">
-                        <i class="fa-solid fa-truck-fast mr-1"></i> Retry Shipping
-                    </button>
-                ` : ''}
             `;
 
             document.getElementById('order-detail-modal').classList.remove('hidden');
