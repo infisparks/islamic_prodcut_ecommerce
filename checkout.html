@@ -262,14 +262,14 @@
                             </div>
                             <div>
                                 <h2 class="font-bold text-sm sm:text-base text-onyx">Payment Method</h2>
-                                <p class="text-[10px] text-gray-500">Choose Online (5% OFF + FREE Delivery) or Cash on Delivery</p>
+                                <p class="text-[10px] text-gray-500">Choose Online (FREE Delivery) or Cash on Delivery</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-2.5">
                         
-                        <!-- ONLINE PAYMENT (Default / Recommended with 5% Discount) -->
+                        <!-- ONLINE PAYMENT (Default / Recommended with Free Delivery) -->
                         <label id="payment-label-razorpay" onclick="selectPaymentMethod('razorpay')" 
                             class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/80 ring-2 ring-emerald-400/30 cursor-pointer transition-all shadow-xs relative group">
                             <input type="radio" name="payment_method" value="razorpay" id="radio-razorpay" checked class="mt-1 text-emerald-600 focus:ring-emerald-500 accent-emerald-600">
@@ -280,15 +280,15 @@
                                         <span>Pay Online (UPI, Cards, NetBanking)</span>
                                     </span>
                                     <span class="text-[9.5px] font-black text-white bg-emerald-600 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                                        ⚡ 5% Instant OFF
+                                        ⚡ FREE DELIVERY
                                     </span>
                                 </div>
                                 <p class="text-[11px] text-gray-600 mt-1 leading-snug">
-                                    Google Pay, PhonePe, Paytm, BHIM UPI, Cards & NetBanking. Save 5% extra instantly!
+                                    Google Pay, PhonePe, Paytm, BHIM UPI, Cards & NetBanking. Get 100% Free Delivery!
                                 </p>
                                 <div class="mt-1.5 flex items-center gap-2">
                                     <span id="badge-online-price" class="text-[11px] font-bold text-emerald-800 bg-white/90 px-2 py-0.5 rounded-md border border-emerald-200">
-                                        Pay Rs. 466.45 (Save Rs. 24.55)
+                                        Pay Rs. 491.00 (FREE Delivery)
                                     </span>
                                 </div>
                             </div>
@@ -371,17 +371,13 @@
                             <span>Coupon Discount:</span>
                             <span id="summary-discount">-Rs. 0.00</span>
                         </div>
-                        <div id="summary-online-row" class="flex justify-between items-center text-emerald-700 font-bold">
-                            <span>Online Payment (5% OFF):</span>
-                            <span id="summary-online-discount">-Rs. 24.55</span>
-                        </div>
                         <div class="flex justify-between items-center">
                             <span>Delivery & Handling:</span>
                             <span id="summary-shipping" class="font-semibold text-gray-500">Enter Pincode</span>
                         </div>
                         <div class="flex justify-between items-center text-sm sm:text-base font-extrabold text-onyx pt-2 border-t border-gray-200">
                             <span>Total Payable:</span>
-                            <span id="summary-total" class="text-gold-700 font-black">Rs. 466.45</span>
+                            <span id="summary-total" class="text-gold-700 font-black">Rs. 491.00</span>
                         </div>
                     </div>
 
@@ -428,16 +424,16 @@
     <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 p-2 px-2.5 z-40 shadow-[0_-6px_25px_rgba(0,0,0,0.08)]">
         <div class="grid grid-cols-2 gap-2 max-w-md mx-auto">
             
-            <!-- Online Button (Left: 5% OFF Gold Theme - Fixed 2-Row) -->
+            <!-- Online Button (Left: FREE DEL Gold Theme - Fixed 2-Row) -->
             <button type="button" onclick="submitWithPaymentMethod('razorpay')" 
                 class="w-full flex flex-col justify-between px-2.5 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/50 cursor-pointer h-[46px]">
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="font-black text-[10.5px] text-onyx tracking-tight">PAY ONLINE</span>
-                    <span class="bg-emerald-700 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded uppercase leading-none tracking-wide whitespace-nowrap">⚡ 5% + FREE DEL</span>
+                    <span class="bg-emerald-700 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded uppercase leading-none tracking-wide whitespace-nowrap">⚡ FREE DEL</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="text-[8.5px] text-onyx/75 font-semibold">UPI • Cards</span>
-                    <span id="mobile-online-price" class="text-[11.5px] font-black text-onyx font-mono">Rs. 466.45</span>
+                    <span id="mobile-online-price" class="text-[11.5px] font-black text-onyx font-mono">Rs. 491.00</span>
                 </div>
             </button>
 
@@ -875,26 +871,23 @@
             }
 
             const subtotalAfterCoupon = Math.max(0, subtotal - discountAmount);
-            const onlineDiscount = Math.round(subtotalAfterCoupon * 0.05);
             const codShippingFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 49;
 
-            // Calculations: Online = 5% OFF + Free Delivery (Rs. 0) | COD = Subtotal + Courier Shipping
-            const onlineTotal = Math.max(0, subtotalAfterCoupon - onlineDiscount);
+            // Calculations: Online = Free Delivery (Rs. 0 Shipping) | COD = Subtotal + Courier Shipping
+            const onlineTotal = subtotalAfterCoupon;
             const codTotal = Math.max(0, subtotalAfterCoupon + codShippingFee);
 
             // Update badge prices in Section 2
             const onlineBadgePrice = document.getElementById('badge-online-price');
             const codBadgePrice = document.getElementById('badge-cod-price');
-            if (onlineBadgePrice) onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Save Rs. ${onlineDiscount.toFixed(2)} + Free Shipping)`;
+            if (onlineBadgePrice) onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (FREE Delivery)`;
             if (codBadgePrice) codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)} (Delivery: Rs. ${codShippingFee.toFixed(2)})`;
 
             // Update summary discount / shipping display
             const onlineRow = document.getElementById('summary-online-row');
-            const onlineDiscountEl = document.getElementById('summary-online-discount');
 
             if (selectedPaymentMethod === 'razorpay') {
-                if (onlineRow) onlineRow.classList.remove('hidden');
-                if (onlineDiscountEl) onlineDiscountEl.textContent = `-Rs. ${onlineDiscount.toFixed(2)}`;
+                if (onlineRow) onlineRow.classList.add('hidden');
                 if (shippingEl) {
                     shippingEl.className = "font-extrabold text-emerald-700";
                     shippingEl.textContent = "FREE Delivery (Online Offer)";
@@ -928,7 +921,7 @@
                 if (selectedPaymentMethod === 'razorpay') {
                     btnSubmitSub.innerHTML = `<span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">Or choose <b>Cash on Delivery</b> (Rs. ${codTotal.toFixed(2)})</span>`;
                 } else {
-                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Save 5% + FREE Delivery (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Get FREE Delivery (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
                 }
             }
 

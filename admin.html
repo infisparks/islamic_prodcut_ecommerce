@@ -347,7 +347,7 @@
 
                             <select id="filter-provider" onchange="loadOrdersAndStats()" class="px-3 py-2 text-xs rounded-lg border border-[#E5E7EB] bg-white text-[#111827] focus:outline-none focus:border-indigo-600">
                                 <option value="all">All Payment Methods</option>
-                                <option value="razorpay">Razorpay (Online 5% OFF)</option>
+                                <option value="razorpay">Online Payment (Razorpay)</option>
                                 <option value="cod">Cash on Delivery (COD)</option>
                             </select>
 
@@ -868,7 +868,7 @@
                 } else {
                     // Online (Razorpay)
                     if (isOnlinePaid || isDelivered) {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (5% OFF)</span>`;
+                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (Free Delivery)</span>`;
                         if (awb || (order.shipping && order.shipping.shiprocketOrderId)) {
                             shippingDisplay = `
                                 <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Booked'}</div>
@@ -1305,7 +1305,7 @@
                         <span class="text-indigo-700">Rs. ${order.pricing?.total || 0}</span>
                     </div>
                     <div class="text-[10px] text-gray-500 pt-1">
-                        <b>Payment Method:</b> ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (Razorpay 5% OFF)'} • <b>Status:</b> ${paymentStatus}
+                        <b>Payment Method:</b> ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (Free Delivery)'} • <b>Status:</b> ${paymentStatus}
                     </div>
                 </div>
 
