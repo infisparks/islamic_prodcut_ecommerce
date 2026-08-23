@@ -269,10 +269,10 @@
 
                     <div class="space-y-2.5">
                         
-                        <!-- ONLINE PAYMENT (Default / Recommended with Free Delivery) -->
+                        <!-- ONLINE PAYMENT (Pay Online with Free Delivery) -->
                         <label id="payment-label-razorpay" onclick="selectPaymentMethod('razorpay')" 
-                            class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/80 ring-2 ring-emerald-400/30 cursor-pointer transition-all shadow-xs relative group">
-                            <input type="radio" name="payment_method" value="razorpay" id="radio-razorpay" checked class="mt-1 text-emerald-600 focus:ring-emerald-500 accent-emerald-600">
+                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-emerald-300 bg-white hover:bg-emerald-50/20 cursor-pointer transition-all relative group">
+                            <input type="radio" name="payment_method" value="razorpay" id="radio-razorpay" class="mt-1 text-emerald-600 focus:ring-emerald-500 accent-emerald-600">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-1 flex-wrap">
                                     <span class="font-black text-xs sm:text-sm text-onyx flex items-center gap-1.5">
@@ -294,10 +294,10 @@
                             </div>
                         </label>
 
-                        <!-- CASH ON DELIVERY (Pay on Doorstep) -->
+                        <!-- CASH ON DELIVERY (Default: Pay on Doorstep) -->
                         <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" 
-                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-gold-300 bg-white hover:bg-gold-50/20 cursor-pointer transition-all">
-                            <input type="radio" name="payment_method" value="cod" id="radio-cod" class="mt-1 text-gold-600 focus:ring-gold-500 accent-gold-600">
+                            class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-gold-500 bg-gold-50/90 ring-2 ring-gold-400/30 cursor-pointer transition-all shadow-xs relative">
+                            <input type="radio" name="payment_method" value="cod" id="radio-cod" checked class="mt-1 text-gold-600 focus:ring-gold-500 accent-gold-600">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-1 flex-wrap">
                                     <span class="font-bold text-xs sm:text-sm text-onyx flex items-center gap-1.5">
@@ -662,6 +662,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initCartFromParamsOrStorage();
             restoreCustomerDetails();
+            selectPaymentMethod('cod');
             renderCheckoutSummary();
             await checkAndLoadPendingOrder();
 
