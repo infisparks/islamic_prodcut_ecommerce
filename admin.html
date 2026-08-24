@@ -140,10 +140,26 @@
                         <span>View Storefront</span>
                     </a>
                 </nav>
+
+                <!-- Support Helpline Box -->
+                <div class="p-3 mx-3 mb-2 rounded-xl bg-indigo-50 border border-indigo-100 text-xs">
+                    <div class="text-[11px] font-bold text-indigo-900 flex items-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-headset text-indigo-600"></i> Customer Support Helpline
+                    </div>
+                    <div class="flex items-center justify-between gap-1 flex-wrap">
+                        <a href="tel:+919970347703" class="text-indigo-700 font-bold hover:underline flex items-center gap-1">
+                            <i class="fa-solid fa-phone text-[10px]"></i> +91 99703 47703
+                        </a>
+                        <a href="https://wa.me/919970347703" target="_blank" class="text-emerald-700 font-bold hover:underline flex items-center gap-1 text-[10px]">
+                            <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- User Info & Logout -->
             <div class="p-4 border-t border-[#E5E7EB] bg-gray-50/50">
+
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2 min-w-0">
                         <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center flex-shrink-0" id="user-avatar-initial">
@@ -836,8 +852,9 @@
                 const status = (order.status || 'PENDING').toUpperCase();
                 const isDelivered = status === 'DELIVERED';
                 const isCodOtpPending = isCod && (status === 'OTP_NOT_VERIFIED' || paymentStatus === 'OTP_NOT_VERIFIED' || shippingStatus === 'OTP_NOT_VERIFIED');
-                const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || (order.payment && order.payment.razorpayPaymentId));
+                const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || status === 'SHIPMENT_BOOKED' || status === 'SHIPPED' || status === 'DELIVERED' || status === 'IN_TRANSIT' || status === 'OUT_FOR_DELIVERY' || Boolean(order.payment && (order.payment.razorpayPaymentId || order.payment.status === 'CAPTURED')));
                 const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED';
+
 
                 let paymentBadge = '';
                 let shippingDisplay = '';

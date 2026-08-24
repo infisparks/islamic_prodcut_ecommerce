@@ -10,9 +10,10 @@ const shiprocketService = require('../services/shiprocketService');
 const whatsappService = require('../services/whatsappService');
 const metaCapiService = require('../services/metaCapiService');
 const { generateOrderId } = require('../utils/crypto');
+const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
 
-// In-memory COD OTP Store (Phone -> { otp, expiresAt, attempts, verified, verificationToken })
+// In-memory COD OTP Store (Phone -> { otp, expiresAt, attempts, verified, verificationToken, draftOrderId })
 const codOtpStore = new Map();
 
 /**
@@ -51,24 +52,29 @@ router.post('/send-cod-otp', async (req, res, next) => {
     const expiresAt = Date.now() + 15 * 60 * 1000; // 15 minutes validity
     const now = new Date().toISOString();
 
-    let draftOrderId = null;
+    // Check if an existing active draft order exists for this phone number
+    const existingRecord = codOtpStore.get(cleanPhone);
+    let draftOrderId = (existingRecord && existingRecord.draftOrderId) || null;
+    const isNewDraft = !draftOrderId;
 
-    // Immediately save a draft record in Firebase so if customer leaves without entering OTP,
-    // the store admin sees "COD (OTP Not Verified)" in admin panel with full customer details
+    // Save or update draft record in Firebase so store admin sees lead without duplicates
     if (customer && Array.isArray(items) && items.length > 0) {
       try {
         const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode, 'cod');
-        draftOrderId = generateOrderId();
+        if (!draftOrderId) {
+          draftOrderId = generateOrderId();
+        }
 
         const draftRecord = {
           orderId: draftOrderId,
-          createdAt: now,
+          createdAt: (existingRecord && existingRecord.createdAt) || now,
           status: 'OTP_NOT_VERIFIED',
           customer,
           items: trustedOrderData.items,
           pricing: trustedOrderData.pricing,
           package: trustedOrderData.package,
           inventoryStatus: trustedOrderData.inventoryStatus,
+          paymentMethod: 'cod',
           payment: {
             provider: 'COD',
             status: 'OTP_NOT_VERIFIED',
@@ -95,8 +101,19 @@ router.post('/send-cod-otp', async (req, res, next) => {
           ]
         };
 
-        await firebaseService.saveOrder(draftOrderId, draftRecord);
-        logger.info('COD_DRAFT_ORDER_SAVED', { draftOrderId, phone: cleanPhone });
+        if (isNewDraft) {
+          await firebaseService.saveOrder(draftOrderId, draftRecord);
+          logger.info('COD_DRAFT_ORDER_SAVED', { draftOrderId, phone: cleanPhone });
+        } else {
+          await firebaseService.updateOrder(draftOrderId, {
+            customer,
+            items: trustedOrderData.items,
+            pricing: trustedOrderData.pricing,
+            payment: draftRecord.payment,
+            updatedAt: now
+          });
+          logger.info('COD_DRAFT_ORDER_REUSED_UPDATED', { draftOrderId, phone: cleanPhone });
+        }
       } catch (calcErr) {
         logger.warn('COD_DRAFT_ORDER_CALC_FAILED', { error: calcErr.message });
       }
@@ -108,7 +125,8 @@ router.post('/send-cod-otp', async (req, res, next) => {
       attempts: 0,
       verified: false,
       verificationToken: null,
-      draftOrderId
+      draftOrderId,
+      createdAt: (existingRecord && existingRecord.createdAt) || now
     });
 
     logger.info('COD_OTP_SENT', { phone: cleanPhone, draftOrderId });
@@ -128,6 +146,7 @@ router.post('/send-cod-otp', async (req, res, next) => {
     next(err);
   }
 });
+
 
 /**
  * POST /api/orders/verify-cod-otp
@@ -276,171 +295,178 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
       }
     }
 
-    // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
-    const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode, paymentMethod);
-    const internalOrderId = reqDraftOrderId || (record && record.draftOrderId) || generateOrderId();
-    const now = new Date().toISOString();
+    // Acquire lock per customer phone to prevent rapid multiple clicks creating duplicate orders
+    return await withLock(`order_create_${cleanPhone}`, async () => {
+      // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
+      const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode, paymentMethod);
+      const internalOrderId = reqDraftOrderId || (record && record.draftOrderId) || generateOrderId();
+      const now = new Date().toISOString();
 
-    const orderRecord = {
-      orderId: internalOrderId,
-      createdAt: now,
-      status: paymentMethod === 'cod' ? 'COD_PENDING' : 'PENDING_PAYMENT',
-      customer,
-      items: trustedOrderData.items,
-      pricing: trustedOrderData.pricing,
-      package: trustedOrderData.package,
-      inventoryStatus: trustedOrderData.inventoryStatus,
-      payment: {
-        provider: paymentMethod === 'cod' ? 'COD' : 'razorpay',
-        status: paymentMethod === 'cod' ? 'COD_PENDING' : 'CREATED',
-        amountPaise: trustedOrderData.pricing.total * 100,
-        currency: 'INR',
-        razorpayOrderId: null,
-        razorpayPaymentId: null,
-        paidAt: null
-      },
-      shipping: {
-        provider: 'shiprocket',
-        status: 'NOT_BOOKED',
-        shiprocketOrderId: null,
-        shipmentId: null,
-        awb: null,
-        courierName: null,
-        trackingUrl: null,
-        bookedAt: null,
-        lastTrackingUpdate: null
-      },
-      events: [
-        {
-          event: 'ORDER_INITIATED',
-          timestamp: now,
-          details: `Order created via ${paymentMethod.toUpperCase()}`
-        }
-      ]
-    };
-
-    // 2. Handle Razorpay flow
-    if (paymentMethod === 'razorpay') {
-      const amountPaise = trustedOrderData.pricing.total * 100;
-
-      const rzpOrder = await razorpayService.createOrder({
-        internalOrderId,
-        amountInPaise: amountPaise,
-        currency: 'INR',
-        customer
-      });
-
-      orderRecord.payment.razorpayOrderId = rzpOrder.id;
-      orderRecord.status = 'PENDING_PAYMENT';
-
-      await firebaseService.saveOrder(internalOrderId, orderRecord);
-      logger.info('ORDER_CREATED', { internalOrderId, paymentMethod: 'razorpay', amountPaise });
-
-      return res.status(201).json({
-        success: true,
-        data: {
-          orderId: internalOrderId,
-          razorpayOrderId: rzpOrder.id,
-          razorpayKeyId: razorpayService.getKeyId(),
-          amount: amountPaise,
+      const orderRecord = {
+        orderId: internalOrderId,
+        createdAt: now,
+        status: paymentMethod === 'cod' ? 'COD_PENDING' : 'PENDING_PAYMENT',
+        paymentMethod: paymentMethod,
+        customer,
+        items: trustedOrderData.items,
+        pricing: trustedOrderData.pricing,
+        package: trustedOrderData.package,
+        inventoryStatus: trustedOrderData.inventoryStatus,
+        payment: {
+          provider: paymentMethod === 'cod' ? 'COD' : 'razorpay',
+          status: paymentMethod === 'cod' ? 'COD_PENDING' : 'CREATED',
+          amountPaise: trustedOrderData.pricing.total * 100,
           currency: 'INR',
-          pricing: trustedOrderData.pricing,
-          itemsCount: trustedOrderData.items.reduce((s, i) => s + i.quantity, 0)
-        }
-      });
-    }
+          razorpayOrderId: null,
+          razorpayPaymentId: null,
+          paidAt: null
+        },
+        shipping: {
+          provider: 'shiprocket',
+          status: 'NOT_BOOKED',
+          shiprocketOrderId: null,
+          shipmentId: null,
+          awb: null,
+          courierName: null,
+          trackingUrl: null,
+          bookedAt: null,
+          lastTrackingUpdate: null
+        },
+        events: [
+          {
+            event: 'ORDER_INITIATED',
+            timestamp: now,
+            details: `Order created via ${paymentMethod.toUpperCase()}`
+          }
+        ]
+      };
 
-    // 3. Handle COD flow
-    if (paymentMethod === 'cod') {
-      logger.info('ORDER_CREATED_COD_INITIATED', { internalOrderId });
+      // 2. Handle Razorpay flow
+      if (paymentMethod === 'razorpay') {
+        const amountPaise = trustedOrderData.pricing.total * 100;
 
-      // Automatically book Shiprocket for COD
-      try {
-        const shippingDetails = await shiprocketService.createShipment(orderRecord);
-        orderRecord.shipping = {
-          ...orderRecord.shipping,
-          ...shippingDetails
-        };
-        orderRecord.status = 'SHIPMENT_BOOKED';
-        orderRecord.events.push({
-          event: 'SHIPMENT_BOOKED',
-          timestamp: new Date().toISOString(),
-          details: `Shiprocket shipment confirmed with Order ID ${shippingDetails.shiprocketOrderId}`
+        const rzpOrder = await razorpayService.createOrder({
+          internalOrderId,
+          amountInPaise: amountPaise,
+          currency: 'INR',
+          customer
         });
+
+        orderRecord.payment.razorpayOrderId = rzpOrder.id;
+        orderRecord.status = 'PENDING_PAYMENT';
 
         await firebaseService.saveOrder(internalOrderId, orderRecord);
-        logger.info('ORDER_CREATED_COD_SUCCESS', { internalOrderId, shiprocketOrderId: shippingDetails.shiprocketOrderId });
-
-        // Dispatch WhatsApp Order & Shipping notifications
-        whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(err => {
-          logger.error('WHATSAPP_COD_CONFIRM_FAIL', { orderId: internalOrderId, error: err.message });
-        });
-        whatsappService.sendShippingConfirmationWhatsApp(orderRecord).catch(err => {
-          logger.error('WHATSAPP_COD_SHIPPING_FAIL', { orderId: internalOrderId, error: err.message });
-        });
-
-        // Dispatch Meta Conversions API (CAPI) Purchase Event from Backend
-        metaCapiService.sendEvent({
-          eventName: 'Purchase',
-          eventId: `ord_${internalOrderId}`,
-          eventSourceUrl: req.headers.referer || 'https://mantasha.store',
-          userData: {
-            name: customer.name,
-            phone: customer.phone,
-            city: customer.city,
-            state: customer.state,
-            zip: customer.pincode,
-            clientIp: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || req.ip,
-            clientUserAgent: req.headers['user-agent']
-          },
-          customData: {
-            currency: 'INR',
-            value: trustedOrderData.pricing.total,
-            order_id: internalOrderId,
-            content_type: 'product',
-            contents: trustedOrderData.items.map(i => ({ id: i.productId, quantity: i.quantity, item_price: i.price }))
-          }
-        }).catch(err => {
-          logger.error('META_CAPI_COD_PURCHASE_FAIL', { orderId: internalOrderId, error: err.message });
-        });
+        logger.info('ORDER_CREATED', { internalOrderId, paymentMethod: 'razorpay', amountPaise });
 
         return res.status(201).json({
           success: true,
           data: {
             orderId: internalOrderId,
-            status: orderRecord.status,
-            payment: {
-              provider: 'COD',
-              status: 'COD_PENDING'
-            },
-            shipping: orderRecord.shipping,
+            razorpayOrderId: rzpOrder.id,
+            razorpayKeyId: razorpayService.getKeyId(),
+            amount: amountPaise,
+            currency: 'INR',
             pricing: trustedOrderData.pricing,
-            customer: orderRecord.customer
-          }
-        });
-      } catch (shipErr) {
-        logger.error('COD_SHIPMENT_FAILED', { internalOrderId, error: shipErr.message });
-        orderRecord.shipping.status = 'FAILED';
-        orderRecord.status = 'SHIPMENT_FAILED';
-        orderRecord.events.push({
-          event: 'SHIPMENT_FAILED',
-          timestamp: new Date().toISOString(),
-          details: `Shipping booking failed: ${shipErr.message}`
-        });
-        await firebaseService.saveOrder(internalOrderId, orderRecord);
-
-        // Even if shipment creation failed, send Order Confirmation WhatsApp
-        whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(e => {});
-
-        return res.status(400).json({
-          success: false,
-          error: {
-            code: 'SHIPROCKET_CONFIRMATION_FAILED',
-            message: shipErr.message || 'Shiprocket could not confirm shipment booking.'
+            itemsCount: trustedOrderData.items.reduce((s, i) => s + i.quantity, 0)
           }
         });
       }
-    }
+
+      // 3. Handle COD flow
+      if (paymentMethod === 'cod') {
+        logger.info('ORDER_CREATED_COD_INITIATED', { internalOrderId });
+
+        // Clean up OTP store after use to prevent stale reuse
+        codOtpStore.delete(cleanPhone);
+
+        // Automatically book Shiprocket for COD
+        try {
+          const shippingDetails = await shiprocketService.createShipment(orderRecord);
+          orderRecord.shipping = {
+            ...orderRecord.shipping,
+            ...shippingDetails
+          };
+          orderRecord.status = 'SHIPMENT_BOOKED';
+          orderRecord.events.push({
+            event: 'SHIPMENT_BOOKED',
+            timestamp: new Date().toISOString(),
+            details: `Shiprocket shipment confirmed with Order ID ${shippingDetails.shiprocketOrderId}`
+          });
+
+          await firebaseService.saveOrder(internalOrderId, orderRecord);
+          logger.info('ORDER_CREATED_COD_SUCCESS', { internalOrderId, shiprocketOrderId: shippingDetails.shiprocketOrderId });
+
+          // Dispatch WhatsApp Order & Shipping notifications
+          whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(err => {
+            logger.error('WHATSAPP_COD_CONFIRM_FAIL', { orderId: internalOrderId, error: err.message });
+          });
+          whatsappService.sendShippingConfirmationWhatsApp(orderRecord).catch(err => {
+            logger.error('WHATSAPP_COD_SHIPPING_FAIL', { orderId: internalOrderId, error: err.message });
+          });
+
+          // Dispatch Meta Conversions API (CAPI) Purchase Event from Backend
+          metaCapiService.sendEvent({
+            eventName: 'Purchase',
+            eventId: `ord_${internalOrderId}`,
+            eventSourceUrl: req.headers.referer || 'https://mantasha.store',
+            userData: {
+              name: customer.name,
+              phone: customer.phone,
+              city: customer.city,
+              state: customer.state,
+              zip: customer.pincode,
+              clientIp: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || req.ip,
+              clientUserAgent: req.headers['user-agent']
+            },
+            customData: {
+              currency: 'INR',
+              value: trustedOrderData.pricing.total,
+              order_id: internalOrderId,
+              content_type: 'product',
+              contents: trustedOrderData.items.map(i => ({ id: i.productId, quantity: i.quantity, item_price: i.price }))
+            }
+          }).catch(err => {
+            logger.error('META_CAPI_COD_PURCHASE_FAIL', { orderId: internalOrderId, error: err.message });
+          });
+
+          return res.status(201).json({
+            success: true,
+            data: {
+              orderId: internalOrderId,
+              status: orderRecord.status,
+              payment: {
+                provider: 'COD',
+                status: 'COD_PENDING'
+              },
+              shipping: orderRecord.shipping,
+              pricing: trustedOrderData.pricing,
+              customer: orderRecord.customer
+            }
+          });
+        } catch (shipErr) {
+          logger.error('COD_SHIPMENT_FAILED', { internalOrderId, error: shipErr.message });
+          orderRecord.shipping.status = 'FAILED';
+          orderRecord.status = 'SHIPMENT_FAILED';
+          orderRecord.events.push({
+            event: 'SHIPMENT_FAILED',
+            timestamp: new Date().toISOString(),
+            details: `Shipping booking failed: ${shipErr.message}`
+          });
+          await firebaseService.saveOrder(internalOrderId, orderRecord);
+
+          // Even if shipment creation failed, send Order Confirmation WhatsApp
+          whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(e => {});
+
+          return res.status(400).json({
+            success: false,
+            error: {
+              code: 'SHIPROCKET_CONFIRMATION_FAILED',
+              message: shipErr.message || 'Shiprocket could not confirm shipment booking.'
+            }
+          });
+        }
+      }
+    });
   } catch (err) {
     next(err);
   }

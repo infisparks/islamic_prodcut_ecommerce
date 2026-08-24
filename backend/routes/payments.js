@@ -12,11 +12,13 @@ const logger = require('../utils/logger');
 
 /**
  * POST /api/payments/razorpay/verify
+ * POST /api/payments/verify
  * Server-side Razorpay signature verification and Shiprocket booking trigger
  */
-router.post('/razorpay/verify', validatePaymentVerification, async (req, res, next) => {
+router.post(['/razorpay/verify', '/verify'], validatePaymentVerification, async (req, res, next) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const reqOrderId = req.body.orderId || req.body.order_id || req.body.internalOrderId;
 
     // 1. Timing-safe HMAC SHA256 signature verification
     const isValidSignature = razorpayService.verifyPaymentSignature({
@@ -36,10 +38,14 @@ router.post('/razorpay/verify', validatePaymentVerification, async (req, res, ne
       });
     }
 
-    // 2. Find internal order in database
-    const order = await firebaseService.findOrderByRazorpayOrderId(razorpay_order_id);
+    // 2. Find internal order in database by Razorpay Order ID or provided Order ID
+    let order = await firebaseService.findOrderByRazorpayOrderId(razorpay_order_id);
+    if (!order && reqOrderId) {
+      order = await firebaseService.getOrder(reqOrderId);
+    }
+
     if (!order) {
-      logger.error('ORDER_NOT_FOUND_FOR_RAZORPAY_ID', { razorpay_order_id });
+      logger.error('ORDER_NOT_FOUND_FOR_RAZORPAY_ID', { razorpay_order_id, reqOrderId });
       return res.status(404).json({
         success: false,
         error: {
@@ -57,7 +63,9 @@ router.post('/razorpay/verify', validatePaymentVerification, async (req, res, ne
 
       // Check if already captured & shipped
       if (
+        freshOrder.payment &&
         freshOrder.payment.status === 'CAPTURED' &&
+        freshOrder.shipping &&
         ['BOOKED', 'AWB_ASSIGNED', 'SHIPPED', 'DELIVERED'].includes(freshOrder.shipping.status)
       ) {
         logger.info('ORDER_ALREADY_FULFILLED_IDEMPOTENT', { orderId });
@@ -66,17 +74,13 @@ router.post('/razorpay/verify', validatePaymentVerification, async (req, res, ne
 
       const now = new Date().toISOString();
 
-      // Update payment status
-      const paymentUpdates = {
-        'payment/status': 'CAPTURED',
-        'payment/razorpayPaymentId': razorpay_payment_id,
-        'payment/paidAt': now,
-        status: 'PAYMENT_CAPTURED'
-      };
-
+      if (!freshOrder.payment) freshOrder.payment = {};
+      freshOrder.payment.provider = 'razorpay';
       freshOrder.payment.status = 'CAPTURED';
+      freshOrder.payment.razorpayOrderId = razorpay_order_id || freshOrder.payment.razorpayOrderId;
       freshOrder.payment.razorpayPaymentId = razorpay_payment_id;
       freshOrder.payment.paidAt = now;
+      freshOrder.paymentMethod = 'razorpay';
       freshOrder.status = 'PAYMENT_CAPTURED';
 
       if (!freshOrder.events) freshOrder.events = [];
@@ -85,9 +89,15 @@ router.post('/razorpay/verify', validatePaymentVerification, async (req, res, ne
         timestamp: now,
         details: `Razorpay payment ${razorpay_payment_id} verified and captured`
       });
-      paymentUpdates.events = freshOrder.events;
 
-      await firebaseService.updateOrder(orderId, paymentUpdates);
+      // Update payment and order status in Firebase
+      await firebaseService.updateOrder(orderId, {
+        payment: freshOrder.payment,
+        paymentMethod: 'razorpay',
+        status: 'PAYMENT_CAPTURED',
+        events: freshOrder.events
+      });
+
 
       // Trigger Order Confirmation WhatsApp message
       whatsappService.sendOrderConfirmationWhatsApp(freshOrder).catch(err => {

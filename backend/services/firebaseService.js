@@ -155,22 +155,8 @@ const firebaseService = {
 
     if (useDatabaseSecret) {
       try {
-        const patchData = {};
-        for (const [key, value] of Object.entries(timestampedUpdates)) {
-          if (key.includes('/')) {
-            const parts = key.split('/');
-            let curr = patchData;
-            for (let i = 0; i < parts.length - 1; i++) {
-              if (!curr[parts[i]]) curr[parts[i]] = {};
-              curr = curr[parts[i]];
-            }
-            curr[parts[parts.length - 1]] = value;
-          } else {
-            patchData[key] = value;
-          }
-        }
-
-        await axios.patch(getDbUrl(`orders/${orderId}`), patchData, { timeout: 10000 });
+        // Firebase RTDB REST API natively supports slash-delimited paths in the top-level PATCH body
+        await axios.patch(getDbUrl(`orders/${orderId}`), timestampedUpdates, { timeout: 10000 });
         return mockStore.orders[orderId];
       } catch (err) {
         logger.warn('FIREBASE_REST_UPDATE_FALLBACK', { error: err.message });
@@ -193,7 +179,11 @@ const firebaseService = {
 
     // Check local memory store first
     for (const order of Object.values(mockStore.orders)) {
-      if (order.payment && order.payment.razorpayOrderId === razorpayOrderId) {
+      if (
+        (order.payment && (order.payment.razorpayOrderId === razorpayOrderId || order.payment.razorpay_order_id === razorpayOrderId)) ||
+        order.razorpayOrderId === razorpayOrderId ||
+        order.orderId === razorpayOrderId
+      ) {
         return JSON.parse(JSON.stringify(order));
       }
     }
@@ -203,7 +193,13 @@ const firebaseService = {
         const res = await axios.get(getDbUrl('orders'), { timeout: 10000 });
         if (res.data) {
           for (const order of Object.values(res.data)) {
-            if (order && order.payment && order.payment.razorpayOrderId === razorpayOrderId) {
+            if (
+              order && (
+                (order.payment && (order.payment.razorpayOrderId === razorpayOrderId || order.payment.razorpay_order_id === razorpayOrderId)) ||
+                order.razorpayOrderId === razorpayOrderId ||
+                order.orderId === razorpayOrderId
+              )
+            ) {
               mockStore.orders[order.orderId] = order;
               return order;
             }
@@ -220,13 +216,15 @@ const firebaseService = {
         .equalTo(razorpayOrderId)
         .once('value');
 
-      if (!snapshot.exists()) return null;
-      const val = snapshot.val();
-      return val[Object.keys(val)[0]];
+      if (snapshot.exists()) {
+        const val = snapshot.val();
+        return val[Object.keys(val)[0]];
+      }
     }
 
     return null;
   },
+
 
   // Find order by Shiprocket Order ID or AWB
   findOrderByShipmentIdentifier: async (identifier) => {

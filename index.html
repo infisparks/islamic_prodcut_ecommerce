@@ -218,7 +218,8 @@
     <div class="bg-onyx text-pearl text-[9px] min-[370px]:text-[10.5px] sm:text-xs font-semibold py-1.5 px-2 text-center border-b border-gold-500/30 flex items-center justify-center gap-1.5 whitespace-nowrap overflow-hidden tracking-tight">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
         <span class="whitespace-nowrap truncate">🎉 <b>FIRST ORDER OFFER</b>: Free Shipping on ₹299+ Orders | Extra 12% OFF with Code <b>RAB112</b></span>
-        <span class="hidden lg:inline-block bg-gold-500/20 text-gold-300 px-2 py-0.5 rounded text-[10px] font-mono border border-gold-500/30 flex-shrink-0" id="top-timer">Ends in 14:28</span>
+        <span class="text-gold-600/80 flex-shrink-0">•</span>
+        <a href="tel:+919970347703" class="hover:underline flex items-center gap-1 font-bold text-gold-300 flex-shrink-0"><i class="fa-solid fa-phone text-[9.5px]"></i> <span class="hidden xs:inline">Support:</span> +91 99703 47703</a>
     </div>
 
     <!-- HEADER / NAVIGATION -->
@@ -235,16 +236,20 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <a href="#reviews" class="hidden sm:flex items-center gap-1 text-amber-400 text-xs font-semibold bg-white/5 px-2.5 py-1 rounded-full border border-gold-500/20">
+                <a href="tel:+919970347703" class="hidden sm:flex items-center gap-1.5 text-gold-300 hover:text-white text-xs font-bold bg-white/5 hover:bg-white/10 px-3 py-1 rounded-full border border-gold-500/25 transition-colors" title="Call Customer Support">
+                    <i class="fa-solid fa-phone text-[10px] text-gold-400"></i> +91 99703 47703
+                </a>
+                <a href="#reviews" class="hidden md:flex items-center gap-1 text-amber-400 text-xs font-semibold bg-white/5 px-2.5 py-1 rounded-full border border-gold-500/20">
                     <i class="fa-solid fa-star text-[10px]"></i> 4.9 (2,800+ Pilgrims)
                 </a>
-                <button onclick="toggleCartDrawer()" class="relative p-2 text-gold-400 hover:text-white transition-colors" aria-label="Open Cart">
+                <button onclick="toggleCartDrawer()" class="relative p-2 text-gold-400 hover:text-white transition-colors cursor-pointer" aria-label="Open Cart">
                     <i class="fa-solid fa-bag-shopping text-xl"></i>
                     <span id="cart-count" class="absolute -top-0.5 -right-0.5 bg-red-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-onyx">0</span>
                 </button>
             </div>
         </div>
     </header>
+
 
     <!-- HERO HOOK SECTION (Clean, Minimal, High-Converting) -->
     <section class="relative bg-onyx text-white pt-10 pb-14 sm:pt-14 sm:pb-16 px-4 overflow-hidden border-b border-gold-500/30">
@@ -971,11 +976,17 @@
             <p class="text-[10px] text-gray-500 max-w-xs mx-auto">
                 Crafting luxury authentic Islamic guides, dua cards & calligraphy pieces for your sacred journey.
             </p>
+            <p class="text-gold-300 text-xs font-semibold">
+                <i class="fa-solid fa-headset mr-1"></i> Customer Support Helpline: 
+                <a href="tel:+919970347703" class="hover:underline text-gold-400 font-bold">+91 99703 47703</a> • 
+                <a href="https://wa.me/919970347703" target="_blank" class="hover:underline text-emerald-400 font-bold"><i class="fa-brands fa-whatsapp"></i> WhatsApp Support</a>
+            </p>
             <div class="text-[9px] text-gray-600 border-t border-gray-800 pt-3">
                 © 2026 FatimaCalligrapher27. All Rights Reserved.
             </div>
         </div>
     </footer>
+
 
 
 
@@ -2866,9 +2877,14 @@
                                 <i class="fa-solid fa-location-crosshairs"></i> Track Shipment Live on Shiprocket
                             </a>
                         ` : ''}
+                        <div class="pt-2 border-t border-gold-200 text-[11px] text-gray-700 flex items-center justify-between flex-wrap gap-1">
+                            <span>Customer Support Helpline:</span>
+                            <a href="tel:+919970347703" class="text-indigo-600 font-bold hover:underline flex items-center gap-1"><i class="fa-solid fa-phone text-[10px]"></i> +91 99703 47703</a>
+                        </div>
                     </div>
                 </div>
             `;
+
 
             // Track Purchase event in Meta Pixel & CAPI
             trackMetaEvent('Purchase', {
@@ -3406,6 +3422,9 @@
             });
 
             // Lock UI
+            if (window.isPlacingOrder) return;
+            window.isPlacingOrder = true;
+
             setCheckoutButtonLoading(true, effectivePaymentMethod === 'cod' ? "Securing COD Order with Server..." : "Initiating Online Payment...");
 
             const orderPayload = {
@@ -3439,6 +3458,7 @@
                 const result = await response.json();
 
                 if (!response.ok || !result.success) {
+                    window.isPlacingOrder = false;
                     const errorMsg = (result.error && result.error.message) || 'Failed to create order. Please try again.';
                     showErrorFeedback(errorMsg, "Order Creation Error");
                     setCheckoutButtonLoading(false);
@@ -3447,6 +3467,7 @@
 
                 // Handle COD Flow
                 if (effectivePaymentMethod === 'cod') {
+                    window.isPlacingOrder = false;
                     setCheckoutButtonLoading(false);
                     showSuccessOrder(result.data);
                     return;
@@ -3455,6 +3476,7 @@
                 // Handle Razorpay Flow
                 const orderData = result.data;
                 if (!window.Razorpay) {
+                    window.isPlacingOrder = false;
                     setCheckoutButtonLoading(false);
                     openTestPaymentModal(orderData);
                     return;
@@ -3484,31 +3506,40 @@
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
+                                    orderId: orderData.orderId,
                                     razorpay_order_id: paymentResponse.razorpay_order_id,
                                     razorpay_payment_id: paymentResponse.razorpay_payment_id,
-                                    razorpay_signature: paymentResponse.razorpay_signature
+                                    razorpay_signature: paymentResponse.razorpay_signature,
+                                    razorpayOrderId: paymentResponse.razorpay_order_id,
+                                    razorpayPaymentId: paymentResponse.razorpay_payment_id,
+                                    razorpaySignature: paymentResponse.razorpay_signature
                                 })
                             });
 
                             const verifyResult = await verifyRes.json();
 
                             if (verifyRes.ok && verifyResult.success) {
+                                window.isPlacingOrder = false;
                                 showSuccessOrder(verifyResult.data);
                             } else {
+                                window.isPlacingOrder = false;
                                 const msg = (verifyResult.error && verifyResult.error.message) || "Payment verification could not be completed.";
                                 showErrorFeedback(msg, "Verification Notice");
                             }
                         } catch (verifyErr) {
+                            window.isPlacingOrder = false;
                             showErrorFeedback(
-                                `Your payment was received, but shipment booking is still processing. Please do not pay again. Your internal order ID is ${orderData.orderId}.`,
+                                `Your payment was received, but shipment booking is still processing. Please do not pay again. Your internal order ID is ${orderData.orderId}. Support: +91 99703 47703`,
                                 "Payment Received"
                             );
                         } finally {
+                            window.isPlacingOrder = false;
                             setCheckoutButtonLoading(false);
                         }
                     },
                     modal: {
                         ondismiss: function () {
+                            window.isPlacingOrder = false;
                             setCheckoutButtonLoading(false);
                             showErrorFeedback("Payment was not completed. Your order remains pending and can be paid anytime.", "Payment Cancelled");
                         }
@@ -3518,18 +3549,22 @@
                 try {
                     const razorpayClient = new window.Razorpay(rzpOptions);
                     razorpayClient.on('payment.failed', function (resp) {
+                        window.isPlacingOrder = false;
                         setCheckoutButtonLoading(false);
                         openTestPaymentModal(orderData);
                     });
                     razorpayClient.open();
                 } catch (rzpOpenErr) {
+                    window.isPlacingOrder = false;
                     setCheckoutButtonLoading(false);
                     openTestPaymentModal(orderData);
                 }
             } catch (err) {
+                window.isPlacingOrder = false;
                 setCheckoutButtonLoading(false);
-                showErrorFeedback("A network connection error occurred while communicating with the server. Please check your connection and retry.", "Network Error");
+                showErrorFeedback("A network connection error occurred while communicating with the server. Please check your connection and retry. Support: +91 99703 47703", "Network Error");
             }
+
         }
 
         function closeSuccessModal() {

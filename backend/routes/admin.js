@@ -148,13 +148,17 @@ router.get('/orders', async (req, res, next) => {
       const orderStatus = (o.status || '').toUpperCase();
       const isCancelled = orderStatus === 'CANCELLED';
       const orderTotal = o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0);
-      const isPaid = (o.payment?.status || '').toUpperCase() === 'CAPTURED';
-      const isCod = (o.payment?.provider || o.paymentMethod || '').toLowerCase() === 'cod';
+      const prov = (o.payment?.provider || o.paymentMethod || o.payment_method || '').toLowerCase();
+      const hasCodCharge = (o.pricing?.codCharge || 0) > 0;
+      const hasCodEvent = (o.events || []).some(e => (e.event || '').includes('COD'));
+      const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
+      const isPaid = (o.payment?.status || '').toUpperCase() === 'CAPTURED' || Boolean(o.payment?.razorpayPaymentId) || (!isCod && ['PAYMENT_CAPTURED', 'SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED'].includes(orderStatus));
 
       if (!isCancelled) {
         filteredRevenue += orderTotal;
         if (isPaid) filteredPaidRevenue += orderTotal;
         if (isCod) filteredCodRevenue += orderTotal;
+
 
         if (orderStatus === 'DELIVERED') {
           filteredDeliveredRevenue += orderTotal;
@@ -233,8 +237,11 @@ router.get('/stats', async (req, res, next) => {
     for (const o of orders) {
       const orderStatus = (o.status || '').toUpperCase();
       const paymentStatus = (o.payment?.status || '').toUpperCase();
-      const isPaid = paymentStatus === 'CAPTURED';
-      const isCod = (o.payment?.provider || o.paymentMethod || '').toLowerCase() === 'cod';
+      const prov = (o.payment?.provider || o.paymentMethod || o.payment_method || '').toLowerCase();
+      const hasCodCharge = (o.pricing?.codCharge || 0) > 0;
+      const hasCodEvent = (o.events || []).some(e => (e.event || '').includes('COD'));
+      const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
+      const isPaid = paymentStatus === 'CAPTURED' || Boolean(o.payment?.razorpayPaymentId) || (!isCod && ['PAYMENT_CAPTURED', 'SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED'].includes(orderStatus));
       const orderTotal = o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0);
       const isCancelled = orderStatus === 'CANCELLED';
 
@@ -261,6 +268,7 @@ router.get('/stats', async (req, res, next) => {
       if (isCancelled) cancelledCount++;
       if (isCod) codCount++;
     }
+
 
     const nonCancelledOrders = Math.max(1, orders.length - cancelledCount);
     const avgOrderValue = orders.length > 0 ? Math.round(totalRevenue / nonCancelledOrders) : 0;

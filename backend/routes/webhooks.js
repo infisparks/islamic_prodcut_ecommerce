@@ -63,9 +63,12 @@ router.post('/razorpay', async (req, res) => {
 
           // Update Payment status if not captured
           if (freshOrder.payment.status !== 'CAPTURED') {
+            if (!freshOrder.payment) freshOrder.payment = {};
+            freshOrder.payment.provider = 'razorpay';
             freshOrder.payment.status = 'CAPTURED';
             freshOrder.payment.razorpayPaymentId = razorpayPaymentId;
             freshOrder.payment.paidAt = now;
+            freshOrder.paymentMethod = 'razorpay';
             freshOrder.status = 'PAYMENT_CAPTURED';
 
             if (!freshOrder.events) freshOrder.events = [];
@@ -77,6 +80,7 @@ router.post('/razorpay', async (req, res) => {
 
             await firebaseService.updateOrder(orderId, {
               payment: freshOrder.payment,
+              paymentMethod: 'razorpay',
               status: freshOrder.status,
               events: freshOrder.events
             });

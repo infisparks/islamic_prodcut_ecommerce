@@ -96,31 +96,39 @@
 
     <!-- TOP HEADER -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xs">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+        <div class="max-w-5xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
             <!-- Left: Back to Home & Store -->
-            <a href="index.html" class="flex items-center gap-1.5 text-xs font-bold text-gray-700 hover:text-gold-700 bg-gray-100 hover:bg-gold-50 py-1.5 px-3 rounded-xl border border-gray-200 transition-all active:scale-95">
-                <i class="fa-solid fa-arrow-left text-xs text-gold-600"></i>
-                <span>Store</span>
+            <a href="index.html" class="flex items-center gap-1 text-xs font-bold text-gray-700 hover:text-gold-700 bg-gray-100 hover:bg-gold-50 py-1.5 px-2.5 sm:px-3 rounded-xl border border-gray-200 transition-all flex-shrink-0 active:scale-95" title="Back to Store">
+                <i class="fa-solid fa-arrow-left text-[11px] text-gold-600"></i>
+                <span class="hidden min-[380px]:inline">Store</span>
             </a>
 
             <!-- Center: Brand Logo -->
-            <a href="index.html" class="flex items-center gap-2 group">
-                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-onyx border border-gold-500/60 flex items-center justify-center text-gold-400 font-cinzel font-bold text-xs sm:text-sm shadow-xs">
+            <a href="index.html" class="flex items-center gap-1.5 sm:gap-2 min-w-0 group">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-onyx border border-gold-500/60 flex items-center justify-center text-gold-400 font-cinzel font-bold text-xs sm:text-sm shadow-xs flex-shrink-0">
                     FC
                 </div>
-                <div class="text-left">
-                    <span class="font-cinzel text-xs sm:text-sm font-bold tracking-wider text-onyx block">FATIMA CALLIGRAPHER</span>
-                    <span class="text-[8.5px] text-gold-600 font-semibold tracking-widest block uppercase -mt-0.5">Secure Checkout</span>
+                <div class="text-left min-w-0">
+                    <span class="font-cinzel text-xs sm:text-sm font-bold tracking-wider text-onyx block truncate">FATIMA CALLIGRAPHER</span>
+                    <span class="text-[8px] sm:text-[9.5px] text-gold-600 font-semibold tracking-widest block uppercase -mt-0.5 truncate">Secure Checkout</span>
                 </div>
             </a>
 
-            <!-- Right: Secure Guarantee Badge -->
-            <div class="flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
-                <i class="fa-solid fa-shield-halved text-xs text-emerald-600"></i>
-                <span class="hidden xs:inline">100% Secure</span>
+            <!-- Right: Support Helpline & Secure Guarantee Badge -->
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+                <a href="tel:+919970347703" class="flex items-center gap-1 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 py-1.5 px-2.5 sm:px-3 rounded-xl border border-indigo-200 transition-colors whitespace-nowrap shadow-2xs" title="Call Customer Support (+91 99703 47703)">
+                    <i class="fa-solid fa-phone text-[11px] text-indigo-600"></i>
+                    <span class="hidden sm:inline">+91 99703 47703</span>
+                    <span class="sm:hidden text-[11px] font-bold">Help</span>
+                </a>
+                <div class="hidden md:flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1.5 rounded-xl border border-emerald-200 whitespace-nowrap">
+                    <i class="fa-solid fa-shield-halved text-xs text-emerald-600"></i>
+                    <span>100% Secure</span>
+                </div>
             </div>
         </div>
     </header>
+
 
     <!-- MAIN CHECKOUT CONTAINER -->
     <main class="flex-grow max-w-5xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-8">
@@ -518,9 +526,15 @@
     <footer class="bg-onyx text-pearl mt-8 py-6 px-4 border-t border-gold-500/30 text-center text-xs">
         <div class="max-w-5xl mx-auto space-y-2">
             <p class="text-gray-400 text-[11px]">Authentic Umrah Dua Cards & Sacred Prophetic Supplications • Designed with reverence</p>
+            <p class="text-gold-300 text-xs font-semibold">
+                <i class="fa-solid fa-headset mr-1"></i> Need Help with Order? 
+                <a href="tel:+919970347703" class="text-gold-400 font-bold hover:underline">+91 99703 47703</a> • 
+                <a href="https://wa.me/919970347703" target="_blank" class="text-emerald-400 font-bold hover:underline"><i class="fa-brands fa-whatsapp"></i> WhatsApp Helpline</a>
+            </p>
             <p class="text-gray-500 text-[10px]">© 2026 Fatima Calligrapher. All rights reserved. Pan-India Express Delivery.</p>
         </div>
     </footer>
+
 
     <!-- PRODUCT CATALOG & CHECKOUT ENGINE SCRIPT -->
     <script>
@@ -1235,11 +1249,14 @@
                     theme: { color: '#D4AF37' },
                     handler: async function (response) {
                         try {
-                            const verifyRes = await fetch('/api/payments/verify', {
+                            const verifyRes = await fetch('/api/payments/razorpay/verify', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     orderId: rzpDetails.orderId,
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
                                     razorpayOrderId: response.razorpay_order_id,
                                     razorpayPaymentId: response.razorpay_payment_id,
                                     razorpaySignature: response.razorpay_signature
@@ -1250,12 +1267,13 @@
                             if (verifyData.success) {
                                 onOrderSuccess(verifyData.data || { orderId: rzpDetails.orderId, pricing: rzpDetails.pricing, customer });
                             } else {
-                                showErrorModal("Payment Verification Failed", verifyData.error?.message || "Please contact support with your payment ID.");
+                                showErrorModal("Payment Verification Notice", verifyData.error?.message || "Please contact support at +91 99703 47703 with your payment reference.");
                             }
                         } catch (vErr) {
-                            showErrorModal("Verification Error", vErr.message);
+                            showErrorModal("Verification Notice", "Payment was received. Our team will verify and dispatch your order. For inquiries call +91 99703 47703.");
                         }
                     },
+
                     modal: {
                         ondismiss: function () {
                             setSubmitButtonLoading(false);

@@ -173,6 +173,17 @@ function validateOrderCreation(req, res, next) {
 }
 
 function validatePaymentVerification(req, res, next) {
+  // Support both snake_case and camelCase property names
+  if (!req.body.razorpay_order_id && req.body.razorpayOrderId) {
+    req.body.razorpay_order_id = req.body.razorpayOrderId;
+  }
+  if (!req.body.razorpay_payment_id && req.body.razorpayPaymentId) {
+    req.body.razorpay_payment_id = req.body.razorpayPaymentId;
+  }
+  if (!req.body.razorpay_signature && req.body.razorpaySignature) {
+    req.body.razorpay_signature = req.body.razorpaySignature;
+  }
+
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
   if (!razorpay_order_id || typeof razorpay_order_id !== 'string') {
@@ -213,3 +224,4 @@ module.exports = {
   validatePaymentVerification,
   sanitizeString
 };
+

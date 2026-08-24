@@ -107,8 +107,8 @@
         <span class="flex items-center gap-1 flex-shrink-0"><i class="fa-solid fa-gift text-gold-400 text-[10px]"></i> Free Tawaf Tasbih</span>
         <span class="text-gold-600/80 flex-shrink-0">•</span>
         <span class="text-emerald-400 flex items-center gap-1 flex-shrink-0"><i class="fa-solid fa-shield-halved text-[10px]"></i> 100% Cash on Delivery</span>
-        <span class="hidden sm:inline text-gold-600/80 flex-shrink-0">•</span>
-        <span class="hidden sm:inline text-gold-300 flex-shrink-0">Pan-India Express</span>
+        <span class="text-gold-600/80 flex-shrink-0">•</span>
+        <a href="tel:+919970347703" class="text-gold-300 hover:underline flex items-center gap-1 font-bold flex-shrink-0"><i class="fa-solid fa-phone text-[9.5px]"></i> <span class="hidden xs:inline">Call:</span> +91 99703 47703</a>
     </div>
 
     <!-- MAIN HEADER -->
@@ -391,11 +391,12 @@
                                 <i class="fa-solid fa-cart-plus text-gold-600"></i>
                                 <span>Add to Cart</span>
                             </button>
-                            <a id="pdp-whatsapp-btn" href="https://wa.me/919876543210?text=Hi%2C%20I%20want%20to%20order%20the%20Umrah%20Dua%20Cards" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold py-2.5 px-3 rounded-xl border border-emerald-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs">
+                            <a id="pdp-whatsapp-btn" href="https://wa.me/919970347703?text=Hi%2C%20I%20want%20to%20order%20the%20Umrah%20Dua%20Cards" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold py-2.5 px-3 rounded-xl border border-emerald-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs">
                                 <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
                                 <span>Order on WhatsApp</span>
                             </a>
                         </div>
+
                     </div>
 
                     <!-- PRODUCT SPECIFICATIONS ACCORDION / TABLE -->
@@ -729,9 +730,15 @@
                 </a>
             </div>
             <p class="text-gray-400 text-[11px]">Authentic Umrah Dua Cards & Sacred Prophetic Supplications • Designed with reverence</p>
+            <p class="text-gold-300 text-xs font-semibold">
+                <i class="fa-solid fa-headset mr-1"></i> Customer Support Helpline: 
+                <a href="tel:+919970347703" class="hover:underline text-gold-400 font-bold">+91 99703 47703</a> • 
+                <a href="https://wa.me/919970347703" target="_blank" class="hover:underline text-emerald-400 font-bold"><i class="fa-brands fa-whatsapp"></i> WhatsApp Support</a>
+            </p>
             <p class="text-gray-500 text-[10px]">© 2026 Fatima Calligrapher. All rights reserved. Pan-India Express Delivery.</p>
         </div>
     </footer>
+
 
     <!-- PRODUCT CATALOG & JAVASCRIPT ENGINE -->
     <script>
@@ -1300,7 +1307,8 @@
 
             // WhatsApp link
             const waMsg = encodeURIComponent(`Assalam u Alaikum! I would like to order: ${p.name} (${activeVariant ? activeVariant.name : 'Standard'}) for Rs. ${activePrice}. Please confirm.`);
-            document.getElementById('pdp-whatsapp-btn').href = `https://wa.me/919876543210?text=${waMsg}`;
+            document.getElementById('pdp-whatsapp-btn').href = `https://wa.me/919970347703?text=${waMsg}`;
+
 
             // Specifications Table
             document.getElementById('spec-brand').textContent = p.brand;
@@ -2211,6 +2219,9 @@
         }
 
         async function executeOrderCreation(verificationToken) {
+            if (window.isProcessingOrder) return;
+            window.isProcessingOrder = true;
+
             const name = document.getElementById('ship-name').value.trim();
             const phone = document.getElementById('ship-phone').value.trim();
             const emergencyPhone = document.getElementById('ship-emergency-phone')?.value.trim() || '';
@@ -2264,6 +2275,7 @@
                 const result = await response.json();
 
                 if (!response.ok || !result.success) {
+                    window.isProcessingOrder = false;
                     setCheckoutButtonLoading(false);
                     showErrorFeedback(result.error?.message || 'Order creation failed.', 'Order Processing Notice');
                     return;
@@ -2272,6 +2284,7 @@
                 const orderData = result.data;
 
                 if (effectivePaymentMethod === 'cod') {
+                    window.isProcessingOrder = false;
                     setCheckoutButtonLoading(false);
                     toggleCartDrawer(false);
                     cart = [];
@@ -2297,11 +2310,14 @@
                     handler: async function (razorpayResponse) {
                         setCheckoutButtonLoading(true, "Verifying Payment & Booking Express Courier...");
                         try {
-                            const verifyRes = await fetch('/api/payments/verify', {
+                            const verifyRes = await fetch('/api/payments/razorpay/verify', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     orderId: orderData.orderId,
+                                    razorpay_order_id: razorpayResponse.razorpay_order_id,
+                                    razorpay_payment_id: razorpayResponse.razorpay_payment_id,
+                                    razorpay_signature: razorpayResponse.razorpay_signature,
                                     razorpayOrderId: razorpayResponse.razorpay_order_id,
                                     razorpayPaymentId: razorpayResponse.razorpay_payment_id,
                                     razorpaySignature: razorpayResponse.razorpay_signature
@@ -2309,21 +2325,26 @@
                             });
                             const verifyData = await verifyRes.json();
                             if (verifyRes.ok && verifyData.success) {
+                                window.isProcessingOrder = false;
                                 toggleCartDrawer(false);
                                 cart = [];
                                 updateCartUI(true);
                                 showSuccessOrder(verifyData.data || orderData);
                             } else {
+                                window.isProcessingOrder = false;
                                 showErrorFeedback(verifyData.error?.message || 'Payment verification notice.', 'Verification Notice');
                             }
                         } catch (e) {
-                            showErrorFeedback(`Payment received. Order ID: ${orderData.orderId}.`, "Payment Received");
+                            window.isProcessingOrder = false;
+                            showErrorFeedback(`Payment received. Order ID: ${orderData.orderId}. Support: +91 99703 47703`, "Payment Received");
                         } finally {
+                            window.isProcessingOrder = false;
                             setCheckoutButtonLoading(false);
                         }
                     },
                     modal: {
                         ondismiss: function () {
+                            window.isProcessingOrder = false;
                             setCheckoutButtonLoading(false);
                             showErrorFeedback("Payment was not completed. Your order remains pending.", "Payment Cancelled");
                         }
@@ -2331,8 +2352,14 @@
                 };
 
                 const razorpayClient = new window.Razorpay(rzpOptions);
+                razorpayClient.on('payment.failed', function (resp) {
+                    window.isProcessingOrder = false;
+                    setCheckoutButtonLoading(false);
+                    showErrorFeedback(resp.error?.description || "Payment could not be completed. Please retry.", "Payment Failed");
+                });
                 razorpayClient.open();
             } catch (err) {
+                window.isProcessingOrder = false;
                 setCheckoutButtonLoading(false);
                 showErrorFeedback("Network connection error. Please retry.", "Network Error");
             }
@@ -2342,11 +2369,11 @@
             const container = document.getElementById('success-order-details');
             if (!container) return;
             const orderId = orderData.orderId || 'FC-CONFIRMED';
-            const isCod = orderData.payment && orderData.payment.provider === 'COD';
+            const isCod = (orderData.payment && orderData.payment.provider === 'COD') || orderData.paymentMethod === 'cod';
 
             trackMetaEvent('Purchase', {
                 currency: 'INR',
-                value: (orderData.totalAmount || 699),
+                value: (orderData.pricing?.total || orderData.totalAmount || 699),
                 num_items: 1,
                 order_id: orderId
             });
@@ -2354,8 +2381,13 @@
             container.innerHTML = `
                 <div class="space-y-1.5">
                     <div class="flex justify-between font-mono"><span class="text-gray-500">Order ID:</span><b class="text-onyx">${orderId}</b></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Payment:</span><b class="${isCod ? 'text-amber-700' : 'text-emerald-700'}">${isCod ? 'Cash on Delivery (Pending)' : '✓ Paid Online (Razorpay)'}</b></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Total Payable:</span><b class="text-gold-700">Rs. ${orderData.totalAmount || 699}</b></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Payment:</span><b class="${isCod ? 'text-amber-700' : 'text-emerald-700'}">${isCod ? 'Cash on Delivery (Pending)' : '✓ Paid Online (Razorpay Captured)'}</b></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Total Payable:</span><b class="text-gold-700">Rs. ${orderData.pricing?.total || orderData.totalAmount || 699}</b></div>
+                    ${orderData.shipping?.awb ? `<div class="flex justify-between"><span class="text-gray-500">AWB Tracking:</span><b class="font-mono text-indigo-700">${orderData.shipping.awb}</b></div>` : ''}
+                    <div class="pt-2 mt-2 border-t border-gold-200 text-[11px] text-gray-700 flex items-center justify-between flex-wrap gap-1">
+                        <span>Need Help / Support?</span>
+                        <a href="tel:+919970347703" class="text-indigo-600 font-bold hover:underline flex items-center gap-1"><i class="fa-solid fa-phone text-[10px]"></i> +91 99703 47703</a>
+                    </div>
                 </div>
             `;
             document.getElementById('success-modal').classList.remove('hidden');
@@ -2363,9 +2395,10 @@
 
         function showErrorFeedback(message, title = "Notice") {
             document.getElementById('error-modal-title').textContent = title;
-            document.getElementById('error-modal-message').textContent = message;
+            document.getElementById('error-modal-message').innerHTML = `${message}<div class="mt-2 pt-2 border-t border-gray-100 text-[11px] text-gray-500">Need immediate help? Call support at <a href="tel:+919970347703" class="text-indigo-600 font-bold hover:underline">+91 99703 47703</a></div>`;
             document.getElementById('error-feedback-modal').classList.remove('hidden');
         }
+
 
         function closeErrorFeedbackModal() {
             document.getElementById('error-feedback-modal').classList.add('hidden');
