@@ -10,6 +10,32 @@ const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
 
 /**
+ * GET /api/webhooks/razorpay
+ * Health & status check when opened in browser (GET request)
+ */
+router.get('/razorpay', (req, res) => {
+  res.json({
+    status: 'ACTIVE',
+    endpoint: 'Razorpay Webhook Listener',
+    allowedMethod: 'POST',
+    message: 'Webhook endpoint is active and listening for Razorpay POST events.'
+  });
+});
+
+/**
+ * GET /api/webhooks/shiprocket
+ * Health & status check when opened in browser (GET request)
+ */
+router.get('/shiprocket', (req, res) => {
+  res.json({
+    status: 'ACTIVE',
+    endpoint: 'Shiprocket Webhook Listener',
+    allowedMethod: 'POST',
+    message: 'Webhook endpoint is active and listening for Shiprocket POST tracking events.'
+  });
+});
+
+/**
  * POST /api/webhooks/razorpay
  * Razorpay Webhook Handler
  */
