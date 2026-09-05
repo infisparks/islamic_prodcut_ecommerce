@@ -270,14 +270,14 @@
                             </div>
                             <div>
                                 <h2 class="font-bold text-sm sm:text-base text-onyx">Payment Method</h2>
-                                <p class="text-[10px] text-gray-500">Choose Online (FREE Delivery) or Cash on Delivery</p>
+                                <p class="text-[10px] text-gray-500">Choose Online (Extra 5% OFF) or Cash on Delivery</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-2.5">
                         
-                        <!-- ONLINE PAYMENT (Pay Online with Free Delivery) -->
+                        <!-- ONLINE PAYMENT (Pay Online with 5% Extra OFF) -->
                         <label id="payment-label-razorpay" onclick="selectPaymentMethod('razorpay')" 
                             class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-emerald-300 bg-white hover:bg-emerald-50/20 cursor-pointer transition-all relative group">
                             <input type="radio" name="payment_method" value="razorpay" id="radio-razorpay" class="mt-1 text-emerald-600 focus:ring-emerald-500 accent-emerald-600">
@@ -287,16 +287,16 @@
                                         <i class="fa-solid fa-bolt text-emerald-600 text-sm"></i>
                                         <span>Pay Online (UPI, Cards, NetBanking)</span>
                                     </span>
-                                    <span class="text-[9.5px] font-black text-white bg-emerald-600 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                                        ⚡ FREE DELIVERY
+                                    <span id="badge-online-offer-pill" class="text-[9.5px] font-black text-white bg-emerald-600 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                                        ⚡ 5% EXTRA OFF
                                     </span>
                                 </div>
                                 <p class="text-[11px] text-gray-600 mt-1 leading-snug">
-                                    Google Pay, PhonePe, Paytm, BHIM UPI, Cards & NetBanking. Get 100% Free Delivery!
+                                    Google Pay, PhonePe, Paytm, BHIM UPI, Cards & NetBanking. Instant 5% Extra Discount!
                                 </p>
                                 <div class="mt-1.5 flex items-center gap-2">
                                     <span id="badge-online-price" class="text-[11px] font-bold text-emerald-800 bg-white/90 px-2 py-0.5 rounded-md border border-emerald-200">
-                                        Pay Rs. 491.00 (FREE Delivery)
+                                        Pay Rs. 491.00 (5% OFF)
                                     </span>
                                 </div>
                             </div>
@@ -376,8 +376,12 @@
                             <span id="summary-subtotal" class="font-bold text-onyx">Rs. 491.00</span>
                         </div>
                         <div id="summary-discount-row" class="hidden flex justify-between items-center text-emerald-700 font-semibold">
-                            <span>Coupon Discount:</span>
+                            <span>Special Coupon (12% OFF):</span>
                             <span id="summary-discount">-Rs. 0.00</span>
+                        </div>
+                        <div id="summary-online-row" class="hidden flex justify-between items-center text-emerald-700 font-semibold">
+                            <span>Prepaid Discount (5% OFF):</span>
+                            <span id="summary-online">-Rs. 0.00</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span>Delivery & Handling:</span>
@@ -855,23 +859,27 @@
             if (countEl) countEl.textContent = totalQty;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
-            // Shipping fee calculated from pincode lookup
-            let effectiveShipping = currentShippingFee;
+            // Free shipping on BOTH COD and Prepaid for orders >= Rs. 699
+            const isFreeShipping = (subtotal >= 699);
+            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 49;
+            const effectiveShipping = isFreeShipping ? 0 : courierFee;
 
-            if (effectiveShipping === null || effectiveShipping === undefined) {
-                if (shippingEl) {
-                    shippingEl.className = "font-semibold text-gray-500";
-                    shippingEl.textContent = 'Enter Pincode';
-                }
-            } else if (effectiveShipping === 0) {
+            if (isFreeShipping) {
                 if (shippingEl) {
                     shippingEl.className = "font-extrabold text-emerald-700";
-                    shippingEl.textContent = 'FREE Delivery';
+                    shippingEl.textContent = 'FREE Delivery (Order ₹699+)';
                 }
             } else {
-                if (shippingEl) {
-                    shippingEl.className = "font-bold text-onyx";
-                    shippingEl.textContent = `Rs. ${effectiveShipping.toFixed(2)}`;
+                if (currentShippingFee === null || currentShippingFee === undefined) {
+                    if (shippingEl) {
+                        shippingEl.className = "font-semibold text-gray-500";
+                        shippingEl.textContent = 'Enter Pincode';
+                    }
+                } else {
+                    if (shippingEl) {
+                        shippingEl.className = "font-bold text-onyx";
+                        shippingEl.textContent = `Rs. ${effectiveShipping.toFixed(2)}`;
+                    }
                 }
             }
 
@@ -884,7 +892,7 @@
                 appliedCoupon = null;
             }
 
-            // Coupon discount
+            // Coupon discount (12% for >= 999)
             let discountAmount = 0;
             const discountRow = document.getElementById('summary-discount-row');
             if (appliedCoupon && appliedCoupon.percent) {
@@ -913,40 +921,41 @@
                 }
             }
 
-            const subtotalAfterCoupon = Math.max(0, subtotal - discountAmount);
-            const codShippingFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 49;
+            // Prepaid 5% discount (always applicable to online payments)
+            const prepaidDiscount = Math.round(subtotal * 0.05);
 
-            // Calculations: Online = Free Delivery (Rs. 0 Shipping) | COD = Subtotal + Courier Shipping
-            const onlineTotal = subtotalAfterCoupon;
-            const codTotal = Math.max(0, subtotalAfterCoupon + codShippingFee);
+            // Calculations:
+            // COD Total: Subtotal - 12% discount (if >= 999) + Shipping (0 if >= 699, else courierFee)
+            const codTotal = Math.max(0, subtotal - discountAmount + (isFreeShipping ? 0 : courierFee));
+
+            // Online Total: Subtotal - 12% discount (if >= 999) - 5% prepaid discount + Shipping (0 if >= 699, else courierFee)
+            const onlineTotal = Math.max(0, subtotal - discountAmount - prepaidDiscount + (isFreeShipping ? 0 : courierFee));
 
             // Update badge prices in Section 2
             const onlineBadgePrice = document.getElementById('badge-online-price');
             const codBadgePrice = document.getElementById('badge-cod-price');
-            if (onlineBadgePrice) onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (FREE Delivery)`;
-            if (codBadgePrice) codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)} (Delivery: Rs. ${codShippingFee.toFixed(2)})`;
+            const onlineOfferPill = document.getElementById('badge-online-offer-pill');
 
-            // Update summary discount / shipping display
+            if (onlineBadgePrice) {
+                onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Extra 5% OFF${isFreeShipping ? ' + FREE Delivery' : ''})`;
+            }
+            if (codBadgePrice) {
+                codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)} (${isFreeShipping ? 'FREE Delivery' : 'Delivery: Rs. ' + courierFee.toFixed(2)})`;
+            }
+            if (onlineOfferPill) {
+                onlineOfferPill.textContent = isFreeShipping ? '⚡ 5% EXTRA OFF + FREE DELIVERY' : '⚡ 5% EXTRA OFF';
+            }
+
+            // Update summary online discount row
             const onlineRow = document.getElementById('summary-online-row');
+            const onlineDiscountEl = document.getElementById('summary-online');
 
             if (selectedPaymentMethod === 'razorpay') {
-                if (onlineRow) onlineRow.classList.add('hidden');
-                if (shippingEl) {
-                    shippingEl.className = "font-extrabold text-emerald-700";
-                    shippingEl.textContent = "FREE Delivery (Online Offer)";
-                }
+                if (onlineRow) onlineRow.classList.remove('hidden');
+                if (onlineDiscountEl) onlineDiscountEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)}`;
                 if (totalEl) totalEl.textContent = `Rs. ${onlineTotal.toFixed(2)}`;
             } else {
                 if (onlineRow) onlineRow.classList.add('hidden');
-                if (shippingEl) {
-                    if (currentShippingFee === null || currentShippingFee === undefined) {
-                        shippingEl.className = "font-semibold text-gray-500";
-                        shippingEl.textContent = 'Enter Pincode';
-                    } else {
-                        shippingEl.className = "font-bold text-onyx";
-                        shippingEl.textContent = `Rs. ${codShippingFee.toFixed(2)}`;
-                    }
-                }
                 if (totalEl) totalEl.textContent = `Rs. ${codTotal.toFixed(2)}`;
             }
 
@@ -955,7 +964,7 @@
             const btnSubmitSub = document.getElementById('btn-submit-sub');
             if (btnSubmitText) {
                 if (selectedPaymentMethod === 'razorpay') {
-                    btnSubmitText.innerHTML = `<span>PAY ONLINE & GET FREE DELIVERY</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitText.innerHTML = `<span>PAY ONLINE & SAVE EXTRA 5%</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
                 } else {
                     btnSubmitText.innerHTML = `<span>CONFIRM CASH ON DELIVERY</span> <span class="text-xs opacity-90 font-bold">(Rs. ${codTotal.toFixed(2)})</span>`;
                 }
@@ -964,7 +973,7 @@
                 if (selectedPaymentMethod === 'razorpay') {
                     btnSubmitSub.innerHTML = `<span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">Or choose <b>Cash on Delivery</b> (Rs. ${codTotal.toFixed(2)})</span>`;
                 } else {
-                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Get FREE Delivery (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Save 5% Extra (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
                 }
             }
 

@@ -50,21 +50,28 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Calculate dynamic shipping fee (FREE for Online Payment, Paid for Cash on Delivery)
-  let shipping = 0;
+  // Calculate dynamic shipping fee:
+  // - Orders >= Rs. 699 get 100% FREE Delivery on BOTH COD and Prepaid
+  // - Orders < Rs. 699 have shipping charges for BOTH COD and Prepaid
+  const isFreeShipping = (subtotal >= 699);
   const isOnlinePayment = (paymentMethod !== 'cod');
+  let shipping = 0;
 
-  if (!isOnlinePayment && deliveryPincode) {
-    const shiprocketService = require('./shiprocketService');
-    try {
-      const servRes = await shiprocketService.checkServiceability(deliveryPincode, true, finalWeightKg);
-      if (servRes.isServiceable && typeof servRes.shippingCharge === 'number') {
-        shipping = servRes.shippingCharge;
-      } else {
+  if (!isFreeShipping) {
+    if (deliveryPincode) {
+      const shiprocketService = require('./shiprocketService');
+      try {
+        const servRes = await shiprocketService.checkServiceability(deliveryPincode, !isOnlinePayment, finalWeightKg);
+        if (servRes.isServiceable && typeof servRes.shippingCharge === 'number') {
+          shipping = servRes.shippingCharge;
+        } else {
+          shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
+        }
+      } catch (e) {
         shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
       }
-    } catch (e) {
-      shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
+    } else {
+      shipping = 49; // Default courier charge when pincode is not yet specified
     }
   }
 
@@ -92,17 +99,15 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
     }
   }
 
-  const subtotalAfterCoupon = Math.max(0, subtotal - discount);
-
-  // Online: 100% FREE Delivery | COD: Standard Delivery fee
+  // Prepaid (Online Payment) gets an extra 5% Discount
   let onlineDiscount = 0;
-  let codCharge = 0;
-
   if (isOnlinePayment) {
-    shipping = 0; // 100% Free delivery for Online payment
+    onlineDiscount = Math.round(subtotal * 0.05);
   }
 
-  const total = Math.max(0, subtotalAfterCoupon - onlineDiscount + codCharge + shipping);
+  let codCharge = 0;
+
+  const total = Math.max(0, subtotal - discount - onlineDiscount + codCharge + shipping);
 
   return {
     items,

@@ -522,7 +522,7 @@
                     <i class="fa-solid fa-bag-shopping text-gold-400 text-base"></i>
                     <div>
                         <h3 class="font-cinzel text-sm sm:text-base font-bold text-gold-300">Instant Express Checkout</h3>
-                        <p class="text-[9px] text-gray-300">✓ Free Shipping above ₹299 • Cash on Delivery</p>
+                        <p class="text-[9px] text-gray-300">✓ Free Shipping on ₹699+ • Extra 5% OFF Online</p>
                     </div>
                 </div>
                 <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-pearl flex items-center justify-center text-xs cursor-pointer">
@@ -592,6 +592,7 @@
                 </div>
 
                 <!-- PAYMENT METHOD SELECTOR (COD / ONLINE) -->
+                <!-- PAYMENT METHOD SELECTOR (COD / ONLINE) -->
                 <div class="bg-sand/60 p-2.5 rounded-xl border border-gold-200">
                     <label class="text-[9px] uppercase font-bold text-gray-600 block mb-1">Select Payment Method</label>
                     <div class="grid grid-cols-2 gap-2 text-xs">
@@ -599,7 +600,7 @@
                             <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage(true);" class="accent-emerald-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">Online Pay</span>
-                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ FREE DELIVERY</span>
+                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ Extra 5% OFF</span>
                             </div>
                         </label>
                         <label id="payment-label-cod" onclick="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs">
@@ -620,6 +621,14 @@
                         <span>Items Subtotal:</span>
                         <span id="cart-subtotal" class="font-bold text-onyx">Rs. 0.00</span>
                     </div>
+                    <div id="cart-auto-discount-row" class="hidden flex justify-between text-emerald-700 font-bold">
+                        <span>Auto Offer (12% OFF):</span>
+                        <span id="cart-auto-discount-amount">-Rs. 0.00</span>
+                    </div>
+                    <div id="cart-prepaid-discount-row" class="hidden flex justify-between text-emerald-700 font-extrabold">
+                        <span>Prepaid Extra (5% OFF):</span>
+                        <span id="cart-prepaid-discount-amount">-Rs. 0.00</span>
+                    </div>
                     <div class="flex justify-between text-emerald-800 font-semibold">
                         <span>Express Delivery:</span>
                         <span id="cart-shipping-fee" class="font-semibold text-gray-500">Enter Pincode</span>
@@ -632,7 +641,7 @@
 
                 <a href="checkout.html" id="checkout-submit-btn" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs active:scale-95 transition-all cursor-pointer">
                     <i class="fa-solid fa-lock text-xs"></i>
-                    <span>PROCEED TO SECURE CHECKOUT</span>
+                    <span id="checkout-btn-text">PROCEED TO SECURE CHECKOUT</span>
                 </a>
 
                 <button onclick="toggleCartDrawer(false)" class="w-full bg-gray-100 hover:bg-gray-200 text-onyx font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors border border-gray-300 mt-2">
@@ -1881,17 +1890,46 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            let effectiveFee = isOnline ? 0 : currentShippingFee;
-            const activeFee = (!isOnline && effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
-            const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice + activeFee) : 0;
+            const isFreeShipping = (subtotalPrice >= 699);
+            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 49;
+            const effectiveFee = isFreeShipping ? 0 : courierFee;
+
+            // Auto Apply Offer for Orders >= 999 (12% off)
+            const discount12 = (subtotalPrice >= 999) ? Math.round(subtotalPrice * 0.12) : 0;
+            const discountRowEl = document.getElementById('cart-auto-discount-row');
+            const discountAmtEl = document.getElementById('cart-auto-discount-amount');
+            if (discountRowEl && discountAmtEl) {
+                if (discount12 > 0) {
+                    discountRowEl.classList.remove('hidden');
+                    discountAmtEl.textContent = `-Rs. ${discount12.toFixed(2)}`;
+                } else {
+                    discountRowEl.classList.add('hidden');
+                }
+            }
+
+            // Prepaid 5% discount (always applicable to online payments)
+            const prepaidDiscount = isOnline ? Math.round(subtotalPrice * 0.05) : 0;
+            const prepaidRowEl = document.getElementById('cart-prepaid-discount-row');
+            const prepaidAmtEl = document.getElementById('cart-prepaid-discount-amount');
+            if (prepaidRowEl && prepaidAmtEl) {
+                if (isOnline && prepaidDiscount > 0) {
+                    prepaidRowEl.classList.remove('hidden');
+                    prepaidAmtEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)}`;
+                } else {
+                    prepaidRowEl.classList.add('hidden');
+                }
+            }
+
+            const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
+            const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - discount12 - prepaidDiscount + activeFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                if (isOnline) {
+                if (isFreeShipping) {
                     shippingFeeEl.className = "font-extrabold text-emerald-700";
-                    shippingFeeEl.textContent = 'FREE Delivery (Online Offer)';
-                } else if (effectiveFee === null || effectiveFee === undefined) {
+                    shippingFeeEl.textContent = 'FREE Delivery (Orders ₹699+)';
+                } else if (currentShippingFee === null || currentShippingFee === undefined) {
                     shippingFeeEl.className = "font-semibold text-gray-500";
                     shippingFeeEl.textContent = 'Enter Pincode';
                 } else {
@@ -1960,7 +1998,7 @@
             if (selectedPaymentMethod === 'razorpay') {
                 if (rzpLabel) rzpLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 if (codLabel) codLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
-                if (btnText && !isProcessingOrder) btnText.textContent = "PAY NOW WITH UPI / CARDS (FREE DELIVERY)";
+                if (btnText && !isProcessingOrder) btnText.textContent = "PAY ONLINE (EXTRA 5% OFF)";
             } else {
                 if (codLabel) codLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 if (rzpLabel) rzpLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
