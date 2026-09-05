@@ -12,6 +12,34 @@
     <meta property="og:description" id="og-desc" content="Authentic Umrah Dua Cards with Tawaf tasbih counter, 100% waterproof laminated. Cash on Delivery available across India.">
     <meta property="og:image" id="og-image" content="product/umrah_card_urdu.webp">
 
+    <!-- Instant Critical Image Preload & Fast Boot -->
+    <script>
+        (function() {
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var rawId = params.get('id') || params.get('product');
+                var pid = rawId ? parseInt(rawId, 10) : 2;
+                var prodImages = {
+                    1: "product/umrah_card_urdu.webp",
+                    2: "product/umrah_card_english.webp",
+                    3: "product/umrah_card_hindi.webp",
+                    4: "product/umrah_card_roman.webp",
+                    5: "product/umrah_Sticker_English.webp",
+                    6: "product/umrah_Sticker_hindi.webp",
+                    7: "product/umrah_Sticker_Urdu.webp"
+                };
+                var targetImg = prodImages[pid] || "product/umrah_card_english.webp";
+                window.__INITIAL_PDP_IMAGE__ = targetImg;
+                var link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'image';
+                link.href = targetImg;
+                link.fetchPriority = 'high';
+                document.head.appendChild(link);
+            } catch(e) {}
+        })();
+    </script>
+
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,10 +226,16 @@
                     </div>
 
                     <!-- Image View Container -->
-                    <div id="pdp-image-container" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-4 touch-none select-none"
+                    <div id="pdp-image-container" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-4 touch-none select-none relative"
                          onmousedown="startPdpDrag(event)" onmousemove="dragPdpImage(event)" onmouseup="stopPdpDrag()" onmouseleave="stopPdpDrag()" ondblclick="togglePdpZoom()">
-                        <img id="pdp-main-image" src="product/umrah_card_urdu.webp" alt="Product View" class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-75 origin-center pointer-events-none select-none">
+                        <img id="pdp-main-image" src="product/umrah_card_english.webp" alt="Product View" fetchpriority="high" decoding="async" width="600" height="600" class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-75 origin-center pointer-events-none select-none">
                     </div>
+                    <script>
+                        if (window.__INITIAL_PDP_IMAGE__) {
+                            var earlyMainImg = document.getElementById('pdp-main-image');
+                            if (earlyMainImg) earlyMainImg.src = window.__INITIAL_PDP_IMAGE__;
+                        }
+                    </script>
 
                     <!-- Video View Container (hidden when image selected) -->
                     <div id="pdp-video-container" class="hidden w-full h-full flex items-center justify-center p-1 bg-black rounded-2xl overflow-hidden">
@@ -784,7 +818,7 @@
                         name: "Essential Pack (Cards + Tawaf Tasbih)",
                         shortName: "Cards + Tawaf Tasbih",
                         price: 491,
-                        oldPrice: 999,
+                        oldPrice: 982,
                         weight: "100gm",
                         tag: "Essential",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
@@ -794,7 +828,7 @@
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
                         price: 589,
-                        oldPrice: 999,
+                        oldPrice: 1178,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -804,7 +838,7 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 999,
+                        oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
@@ -846,7 +880,7 @@
                         name: "Essential Pack (Cards + Tawaf Tasbih)",
                         shortName: "Cards + Tawaf Tasbih",
                         price: 491,
-                        oldPrice: 999,
+                        oldPrice: 982,
                         weight: "100gm",
                         tag: "Essential",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
@@ -856,7 +890,7 @@
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
                         price: 589,
-                        oldPrice: 999,
+                        oldPrice: 1178,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -866,7 +900,7 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 999,
+                        oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
@@ -923,7 +957,7 @@
                         name: "Essential Pack (Cards + Tawaf Tasbih)",
                         shortName: "Cards + Tawaf Tasbih",
                         price: 491,
-                        oldPrice: 999,
+                        oldPrice: 982,
                         weight: "100gm",
                         tag: "Essential",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
@@ -933,7 +967,7 @@
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
                         price: 589,
-                        oldPrice: 999,
+                        oldPrice: 1178,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -943,7 +977,7 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 999,
+                        oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
@@ -989,7 +1023,7 @@
                         name: "Essential Pack (Cards + Tawaf Tasbih)",
                         shortName: "Cards + Tawaf Tasbih",
                         price: 491,
-                        oldPrice: 999,
+                        oldPrice: 982,
                         weight: "100gm",
                         tag: "Essential",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
@@ -999,7 +1033,7 @@
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
                         price: 589,
-                        oldPrice: 999,
+                        oldPrice: 1178,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -1009,7 +1043,7 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 999,
+                        oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
@@ -1031,7 +1065,7 @@
                 sku: "fati_stk_01",
                 soldCount: "1,350 sold",
                 price: 199,
-                oldPrice: 399,
+                oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
                 images: ["product/umrah_Sticker_English.webp"],
@@ -1056,7 +1090,7 @@
                 sku: "fati_stk_02",
                 soldCount: "1,280 sold",
                 price: 199,
-                oldPrice: 399,
+                oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
                 images: ["product/umrah_Sticker_hindi.webp"],
@@ -1081,7 +1115,7 @@
                 sku: "fati_stk_03",
                 soldCount: "1,490 sold",
                 price: 199,
-                oldPrice: 399,
+                oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_Urdu.webp",
                 images: ["product/umrah_Sticker_Urdu.webp"],
@@ -1092,6 +1126,18 @@
                 features: ["Clear Naskh & Nastaliq Script", "Waterproof Protective Coating", "Easy Peel Adhesive", "Contains Daily Essential Duas"]
             }
         ];
+
+        // Ensure cancelled (oldPrice) is always exactly double the selling price
+        products.forEach(p => {
+            if (p.variants && p.variants.length > 0) {
+                p.variants.forEach(v => {
+                    v.oldPrice = v.price * 2;
+                });
+                p.oldPrice = p.variants[0].oldPrice;
+            } else {
+                p.oldPrice = p.price * 2;
+            }
+        });
 
         let currentProduct = products[0];
         let currentVariantIndex = 0;
@@ -1273,7 +1319,7 @@
             const activeVariant = hasVariants ? p.variants[currentVariantIndex] : null;
 
             const activePrice = activeVariant ? activeVariant.price : p.price;
-            const activeOldPrice = activeVariant ? activeVariant.oldPrice : p.oldPrice;
+            const activeOldPrice = activePrice * 2;
             const activeSku = activeVariant ? activeVariant.sku : (p.sku || 'fati_001');
             const activeWeight = activeVariant ? activeVariant.weight : p.weight;
             const discountPercent = Math.round(((activeOldPrice - activePrice) / activeOldPrice) * 100);
@@ -1374,7 +1420,7 @@
                             </div>
                             <div class="pt-1.5 border-t border-gray-200/80 flex items-baseline justify-between mt-1">
                                 <span class="font-extrabold text-sm text-onyx">Rs. ${v.price}</span>
-                                <span class="text-[10px] text-gray-400 line-through">Rs. ${v.oldPrice}</span>
+                                <span class="text-[10px] text-gray-400 line-through">Rs. ${v.price * 2}</span>
                             </div>
                         </div>
                     `;
@@ -1448,6 +1494,7 @@
             }
 
             renderPdpThumbnails(mediaList);
+            preloadPdpGalleryMedia(mediaList);
         }
 
         function renderPdpThumbnails(mediaList) {
@@ -1495,6 +1542,23 @@
                     activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 }
             }, 50);
+        }
+
+        // Background idle preloader for gallery thumbnails
+        const preloadedGalleryUrls = new Set();
+        function preloadPdpGalleryMedia(mediaList) {
+            if (!mediaList || mediaList.length <= 1) return;
+            const idleRunner = window.requestIdleCallback || ((fn) => setTimeout(fn, 150));
+            idleRunner(() => {
+                mediaList.forEach(item => {
+                    if (item.type === 'image' && item.url && !preloadedGalleryUrls.has(item.url)) {
+                        preloadedGalleryUrls.add(item.url);
+                        const img = new Image();
+                        img.decoding = 'async';
+                        img.src = item.url;
+                    }
+                });
+            });
         }
 
         function setPdpMediaSlide(idx) {
@@ -1857,7 +1921,9 @@
                             <h4 class="font-bold text-xs text-onyx truncate">${item.name}</h4>
                             ${item.variantName ? `<div class="text-[10px] text-gray-600 truncate">${item.variantName}</div>` : ''}
                             <div class="flex items-center gap-2 mt-0.5">
-                                <span class="text-xs text-gold-600 font-bold">Rs. ${item.price} x ${item.qty}</span>
+                                <span class="text-xs text-gold-600 font-bold">Rs. ${item.price}</span>
+                                <span class="text-[10px] text-gray-400 line-through">Rs. ${item.price * 2}</span>
+                                <span class="text-xs text-gray-500 font-semibold">x ${item.qty}</span>
                                 <span class="text-[9px] font-mono font-semibold bg-gray-100 text-gray-600 px-1.5 py-0.2 rounded border border-gray-200">SKU: ${item.sku}</span>
                             </div>
                         </div>

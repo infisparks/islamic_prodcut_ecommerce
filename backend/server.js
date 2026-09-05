@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
 const cors = require('cors');
+const compression = require('compression');
 
 const config = require('./config/env');
 const logger = require('./utils/logger');
@@ -16,6 +17,15 @@ const adminRouter = require('./routes/admin');
 const metaRouter = require('./routes/meta');
 
 const app = express();
+
+// High-speed response compression for HTML, CSS, JS, JSON
+app.use(compression({
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) return false;
+    return compression.filter(req, res);
+  },
+  threshold: 1024
+}));
 
 // 1. Security Headers with Helmet (Configured for inline onclick handlers, Razorpay SDK, Meta Pixel/CAPI, Firebase & Tailwind)
 app.use(
@@ -155,10 +165,29 @@ app.use('/api/webhooks', webhooksRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/meta', metaRouter);
 
-// 7. Serve existing frontend static files & media directories
+// 7. Serve existing frontend static files & media directories with high-speed caching
 const rootDir = path.resolve(__dirname, '..');
-app.use('/product', express.static(path.join(rootDir, 'product')));
-app.use(express.static(rootDir));
+
+const staticCacheOptions = {
+  maxAge: '30d',
+  etag: true,
+  lastModified: true,
+  setHeaders: (res, filePath) => {
+    if (/\.(webp|png|jpe?g|gif|svg|ico|mp4|webm)$/i.test(filePath)) {
+      // 30 days immutable cache for product media
+      res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+    } else if (/\.(css|js|woff2?|ttf|eot)$/i.test(filePath)) {
+      // 7 days with stale-while-revalidate for stylesheets and scripts
+      res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
+    } else if (/\.html$/i.test(filePath)) {
+      // Ensure HTML is always verified fresh
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    }
+  }
+};
+
+app.use('/product', express.static(path.join(rootDir, 'product'), staticCacheOptions));
+app.use(express.static(rootDir, staticCacheOptions));
 
 app.get('/recent-purchases.js', (req, res) => {
   res.type('application/javascript').sendFile(path.join(rootDir, 'recent-purchases.js'));
