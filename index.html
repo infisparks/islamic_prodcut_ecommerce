@@ -912,21 +912,7 @@
         </div>
     </div>
 
-    <!-- FLOATING BOTTOM-UP SPECIAL OFFER POPUP (OFFER.WEBP WITH SHINE SWEEP & DISMISS BUTTON) -->
-    <div id="floating-offer-popup" class="fixed bottom-4 left-3 right-3 sm:left-auto sm:right-6 z-50 max-w-sm sm:max-w-md w-auto transform translate-y-full opacity-0 pointer-events-none transition-all duration-500 ease-out">
-        <div class="bg-onyx/95 backdrop-blur-md rounded-2xl sm:rounded-3xl border-2 border-gold-500 p-2 sm:p-2.5 shadow-2xl shadow-gold-glow relative">
-            <!-- Close / Cancel Button -->
-            <button onclick="dismissFloatingOfferPopup()" class="absolute -top-2.5 -right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-onyx border-2 border-gold-400 text-gold-400 hover:bg-gold-500 hover:text-onyx flex items-center justify-center shadow-lg z-20 cursor-pointer transition-colors" title="Close Offer">
-                <i class="fa-solid fa-xmark text-xs sm:text-sm font-bold"></i>
-            </button>
 
-            <!-- Offer Image with Shine Sweep -->
-            <a href="#products-grid" onclick="dismissFloatingOfferPopup()" class="block relative rounded-xl sm:rounded-2xl overflow-hidden banner-shine-container cursor-pointer">
-                <img src="product/offer.webp" alt="Special Offer - Order Above ₹299 Free Delivery" decoding="async" class="w-full h-auto object-cover rounded-xl sm:rounded-2xl drop-shadow-md" />
-                <div class="absolute inset-0 rounded-xl sm:rounded-2xl border border-gold-400/40 pointer-events-none"></div>
-            </a>
-        </div>
-    </div>
 
     <!-- INTERACTIVE UMRAH RITUAL JOURNEY MAP (HIDDEN) -->
     <section id="umrah-journey-map" class="hidden" style="display: none !important;">
@@ -4365,38 +4351,7 @@
             }
         });
 
-        // -------------------------------------------------------------
-        // FLOATING BOTTOM-UP OFFER POPUP SERVICE
-        // -------------------------------------------------------------
-        let isOfferPopupDismissed = false;
-        let isOfferScrollTicking = false;
 
-        function dismissFloatingOfferPopup() {
-            isOfferPopupDismissed = true;
-            const popup = document.getElementById('floating-offer-popup');
-            if (popup) {
-                popup.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
-                popup.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-            }
-        }
-
-        function checkOfferPopupScroll() {
-            if (isOfferPopupDismissed || isOfferScrollTicking) return;
-            isOfferScrollTicking = true;
-            requestAnimationFrame(() => {
-                const popup = document.getElementById('floating-offer-popup');
-                if (popup && !isOfferPopupDismissed) {
-                    if (window.scrollY > 120) {
-                        popup.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
-                        popup.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-                    } else {
-                        popup.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
-                        popup.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-                    }
-                }
-                isOfferScrollTicking = false;
-            });
-        }
 
         // =============================================================
         // INTERACTIVE UMRAH RITUAL JOURNEY MAP CONTROLLER (ALL 11 STEPS)
@@ -4940,8 +4895,6 @@
                 slider.addEventListener('scroll', updateDuaSlideCounter, { passive: true });
             }
 
-            window.addEventListener('scroll', checkOfferPopupScroll, { passive: true });
-            checkOfferPopupScroll();
         });
     </script>
 
