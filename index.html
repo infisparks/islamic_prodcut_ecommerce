@@ -2865,7 +2865,7 @@
                     codLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
                 }
                 if (btnText && !isProcessingOrder) {
-                    btnText.textContent = "PAY NOW WITH UPI / CARDS (FREE DELIVERY)";
+                    btnText.textContent = "PAY NOW WITH UPI / CARDS (5% OFF)";
                 }
             } else {
                 if (codLabel) {
@@ -2896,7 +2896,7 @@
                 const checkedRadio = document.querySelector('input[name="payment"]:checked');
                 const currentMethod = checkedRadio ? checkedRadio.value : (selectedPaymentMethod || 'cod');
                 btnText.textContent = currentMethod === 'razorpay'
-                    ? "PAY NOW WITH UPI / CARDS (ONLINE)"
+                    ? "PAY NOW WITH UPI / CARDS (5% OFF)"
                     : "CONFIRM & PLACE ORDER (COD)";
             }
         }

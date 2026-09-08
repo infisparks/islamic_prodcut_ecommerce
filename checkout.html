@@ -436,12 +436,12 @@
     <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 p-2 px-2.5 z-40 shadow-[0_-6px_25px_rgba(0,0,0,0.08)]">
         <div class="grid grid-cols-2 gap-2 max-w-md mx-auto">
             
-            <!-- Online Button (Left: FREE DEL Gold Theme - Fixed 2-Row) -->
+            <!-- Online Button (Left: 5% OFF Gold Theme - Fixed 2-Row) -->
             <button type="button" onclick="submitWithPaymentMethod('razorpay')" 
                 class="w-full flex flex-col justify-between px-2.5 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/50 cursor-pointer h-[46px]">
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="font-black text-[10.5px] text-onyx tracking-tight">PAY ONLINE</span>
-                    <span class="bg-emerald-700 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded uppercase leading-none tracking-wide whitespace-nowrap">⚡ FREE DEL</span>
+                    <span class="bg-emerald-700 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded uppercase leading-none tracking-wide whitespace-nowrap">⚡ 5% OFF</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="text-[8.5px] text-onyx/75 font-semibold">UPI • Cards</span>
@@ -937,13 +937,13 @@
             const onlineOfferPill = document.getElementById('badge-online-offer-pill');
 
             if (onlineBadgePrice) {
-                onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Extra 5% OFF${isFreeShipping ? ' + FREE Delivery' : ''})`;
+                onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Extra 5% OFF)`;
             }
             if (codBadgePrice) {
                 codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)} (${isFreeShipping ? 'FREE Delivery' : 'Delivery: Rs. ' + courierFee.toFixed(2)})`;
             }
             if (onlineOfferPill) {
-                onlineOfferPill.textContent = isFreeShipping ? '⚡ 5% EXTRA OFF + FREE DELIVERY' : '⚡ 5% EXTRA OFF';
+                onlineOfferPill.textContent = '⚡ 5% EXTRA OFF';
             }
 
             // Update summary online discount row
