@@ -536,12 +536,14 @@ router.post('/orders/:orderId/delete', handlePermanentDeleteOrder);
 
 /**
  * POST /api/admin/orders/:orderId/retry-shipping
- * Retry booking Shiprocket shipment
+ * POST /api/admin/orders/:orderId/move-to-shiprocket
+ * Move order to Shiprocket upon phone confirmation (COD or Prepaid)
  */
-router.post('/orders/:orderId/retry-shipping', async (req, res, next) => {
+const handleMoveOrderToShiprocket = async (req, res, next) => {
   try {
     const { orderId } = req.params;
-    const order = await firebaseService.getOrder(orderId);
+    const { convertToCod } = req.body || {};
+    let order = await firebaseService.getOrder(orderId);
 
     if (!order) {
       return res.status(404).json({
@@ -553,19 +555,44 @@ router.post('/orders/:orderId/retry-shipping', async (req, res, next) => {
       });
     }
 
+    // Ensure customer address format is valid for Shiprocket
+    if (order.customer) {
+      if (!order.customer.address1 && order.customer.addressLine1) {
+        order.customer.address1 = order.customer.addressLine1;
+      }
+      if (!order.customer.address2 && order.customer.addressLine2) {
+        order.customer.address2 = order.customer.addressLine2;
+      }
+    }
+
+    // If convertToCod is true or order was unpaid online / unverified COD
+    const prov = (order.payment?.provider || order.paymentMethod || '').toLowerCase();
+    const isAlreadyPaid = prov === 'razorpay' && order.payment?.status === 'CAPTURED';
+    
+    if (convertToCod || !isAlreadyPaid) {
+      order.paymentMethod = 'cod';
+      order.payment = {
+        ...(order.payment || {}),
+        provider: 'COD',
+        status: 'COD_PENDING'
+      };
+    }
+
     const shipmentDetails = await shiprocketService.createShipment(order);
     const now = new Date().toISOString();
     const events = order.events || [];
 
     events.push({
-      event: 'SHIPMENT_RETRY_BY_ADMIN',
+      event: 'SHIPMENT_MOVED_TO_SHIPROCKET_BY_ADMIN',
       timestamp: now,
-      details: `Shipment booked by admin with AWB ${shipmentDetails.awb}`
+      details: `Shipment moved to Shiprocket by Admin (Phone Confirmed). AWB: ${shipmentDetails.awb || 'Pending'}`
     });
 
     const updatedOrder = await firebaseService.updateOrder(orderId, {
+      payment: order.payment,
+      paymentMethod: order.paymentMethod,
       shipping: {
-        ...order.shipping,
+        ...(order.shipping || {}),
         ...shipmentDetails
       },
       status: 'SHIPMENT_BOOKED',
@@ -574,18 +601,110 @@ router.post('/orders/:orderId/retry-shipping', async (req, res, next) => {
 
     res.json({
       success: true,
-      message: 'Shipment created successfully.',
+      message: 'Order successfully moved to Shiprocket!',
       data: updatedOrder
     });
   } catch (err) {
-    logger.error('ADMIN_RETRY_SHIPPING_FAILED', { orderId: req.params.orderId, error: err.message });
+    logger.error('ADMIN_MOVE_TO_SHIPROCKET_FAILED', { orderId: req.params.orderId, error: err.message });
     return res.status(400).json({
       success: false,
       error: {
         code: 'SHIPROCKET_BOOKING_FAILED',
-        message: err.message || 'Shiprocket shipment retry failed.'
+        message: err.message || 'Shiprocket shipment booking failed.'
       }
     });
+  }
+};
+
+router.post('/orders/:orderId/retry-shipping', handleMoveOrderToShiprocket);
+router.post('/orders/:orderId/move-to-shiprocket', handleMoveOrderToShiprocket);
+
+/**
+ * POST /api/admin/orders/:orderId/whatsapp
+ * Send a WhatsApp message to customer directly via Evolution API backend
+ */
+router.post('/orders/:orderId/whatsapp', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { message, phone } = req.body;
+
+    if (!message || !message.trim()) {
+      return res.status(400).json({ success: false, error: 'Message content is required.' });
+    }
+
+    const order = await firebaseService.getOrder(orderId);
+    const targetPhone = phone || order?.customer?.phone;
+
+    if (!targetPhone) {
+      return res.status(400).json({ success: false, error: 'Recipient phone number is required.' });
+    }
+
+    const whatsappService = require('../services/whatsappService');
+    const sent = await whatsappService.sendTextMessage(targetPhone, message.trim());
+
+    if (!sent) {
+      return res.status(502).json({
+        success: false,
+        error: 'Failed to send WhatsApp message via Evolution API. Please check server logs and WhatsApp instance.'
+      });
+    }
+
+    // Log event in order history
+    if (order) {
+      await firebaseService.logOrderEvent(orderId, 'WHATSAPP_MESSAGE_SENT', {
+        phone: targetPhone,
+        messagePreview: message.trim().substring(0, 100),
+        sentAt: new Date().toISOString()
+      }).catch(err => logger.warn('LOG_EVENT_FAIL', { error: err.message }));
+    }
+
+    return res.json({
+      success: true,
+      message: 'WhatsApp message sent successfully via API to customer!'
+    });
+  } catch (err) {
+    logger.error('ADMIN_SEND_WHATSAPP_API_FAIL', { orderId: req.params.orderId, error: err.message });
+    return res.status(500).json({ success: false, error: err.message || 'Internal error sending WhatsApp message.' });
+  }
+});
+
+/**
+ * GET /api/admin/whatsapp/templates
+ * Retrieve customized templates from Firebase settings
+ */
+router.get('/whatsapp/templates', async (req, res) => {
+  try {
+    const templates = await firebaseService.getSettings('whatsapp_templates');
+    res.json({
+      success: true,
+      templates: templates || {}
+    });
+  } catch (err) {
+    logger.error('GET_WHATSAPP_TEMPLATES_ERROR', { error: err.message });
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/admin/whatsapp/templates
+ * Save customized templates to Firebase settings
+ */
+router.post('/whatsapp/templates', async (req, res) => {
+  try {
+    const { templates } = req.body;
+    if (!templates || typeof templates !== 'object') {
+      return res.status(400).json({ success: false, error: 'Valid templates object is required.' });
+    }
+
+    const saved = await firebaseService.saveSettings('whatsapp_templates', templates);
+    res.json({
+      success: true,
+      message: 'WhatsApp templates saved successfully to Firebase!',
+      templates: saved
+    });
+  } catch (err) {
+    logger.error('SAVE_WHATSAPP_TEMPLATES_ERROR', { error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 

@@ -396,6 +396,53 @@ const firebaseService = {
     return true;
   },
 
+  // Get generic settings / template data from Firebase
+  getSettings: async (settingPath) => {
+    if (useDatabaseSecret) {
+      try {
+        const res = await axios.get(getDbUrl(`settings/${settingPath}`), { timeout: 10000 });
+        if (res.data) return res.data;
+      } catch (err) {
+        logger.warn('FIREBASE_GET_SETTINGS_ERROR', { path: settingPath, error: err.message });
+      }
+    }
+    if (db) {
+      try {
+        const snapshot = await db.ref(`settings/${settingPath}`).once('value');
+        if (snapshot.exists()) return snapshot.val();
+      } catch (err) {
+        logger.warn('FIREBASE_ADMIN_GET_SETTINGS_ERROR', { path: settingPath, error: err.message });
+      }
+    }
+    return null;
+  },
+
+  // Save generic settings / template data to Firebase
+  saveSettings: async (settingPath, data) => {
+    const payload = {
+      ...data,
+      updatedAt: new Date().toISOString()
+    };
+    if (useDatabaseSecret) {
+      try {
+        await axios.put(getDbUrl(`settings/${settingPath}`), payload, { timeout: 10000 });
+        return payload;
+      } catch (err) {
+        logger.error('FIREBASE_SAVE_SETTINGS_ERROR', { path: settingPath, error: err.message });
+      }
+    }
+    if (db) {
+      try {
+        const ref = db.ref(`settings/${settingPath}`);
+        await ref.set(payload);
+        return payload;
+      } catch (err) {
+        logger.error('FIREBASE_ADMIN_SAVE_SETTINGS_ERROR', { path: settingPath, error: err.message });
+      }
+    }
+    return payload;
+  },
+
   // Clear mock data (for testing)
   _resetMockStore: () => {
     mockStore.orders = {};

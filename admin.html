@@ -505,6 +505,109 @@
         </div>
     </div>
 
+    <!-- WHATSAPP MESSAGE SENDER MODAL WITH MULTIPLE TEMPLATES -->
+    <div id="whatsapp-modal" onclick="if(event.target === this) closeWhatsAppModal()" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 border border-emerald-200 shadow-2xl space-y-4" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shadow-xs">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm sm:text-base text-[#111827]">Send WhatsApp Message</h3>
+                        <p class="text-[11px] text-gray-500" id="wa-modal-subtitle">Customer: Loading...</p>
+                    </div>
+                </div>
+                <button onclick="closeWhatsAppModal()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Customer & Phone Quick Info -->
+            <div class="bg-emerald-50/60 p-3 rounded-xl border border-emerald-100 flex items-center justify-between text-xs">
+                <div>
+                    <span class="text-gray-500">Recipient Phone:</span>
+                    <b id="wa-recipient-phone" class="font-mono text-emerald-800 ml-1">+91 00000 00000</b>
+                </div>
+                <div id="wa-order-badge-container"></div>
+            </div>
+
+            <!-- Template Selector -->
+            <div>
+                <label class="block text-xs font-bold text-[#111827] mb-1.5 flex items-center justify-between">
+                    <span><i class="fa-solid fa-list-check text-indigo-600 mr-1"></i> Choose Message Template:</span>
+                    <span class="text-[10px] font-normal text-gray-400">Click to switch template</span>
+                </label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="wa-template-pills">
+                    <button type="button" onclick="selectWhatsAppTemplate('order_accepted')" id="wa-tpl-btn-order_accepted" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-bold text-left transition-all cursor-pointer bg-emerald-600 text-white border-emerald-600 shadow-xs">
+                        ✨ Order Accepted (Default)
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('payment_pending_cod')" id="wa-tpl-btn-payment_pending_cod" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                        🔄 Shift to COD (Unpaid)
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('shipped')" id="wa-tpl-btn-shipped" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                        🚚 Shipped / Tracking
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('cod_followup')" id="wa-tpl-btn-cod_followup" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                        💬 COD Confirmation
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('payment_link')" id="wa-tpl-btn-payment_link" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                        💳 Payment Link Only
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('delivered')" id="wa-tpl-btn-delivered" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                        🎉 Delivered Review
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('custom')" id="wa-tpl-btn-custom" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                        ✏️ Custom Message
+                    </button>
+                </div>
+            </div>
+
+            <!-- Message Textarea with Preview / Edit -->
+            <div>
+                <div class="flex items-center justify-between mb-1.5 flex-wrap gap-2">
+                    <label class="text-xs font-bold text-[#111827]">
+                        <i class="fa-regular fa-comment-dots text-emerald-600 mr-1"></i> Message Content (WhatsApp Formatted):
+                    </label>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button type="button" onclick="saveCurrentTemplateToFirebase()" id="wa-save-template-btn" class="text-[11px] font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-2.5 py-1 rounded-lg flex items-center gap-1 cursor-pointer transition-colors shadow-2xs" title="Save this custom text as template in Firebase so it is reused for future orders">
+                            <i class="fa-solid fa-floppy-disk text-emerald-600"></i> <span>Save Template to Firebase</span>
+                        </button>
+                        <button type="button" onclick="resetCurrentTemplateToDefault()" id="wa-reset-template-btn" class="text-[11px] font-medium text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded-lg flex items-center gap-1 cursor-pointer transition-colors" title="Reset this template to system default">
+                            <i class="fa-solid fa-rotate-left text-gray-500"></i> <span>Reset</span>
+                        </button>
+                        <button type="button" onclick="copyWhatsAppMessageToClipboard()" id="wa-copy-btn" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-2 py-1 rounded-lg flex items-center gap-1 cursor-pointer transition-colors">
+                            <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                    </div>
+                </div>
+                <textarea id="wa-message-textarea" rows="8" oninput="updateWhatsAppCharCount()" class="w-full p-3 text-xs leading-relaxed font-sans rounded-xl border border-gray-300 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-gray-50/40 text-gray-800" placeholder="Type WhatsApp message here..."></textarea>
+                <div class="flex items-center justify-between text-[10px] text-gray-400 mt-1">
+                    <span>💡 Supports WhatsApp formatting (*bold*, _italic_) & placeholders</span>
+                    <span id="wa-char-count">0 chars</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between pt-2 border-t border-gray-100 flex-wrap gap-2">
+                <button type="button" onclick="openInWhatsAppFallback()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer" title="Open directly in WhatsApp Web / App as fallback">
+                    <i class="fa-brands fa-whatsapp text-emerald-600"></i>
+                    <span>Open WhatsApp Web</span>
+                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="closeWhatsAppModal()" class="px-3.5 py-2 bg-white border border-[#E5E7EB] text-[#111827] rounded-xl text-xs font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+                        Cancel
+                    </button>
+                    <button onclick="sendWhatsAppViaAPI()" id="wa-send-api-btn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                        <span>Send via WhatsApp (API)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // User's Firebase Configuration
@@ -731,6 +834,9 @@
                     document.getElementById('stat-shipped-orders').textContent = s.shippedCount || 0;
                     document.getElementById('stat-cancelled-orders').textContent = s.cancelledCount || 0;
                 }
+
+                // Load custom WhatsApp templates from Firebase
+                loadWhatsAppTemplatesFromFirebase();
             } catch (err) {
                 console.error("Failed to load admin data:", err);
             } finally {
@@ -960,14 +1066,12 @@
                         </td>
                         <td class="py-3 px-4 text-right">
                             <div class="flex items-center justify-end gap-1.5 flex-wrap">
-                                ${isCodOtpPending ? `
-                                    <button onclick="sendCodOtpReminderWhatsApp('${orderId}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Send WhatsApp follow up to recover unverified COD order">
-                                        <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i> WhatsApp
-                                    </button>
-                                ` : ''}
-                                ${isOnlinePendingPayment ? `
-                                    <button onclick="sendPendingPaymentWhatsApp('${orderId}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Send WhatsApp Payment Link">
-                                        <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i> WhatsApp
+                                <button onclick="openWhatsAppModal('${orderId}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Send WhatsApp Message / Confirmation to Customer">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i> WhatsApp
+                                </button>
+                                ${!order.shipping?.shiprocketOrderId && status !== 'CANCELLED' ? `
+                                    <button onclick="moveOrderToShiprocket('${orderId}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-300 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Shiprocket (Confirmed over phone)">
+                                        <i class="fa-solid fa-truck-fast text-indigo-600 text-xs"></i> Shiprocket
                                     </button>
                                 ` : ''}
                                 ${order.shipping && order.shipping.shiprocketOrderId ? `
@@ -1350,17 +1454,25 @@
 
             const actionContainer = document.getElementById('modal-action-buttons');
             actionContainer.innerHTML = `
-                <!-- 1-Click Delivered Toggle in Modal -->
-                ${status !== 'CANCELLED' ? `
-                    <button onclick="closeOrderDetailModal(); toggleDeliveredStatus('${order.orderId}', ${!isDelivered});" class="px-3.5 py-2 ${isDelivered ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300' : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'} rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid ${isDelivered ? 'fa-rotate-left' : 'fa-circle-check'}"></i>
-                        <span>${isDelivered ? 'Uncheck / Revert Delivery' : 'Mark as Delivered (Settled)'}</span>
+                <!-- 1-Click WhatsApp Button in Modal -->
+                <button onclick="openWhatsAppModal('${order.orderId}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Send WhatsApp Message / Confirmation to Customer">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>WhatsApp Customer</span>
+                </button>
+
+                <!-- Move to Shiprocket button (Confirm & Dispatch) -->
+                ${!order.shipping?.shiprocketOrderId && status !== 'CANCELLED' ? `
+                    <button onclick="moveOrderToShiprocket('${order.orderId}')" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Shiprocket upon phone confirmation">
+                        <i class="fa-solid fa-truck-fast text-xs"></i>
+                        <span>Move to Shiprocket</span>
                     </button>
                 ` : ''}
 
-                ${isOnlinePendingPayment ? `
-                    <button onclick="sendPendingPaymentWhatsApp('${order.orderId}')" class="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
-                        <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp Link
+                <!-- 1-Click Delivered Toggle in Modal -->
+                ${status !== 'CANCELLED' ? `
+                    <button onclick="closeOrderDetailModal(); toggleDeliveredStatus('${order.orderId}', ${!isDelivered});" class="px-3.5 py-2 ${isDelivered ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'} rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid ${isDelivered ? 'fa-rotate-left' : 'fa-circle-check'}"></i>
+                        <span>${isDelivered ? 'Uncheck / Revert Delivery' : 'Mark as Delivered (Settled)'}</span>
                     </button>
                 ` : ''}
 
@@ -1378,31 +1490,188 @@
             document.getElementById('order-detail-modal').classList.remove('hidden');
         }
 
-        // WhatsApp Follow-up for COD OTP Not Verified Leads
-        function sendCodOtpReminderWhatsApp(orderId) {
-            const order = currentOrdersList.find(o => o.orderId === orderId);
-            if (!order) {
-                alert("Order not found.");
-                return;
+        // ==========================================
+        // WHATSAPP MESSAGING SYSTEM WITH FIREBASE TEMPLATES
+        // ==========================================
+        let currentWhatsAppOrderId = null;
+        let currentWhatsAppTemplate = 'order_accepted';
+        let savedWhatsAppTemplates = {};
+
+        const DEFAULT_WHATSAPP_TEMPLATES = {
+            order_accepted: `Assalamu Alaikum! your order from fatimacalligrapher27, {itemsText} has been accepted, your estimated delivery date is {estDeliveryDate}, Insha Allah! Jazakallah ✨\n\nkindly confirm your order and language of cards ✨\n\n*Order Summary:*\n📋 *Order ID:* #{orderId}\n💰 *Total Amount:* *{totalAmount}* ({paymentMethodText})\n📍 *Delivery Address:* {deliveryAddress}\n📞 *Helpline / Call to confirm:* +91 99703 47703`,
+
+            payment_link: `Assalamu Alaikum *{customerName}*! 🌸\n\nYour order (*#{orderId}*) for *{itemsText}* (Total: *{totalAmount}*) at *Fatima Calligrapher* is reserved.\n\nPlease complete payment below to start immediate dispatch:\n👉 {orderUrl}\n\n📞 *Call / WhatsApp to confirm:* +91 99703 47703\n(Or call on this number to confirm your order)\n\nJazakallahu Khair,\n*Fatima Calligrapher Team* 🌸`,
+
+            payment_pending_cod: `Assalamu Alaikum *{customerName}*! 🌸\n\nWe noticed your online payment for order (*#{orderId}*) for *{itemsText}* (Total: *{totalAmount}*) at *Fatima Calligrapher* was not completed.\n\n💡 *Would you like us to shift your order to Cash on Delivery (COD) and deliver it directly to your address?*\n\n📍 *Delivery Address:* {deliveryAddress}\n🗓️ *Estimated Delivery:* {estDeliveryDate}, Insha Allah!\n\n👉 Please reply *YES* to deliver via Cash on Delivery (Pay upon arrival) 🚚\n👉 Or complete your online payment here: {orderUrl}\n📞 *Call to confirm:* +91 99703 47703\n\nJazakallahu Khair,\n*Fatima Calligrapher Team* ✨`,
+
+            shipped: `Assalamu Alaikum *{customerName}*! 🌸\n\nGood news! Your order (*#{orderId}*) for *{itemsText}* has been dispatched via *{courier}* 🚚\n\n📦 *Tracking AWB:* *{awb}*\n🗓️ *Estimated Delivery:* *{estDeliveryDate}*, Insha Allah!\n🔗 *Track Live:* {orderUrl}\n📞 *Support Helpline:* +91 99703 47703\n\nJazakallahu Khair ✨\n*Fatima Calligrapher*`,
+
+            cod_followup: `Assalamu Alaikum *{customerName}*! 🌸\n\nWe noticed you started a Cash on Delivery order (*#{orderId}*) for *{itemsText}* (Total: *{totalAmount}*) at *Fatima Calligrapher*, but could not enter the WhatsApp OTP.\n\nWould you like us to confirm and dispatch your order directly to *{city}*?\n\n👉 Please reply *YES* to confirm this order! 😊\n📞 *Or call to confirm:* +91 99703 47703\n\nJazakallahu Khair,\n*Fatima Calligrapher*`,
+
+            delivered: `Assalamu Alaikum *{customerName}*! 🌸\n\nYour order (*#{orderId}*) from *fatimacalligrapher27* has been delivered! 🎉\n\nWe hope you love your Umrah Dua cards. Please keep us in your special duas during your blessed journey ✨\n📞 *Support Helpline:* +91 99703 47703\n\nJazakallahu Khair,\n*Fatima Calligrapher*`,
+
+            custom: `Assalamu Alaikum *{customerName}*! 🌸\n\nRegarding your order (*#{orderId}*) from Fatima Calligrapher:\n\n📞 *Helpline / Call:* +91 99703 47703\n\nJazakallahu Khair ✨`
+        };
+
+        async function loadWhatsAppTemplatesFromFirebase() {
+            if (!currentAdminToken) return;
+            try {
+                const res = await fetch('/api/admin/whatsapp/templates', {
+                    headers: { 'Authorization': `Bearer ${currentAdminToken}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.templates) {
+                        savedWhatsAppTemplates = data.templates;
+                    }
+                }
+            } catch (err) {
+                console.warn("Could not load WhatsApp templates from Firebase:", err);
             }
-
-            const phoneRaw = order.customer && order.customer.phone ? String(order.customer.phone).trim() : '';
-            const cleanPhone = phoneRaw.replace(/\D/g, '');
-            if (!cleanPhone || cleanPhone.length < 10) {
-                alert("Invalid phone number on order.");
-                return;
-            }
-
-            const customerName = (order.customer && order.customer.name) || 'Customer';
-            const totalAmount = order.pricing && order.pricing.total ? `Rs. ${order.pricing.total}` : 'Rs. 0';
-            const itemsText = (order.items || []).map(i => `${i.name || i.variantName} (Qty: ${i.quantity || 1})`).join(', ');
-
-            const message = `Salam ${customerName}! 🌸\n\nWe noticed you started a Cash on Delivery order (*${orderId}*) for *${itemsText}* (Total: *${totalAmount}*) at Fatima Calligrapher, but could not enter the WhatsApp OTP.\n\nWould you like us to confirm and dispatch your order directly to ${order.customer?.city || 'your address'}?\n\nPlease reply *YES* to confirm this order! 😊\n\nWarm regards,\n*Fatima Calligrapher*`;
-            window.open(`https://wa.me/91${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // WhatsApp Message Sender for Pending Payment Orders
-        function sendPendingPaymentWhatsApp(orderId) {
+        function formatOrderItemsForWhatsApp(order) {
+            if (!order.items || order.items.length === 0) {
+                return 'Umrah Dua & Guide Cards (Roman English)';
+            }
+            return order.items.map(i => {
+                const baseName = (i.name || i.variantName || 'Umrah Dua & Guide Cards').trim();
+                let lang = i.language || '';
+                if (!lang && i.variantName) {
+                    const m = i.variantName.match(/\(([^)]+)\)/);
+                    if (m) lang = m[1];
+                }
+                if (lang) {
+                    const cleanBase = baseName.replace(/\s*\([^)]*\)/g, '').trim();
+                    const cleanLang = lang.toLowerCase().includes('english') || lang.toLowerCase().includes('urdu') || lang.toLowerCase().includes('hindi') ? lang : `${lang} English`;
+                    return `${cleanBase} (${cleanLang})`;
+                }
+                return baseName;
+            }).join(', ');
+        }
+
+        function calculateEstimatedDeliveryRange(orderDate) {
+            const base = orderDate ? new Date(orderDate) : new Date();
+            const startD = new Date(base.getTime() + 2 * 86400000);
+            const endD = new Date(base.getTime() + 3 * 86400000);
+            const startDay = startD.getDate();
+            const endDay = endD.getDate();
+            const monthName = endD.toLocaleString('en-US', { month: 'long' });
+            const year = endD.getFullYear();
+            return `${startDay}-${endDay} ${monthName} ${year}`;
+        }
+
+        function generateWhatsAppMessage(order, templateKey) {
+            if (!order) return '';
+            const customerName = (order.customer && order.customer.name) || 'Customer';
+            const orderId = order.orderId || 'Order';
+            const totalAmount = order.pricing && order.pricing.total ? `Rs. ${order.pricing.total}` : 'Rs. 0';
+            const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
+            const isCod = prov === 'cod' || prov === 'cash_on_delivery' || (order.pricing?.codCharge || 0) > 0;
+            const paymentMethodText = isCod ? 'Cash on Delivery' : 'Paid Online';
+            const itemsText = formatOrderItemsForWhatsApp(order);
+            const estDeliveryDate = calculateEstimatedDeliveryRange(order.createdAt);
+            const orderUrl = `${window.location.origin}/order-status.html?orderId=${encodeURIComponent(orderId)}`;
+            const city = order.customer?.city || 'your address';
+            const fullAddress = [order.customer?.addressLine1, order.customer?.city, order.customer?.state, order.customer?.pincode].filter(Boolean).join(', ') || city;
+            const awb = order.shipping && order.shipping.awb ? order.shipping.awb : 'Assigned';
+            const courier = order.shipping && order.shipping.courierName ? order.shipping.courierName : 'Shiprocket Express';
+
+            let rawTpl = savedWhatsAppTemplates[templateKey] || DEFAULT_WHATSAPP_TEMPLATES[templateKey] || DEFAULT_WHATSAPP_TEMPLATES.custom;
+
+            let msg = rawTpl
+                .replace(/{customerName}/g, customerName)
+                .replace(/{orderId}/g, orderId)
+                .replace(/{itemsText}/g, itemsText)
+                .replace(/{totalAmount}/g, totalAmount)
+                .replace(/{paymentMethodText}/g, paymentMethodText)
+                .replace(/{deliveryAddress}/g, fullAddress)
+                .replace(/{city}/g, city)
+                .replace(/{estDeliveryDate}/g, estDeliveryDate)
+                .replace(/{orderUrl}/g, orderUrl)
+                .replace(/{courier}/g, courier)
+                .replace(/{awb}/g, awb)
+                .replace(/{helplinePhone}/g, '+91 99703 47703');
+
+            return msg;
+        }
+
+        async function saveCurrentTemplateToFirebase() {
+            if (!currentWhatsAppTemplate) return;
+            const textarea = document.getElementById('wa-message-textarea');
+            if (!textarea) return;
+
+            const text = textarea.value.trim();
+            if (!text) {
+                alert("Cannot save an empty template.");
+                return;
+            }
+
+            const btn = document.getElementById('wa-save-template-btn');
+            const origHtml = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-emerald-600"></i> <span>Saving to Firebase...</span>`;
+            }
+
+            try {
+                savedWhatsAppTemplates[currentWhatsAppTemplate] = text;
+                const response = await fetch('/api/admin/whatsapp/templates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({ templates: savedWhatsAppTemplates })
+                });
+
+                const resData = await response.json();
+                if (response.ok && resData.success) {
+                    if (btn) {
+                        btn.innerHTML = `<i class="fa-solid fa-check text-emerald-600"></i> <span class="text-emerald-700 font-bold">Saved in Firebase!</span>`;
+                    }
+                    setTimeout(() => {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = origHtml;
+                        }
+                    }, 2000);
+                } else {
+                    throw new Error(resData.error || 'Could not save to Firebase.');
+                }
+            } catch (err) {
+                console.error("Save template error:", err);
+                alert(`⚠️ Error saving template to Firebase: ${err.message}`);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = origHtml;
+                }
+            }
+        }
+
+        async function resetCurrentTemplateToDefault() {
+            if (!currentWhatsAppTemplate) return;
+            if (!confirm(`Reset "${currentWhatsAppTemplate}" template to default settings?`)) return;
+
+            delete savedWhatsAppTemplates[currentWhatsAppTemplate];
+            if (currentAdminToken) {
+                await fetch('/api/admin/whatsapp/templates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({ templates: savedWhatsAppTemplates })
+                }).catch(() => {});
+            }
+
+            selectWhatsAppTemplate(currentWhatsAppTemplate);
+        }
+
+        async function openWhatsAppModal(orderId, defaultTemplate = null) {
+            if (Object.keys(savedWhatsAppTemplates).length === 0) {
+                await loadWhatsAppTemplatesFromFirebase();
+            }
             const order = currentOrdersList.find(o => o.orderId === orderId);
             if (!order) {
                 alert("Order not found.");
@@ -1412,20 +1681,226 @@
             const phoneRaw = order.customer && order.customer.phone ? String(order.customer.phone).trim() : '';
             const cleanPhone = phoneRaw.replace(/\D/g, '');
             if (!cleanPhone || cleanPhone.length < 10) {
-                alert("Invalid phone number on order.");
+                alert("Invalid or missing phone number on this order.");
                 return;
             }
 
-            const customerName = (order.customer && order.customer.name) || 'Customer';
-            const totalAmount = order.pricing && order.pricing.total ? `Rs. ${order.pricing.total}` : 'Rs. 0';
-            const orderUrl = `${window.location.origin}/order-status.html?orderId=${encodeURIComponent(orderId)}`;
+            currentWhatsAppOrderId = orderId;
 
-            const message = `Salam ${customerName}! 🌸\n\nYour order *${orderId}* for *${totalAmount}* at Fatima Calligrapher is reserved.\n\nPlease complete payment below to start immediate dispatch:\n👉 ${orderUrl}\n\nWarm regards,\n*Fatima Calligrapher Team*`;
-            window.open(`https://wa.me/91${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+            // Auto-detect default template if not explicitly specified
+            if (!defaultTemplate) {
+                const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
+                const isCod = prov === 'cod' || prov === 'cash_on_delivery' || (order.pricing?.codCharge || 0) > 0;
+                const paymentStatus = ((order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING')).toUpperCase();
+                const status = (order.status || 'PENDING').toUpperCase();
+                const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || (order.payment && order.payment.razorpayPaymentId));
+                const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED';
+
+                if (isOnlinePendingPayment) {
+                    defaultTemplate = 'payment_pending_cod';
+                } else if (status === 'SHIPPED' || status === 'SHIPMENT_BOOKED' || (order.shipping && order.shipping.awb)) {
+                    defaultTemplate = 'shipped';
+                } else if (status === 'DELIVERED') {
+                    defaultTemplate = 'delivered';
+                } else {
+                    defaultTemplate = 'order_accepted';
+                }
+            }
+
+            currentWhatsAppTemplate = defaultTemplate || 'order_accepted';
+
+            // Populate Modal Fields
+            const customerName = (order.customer && order.customer.name) || 'Customer';
+            document.getElementById('wa-modal-subtitle').textContent = `${customerName} • Order #${orderId}`;
+            document.getElementById('wa-recipient-phone').textContent = `+91 ${cleanPhone}`;
+
+            const badgeContainer = document.getElementById('wa-order-badge-container');
+            if (badgeContainer) {
+                badgeContainer.innerHTML = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">Status: ${order.status || 'PLACED'}</span>`;
+            }
+
+            selectWhatsAppTemplate(currentWhatsAppTemplate);
+
+            document.getElementById('whatsapp-modal').classList.remove('hidden');
+        }
+
+        function closeWhatsAppModal() {
+            currentWhatsAppOrderId = null;
+            document.getElementById('whatsapp-modal').classList.add('hidden');
+        }
+
+        function selectWhatsAppTemplate(tplKey) {
+            currentWhatsAppTemplate = tplKey;
+            const order = currentOrdersList.find(o => o.orderId === currentWhatsAppOrderId);
+            if (!order) return;
+
+            // Update button styles
+            const allBtns = document.querySelectorAll('.wa-tpl-btn');
+            allBtns.forEach(btn => {
+                btn.className = 'wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50';
+            });
+
+            const activeBtn = document.getElementById(`wa-tpl-btn-${tplKey}`);
+            if (activeBtn) {
+                activeBtn.className = 'wa-tpl-btn p-2 rounded-lg border text-[11px] font-bold text-left transition-all cursor-pointer bg-emerald-600 text-white border-emerald-600 shadow-xs';
+            }
+
+            const msg = generateWhatsAppMessage(order, tplKey);
+            const textarea = document.getElementById('wa-message-textarea');
+            textarea.value = msg;
+            updateWhatsAppCharCount();
+        }
+
+        function updateWhatsAppCharCount() {
+            const textarea = document.getElementById('wa-message-textarea');
+            const countEl = document.getElementById('wa-char-count');
+            if (textarea && countEl) {
+                countEl.textContent = `${textarea.value.length} chars`;
+            }
+        }
+
+        function copyWhatsAppMessageToClipboard() {
+            const textarea = document.getElementById('wa-message-textarea');
+            if (!textarea || !textarea.value) return;
+
+            navigator.clipboard.writeText(textarea.value).then(() => {
+                const btn = document.getElementById('wa-copy-btn');
+                if (btn) {
+                    btn.innerHTML = `<i class="fa-solid fa-check text-emerald-600"></i> <span class="text-emerald-600 font-bold">Copied!</span>`;
+                    setTimeout(() => {
+                        btn.innerHTML = `<i class="fa-regular fa-copy"></i> <span>Copy Text</span>`;
+                    }, 2000);
+                }
+            }).catch(() => {
+                alert("Failed to copy to clipboard.");
+            });
+        }
+
+        async function sendWhatsAppViaAPI() {
+            if (!currentWhatsAppOrderId) return;
+            const order = currentOrdersList.find(o => o.orderId === currentWhatsAppOrderId);
+            if (!order) {
+                alert("Order not found.");
+                return;
+            }
+
+            const phoneRaw = order.customer && order.customer.phone ? String(order.customer.phone).trim() : '';
+            const cleanPhone = phoneRaw.replace(/\D/g, '');
+            if (!cleanPhone || cleanPhone.length < 10) {
+                alert("Invalid or missing phone number.");
+                return;
+            }
+
+            const textarea = document.getElementById('wa-message-textarea');
+            const message = textarea.value.trim();
+            if (!message) {
+                alert("Please enter a message to send.");
+                return;
+            }
+
+            const btn = document.getElementById('wa-send-api-btn');
+            const originalContent = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Sending via API...</span>`;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(currentWhatsAppOrderId)}/whatsapp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        phone: cleanPhone
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    if (btn) {
+                        btn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Message Sent!</span>`;
+                        btn.className = 'px-4 py-2 bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md cursor-default';
+                    }
+                    setTimeout(() => {
+                        closeWhatsAppModal();
+                        alert(`✅ WhatsApp message sent successfully via API to ${order.customer?.name || 'Customer'} (+91 ${cleanPhone})!`);
+                        loadOrdersAndStats();
+                    }, 600);
+                } else {
+                    throw new Error(result.error || result.message || 'Server returned failure.');
+                }
+            } catch (err) {
+                console.error("WhatsApp API Send Error:", err);
+                alert(`⚠️ WhatsApp API Send Error: ${err.message}\n\nYou can use 'Open WhatsApp Web' as fallback.`);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                }
+            }
+        }
+
+        function openInWhatsAppFallback() {
+            const order = currentOrdersList.find(o => o.orderId === currentWhatsAppOrderId);
+            if (!order) return;
+            const phoneRaw = order.customer && order.customer.phone ? String(order.customer.phone).trim() : '';
+            const cleanPhone = phoneRaw.replace(/\D/g, '');
+            const message = document.getElementById('wa-message-textarea').value.trim();
+            if (cleanPhone) {
+                window.open(`https://wa.me/91${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+            }
+        }
+
+        // WhatsApp Shortcuts (Backwards-compatibility)
+        function sendCodOtpReminderWhatsApp(orderId) {
+            openWhatsAppModal(orderId, 'cod_followup');
+        }
+
+        function sendPendingPaymentWhatsApp(orderId) {
+            openWhatsAppModal(orderId, 'payment_pending_cod');
         }
 
         function closeOrderDetailModal() {
             document.getElementById('order-detail-modal').classList.add('hidden');
+        }
+
+        // Move Order to Shiprocket (Confirmed over phone / Unpaid or COD unverified)
+        async function moveOrderToShiprocket(orderId) {
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            const customerName = order?.customer?.name || 'Customer';
+            const prov = (order?.payment?.provider || order?.paymentMethod || '').toLowerCase();
+            const isAlreadyPaid = prov === 'razorpay' && order?.payment?.status === 'CAPTURED';
+            const payTypeInfo = isAlreadyPaid ? 'Prepaid (Paid Online)' : 'Cash on Delivery (COD)';
+
+            const confirmed = confirm(`Move Order #${orderId} (${customerName}) to Shiprocket?\n\nPayment Mode: ${payTypeInfo}\n\nThis will create courier shipment in Shiprocket and mark the order as confirmed for dispatch.`);
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/move-to-shiprocket`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({
+                        convertToCod: !isAlreadyPaid
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert(`✅ Order #${orderId} successfully moved to Shiprocket!\nAWB: ${result.data?.shipping?.awb || 'Assigned'}`);
+                    closeOrderDetailModal();
+                    loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Failed to book shipment on Shiprocket.');
+                }
+            } catch (err) {
+                console.error("Move to Shiprocket Error:", err);
+                alert(`❌ Failed to move order to Shiprocket:\n${err.message}`);
+            }
         }
 
         // Cancel Order Flow
