@@ -212,6 +212,18 @@ const shiprocketService = {
               console.log(`📋 Top Available Couriers: ${courierNames.join(', ')}`);
               console.log('=============================================================\n');
 
+              let etdFormatted = '3-4 Business Days';
+              if (bestCourier.etd) {
+                const rawEtd = String(bestCourier.etd).trim();
+                if (/^\d+$/.test(rawEtd)) {
+                  etdFormatted = `${rawEtd} Days`;
+                } else if (rawEtd.toLowerCase().includes('day')) {
+                  etdFormatted = rawEtd;
+                } else {
+                  etdFormatted = rawEtd;
+                }
+              }
+
               return {
                 isServiceable: true,
                 serviceable: true,
@@ -219,10 +231,10 @@ const shiprocketService = {
                 city: locationInfo.city,
                 state: locationInfo.state,
                 shippingCharge: liveRate,
-                estimatedDays: bestCourier.etd ? `${bestCourier.etd} Days` : '3-5 Business Days',
+                estimatedDays: etdFormatted,
                 codAvailable: Boolean(bestCourier.cod),
                 couriers: couriers.slice(0, 3).map(c => c.courier_name),
-                deliveryType: bestCourier.courier_name || 'Shiprocket Courier Partner'
+                deliveryType: bestCourier.courier_name || 'Express Courier Partner'
               };
             }
           }

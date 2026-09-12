@@ -50,62 +50,53 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Calculate dynamic shipping fee:
-  // - Orders >= Rs. 699 get 100% FREE Delivery on BOTH COD and Prepaid
-  // - Orders < Rs. 699 have shipping charges for BOTH COD and Prepaid
-  const isFreeShipping = (subtotal >= 699);
-  const isOnlinePayment = (paymentMethod !== 'cod');
+  // Dynamic Shipping calculation based on delivery pincode and package weight (using Shiprocket COD rate)
   let shipping = 0;
-
-  if (!isFreeShipping) {
-    if (deliveryPincode) {
-      const shiprocketService = require('./shiprocketService');
-      try {
-        const servRes = await shiprocketService.checkServiceability(deliveryPincode, !isOnlinePayment, finalWeightKg);
-        if (servRes.isServiceable && typeof servRes.shippingCharge === 'number') {
-          shipping = servRes.shippingCharge;
-        } else {
-          shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
-        }
-      } catch (e) {
+  if (deliveryPincode) {
+    const shiprocketService = require('./shiprocketService');
+    try {
+      const servRes = await shiprocketService.checkServiceability(deliveryPincode, true, finalWeightKg);
+      if (servRes.isServiceable && typeof servRes.shippingCharge === 'number') {
+        shipping = servRes.shippingCharge;
+      } else {
         shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
       }
-    } else {
-      shipping = 49; // Default courier charge when pincode is not yet specified
+    } catch (e) {
+      shipping = shiprocketService.calculateShippingCharge(deliveryPincode, finalWeightKg);
     }
+  } else {
+    shipping = 102;
   }
 
-  // Automatic 12% Discount for orders >= Rs. 999 (Code RAB112)
+  // No auto 12% discount
   let discount = 0;
   let appliedCoupon = null;
 
-  if (subtotal >= 999) {
-    discount = Math.round(subtotal * 0.12);
-    appliedCoupon = 'RAB112';
-  } else if (couponCode && typeof couponCode === 'string') {
+  if (couponCode && typeof couponCode === 'string') {
     const cleanCoupon = couponCode.trim().toUpperCase();
     if (cleanCoupon === 'RAB112') {
-      const err = new Error('Coupon RAB112 requires a minimum order of ₹999.');
-      err.statusCode = 400;
-      err.code = 'COUPON_MIN_AMOUNT_NOT_MET';
-      err.isPublic = true;
-      throw err;
-    } else {
-      const err = new Error(`Invalid coupon code [${couponCode}]. Use coupon RAB112.`);
-      err.statusCode = 400;
-      err.code = 'INVALID_COUPON';
-      err.isPublic = true;
-      throw err;
+      if (subtotal >= 999) {
+        discount = Math.round(subtotal * 0.12);
+        appliedCoupon = 'RAB112';
+      } else {
+        const err = new Error('Coupon RAB112 requires a minimum order of ₹999.');
+        err.statusCode = 400;
+        err.code = 'COUPON_MIN_AMOUNT_NOT_MET';
+        err.isPublic = true;
+        throw err;
+      }
     }
   }
 
-  // Prepaid (Online Payment) gets an extra 5% Discount
+  // Payment Method Discounts & Fees:
+  // - Online Payment: 5% Instant Discount
+  const isOnlinePayment = (paymentMethod !== 'cod');
   let onlineDiscount = 0;
+  let codCharge = 0;
+
   if (isOnlinePayment) {
     onlineDiscount = Math.round(subtotal * 0.05);
   }
-
-  let codCharge = 0;
 
   const total = Math.max(0, subtotal - discount - onlineDiscount + codCharge + shipping);
 
