@@ -263,64 +263,71 @@
 
                 <!-- SECTION 2: PAYMENT METHOD SELECTION -->
                 <div class="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs">
-                    <div class="flex items-center justify-between pb-3 mb-3.5 border-b border-gray-100">
+                    <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
                         <div class="flex items-center gap-2">
-                            <div class="w-7 h-7 rounded-lg bg-onyx text-gold-400 flex items-center justify-center text-xs font-bold shadow-xs">
+                            <div class="w-6 h-6 rounded-lg bg-onyx text-gold-400 flex items-center justify-center text-xs font-bold">
                                 2
                             </div>
-                            <div>
-                                <h2 class="font-bold text-sm sm:text-base text-onyx">Payment Method</h2>
-                                <p class="text-[10px] text-gray-500">Choose Online (Extra 5% OFF) or Cash on Delivery</p>
-                            </div>
+                            <h2 class="font-bold text-sm sm:text-base text-onyx">Payment Method</h2>
                         </div>
                     </div>
 
                     <div class="space-y-2.5">
                         
-                        <!-- ONLINE PAYMENT (Pay Online with 5% Extra OFF) -->
+                        <!-- ONLINE PAYMENT (Clean, Modern, Uncluttered Hero Option) -->
                         <label id="payment-label-razorpay" onclick="selectPaymentMethod('razorpay')" 
-                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-emerald-300 bg-white hover:bg-emerald-50/20 cursor-pointer transition-all relative group">
-                            <input type="radio" name="payment_method" value="razorpay" id="radio-razorpay" class="mt-1 text-emerald-600 focus:ring-emerald-500 accent-emerald-600">
+                            class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition-all">
+                            
+                            <input type="radio" name="payment_method" value="razorpay" id="radio-razorpay" checked class="mt-0.5 text-emerald-600 focus:ring-emerald-500 accent-emerald-600 w-4 h-4">
+                            
                             <div class="flex-1 min-w-0">
-                                <div class="flex items-center justify-between gap-1 flex-wrap">
-                                    <span class="font-black text-xs sm:text-sm text-onyx flex items-center gap-1.5">
-                                        <i class="fa-solid fa-bolt text-emerald-600 text-sm"></i>
-                                        <span>Pay Online (UPI, Cards, NetBanking)</span>
+                                <div class="flex items-center justify-between gap-1.5 flex-wrap">
+                                    <span class="font-bold text-xs sm:text-sm text-onyx">
+                                        Pay Online (UPI / Cards / NetBanking)
                                     </span>
-                                    <span id="badge-online-offer-pill" class="text-[9.5px] font-black text-white bg-emerald-600 px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                                        ⚡ 5% EXTRA OFF
+                                    <span id="badge-online-offer-pill" class="bg-emerald-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">
+                                        ⚡ Extra 5% OFF
                                     </span>
                                 </div>
-                                <p class="text-[11px] text-gray-600 mt-1 leading-snug">
-                                    Google Pay, PhonePe, Paytm, BHIM UPI, Cards & NetBanking. Instant 5% Extra Discount!
-                                </p>
-                                <div class="mt-1.5 flex items-center gap-2">
-                                    <span id="badge-online-price" class="text-[11px] font-bold text-emerald-800 bg-white/90 px-2 py-0.5 rounded-md border border-emerald-200">
-                                        Pay Rs. 531.05 (5% OFF)
+                                
+                                <div class="text-[11px] text-gray-500 mt-1 flex items-center gap-1.5 flex-wrap">
+                                    <span class="font-semibold text-gray-600">GPay</span> • 
+                                    <span class="font-semibold text-gray-600">PhonePe</span> • 
+                                    <span class="font-semibold text-gray-600">Paytm</span> • 
+                                    <span class="font-semibold text-gray-600">UPI</span> • 
+                                    <span class="font-semibold text-gray-600">Cards</span> • 
+                                    <span class="font-semibold text-gray-600">NetBanking</span>
+                                </div>
+
+                                <div class="mt-2 flex items-center justify-between gap-2 pt-2 border-t border-emerald-200/60 text-xs">
+                                    <span id="badge-online-price" class="font-extrabold text-emerald-800">
+                                        Pay Rs. 531.05 (Save Rs. 27.95)
+                                    </span>
+                                    <span class="text-[10px] font-bold text-emerald-700 flex items-center gap-1">
+                                        <i class="fa-solid fa-truck-fast"></i> Priority 24h Dispatch
                                     </span>
                                 </div>
                             </div>
                         </label>
 
-                        <!-- CASH ON DELIVERY (Default: Pay on Doorstep) -->
+                        <!-- CASH ON DELIVERY (Clean Secondary Option) -->
                         <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" 
-                            class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-gold-500 bg-gold-50/90 ring-2 ring-gold-400/30 cursor-pointer transition-all shadow-xs relative">
-                            <input type="radio" name="payment_method" value="cod" id="radio-cod" checked class="mt-1 text-gold-600 focus:ring-gold-500 accent-gold-600">
+                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all">
+                            <input type="radio" name="payment_method" value="cod" id="radio-cod" class="mt-0.5 text-onyx focus:ring-onyx accent-onyx w-4 h-4">
                             <div class="flex-1 min-w-0">
-                                <div class="flex items-center justify-between gap-1 flex-wrap">
-                                    <span class="font-bold text-xs sm:text-sm text-onyx flex items-center gap-1.5">
-                                        <i class="fa-solid fa-hand-holding-dollar text-amber-600 text-sm"></i>
-                                        <span>Cash on Delivery (COD)</span>
+                                <div class="flex items-center justify-between gap-1.5 flex-wrap">
+                                    <span class="font-bold text-xs sm:text-sm text-onyx">
+                                        Cash on Delivery (COD)
                                     </span>
-                                    <span class="text-[9.5px] font-bold text-stone-700 bg-stone-100 border border-stone-300 px-2 py-0.5 rounded-full">
-                                        Standard Delivery
+                                    <span class="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                                        Standard Dispatch
                                     </span>
                                 </div>
-                                <p class="text-[11px] text-gray-500 mt-1 leading-snug">
-                                    Pay with cash when package arrives at your doorstep. Verified via WhatsApp OTP.
+                                <p class="text-[11px] text-gray-500 mt-1">
+                                    Pay with cash upon delivery. Requires WhatsApp OTP verification.
                                 </p>
-                                <div class="mt-1.5 flex items-center gap-2">
-                                    <span id="badge-cod-price" class="text-[11px] font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md border border-gray-200">
+                                <div class="mt-1.5">
+                                    <span id="badge-cod-price" class="text-xs font-bold text-gray-700">
                                         Pay Rs. 559.00
                                     </span>
                                 </div>
@@ -369,8 +376,17 @@
                         </div>
                     </div>
 
+                    <!-- Live Savings Banner when Online is Active -->
+                    <div id="summary-savings-banner" class="mt-3 mb-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xs flex items-center justify-between text-xs font-bold animate-pulse">
+                        <span class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-gift text-amber-300 text-sm"></i>
+                            <span>You Save <b id="summary-savings-amount" class="text-amber-200">Rs. 27.95</b> with Pay Online!</span>
+                        </span>
+                        <span class="bg-white/20 text-[9px] uppercase px-2 py-0.5 rounded-full font-black">5% OFF</span>
+                    </div>
+
                     <!-- Pricing Breakdown -->
-                    <div class="mt-3.5 pt-3 border-t border-gray-200 space-y-1.5 text-xs text-gray-600">
+                    <div class="mt-3 pt-3 border-t border-gray-200 space-y-1.5 text-xs text-gray-600">
                         <div class="flex justify-between items-center">
                             <span>Items Subtotal:</span>
                             <span id="summary-subtotal" class="font-bold text-onyx">Rs. 559.00</span>
@@ -379,9 +395,9 @@
                             <span>Special Coupon (12% OFF):</span>
                             <span id="summary-discount">-Rs. 0.00</span>
                         </div>
-                        <div id="summary-online-row" class="hidden flex justify-between items-center text-emerald-700 font-semibold">
-                            <span>Prepaid Discount (5% OFF):</span>
-                            <span id="summary-online">-Rs. 0.00</span>
+                        <div id="summary-online-row" class="flex justify-between items-center text-emerald-700 font-semibold">
+                            <span>Prepaid Instant Discount (5% OFF):</span>
+                            <span id="summary-online" class="font-bold">-Rs. 27.95</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span>Delivery & Handling:</span>
@@ -389,15 +405,15 @@
                         </div>
                         <div class="flex justify-between items-center text-sm sm:text-base font-extrabold text-onyx pt-2 border-t border-gray-200">
                             <span>Total Payable:</span>
-                            <span id="summary-total" class="text-gold-700 font-black">Rs. 559.00</span>
+                            <span id="summary-total" class="text-emerald-700 font-black">Rs. 531.05</span>
                         </div>
                     </div>
 
                     <!-- Submit CTA Dual Action Section -->
                     <div class="mt-4 space-y-2">
-                        <button type="submit" id="btn-submit-order" class="w-full gold-bg-gradient text-onyx font-extrabold py-3.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs sm:text-sm hover:opacity-95 active:scale-98 transition-all cursor-pointer">
-                            <i class="fa-solid fa-lock text-xs"></i>
-                            <span id="btn-submit-text">PAY ONLINE & SAVE 5%</span>
+                        <button type="submit" id="btn-submit-order" class="w-full gold-bg-gradient text-onyx font-black py-3.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs sm:text-sm hover:opacity-95 active:scale-98 transition-all cursor-pointer ring-2 ring-amber-400/50">
+                            <i class="fa-solid fa-bolt text-xs"></i>
+                            <span id="btn-submit-text">PAY ONLINE & SAVE Rs. 27.95 (Rs. 531.05)</span>
                         </button>
                         
                         <div id="btn-submit-sub" class="text-center text-[11px] pt-1">
@@ -408,7 +424,7 @@
                     </div>
 
                     <p class="text-[10px] text-gray-500 text-center mt-2.5 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-shield-check text-emerald-600"></i> 100% Encrypted & Safe Checkout
+                        <i class="fa-solid fa-shield-check text-emerald-600"></i> 100% Encrypted & Safe Razorpay Checkout
                     </p>
                 </div>
 
@@ -432,33 +448,35 @@
         </form>
     </main>
 
-    <!-- MOBILE STICKY BOTTOM DUAL CONFIRM BAR (Ultra-Sleek, Compact & Fixed Layout) -->
+    <!-- MOBILE STICKY BOTTOM DUAL CONFIRM BAR (High-Converting 65/35 Hero Online Bar) -->
     <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 p-2 px-2.5 z-40 shadow-[0_-6px_25px_rgba(0,0,0,0.08)]">
-        <div class="grid grid-cols-2 gap-2 max-w-md mx-auto">
+        <div class="grid grid-cols-5 gap-2 max-w-md mx-auto">
             
-            <!-- Online Button (Left: 5% OFF Gold Theme - Fixed 2-Row) -->
+            <!-- Online Button (Left: 60% Width - Dominant Hero with Radiant Shimmer & Live Savings) -->
             <button type="button" onclick="submitWithPaymentMethod('razorpay')" 
-                class="w-full flex flex-col justify-between px-2.5 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/50 cursor-pointer h-[46px]">
+                class="col-span-3 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30">
                 <div class="flex items-center justify-between w-full leading-none">
-                    <span class="font-black text-[10.5px] text-onyx tracking-tight">PAY ONLINE</span>
-                    <span class="bg-emerald-700 text-white text-[7.5px] font-black px-1.5 py-0.5 rounded uppercase leading-none tracking-wide whitespace-nowrap">⚡ 5% OFF</span>
+                    <span class="font-black text-[11px] text-onyx tracking-tight flex items-center gap-1">
+                        <i class="fa-solid fa-bolt text-emerald-700 text-[10px]"></i> PAY ONLINE
+                    </span>
+                    <span id="mobile-online-savings-tag" class="bg-emerald-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase leading-none tracking-wide whitespace-nowrap">⚡ 5% OFF</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
-                    <span class="text-[8.5px] text-onyx/75 font-semibold">UPI • Cards</span>
-                    <span id="mobile-online-price" class="text-[11.5px] font-black text-onyx font-mono">Rs. 531.05</span>
+                    <span class="text-[8.5px] text-onyx/75 font-semibold">GPay • PhonePe • UPI</span>
+                    <span id="mobile-online-price" class="text-xs font-black text-onyx font-mono">Rs. 531.05</span>
                 </div>
             </button>
 
-            <!-- COD Button (Right: Onyx Luxury Theme - Fixed 2-Row) -->
+            <!-- COD Button (Right: 40% Width - Clean Secondary Cash Option) -->
             <button type="button" onclick="submitWithPaymentMethod('cod')" 
-                class="w-full flex flex-col justify-between px-2.5 py-1.5 rounded-xl bg-onyx hover:bg-black text-white shadow-sm active:scale-[0.98] transition-all border border-gray-700/80 cursor-pointer h-[46px]">
+                class="col-span-2 w-full flex flex-col justify-between px-2 py-1.5 rounded-xl bg-onyx hover:bg-black text-white shadow-2xs active:scale-[0.98] transition-all border border-gray-700/80 cursor-pointer h-[48px]">
                 <div class="flex items-center justify-between w-full leading-none">
-                    <span class="font-bold text-[10.5px] text-white tracking-tight">PAY COD</span>
-                    <span class="bg-stone-800 text-stone-300 border border-stone-700 text-[7.5px] font-bold px-1.5 py-0.5 rounded leading-none whitespace-nowrap">Doorstep</span>
+                    <span class="font-bold text-[10px] text-white tracking-tight">PAY COD</span>
+                    <span class="text-gray-400 text-[7.5px]">Doorstep</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
-                    <span class="text-[8.5px] text-gray-400 font-medium">Cash on Delivery</span>
-                    <span id="mobile-cod-price" class="text-[11.5px] font-bold text-amber-300 font-mono">Rs. 559.00</span>
+                    <span class="text-[8px] text-gray-400">Cash</span>
+                    <span id="mobile-cod-price" class="text-[10.5px] font-bold text-amber-300 font-mono">Rs. 559.00</span>
                 </div>
             </button>
 
@@ -630,7 +648,7 @@
         ];
 
         let checkoutCart = [];
-        let selectedPaymentMethod = 'cod';
+        let selectedPaymentMethod = 'razorpay';
         let currentShippingFee = null;
         let appliedCoupon = null;
         let isProcessing = false;
@@ -679,7 +697,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initCartFromParamsOrStorage();
             restoreCustomerDetails();
-            selectPaymentMethod('cod');
+            selectPaymentMethod('razorpay');
             renderCheckoutSummary();
             await checkAndLoadPendingOrder();
 
@@ -931,15 +949,27 @@
             const onlineBadgePrice = document.getElementById('badge-online-price');
             const codBadgePrice = document.getElementById('badge-cod-price');
             const onlineOfferPill = document.getElementById('badge-online-offer-pill');
+            const savingsBanner = document.getElementById('summary-savings-banner');
+            const savingsAmountEl = document.getElementById('summary-savings-amount');
 
             if (onlineBadgePrice) {
-                onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Extra 5% OFF)`;
+                onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Save Rs. ${prepaidDiscount.toFixed(2)})`;
             }
             if (codBadgePrice) {
-                codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)} (${isFreeShipping ? 'FREE Delivery' : 'Delivery: Rs. ' + courierFee.toFixed(2)})`;
+                codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)}`;
             }
             if (onlineOfferPill) {
-                onlineOfferPill.textContent = '⚡ 5% EXTRA OFF';
+                onlineOfferPill.textContent = '⚡ Extra 5% OFF';
+            }
+            if (savingsAmountEl) {
+                savingsAmountEl.textContent = `Rs. ${prepaidDiscount.toFixed(2)}`;
+            }
+            if (savingsBanner) {
+                if (selectedPaymentMethod === 'razorpay') {
+                    savingsBanner.classList.remove('hidden');
+                } else {
+                    savingsBanner.classList.add('hidden');
+                }
             }
 
             // Update summary online discount row
@@ -960,7 +990,7 @@
             const btnSubmitSub = document.getElementById('btn-submit-sub');
             if (btnSubmitText) {
                 if (selectedPaymentMethod === 'razorpay') {
-                    btnSubmitText.innerHTML = `<span>PAY ONLINE & SAVE EXTRA 5%</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitText.innerHTML = `<span>PAY ONLINE & SAVE Rs. ${prepaidDiscount.toFixed(2)}</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
                 } else {
                     btnSubmitText.innerHTML = `<span>CONFIRM CASH ON DELIVERY</span> <span class="text-xs opacity-90 font-bold">(Rs. ${codTotal.toFixed(2)})</span>`;
                 }
@@ -969,15 +999,17 @@
                 if (selectedPaymentMethod === 'razorpay') {
                     btnSubmitSub.innerHTML = `<span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">Or choose <b>Cash on Delivery</b> (Rs. ${codTotal.toFixed(2)})</span>`;
                 } else {
-                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Save 5% Extra (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online & Save Extra Rs. ${prepaidDiscount.toFixed(2)} (Pay Rs. ${onlineTotal.toFixed(2)})</span>`;
                 }
             }
 
             // Update Mobile Sticky Buttons
             const mobileOnlinePrice = document.getElementById('mobile-online-price');
             const mobileCodPrice = document.getElementById('mobile-cod-price');
+            const mobileOnlineSavingsTag = document.getElementById('mobile-online-savings-tag');
             if (mobileOnlinePrice) mobileOnlinePrice.textContent = `Rs. ${onlineTotal.toFixed(2)}`;
             if (mobileCodPrice) mobileCodPrice.textContent = `Rs. ${codTotal.toFixed(2)}`;
+            if (mobileOnlineSavingsTag) mobileOnlineSavingsTag.textContent = `⚡ SAVE ₹${prepaidDiscount.toFixed(0)}`;
 
             if (checkoutCart.length === 0) {
                 if (listEl) {
@@ -1136,13 +1168,13 @@
             if (selectedPaymentMethod === 'cod') {
                 if (radioCod) radioCod.checked = true;
                 if (radioRzp) radioRzp.checked = false;
-                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-gold-500 bg-gold-50/90 ring-2 ring-gold-400/30 cursor-pointer transition-all shadow-xs relative";
-                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-emerald-300 bg-white hover:bg-emerald-50/20 cursor-pointer transition-all relative group";
+                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-onyx bg-gray-50/80 cursor-pointer transition-all shadow-2xs";
+                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-emerald-50/20 cursor-pointer transition-all";
             } else {
                 if (radioCod) radioCod.checked = false;
                 if (radioRzp) radioRzp.checked = true;
-                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/80 ring-2 ring-emerald-400/30 cursor-pointer transition-all shadow-xs relative group";
-                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-gold-300 bg-white hover:bg-gold-50/20 cursor-pointer transition-all";
+                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition-all shadow-2xs";
+                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all";
             }
 
             renderCheckoutSummary();

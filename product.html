@@ -206,29 +206,14 @@
 
                     <!-- Slide Counter Badge on Top-Right -->
                     <div class="absolute top-2.5 right-2.5 z-20 pointer-events-none">
-                        <span id="pdp-media-counter" class="bg-black/80 backdrop-blur-md text-gold-300 font-mono text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-gold-500/40 shadow-md">
+                        <span id="pdp-media-counter" class="bg-black/80 backdrop-blur-md text-gold-300 font-mono text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/40 shadow-md">
                             1 / 1
                         </span>
                     </div>
 
-                    <!-- Zoom Controls (for Image - Desktop only to save mobile clutter) -->
-                    <div id="pdp-zoom-controls" class="hidden sm:flex absolute bottom-3 left-3 z-20 items-center gap-1 bg-black/80 backdrop-blur-md text-white p-1 rounded-xl border border-gold-500/40 text-xs shadow-xl">
-                        <button onclick="zoomPdpImage(-0.3)" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom Out">
-                            <i class="fa-solid fa-magnifying-glass-minus text-xs"></i>
-                        </button>
-                        <span id="pdp-zoom-level" class="text-[10px] font-mono px-1.5 font-extrabold text-gold-300 min-w-[36px] text-center">100%</span>
-                        <button onclick="zoomPdpImage(0.3)" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom In">
-                            <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
-                        </button>
-                        <button onclick="zoomPdpImage('reset')" class="px-2 py-0.5 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx text-[9px] font-extrabold uppercase transition-colors" title="Reset Zoom">
-                            Reset
-                        </button>
-                    </div>
-
-                    <!-- Image View Container -->
-                    <div id="pdp-image-container" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-2 sm:p-4 touch-none select-none relative"
-                         onmousedown="startPdpDrag(event)" onmousemove="dragPdpImage(event)" onmouseup="stopPdpDrag()" onmouseleave="stopPdpDrag()" ondblclick="togglePdpZoom()">
-                        <img id="pdp-main-image" src="product/umrah_card_english.webp" alt="Product View" fetchpriority="high" decoding="async" width="600" height="600" class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-75 origin-center pointer-events-none select-none">
+                    <!-- Image View Container (Click opens big screen lightbox modal) -->
+                    <div id="pdp-image-container" onclick="openBigScreenMediaModal()" class="w-full h-full flex items-center justify-center overflow-hidden p-2 sm:p-4 select-none relative cursor-zoom-in" title="Click to view full screen with zoom">
+                        <img id="pdp-main-image" src="product/umrah_card_english.webp" alt="Product View" fetchpriority="high" decoding="async" width="600" height="600" class="max-w-full max-h-full object-contain rounded-xl pointer-events-none select-none transition-transform duration-200 group-hover:scale-[1.03]">
                     </div>
                     <script>
                         if (window.__INITIAL_PDP_IMAGE__) {
@@ -236,6 +221,12 @@
                             if (earlyMainImg) earlyMainImg.src = window.__INITIAL_PDP_IMAGE__;
                         }
                     </script>
+
+                    <!-- Tap to View Full Screen Indicator Pill -->
+                    <button type="button" onclick="openBigScreenMediaModal()" class="absolute bottom-2.5 right-2.5 z-20 flex items-center gap-1.5 bg-black/80 hover:bg-gold-500 hover:text-onyx backdrop-blur-md text-gold-300 text-[9.5px] sm:text-[10px] font-bold px-2.5 py-1 rounded-xl border border-gold-500/40 shadow-md transition-all cursor-pointer">
+                        <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                        <span>Tap to Zoom</span>
+                    </button>
 
                     <!-- Video View Container (hidden when image selected) -->
                     <div id="pdp-video-container" class="hidden w-full h-full flex items-center justify-center p-1 bg-black rounded-2xl overflow-hidden">
@@ -278,12 +269,18 @@
                     </h1>
 
                     <!-- Dynamic Price Display -->
-                    <div class="flex items-baseline gap-2 mb-2 flex-wrap">
+                    <div class="flex items-baseline gap-2 mb-1.5 flex-wrap">
                         <span id="pdp-price" class="text-xl sm:text-3xl font-black text-onyx">Rs. 559</span>
                         <span id="pdp-old-price" class="text-xs sm:text-base text-gray-400 line-through">MRP Rs. 1118</span>
                         <span id="pdp-discount-badge" class="text-[10px] sm:text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-md border border-red-200">
                             -50% OFF
                         </span>
+                    </div>
+
+                    <!-- Dynamic Estimated Delivery Date Callout (+4 Days) -->
+                    <div class="flex items-center gap-1.5 text-[11px] sm:text-xs text-emerald-900 font-semibold mb-2.5 bg-emerald-50/90 px-2.5 py-1 rounded-xl border border-emerald-200/80 w-fit">
+                        <i class="fa-solid fa-truck-fast text-emerald-600 text-xs"></i>
+                        <span>Estimated Delivery: <b id="pdp-est-delivery-badge" class="font-extrabold text-emerald-950 underline decoration-emerald-500">--</b> (within 4 days)</span>
                     </div>
 
                     <!-- ULTRA-COMPACT 4-COLUMN LANGUAGE SELECTOR (Slim Bar with Zero Mobile Clutter) -->
@@ -374,14 +371,14 @@
                     </div>
 
                     <!-- PINCODE SERVICEABILITY CHECKER WIDGET -->
-                    <div class="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-3.5 mb-4">
-                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                    <div class="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-3 sm:p-3.5 mb-4">
+                        <div class="flex items-center justify-between gap-2 mb-2">
                             <div class="text-xs font-bold text-onyx flex items-center gap-1.5">
                                 <i class="fa-solid fa-truck-fast text-indigo-600"></i>
-                                <span>Check Delivery Availability & Estimated Days</span>
+                                <span>Estimated Delivery: <b id="pdp-pincode-est-date" class="text-indigo-950 font-black">--</b></span>
                             </div>
-                            <span class="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                                Pan-India Express
+                            <span class="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                                <i class="fa-solid fa-bolt text-amber-500"></i> Dispatches in 24h
                             </span>
                         </div>
                         <div class="flex items-center gap-2">
@@ -629,6 +626,79 @@
                     <span>Continue Browsing</span>
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- BIG SCREEN / FULLSCREEN IMAGE & VIDEO VIEWER MODAL -->
+    <div id="big-screen-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden flex flex-col justify-between p-3 sm:p-5 select-none" onclick="handleBigScreenBackdropClick(event)">
+        
+        <!-- Header Bar: Title, Media Counter & Zoom Toolbar -->
+        <div class="flex items-center justify-between z-20 text-white w-full max-w-6xl mx-auto" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-2">
+                <span id="modal-media-counter" class="bg-white/10 text-gold-300 text-xs font-mono font-bold px-3 py-1 rounded-full border border-gold-500/30">
+                    1 / 1
+                </span>
+                <span id="modal-product-title" class="font-bold text-xs sm:text-sm text-gray-200 truncate max-w-[180px] sm:max-w-md hidden xs:inline">
+                    Product View
+                </span>
+            </div>
+
+            <!-- Top Controls (Zoom In, Zoom Out, Reset, Close) -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <div id="modal-zoom-controls" class="flex items-center gap-1 bg-white/10 backdrop-blur-md p-1 rounded-xl border border-white/20 text-xs">
+                    <button onclick="zoomBigScreenImage(-0.35)" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors cursor-pointer" title="Zoom Out (-)">
+                        <i class="fa-solid fa-magnifying-glass-minus text-xs"></i>
+                    </button>
+                    <span id="modal-zoom-level" class="text-xs font-mono px-2 font-black text-gold-300 min-w-[42px] text-center">100%</span>
+                    <button onclick="zoomBigScreenImage(0.35)" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors cursor-pointer" title="Zoom In (+)">
+                        <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                    </button>
+                    <button onclick="zoomBigScreenImage('reset')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx text-[10px] font-bold uppercase transition-colors cursor-pointer" title="Reset">
+                        Reset
+                    </button>
+                </div>
+
+                <button onclick="closeBigScreenModal()" class="w-9 h-9 rounded-xl bg-white/15 hover:bg-red-600 text-white flex items-center justify-center transition-colors shadow-lg cursor-pointer ml-1" title="Close (Esc)">
+                    <i class="fa-solid fa-xmark text-sm font-bold"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Viewport Area with Pinch & Pan -->
+        <div class="relative flex-1 w-full flex items-center justify-center overflow-hidden my-2 touch-none cursor-grab active:cursor-grabbing"
+             id="modal-viewport"
+             onmousedown="startModalDrag(event)" 
+             onmousemove="dragModalImage(event)" 
+             onmouseup="stopModalDrag()" 
+             onmouseleave="stopModalDrag()" 
+             ondblclick="toggleModalZoom(event)">
+
+            <!-- Modal Image Element -->
+            <img id="modal-main-image" src="" alt="Full Screen Product View" class="max-w-[90vw] max-h-[75vh] object-contain transition-transform duration-75 origin-center pointer-events-none select-none rounded-lg shadow-2xl">
+
+            <!-- Modal Video Element (hidden when showing image) -->
+            <div id="modal-video-container" class="hidden w-full max-w-4xl max-h-[75vh] flex items-center justify-center">
+                <video id="modal-main-video" controls autoplay loop playsinline class="max-w-full max-h-[75vh] object-contain rounded-xl shadow-2xl">
+                    <source id="modal-video-source" src="" type="video/mp4">
+                </video>
+            </div>
+
+            <!-- Left / Right Navigation Arrows in Modal -->
+            <button onclick="prevBigScreenMedia(event)" class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/70 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-all active:scale-95 shadow-2xl cursor-pointer" title="Previous (Left Arrow)">
+                <i class="fa-solid fa-chevron-left text-sm sm:text-base"></i>
+            </button>
+            <button onclick="nextBigScreenMedia(event)" class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/70 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-all active:scale-95 shadow-2xl cursor-pointer" title="Next (Right Arrow)">
+                <i class="fa-solid fa-chevron-right text-sm sm:text-base"></i>
+            </button>
+        </div>
+
+        <!-- Footer Hint -->
+        <div class="text-center text-gray-400 text-[11px] z-20 flex items-center justify-center gap-3">
+            <span><i class="fa-solid fa-hand-pointer text-gold-400 mr-1"></i> Double-tap or scroll to zoom</span>
+            <span>•</span>
+            <span><i class="fa-solid fa-arrows-left-right text-gold-400 mr-1"></i> Drag to pan</span>
+            <span>•</span>
+            <span><i class="fa-solid fa-keyboard text-gold-400 mr-1"></i> Esc to close</span>
         </div>
     </div>
 
@@ -1262,6 +1332,15 @@
             return items;
         }
 
+        function getFormattedEstimatedDelivery(daysToAdd = 4) {
+            const d = new Date();
+            d.setDate(d.getDate() + daysToAdd);
+            const weekday = d.toLocaleDateString('en-IN', { weekday: 'short' });
+            const day = d.getDate();
+            const month = d.toLocaleDateString('en-IN', { month: 'short' });
+            return `${weekday}, ${day} ${month}`;
+        }
+
         function renderPdpView() {
             const p = currentProduct;
             const hasVariants = p.variants && p.variants.length > 0;
@@ -1284,6 +1363,13 @@
             document.getElementById('pdp-badge').textContent = p.badge;
             document.getElementById('pdp-sku-badge').textContent = `SKU: ${activeSku}`;
             document.getElementById('pdp-weight-badge').textContent = activeWeight;
+            
+            // Estimated Delivery Date (+4 Days)
+            const estDeliveryDateStr = getFormattedEstimatedDelivery(4);
+            const estBadge = document.getElementById('pdp-est-delivery-badge');
+            const pincodeEst = document.getElementById('pdp-pincode-est-date');
+            if (estBadge) estBadge.textContent = estDeliveryDateStr;
+            if (pincodeEst) pincodeEst.textContent = estDeliveryDateStr;
             
             // Sold Count Tag
             const soldTextEl = document.getElementById('pdp-sold-text');
@@ -1413,7 +1499,6 @@
 
             const imgContainer = document.getElementById('pdp-image-container');
             const vidContainer = document.getElementById('pdp-video-container');
-            const zoomControls = document.getElementById('pdp-zoom-controls');
             const mainImg = document.getElementById('pdp-main-image');
             const mainVid = document.getElementById('pdp-main-video');
             const vidSource = document.getElementById('pdp-video-source');
@@ -1425,7 +1510,6 @@
 
             if (isVideo) {
                 imgContainer.classList.add('hidden');
-                zoomControls.classList.add('hidden');
                 vidContainer.classList.remove('hidden');
                 vidSource.src = activeMedia.url;
                 mainVid.load();
@@ -1437,12 +1521,16 @@
                 if (mainVid) mainVid.pause();
                 vidContainer.classList.add('hidden');
                 imgContainer.classList.remove('hidden');
-                zoomControls.classList.remove('hidden');
                 mainImg.src = activeMedia.url;
-                mainImg.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
             }
 
             preloadPdpGalleryMedia(mediaList);
+            
+            // If big screen modal is open, sync it
+            const modal = document.getElementById('big-screen-modal');
+            if (modal && !modal.classList.contains('hidden')) {
+                renderBigScreenModalMedia();
+            }
         }
 
         // Background idle preloader for gallery thumbnails
@@ -1464,9 +1552,6 @@
 
         function setPdpMediaSlide(idx) {
             currentMediaIndex = idx;
-            currentZoom = 1;
-            currentPanX = 0;
-            currentPanY = 0;
             renderPdpMediaView();
         }
 
@@ -1482,150 +1567,255 @@
             setPdpMediaSlide(currentMediaIndex);
         }
 
-        // ADVANCED 2-FINGER PINCH-TO-ZOOM, PAN & SWIPE ENGINE (MOBILE + DESKTOP)
-        let initialPinchDistance = null;
-        let initialZoomOnPinch = 1;
-        let lastTouchEndTime = 0;
-        let touchStartSwipeX = 0;
-        let touchStartSwipeY = 0;
+        // =========================================================================
+        // BIG SCREEN / FULLSCREEN LIGHTBOX VIEWER WITH ZOOM & PAN ENGINE
+        // =========================================================================
+        let modalZoom = 1;
+        let modalPanX = 0;
+        let modalPanY = 0;
+        let isModalDragging = false;
+        let modalStartX = 0;
+        let modalStartY = 0;
+        let modalInitialPinchDist = null;
+        let modalInitialZoom = 1;
+        let modalLastTouchTime = 0;
 
-        function getTouchDistance(touches) {
-            return Math.hypot(
-                touches[0].clientX - touches[1].clientX,
-                touches[0].clientY - touches[1].clientY
-            );
+        function openBigScreenMediaModal(idx) {
+            if (typeof idx === 'number') {
+                currentMediaIndex = idx;
+            }
+            modalZoom = 1;
+            modalPanX = 0;
+            modalPanY = 0;
+
+            const modal = document.getElementById('big-screen-modal');
+            if (!modal) return;
+
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            renderBigScreenModalMedia();
+            initModalEvents();
         }
 
-        function updatePdpTransform() {
-            const img = document.getElementById('pdp-main-image');
-            const label = document.getElementById('pdp-zoom-level');
+        function closeBigScreenModal() {
+            const modal = document.getElementById('big-screen-modal');
+            if (!modal) return;
+
+            modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+
+            const modalVid = document.getElementById('modal-main-video');
+            if (modalVid) modalVid.pause();
+        }
+
+        function handleBigScreenBackdropClick(e) {
+            if (e.target.id === 'big-screen-modal' || e.target.id === 'modal-viewport') {
+                closeBigScreenModal();
+            }
+        }
+
+        function renderBigScreenModalMedia() {
+            const mediaList = getPdpMediaList();
+            if (currentMediaIndex >= mediaList.length) currentMediaIndex = 0;
+            const activeMedia = mediaList[currentMediaIndex] || mediaList[0];
+            const isVideo = activeMedia.type === 'video';
+
+            const modalImg = document.getElementById('modal-main-image');
+            const modalVidContainer = document.getElementById('modal-video-container');
+            const modalVid = document.getElementById('modal-main-video');
+            const modalVidSource = document.getElementById('modal-video-source');
+            const modalCounter = document.getElementById('modal-media-counter');
+            const modalTitle = document.getElementById('modal-product-title');
+            const modalZoomControls = document.getElementById('modal-zoom-controls');
+
+            if (modalCounter) modalCounter.textContent = `${currentMediaIndex + 1} / ${mediaList.length}`;
+            if (modalTitle) modalTitle.textContent = currentProduct.name;
+
+            modalZoom = 1;
+            modalPanX = 0;
+            modalPanY = 0;
+
+            if (isVideo) {
+                if (modalImg) modalImg.classList.add('hidden');
+                if (modalZoomControls) modalZoomControls.classList.add('hidden');
+                if (modalVidContainer) modalVidContainer.classList.remove('hidden');
+                if (modalVidSource) modalVidSource.src = activeMedia.url;
+                if (modalVid) {
+                    modalVid.load();
+                    modalVid.play().catch(() => {});
+                }
+            } else {
+                if (modalVid) modalVid.pause();
+                if (modalVidContainer) modalVidContainer.classList.add('hidden');
+                if (modalZoomControls) modalZoomControls.classList.remove('hidden');
+                if (modalImg) {
+                    modalImg.classList.remove('hidden');
+                    modalImg.src = activeMedia.url;
+                }
+                updateModalTransform();
+            }
+        }
+
+        function updateModalTransform() {
+            const img = document.getElementById('modal-main-image');
+            const label = document.getElementById('modal-zoom-level');
             if (!img) return;
 
-            if (currentZoom > 1) {
-                const maxPan = (currentZoom - 1) * 180;
-                currentPanX = Math.max(Math.min(currentPanX, maxPan), -maxPan);
-                currentPanY = Math.max(Math.min(currentPanY, maxPan), -maxPan);
+            if (modalZoom > 1) {
+                const maxPanX = (modalZoom - 1) * 350;
+                const maxPanY = (modalZoom - 1) * 350;
+                modalPanX = Math.max(Math.min(modalPanX, maxPanX), -maxPanX);
+                modalPanY = Math.max(Math.min(modalPanY, maxPanY), -maxPanY);
             } else {
-                currentPanX = 0;
-                currentPanY = 0;
+                modalPanX = 0;
+                modalPanY = 0;
             }
 
-            img.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
-            if (label) label.textContent = `${Math.round(currentZoom * 100)}%`;
+            img.style.transform = `scale(${modalZoom}) translate(${modalPanX / modalZoom}px, ${modalPanY / modalZoom}px)`;
+            if (label) label.textContent = `${Math.round(modalZoom * 100)}%`;
         }
 
-        function zoomPdpImage(factor) {
+        function zoomBigScreenImage(factor) {
             if (factor === 'reset') {
-                currentZoom = 1;
-                currentPanX = 0;
-                currentPanY = 0;
+                modalZoom = 1;
+                modalPanX = 0;
+                modalPanY = 0;
             } else {
-                currentZoom = Math.min(Math.max(1, currentZoom + factor), 3.5);
-                if (currentZoom === 1) {
-                    currentPanX = 0;
-                    currentPanY = 0;
+                modalZoom = Math.min(Math.max(1, modalZoom + factor), 4.0);
+                if (modalZoom === 1) {
+                    modalPanX = 0;
+                    modalPanY = 0;
                 }
             }
-            updatePdpTransform();
+            updateModalTransform();
         }
 
-        function togglePdpZoom() {
-            zoomPdpImage(currentZoom === 1 ? 1.0 : 'reset');
+        function toggleModalZoom(e) {
+            if (e) e.stopPropagation();
+            zoomBigScreenImage(modalZoom === 1 ? 1.0 : 'reset');
         }
 
-        function startPdpDrag(e) {
-            if (currentZoom <= 1) return;
-            isDragging = true;
-            startX = e.clientX - currentPanX;
-            startY = e.clientY - currentPanY;
+        function prevBigScreenMedia(e) {
+            if (e) e.stopPropagation();
+            const list = getPdpMediaList();
+            currentMediaIndex = (currentMediaIndex - 1 + list.length) % list.length;
+            renderPdpMediaView();
+            renderBigScreenModalMedia();
         }
 
-        function dragPdpImage(e) {
-            if (!isDragging || currentZoom <= 1) return;
-            currentPanX = e.clientX - startX;
-            currentPanY = e.clientY - startY;
-            updatePdpTransform();
+        function nextBigScreenMedia(e) {
+            if (e) e.stopPropagation();
+            const list = getPdpMediaList();
+            currentMediaIndex = (currentMediaIndex + 1) % list.length;
+            renderPdpMediaView();
+            renderBigScreenModalMedia();
         }
 
-        function stopPdpDrag() {
-            isDragging = false;
+        function startModalDrag(e) {
+            if (modalZoom <= 1) return;
+            isModalDragging = true;
+            modalStartX = e.clientX - modalPanX;
+            modalStartY = e.clientY - modalPanY;
         }
 
-        function initPdpTouchControls() {
-            const container = document.getElementById('pdp-image-container');
-            if (!container) return;
+        function dragModalImage(e) {
+            if (!isModalDragging || modalZoom <= 1) return;
+            modalPanX = e.clientX - modalStartX;
+            modalPanY = e.clientY - modalStartY;
+            updateModalTransform();
+        }
 
-            container.addEventListener('touchstart', function(e) {
+        function stopModalDrag() {
+            isModalDragging = false;
+        }
+
+        let modalEventsInitialized = false;
+        function initModalEvents() {
+            if (modalEventsInitialized) return;
+            modalEventsInitialized = true;
+
+            const viewport = document.getElementById('modal-viewport');
+            if (!viewport) return;
+
+            // Mouse wheel zoom
+            viewport.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                const delta = e.deltaY < 0 ? 0.25 : -0.25;
+                zoomBigScreenImage(delta);
+            }, { passive: false });
+
+            // Touch gesture engine (Pinch-to-zoom & double-tap on Big Screen Modal)
+            viewport.addEventListener('touchstart', function(e) {
                 if (e.touches.length === 2) {
-                    // 2-Finger Pinch Zoom Initiation
                     e.preventDefault();
-                    isDragging = false;
-                    initialPinchDistance = getTouchDistance(e.touches);
-                    initialZoomOnPinch = currentZoom;
+                    isModalDragging = false;
+                    modalInitialPinchDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    modalInitialZoom = modalZoom;
                 } else if (e.touches.length === 1) {
                     const touch = e.touches[0];
-                    touchStartSwipeX = touch.clientX;
-                    touchStartSwipeY = touch.clientY;
-
-                    if (currentZoom > 1) {
+                    if (modalZoom > 1) {
                         e.preventDefault();
-                        isDragging = true;
-                        startX = touch.clientX - currentPanX;
-                        startY = touch.clientY - currentPanY;
+                        isModalDragging = true;
+                        modalStartX = touch.clientX - modalPanX;
+                        modalStartY = touch.clientY - modalPanY;
                     }
                 }
             }, { passive: false });
 
-            container.addEventListener('touchmove', function(e) {
-                if (e.touches.length === 2 && initialPinchDistance) {
-                    // 2-Finger Pinch Zooming
+            viewport.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 2 && modalInitialPinchDist) {
                     e.preventDefault();
-                    const currentDist = getTouchDistance(e.touches);
-                    const scale = currentDist / initialPinchDistance;
-                    currentZoom = Math.min(Math.max(1, initialZoomOnPinch * scale), 3.5);
-                    updatePdpTransform();
-                } else if (e.touches.length === 1 && isDragging && currentZoom > 1) {
-                    // 1-Finger Panning when zoomed
+                    const currentDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    const scale = currentDist / modalInitialPinchDist;
+                    modalZoom = Math.min(Math.max(1, modalInitialZoom * scale), 4.0);
+                    updateModalTransform();
+                } else if (e.touches.length === 1 && isModalDragging && modalZoom > 1) {
                     e.preventDefault();
                     const touch = e.touches[0];
-                    currentPanX = touch.clientX - startX;
-                    currentPanY = touch.clientY - startY;
-                    updatePdpTransform();
+                    modalPanX = touch.clientX - modalStartX;
+                    modalPanY = touch.clientY - modalStartY;
+                    updateModalTransform();
                 }
             }, { passive: false });
 
-            container.addEventListener('touchend', function(e) {
+            viewport.addEventListener('touchend', function(e) {
                 if (e.touches.length < 2) {
-                    initialPinchDistance = null;
+                    modalInitialPinchDist = null;
                 }
                 if (e.touches.length === 0) {
-                    isDragging = false;
-                    
-                    // Snap back if zoom was slightly below threshold
-                    if (currentZoom < 1.05) {
-                        zoomPdpImage('reset');
+                    isModalDragging = false;
+                    if (modalZoom < 1.05) {
+                        zoomBigScreenImage('reset');
                     }
-
-                    // 1-Finger horizontal swipe navigation when not zoomed in
-                    if (currentZoom === 1 && e.changedTouches && e.changedTouches.length === 1) {
-                        const touchEnd = e.changedTouches[0];
-                        const diffX = touchEnd.clientX - touchStartSwipeX;
-                        const diffY = touchEnd.clientY - touchStartSwipeY;
-                        if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
-                            if (diffX < 0) {
-                                nextPdpMedia();
-                            } else {
-                                prevPdpMedia();
-                            }
-                        }
-                    }
-
-                    // Double-tap zoom toggle on mobile
                     const now = Date.now();
-                    if (now - lastTouchEndTime < 280) {
-                        togglePdpZoom();
+                    if (now - modalLastTouchTime < 300) {
+                        toggleModalZoom();
                     }
-                    lastTouchEndTime = now;
+                    modalLastTouchTime = now;
+                }
+            });
+
+            // Global Keydown Handler for Big Screen Modal (Esc, Left, Right, +, -)
+            window.addEventListener('keydown', function(e) {
+                const modal = document.getElementById('big-screen-modal');
+                if (!modal || modal.classList.contains('hidden')) return;
+
+                if (e.key === 'Escape') {
+                    closeBigScreenModal();
+                } else if (e.key === 'ArrowLeft') {
+                    prevBigScreenMedia();
+                } else if (e.key === 'ArrowRight') {
+                    nextBigScreenMedia();
+                } else if (e.key === '+' || e.key === '=') {
+                    zoomBigScreenImage(0.35);
+                } else if (e.key === '-' || e.key === '_') {
+                    zoomBigScreenImage(-0.35);
                 }
             });
         }
@@ -1681,12 +1871,13 @@
                 const res = await fetch(`/api/shipments/serviceability?pincode=${pincode}&cod=1`);
                 const data = await res.json();
                 if (data.success && data.data && data.data.isServiceable) {
+                    const estDateStr = getFormattedEstimatedDelivery(4);
                     resultBox.className = 'mt-2 text-[11px] p-2.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2';
                     resultBox.innerHTML = `
                         <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                         <div>
                             <div class="font-bold">✓ Delivery Available to ${data.data.city || ''} ${data.data.state ? '(' + data.data.state + ')' : ''}</div>
-                            <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery: <b>${data.data.estimatedDays || '3-4 Days'}</b> • Express Shipping & Cash on Delivery Available</div>
+                            <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> (${data.data.estimatedDays || '3-4 Days'}) • Express Shipping & Cash on Delivery Available</div>
                         </div>
                     `;
                 } else {
@@ -2000,12 +2191,13 @@
                         currentShippingFee = data.data.shippingCharge || 50;
                         updateCartUI(false);
 
+                        const estDateStr = getFormattedEstimatedDelivery(4);
                         badge.className = 'text-[11px] p-2.5 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2';
                         badge.innerHTML = `
                             <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                             <div>
                                 <div class="font-bold">✓ Delivery Available to ${data.data.city || ''} ${data.data.state ? '(' + data.data.state + ')' : ''}</div>
-                                <div class="text-[10px] text-emerald-700 mt-0.5">Est: <b>${data.data.estimatedDays || '3-4 Days'}</b> • Shipping Charge: <b>Rs. ${currentShippingFee}</b> (COD Available)</div>
+                                <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> • Shipping: <b>Rs. ${currentShippingFee}</b> (COD Available)</div>
                             </div>
                         `;
                         const cityInput = document.getElementById('ship-city');
