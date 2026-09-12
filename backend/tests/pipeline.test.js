@@ -231,7 +231,7 @@ async function runTests() {
   await test('Scenario 5: Duplicate Razorpay webhook -> Processed once, duplicate ignored', async () => {
     const createRes = await makeRequest('POST', '/api/orders/create', {
       customer: mockCustomer,
-      items: [{ sku: 'fati_003', quantity: 1 }],
+      items: [{ sku: 'fati_002', quantity: 1 }],
       paymentMethod: 'razorpay'
     });
 
@@ -245,7 +245,7 @@ async function runTests() {
           entity: {
             id: 'pay_webhook_dup_888',
             order_id: razorpayOrderId,
-            amount: 49100,
+            amount: 55900,
             status: 'captured'
           }
         }
@@ -411,7 +411,7 @@ async function runTests() {
   await test('Scenario 12: Browser closes after payment -> Webhook captures payment & books shipment', async () => {
     const createRes = await makeRequest('POST', '/api/orders/create', {
       customer: mockCustomer,
-      items: [{ sku: 'fati_006', quantity: 1 }],
+      items: [{ sku: 'fati_005', quantity: 1 }],
       paymentMethod: 'razorpay'
     });
     const { orderId, razorpayOrderId } = createRes.body.data;
@@ -425,7 +425,7 @@ async function runTests() {
           entity: {
             id: 'pay_bg_webhook_999',
             order_id: razorpayOrderId,
-            amount: 49100,
+            amount: 55900,
             status: 'captured'
           }
         }
@@ -602,7 +602,7 @@ async function runTests() {
     let thrownErr = null;
     try {
       await catalogService.buildTrustedOrderItems([
-        { sku: 'fati_003', quantity: 1 }
+        { sku: 'fati_002', quantity: 1 }
       ], '400001', 'RAB112');
     } catch (e) {
       thrownErr = e;

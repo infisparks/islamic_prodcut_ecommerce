@@ -171,7 +171,7 @@
     </header>
 
     <!-- BREADCRUMB -->
-    <div class="bg-white border-b border-gray-200 text-[11px] text-gray-500 py-2 px-4 sm:px-6">
+    <div class="hidden sm:block bg-white border-b border-gray-200 text-[11px] text-gray-500 py-2 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto flex items-center gap-1.5 flex-wrap">
             <a href="index.html" class="hover:text-gold-600 flex items-center gap-1"><i class="fa-solid fa-house text-[10px]"></i> Home</a>
             <i class="fa-solid fa-chevron-right text-[8px] text-gray-400"></i>
@@ -182,37 +182,37 @@
     </div>
 
     <!-- MAIN PRODUCT DETAIL CONTAINER -->
-    <main class="flex-grow max-w-6xl mx-auto w-full px-3 sm:px-6 py-4 sm:py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
+    <main class="flex-grow max-w-6xl mx-auto w-full px-2.5 sm:px-6 py-2 sm:py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-10">
 
             <!-- LEFT COLUMN: MEDIA SHOWCASE & ZOOM GALLERY (lg:col-span-6) -->
-            <div class="lg:col-span-6 space-y-3">
+            <div class="lg:col-span-6 space-y-2">
                 
-                <!-- Main Media Frame -->
-                <div class="relative w-full aspect-square sm:aspect-[4/3] max-h-[380px] sm:max-h-[460px] rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border-2 border-gold-500/40 shadow-card-premium flex items-center justify-center select-none group">
+                <!-- Main Media Frame (Compact on mobile to preserve screen height) -->
+                <div class="relative w-full aspect-[4/3] max-h-[220px] xs:max-h-[260px] sm:max-h-[460px] rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border-2 border-gold-500/40 shadow-card-premium flex items-center justify-center select-none group">
                     
                     <!-- Floating Overlay Badges -->
-                    <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5 flex-wrap max-w-[75%] pointer-events-none">
-                        <span id="pdp-badge" class="bg-black/85 backdrop-blur-md text-gold-400 text-[10px] font-extrabold px-3 py-1 rounded-full border border-gold-500/50 uppercase shadow-md">
+                    <div class="absolute top-2.5 left-2.5 z-20 flex items-center gap-1 flex-wrap max-w-[80%] pointer-events-none">
+                        <span id="pdp-badge" class="bg-black/85 backdrop-blur-md text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/50 uppercase shadow-md">
                             CARD • AUTHENTIC
                         </span>
-                        <span id="pdp-sku-badge" class="bg-purple-950/85 backdrop-blur-md text-purple-200 text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border border-purple-400/40 shadow-md">
+                        <span id="pdp-sku-badge" class="hidden xs:inline-block bg-purple-950/85 backdrop-blur-md text-purple-200 text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-purple-400/40 shadow-md">
                             SKU: fati_001
                         </span>
-                        <span id="pdp-weight-badge" class="bg-emerald-950/85 backdrop-blur-md text-emerald-300 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/40 shadow-md">
+                        <span id="pdp-weight-badge" class="bg-emerald-950/85 backdrop-blur-md text-emerald-300 text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/40 shadow-md">
                             150gm
                         </span>
                     </div>
 
                     <!-- Slide Counter Badge on Top-Right -->
-                    <div class="absolute top-3 right-3 z-20 pointer-events-none">
-                        <span id="pdp-media-counter" class="bg-black/80 backdrop-blur-md text-gold-300 font-mono text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-gold-500/40 shadow-md">
+                    <div class="absolute top-2.5 right-2.5 z-20 pointer-events-none">
+                        <span id="pdp-media-counter" class="bg-black/80 backdrop-blur-md text-gold-300 font-mono text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-gold-500/40 shadow-md">
                             1 / 1
                         </span>
                     </div>
 
-                    <!-- Zoom Controls (for Image) -->
-                    <div id="pdp-zoom-controls" class="absolute bottom-3 left-3 z-20 flex items-center gap-1 bg-black/80 backdrop-blur-md text-white p-1 rounded-xl border border-gold-500/40 text-xs shadow-xl">
+                    <!-- Zoom Controls (for Image - Desktop only to save mobile clutter) -->
+                    <div id="pdp-zoom-controls" class="hidden sm:flex absolute bottom-3 left-3 z-20 items-center gap-1 bg-black/80 backdrop-blur-md text-white p-1 rounded-xl border border-gold-500/40 text-xs shadow-xl">
                         <button onclick="zoomPdpImage(-0.3)" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-gold-500 hover:text-onyx flex items-center justify-center font-bold transition-colors" title="Zoom Out">
                             <i class="fa-solid fa-magnifying-glass-minus text-xs"></i>
                         </button>
@@ -226,7 +226,7 @@
                     </div>
 
                     <!-- Image View Container -->
-                    <div id="pdp-image-container" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-4 touch-none select-none relative"
+                    <div id="pdp-image-container" class="w-full h-full flex items-center justify-center overflow-hidden cursor-grab active:cursor-grabbing p-2 sm:p-4 touch-none select-none relative"
                          onmousedown="startPdpDrag(event)" onmousemove="dragPdpImage(event)" onmouseup="stopPdpDrag()" onmouseleave="stopPdpDrag()" ondblclick="togglePdpZoom()">
                         <img id="pdp-main-image" src="product/umrah_card_english.webp" alt="Product View" fetchpriority="high" decoding="async" width="600" height="600" class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-75 origin-center pointer-events-none select-none">
                     </div>
@@ -246,108 +246,91 @@
                     </div>
 
                     <!-- Media Slide Arrows -->
-                    <button onclick="prevPdpMedia()" class="absolute left-2.5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Previous Media">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    <button onclick="prevPdpMedia()" class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Previous Media">
+                        <i class="fa-solid fa-chevron-left text-[10px] sm:text-xs"></i>
                     </button>
-                    <button onclick="nextPdpMedia()" class="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Next Media">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    <button onclick="nextPdpMedia()" class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Next Media">
+                        <i class="fa-solid fa-chevron-right text-[10px] sm:text-xs"></i>
                     </button>
-                </div>
-
-                <!-- Horizontal Interactive Media Thumbnail Gallery -->
-                <div id="pdp-gallery-card" class="bg-white p-2 rounded-2xl border border-gray-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-1.5 px-1">
-                        <span class="text-[11px] font-bold text-onyx flex items-center gap-1">
-                            <i class="fa-solid fa-images text-gold-600 text-xs"></i>
-                            <span>All Cards & Demo Video</span>
-                        </span>
-                        <span id="pdp-gallery-hint" class="text-[9px] font-semibold text-gray-500">
-                            Click to view each card
-                        </span>
-                    </div>
-                    <div id="pdp-thumbnails-strip" class="flex items-center gap-2 overflow-x-auto pb-1 px-0.5 no-scrollbar scroll-smooth">
-                        <!-- Dynamically generated thumbnails -->
-                    </div>
                 </div>
 
             </div>
 
             <!-- RIGHT COLUMN: PRODUCT DETAILS & BUY ACTIONS (lg:col-span-6) -->
-            <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
+            <div class="lg:col-span-6 flex flex-col justify-between space-y-2.5 sm:space-y-4">
                 
                 <div>
-                    <!-- Title & Rating -->
-                    <div class="flex items-center gap-2 text-xs text-amber-600 mb-1 flex-wrap">
+                    <!-- Title & Rating (Ultra-Compact on mobile) -->
+                    <div class="flex items-center gap-1.5 text-[10.5px] text-amber-600 mb-1 flex-wrap">
                         <span class="font-bold">★★★★★</span>
-                        <span id="pdp-rating" class="font-semibold text-gray-600">(614 Verified Reviews)</span>
-                        <span id="pdp-sold-badge" class="text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded-full border border-amber-300 text-[10px] flex items-center gap-1">
+                        <span id="pdp-rating" class="font-semibold text-gray-600">(614 Reviews)</span>
+                        <span id="pdp-sold-badge" class="text-amber-800 font-bold bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-300 text-[9px] sm:text-[10px] flex items-center gap-1">
                             <i class="fa-solid fa-fire text-amber-500"></i>
                             <span id="pdp-sold-text">1,820 sold</span>
                         </span>
-                        <span class="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 text-[10px]">
-                            In Stock • Ready to Dispatch
+                        <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200 text-[9px] sm:text-[10px]">
+                            In Stock
                         </span>
                     </div>
 
-                    <!-- ULTRA-COMPACT LANGUAGE SELECTOR (Slim Bar) -->
-                    <div id="pdp-language-selector-section" class="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-3 bg-sand/70 p-2 rounded-xl border border-gold-300/60 shadow-xs">
-                        <span class="text-[11px] font-bold text-onyx flex items-center gap-1 pl-0.5 flex-shrink-0">
-                            <i class="fa-solid fa-language text-gold-600 text-xs"></i> Language:
-                        </span>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full flex-1">
-                            <button type="button" onclick="switchProductLanguage('English')" id="lang-btn-English" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
-                                <span>🇬🇧 English</span>
-                                <span class="text-[9px] font-semibold opacity-75">1,820 sold</span>
-                            </button>
-                            <button type="button" onclick="switchProductLanguage('Urdu')" id="lang-btn-Urdu" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
-                                <span>🇵🇰 اردو</span>
-                                <span class="text-[9px] font-semibold opacity-75">1,450 sold</span>
-                            </button>
-                            <button type="button" onclick="switchProductLanguage('Hindi')" id="lang-btn-Hindi" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
-                                <span>🇮🇳 हिंदी</span>
-                                <span class="text-[9px] font-semibold opacity-75">1,310 sold</span>
-                            </button>
-                            <button type="button" onclick="switchProductLanguage('Roman')" id="lang-btn-Roman" class="py-1 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-between gap-1 cursor-pointer border">
-                                <span>🔤 Roman</span>
-                                <span class="text-[9px] font-semibold opacity-75">1,540 sold</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <h1 id="pdp-title" class="font-cinzel text-xl sm:text-2xl lg:text-3xl font-extrabold text-onyx leading-tight mb-2">
+                    <h1 id="pdp-title" class="font-cinzel text-base xs:text-lg sm:text-2xl lg:text-3xl font-extrabold text-onyx leading-tight mb-1">
                         Umrah Dua & Guide Cards (English)
                     </h1>
 
                     <!-- Dynamic Price Display -->
-                    <div class="flex items-center gap-2.5 mb-4 flex-wrap">
-                        <span id="pdp-price" class="text-2xl sm:text-3xl font-black text-onyx">Rs. 699</span>
-                        <span id="pdp-old-price" class="text-sm sm:text-base text-gray-400 line-through">MRP Rs. 999</span>
-                        <span id="pdp-discount-badge" class="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-lg border border-red-200">
-                            -30% OFF
+                    <div class="flex items-baseline gap-2 mb-2 flex-wrap">
+                        <span id="pdp-price" class="text-xl sm:text-3xl font-black text-onyx">Rs. 559</span>
+                        <span id="pdp-old-price" class="text-xs sm:text-base text-gray-400 line-through">MRP Rs. 1118</span>
+                        <span id="pdp-discount-badge" class="text-[10px] sm:text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-md border border-red-200">
+                            -50% OFF
                         </span>
                     </div>
 
-                    <p id="pdp-desc" class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4">
+                    <!-- ULTRA-COMPACT 4-COLUMN LANGUAGE SELECTOR (Slim Bar with Zero Mobile Clutter) -->
+                    <div id="pdp-language-selector-section" class="flex flex-col gap-1 mb-2.5 bg-sand/60 p-1.5 sm:p-2 rounded-xl border border-gold-300/50 shadow-xs">
+                        <div class="flex items-center justify-between px-1">
+                            <span class="text-[10.5px] font-bold text-onyx flex items-center gap-1">
+                                <i class="fa-solid fa-language text-gold-600 text-xs"></i> Select Language:
+                            </span>
+                            <span class="text-[9px] font-semibold text-gray-500 hidden sm:inline">Tap to switch edition</span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-1 w-full">
+                            <button type="button" onclick="switchProductLanguage('English')" id="lang-btn-English" class="py-1 px-1 rounded-lg text-[10.5px] sm:text-[11px] font-bold transition-all flex items-center justify-center gap-0.5 cursor-pointer border truncate">
+                                <span>🇬🇧 English</span>
+                            </button>
+                            <button type="button" onclick="switchProductLanguage('Urdu')" id="lang-btn-Urdu" class="py-1 px-1 rounded-lg text-[10.5px] sm:text-[11px] font-bold transition-all flex items-center justify-center gap-0.5 cursor-pointer border truncate">
+                                <span>🇵🇰 اردو</span>
+                            </button>
+                            <button type="button" onclick="switchProductLanguage('Hindi')" id="lang-btn-Hindi" class="py-1 px-1 rounded-lg text-[10.5px] sm:text-[11px] font-bold transition-all flex items-center justify-center gap-0.5 cursor-pointer border truncate">
+                                <span>🇮🇳 हिंदी</span>
+                            </button>
+                            <button type="button" onclick="switchProductLanguage('Roman')" id="lang-btn-Roman" class="py-1 px-1 rounded-lg text-[10.5px] sm:text-[11px] font-bold transition-all flex items-center justify-center gap-0.5 cursor-pointer border truncate">
+                                <span>🔤 Roman</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p id="pdp-desc" class="hidden sm:block text-xs sm:text-sm text-gray-600 leading-relaxed mb-3">
                         Authentic Umrah Dua cards with clear translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.
                     </p>
 
-                    <!-- INTERACTIVE KIT / PACKAGE VARIANT SELECTION -->
-                    <div id="pdp-variants-container" class="bg-white border border-gray-200 rounded-2xl p-3.5 sm:p-4 mb-4 shadow-xs">
-                        <div class="flex items-center justify-between mb-2.5">
-                            <label class="text-xs sm:text-sm font-bold text-onyx flex items-center gap-1.5">
+                    <!-- INTERACTIVE KIT / PACKAGE VARIANT SELECTION (Clean 2-Column Side-by-Side Grid) -->
+                    <div id="pdp-variants-container" class="bg-white border border-gray-200 rounded-2xl p-2.5 sm:p-4 mb-3 shadow-xs">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-[11px] sm:text-sm font-bold text-onyx flex items-center gap-1.5">
                                 <i class="fa-solid fa-layer-group text-gold-600"></i>
-                                <span>Select Kit / Package Option:</span>
+                                <span>Select Kit Option:</span>
                             </label>
-                            <span class="text-[10px] font-bold text-gold-700 bg-gold-100 px-2 py-0.5 rounded-full border border-gold-300">
-                                3 Kit Options
+                            <span id="pdp-kit-options-badge" class="text-[9px] sm:text-[10px] font-bold text-gold-700 bg-gold-100 px-2 py-0.5 rounded-full border border-gold-300">
+                                2 Kit Options
                             </span>
                         </div>
 
-                        <!-- Variant Cards Slider -->
-                        <div id="pdp-variants-slider" class="flex gap-2.5 overflow-x-auto pb-2 -mx-1 px-1 no-scrollbar scroll-smooth snap-x snap-mandatory"></div>
+                        <!-- 2 Variant Cards Grid (Clean Side-by-Side on Mobile) -->
+                        <div id="pdp-variants-slider" class="grid grid-cols-2 gap-2 sm:gap-3"></div>
 
                         <!-- Inclusions Checklist Box -->
-                        <div id="pdp-inclusions-box" class="mt-3 pt-2.5 border-t border-gray-200"></div>
+                        <div id="pdp-inclusions-box" class="mt-2.5 pt-2 border-t border-gray-200"></div>
                     </div>
 
                     <!-- TRUST & QUALITY GUARANTEE BADGES -->
@@ -820,21 +803,11 @@
                 features: ["Authentic Urdu Translation", "Arabic Script & Ritual Guidance", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_003",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
-                        oldPrice: 982,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
-                    },
-                    {
                         sku: "fati_002",
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
-                        price: 589,
-                        oldPrice: 1178,
+                        price: 559,
+                        oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -882,21 +855,11 @@
                 features: ["Clear English Translation", "Arabic Script + Transliteration", "35+ Step-by-Step Duas", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_006",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
-                        oldPrice: 982,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
-                    },
-                    {
                         sku: "fati_005",
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
-                        price: 589,
-                        oldPrice: 1178,
+                        price: 559,
+                        oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -959,21 +922,11 @@
                 features: ["Full Hindi Translation", "Arabic Script & Transliteration", "100% Waterproof Laminated", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_009",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
-                        oldPrice: 982,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
-                    },
-                    {
                         sku: "fati_008",
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
-                        price: 589,
-                        oldPrice: 1178,
+                        price: 559,
+                        oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -1025,21 +978,11 @@
                 features: ["Roman Phonetic Pronunciation", "Step-by-Step Tawaf Guidance", "Stainless Binder Ring", "Tawaf Tasbih Counter Included"],
                 variants: [
                     {
-                        sku: "fati_012",
-                        name: "Essential Pack (Cards + Tawaf Tasbih)",
-                        shortName: "Cards + Tawaf Tasbih",
-                        price: 491,
-                        oldPrice: 982,
-                        weight: "100gm",
-                        tag: "Essential",
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)"]
-                    },
-                    {
                         sku: "fati_011",
                         name: "Standard Kit (Cards + Tasbih + Lanyard)",
                         shortName: "Cards + Tasbih + Lanyard",
-                        price: 589,
-                        oldPrice: 1178,
+                        price: 559,
+                        oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
@@ -1218,7 +1161,7 @@
             if (!isNaN(variantParam) && foundProduct.variants && foundProduct.variants[variantParam]) {
                 currentVariantIndex = variantParam;
             } else {
-                // By default keep cheapest variant selected (e.g. Rs. 491)
+                // By default keep cheapest variant selected (e.g. Rs. 559)
                 currentVariantIndex = getCheapestVariantIndex(foundProduct);
             }
 
@@ -1380,9 +1323,9 @@
                         const btn = document.getElementById(`lang-btn-${l}`);
                         if (btn) {
                             if (p.language === l) {
-                                btn.className = 'py-1 px-2 rounded-lg text-[11px] font-extrabold bg-onyx text-gold-400 border border-gold-500 shadow-xs ring-1 ring-gold-400/50 flex items-center justify-between gap-1 cursor-pointer transition-all';
+                                btn.className = 'py-1 px-1 rounded-lg text-[10.5px] sm:text-[11px] font-extrabold bg-onyx text-gold-400 border border-gold-500 shadow-xs ring-1 ring-gold-400/50 flex items-center justify-center gap-0.5 cursor-pointer transition-all';
                             } else {
-                                btn.className = 'py-1 px-2 rounded-lg text-[11px] font-bold bg-white text-gray-700 hover:bg-gold-50 hover:border-gold-300 border border-gray-300 flex items-center justify-between gap-1 cursor-pointer transition-all';
+                                btn.className = 'py-1 px-1 rounded-lg text-[10.5px] sm:text-[11px] font-bold bg-white text-gray-700 hover:bg-gold-50 hover:border-gold-300 border border-gray-300 flex items-center justify-center gap-0.5 cursor-pointer transition-all';
                             }
                         }
                     });
@@ -1405,28 +1348,28 @@
                     const isSelected = idx === currentVariantIndex;
                     return `
                         <div onclick="selectPdpVariant(${idx})" 
-                             class="min-w-[210px] xs:min-w-[230px] sm:min-w-0 sm:flex-1 flex-shrink-0 snap-start cursor-pointer rounded-xl p-3 transition-all border-2 relative flex flex-col justify-between ${
+                             class="cursor-pointer rounded-xl p-2 sm:p-3 transition-all border-2 relative flex flex-col justify-between ${
                                  isSelected 
-                                    ? 'border-gold-500 bg-gold-50/80 shadow-md ring-2 ring-gold-400/40 scale-[1.01]' 
+                                    ? 'border-gold-500 bg-gold-50/90 shadow-md ring-2 ring-gold-400/40 scale-[1.01]' 
                                     : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/20'
                              }">
                             <div class="flex items-start justify-between gap-1 mb-1">
-                                <span class="text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase ${
-                                    idx === 0 ? 'bg-onyx text-gold-400' : idx === 1 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700'
+                                <span class="text-[7.5px] sm:text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase ${
+                                    v.tag === 'Best Value' ? 'bg-amber-100 text-amber-800' : 'bg-onyx text-gold-400'
                                 }">${v.tag}</span>
-                                <div class="w-4 h-4 rounded-full flex items-center justify-center border ${
+                                <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center border ${
                                     isSelected ? 'bg-gold-500 border-gold-600 text-onyx' : 'border-gray-300 bg-white'
                                 }">
-                                    ${isSelected ? '<i class="fa-solid fa-check text-[9px] font-bold"></i>' : ''}
+                                    ${isSelected ? '<i class="fa-solid fa-check text-[8px] sm:text-[9px] font-bold"></i>' : ''}
                                 </div>
                             </div>
-                            <div class="my-1">
-                                <div class="text-xs font-bold text-onyx leading-tight line-clamp-1">${v.shortName}</div>
-                                <div class="text-[9px] text-gray-500 font-mono">SKU: <b>${v.sku}</b> (${v.weight})</div>
+                            <div class="my-0.5 sm:my-1">
+                                <div class="text-[11px] sm:text-xs font-bold text-onyx leading-snug line-clamp-2">${v.shortName}</div>
+                                <div class="text-[8.5px] sm:text-[9px] text-gray-500 font-mono mt-0.5">SKU: <b>${v.sku}</b> (${v.weight})</div>
                             </div>
-                            <div class="pt-1.5 border-t border-gray-200/80 flex items-baseline justify-between mt-1">
-                                <span class="font-extrabold text-sm text-onyx">Rs. ${v.price}</span>
-                                <span class="text-[10px] text-gray-400 line-through">Rs. ${v.price * 2}</span>
+                            <div class="pt-1 border-t border-gray-200/80 flex items-baseline justify-between mt-1">
+                                <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${v.price}</span>
+                                <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${v.price * 2}</span>
                             </div>
                         </div>
                     `;
@@ -1434,14 +1377,14 @@
 
                 if (activeVariant && activeVariant.includes) {
                     inclusionsBox.innerHTML = `
-                        <div class="font-bold text-[11px] text-onyx mb-1.5 flex items-center gap-1">
+                        <div class="font-bold text-[10px] sm:text-[11px] text-onyx mb-1 flex items-center gap-1">
                             <i class="fa-solid fa-box-open text-emerald-600"></i> Included in Selected Package:
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-gray-700">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[10px] sm:text-xs text-gray-700">
                             ${activeVariant.includes.map(inc => `
-                                <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-1 rounded-lg border border-gray-200">
-                                    <i class="fa-solid fa-circle-check text-emerald-600 text-xs"></i>
-                                    <span class="font-medium">${inc}</span>
+                                <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                    <span class="font-medium truncate">${inc}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -1499,55 +1442,7 @@
                 mainImg.style.transform = `scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px)`;
             }
 
-            renderPdpThumbnails(mediaList);
             preloadPdpGalleryMedia(mediaList);
-        }
-
-        function renderPdpThumbnails(mediaList) {
-            const strip = document.getElementById('pdp-thumbnails-strip');
-            const galleryCard = document.getElementById('pdp-gallery-card');
-            if (!strip) return;
-
-            if (!mediaList || mediaList.length <= 1) {
-                if (galleryCard) galleryCard.classList.add('hidden');
-                return;
-            }
-            if (galleryCard) galleryCard.classList.remove('hidden');
-
-            const hintEl = document.getElementById('pdp-gallery-hint');
-            if (hintEl) {
-                hintEl.textContent = `${mediaList.length} items • Click to switch`;
-            }
-
-            strip.innerHTML = mediaList.map((item, idx) => {
-                const isActive = idx === currentMediaIndex;
-                return `
-                    <button type="button" onclick="setPdpMediaSlide(${idx})" id="pdp-thumb-${idx}"
-                            class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all p-0.5 bg-neutral-900 cursor-pointer ${
-                                isActive 
-                                    ? 'border-gold-500 ring-2 ring-gold-400/60 scale-105 shadow-md opacity-100' 
-                                    : 'border-neutral-700/70 hover:border-gold-400/60 opacity-60 hover:opacity-100'
-                            }" title="${item.title || 'Slide ' + (idx + 1)}">
-                        ${item.type === 'image' ? `
-                            <img src="${item.url}" alt="Thumbnail ${idx + 1}" class="w-full h-full object-contain rounded-lg" loading="lazy">
-                        ` : `
-                            <div class="w-full h-full bg-onyx rounded-lg flex flex-col items-center justify-center text-gold-400 text-[9px] gap-0.5 border border-gold-500/30">
-                                <i class="fa-solid fa-circle-play text-sm text-gold-500"></i>
-                                <span class="text-[7px] font-extrabold uppercase text-white tracking-wider">Video</span>
-                            </div>
-                        `}
-                        <span class="absolute bottom-0.5 right-0.5 bg-black/80 text-[8px] font-mono text-gold-300 px-1 rounded font-bold">${idx + 1}</span>
-                    </button>
-                `;
-            }).join('');
-
-            // Scroll active thumbnail smoothly into view
-            setTimeout(() => {
-                const activeThumb = document.getElementById(`pdp-thumb-${currentMediaIndex}`);
-                if (activeThumb) {
-                    activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                }
-            }, 50);
         }
 
         // Background idle preloader for gallery thumbnails

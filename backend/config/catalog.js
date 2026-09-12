@@ -13,25 +13,18 @@ const catalog = [
     dimensions: { length: 15, breadth: 10, height: 2.5 }, // cm for Shiprocket
     variants: [
       {
+        sku: "fati_002",
+        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+        price: 559,
+        weightKg: 0.12,
+        weightLabel: "120gm"
+      },
+      {
         sku: "fati_001",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm"
-      },
-      {
-        sku: "fati_002",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 589,
-        weightKg: 0.12,
-        weightLabel: "120gm"
-      },
-      {
-        sku: "fati_003",
-        name: "Essential Pack (Cards + Tawaf Tasbih)",
-        price: 491,
-        weightKg: 0.10,
-        weightLabel: "100gm"
       }
     ]
   },
@@ -43,25 +36,18 @@ const catalog = [
     dimensions: { length: 15, breadth: 10, height: 2.5 },
     variants: [
       {
+        sku: "fati_005",
+        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+        price: 559,
+        weightKg: 0.12,
+        weightLabel: "120gm"
+      },
+      {
         sku: "fati_004",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm"
-      },
-      {
-        sku: "fati_005",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 589,
-        weightKg: 0.12,
-        weightLabel: "120gm"
-      },
-      {
-        sku: "fati_006",
-        name: "Essential Pack (Cards + Tawaf Tasbih)",
-        price: 491,
-        weightKg: 0.10,
-        weightLabel: "100gm"
       }
     ]
   },
@@ -73,25 +59,18 @@ const catalog = [
     dimensions: { length: 15, breadth: 10, height: 2.5 },
     variants: [
       {
+        sku: "fati_008",
+        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+        price: 559,
+        weightKg: 0.12,
+        weightLabel: "120gm"
+      },
+      {
         sku: "fati_007",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm"
-      },
-      {
-        sku: "fati_008",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 589,
-        weightKg: 0.12,
-        weightLabel: "120gm"
-      },
-      {
-        sku: "fati_009",
-        name: "Essential Pack (Cards + Tawaf Tasbih)",
-        price: 491,
-        weightKg: 0.10,
-        weightLabel: "100gm"
       }
     ]
   },
@@ -103,25 +82,18 @@ const catalog = [
     dimensions: { length: 15, breadth: 10, height: 2.5 },
     variants: [
       {
+        sku: "fati_011",
+        name: "Standard Kit (Cards + Tasbih + Lanyard)",
+        price: 559,
+        weightKg: 0.12,
+        weightLabel: "120gm"
+      },
+      {
         sku: "fati_010",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm"
-      },
-      {
-        sku: "fati_011",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 589,
-        weightKg: 0.12,
-        weightLabel: "120gm"
-      },
-      {
-        sku: "fati_012",
-        name: "Essential Pack (Cards + Tawaf Tasbih)",
-        price: 491,
-        weightKg: 0.10,
-        weightLabel: "100gm"
       }
     ]
   },
