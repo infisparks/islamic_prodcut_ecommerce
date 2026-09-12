@@ -108,83 +108,70 @@
     </div>
 
     <!-- MAIN DASHBOARD WRAPPER -->
-    <div id="dashboard-section" class="hidden flex-grow flex flex-col md:flex-row min-h-screen">
+    <div id="dashboard-section" class="hidden flex-grow flex flex-col min-h-screen">
         
-        <!-- SIDEBAR -->
-        <aside class="w-full md:w-64 bg-white border-b md:border-b-0 md:border-r border-[#E5E7EB] flex flex-col justify-between flex-shrink-0">
-            <div>
-                <!-- Brand Header -->
-                <div class="p-4 border-b border-[#E5E7EB] flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
-                            FC
-                        </div>
-                        <div>
-                            <div class="text-sm font-bold text-[#111827] leading-none">FATIMA</div>
-                            <div class="text-[10px] text-[#6B7280] font-medium tracking-wide">ADMIN PORTAL</div>
-                        </div>
+        <!-- TOP NAVIGATION HEADER BAR (Clean Full-Width Header - No Sidebar) -->
+        <header class="bg-white border-b border-[#E5E7EB] sticky top-0 z-30 shadow-xs">
+            <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <!-- Brand / Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm shadow-sm">
+                        FC
                     </div>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        Live
-                    </span>
+                    <div>
+                        <div class="text-sm font-bold text-[#111827] leading-none flex items-center gap-2">
+                            <span>FATIMA CALLIGRAPHER</span>
+                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                Live Store
+                            </span>
+                        </div>
+                        <div class="text-[10.5px] text-[#6B7280] font-medium mt-0.5">Admin Management Portal</div>
+                    </div>
                 </div>
 
-                <!-- Nav Links -->
-                <nav class="p-3 space-y-1 text-sm font-medium">
-                    <a href="#orders" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 font-semibold transition-colors">
-                        <i class="fa-solid fa-boxes-stacked w-4 text-center"></i>
-                        <span>Orders & Analytics</span>
+                <!-- Center Quick Navigation & Helpline -->
+                <div class="flex items-center gap-2.5 text-xs flex-wrap">
+                    <a href="/" target="_blank" class="px-3 py-1.5 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors flex items-center gap-1.5 border border-gray-200">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-indigo-600 text-xs"></i>
+                        <span>Storefront</span>
                     </a>
-                    <a href="/" target="_blank" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#6B7280] hover:bg-gray-50 hover:text-[#111827] transition-colors">
-                        <i class="fa-solid fa-arrow-up-right-from-square w-4 text-center"></i>
-                        <span>View Storefront</span>
+                    <a href="tel:+919970347703" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-800 font-bold hover:bg-indigo-100 transition-colors flex items-center gap-1.5 border border-indigo-100">
+                        <i class="fa-solid fa-phone text-indigo-600 text-xs"></i>
+                        <span>+91 99703 47703</span>
                     </a>
-                </nav>
-
-                <!-- Support Helpline Box -->
-                <div class="p-3 mx-3 mb-2 rounded-xl bg-indigo-50 border border-indigo-100 text-xs">
-                    <div class="text-[11px] font-bold text-indigo-900 flex items-center gap-1.5 mb-1">
-                        <i class="fa-solid fa-headset text-indigo-600"></i> Customer Support Helpline
-                    </div>
-                    <div class="flex items-center justify-between gap-1 flex-wrap">
-                        <a href="tel:+919970347703" class="text-indigo-700 font-bold hover:underline flex items-center gap-1">
-                            <i class="fa-solid fa-phone text-[10px]"></i> +91 99703 47703
-                        </a>
-                        <a href="https://wa.me/919970347703" target="_blank" class="text-emerald-700 font-bold hover:underline flex items-center gap-1 text-[10px]">
-                            <i class="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp
-                        </a>
-                    </div>
+                    <a href="https://wa.me/919970347703" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-bold hover:bg-emerald-100 transition-colors flex items-center gap-1.5 border border-emerald-200">
+                        <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i>
+                        <span>WhatsApp</span>
+                    </a>
                 </div>
-            </div>
 
-            <!-- User Info & Logout -->
-            <div class="p-4 border-t border-[#E5E7EB] bg-gray-50/50">
-
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2 min-w-0">
+                <!-- Right User Info & Logout -->
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center flex-shrink-0" id="user-avatar-initial">
                             A
                         </div>
-                        <div class="min-w-0">
-                            <div class="text-xs font-semibold text-[#111827] truncate" id="admin-user-email">admin@example.com</div>
-                            <div class="text-[10px] text-[#6B7280]">Store Manager</div>
+                        <div class="hidden md:block text-left">
+                            <div class="text-xs font-bold text-[#111827] max-w-[150px] truncate" id="admin-user-email">admin@example.com</div>
+                            <div class="text-[10px] text-[#6B7280] font-medium">Store Admin</div>
                         </div>
                     </div>
-                    <button onclick="handleAdminLogout()" title="Logout" class="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
-                        <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                    <button onclick="handleAdminLogout()" title="Logout" class="px-3 py-1.5 text-xs text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                        <span>Logout</span>
                     </button>
                 </div>
             </div>
-        </aside>
+        </header>
 
         <!-- MAIN CONTENT AREA -->
-        <main class="flex-grow flex flex-col min-w-0">
+        <main class="flex-grow flex flex-col min-w-0 max-w-[1600px] w-full mx-auto">
             
-            <!-- TOP BAR -->
-            <header class="bg-white border-b border-[#E5E7EB] px-4 sm:px-6 py-3.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3 sticky top-0 z-20 shadow-2xs">
+            <!-- SUB-HEADER / ACTIONS TOOLBAR -->
+            <div class="bg-white/80 border-b border-[#E5E7EB] px-4 sm:px-6 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold text-[#111827]">Orders & Realtime Analytics</h2>
-                    <p class="text-xs text-[#6B7280]">Realtime revenue tracking, interactive booking graphs, and manual delivery settlement</p>
+                    <p class="text-xs text-[#6B7280]">Realtime revenue tracking, order product editing, and automated Shiprocket settlement</p>
                 </div>
 
                 <!-- Export & Refresh Actions Toolbar -->
@@ -213,7 +200,7 @@
                         <span>Refresh</span>
                     </button>
                 </div>
-            </header>
+            </div>
 
             <!-- DASHBOARD BODY -->
             <div class="p-4 sm:p-6 space-y-6 flex-grow">
@@ -225,16 +212,19 @@
                         <!-- Presets -->
                         <div class="flex items-center gap-1.5 flex-wrap">
                             <span class="text-xs font-bold text-[#111827] mr-1 flex items-center gap-1">
-                                <i class="fa-regular fa-calendar-days text-indigo-600"></i> Date Range:
+                                <i class="fa-regular fa-calendar-days text-indigo-600"></i> Date:
                             </span>
-                            <button type="button" onclick="setDatePreset('all')" id="btn-preset-all" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-semibold bg-indigo-600 text-white transition-colors cursor-pointer">
+                            <button type="button" onclick="setDatePreset('all')" id="btn-preset-all" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
                                 All Time
                             </button>
-                            <button type="button" onclick="setDatePreset('today')" id="btn-preset-today" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
+                            <button type="button" onclick="setDatePreset('today')" id="btn-preset-today" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-semibold bg-indigo-600 text-white transition-colors cursor-pointer">
                                 Today
                             </button>
                             <button type="button" onclick="setDatePreset('yesterday')" id="btn-preset-yesterday" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
                                 Yesterday
+                            </button>
+                            <button type="button" onclick="setDatePreset('daybeforeyesterday')" id="btn-preset-daybeforeyesterday" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
+                                Day Before Yesterday
                             </button>
                             <button type="button" onclick="setDatePreset('last7days')" id="btn-preset-last7days" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
                                 Last 7 Days
@@ -247,8 +237,17 @@
                             </button>
                         </div>
 
-                        <!-- Custom Date Pickers -->
+                        <!-- Specific Single Date & Custom Range Pickers -->
                         <div class="flex items-center gap-2 flex-wrap">
+                            <!-- Specific Date Selector -->
+                            <div class="flex items-center gap-1.5 text-xs bg-indigo-50/80 border border-indigo-200 rounded-lg px-2 py-1 shadow-2xs" title="Filter by a single specific date">
+                                <span class="text-indigo-800 font-bold text-[11px] flex items-center gap-1">
+                                    <i class="fa-solid fa-calendar-day text-indigo-600"></i> Specific Date:
+                                </span>
+                                <input type="date" id="filter-specific-date" onchange="onSpecificDateChange(this.value)" class="bg-transparent border-0 text-xs font-semibold text-indigo-950 focus:outline-none cursor-pointer">
+                            </div>
+
+                            <!-- Custom Range Pickers -->
                             <div class="flex items-center gap-1.5 text-xs bg-gray-50 border border-[#E5E7EB] rounded-lg px-2 py-1">
                                 <span class="text-[#6B7280] font-medium text-[11px]">From:</span>
                                 <input type="date" id="filter-start-date" onchange="onCustomDateChange()" class="bg-transparent border-0 text-xs font-semibold text-[#111827] focus:outline-none cursor-pointer">
@@ -608,6 +607,146 @@
         </div>
     </div>
 
+    <!-- CHANGE PRODUCT & EDIT PRICING PANEL MODAL -->
+    <div id="change-product-modal" onclick="if(event.target === this) closeChangeProductModal()" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-5 sm:p-6 border border-indigo-200 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-base shadow-xs">
+                        <i class="fa-solid fa-repeat"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm sm:text-base text-[#111827]">Change Product & Custom Pricing</h3>
+                        <p class="text-[11px] text-gray-500" id="change-product-modal-subtitle">Order #... • Customer: ...</p>
+                    </div>
+                </div>
+                <button onclick="closeChangeProductModal()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Current Product Summary Box -->
+            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs">
+                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Current Order Snapshot</div>
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                        <div class="font-bold text-[#111827] text-xs sm:text-sm" id="change-product-current-name">Loading...</div>
+                        <div class="text-[11px] text-gray-500 mt-0.5">
+                            SKU: <b id="change-product-current-sku" class="font-mono text-indigo-700">-</b> • Qty: <b id="change-product-current-qty">-</b>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[10px] text-gray-500">Current Total:</div>
+                        <div class="font-bold text-indigo-700 text-sm" id="change-product-current-price">Rs. 0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. Select Replacement Product -->
+            <div>
+                <label class="block text-xs font-bold text-[#111827] mb-1.5 flex items-center justify-between">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-box-open text-indigo-600"></i> Select New Product / Language Kit:
+                    </span>
+                    <span class="text-[10px] text-indigo-600 font-medium">Auto-loads catalog price</span>
+                </label>
+                <select id="change-product-select" onchange="onProductDropdownChanged()" class="w-full px-3 py-2.5 text-xs bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium text-gray-900 cursor-pointer shadow-2xs">
+                    <optgroup label="Urdu / اردو Kits">
+                        <option value="fati_002" data-price="559">Umrah Dua Cards (Urdu) - Standard Kit (Cards + Tasbih + Lanyard) [Rs. 559]</option>
+                        <option value="fati_001" data-price="699">Umrah Dua Cards (Urdu) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
+                    </optgroup>
+                    <optgroup label="English Kits">
+                        <option value="fati_005" data-price="559">Umrah Dua Cards (English) - Standard Kit (Cards + Tasbih + Lanyard) [Rs. 559]</option>
+                        <option value="fati_004" data-price="699">Umrah Dua Cards (English) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
+                    </optgroup>
+                    <optgroup label="Hindi / हिंदी Kits">
+                        <option value="fati_008" data-price="559">Umrah Dua Cards (Hindi) - Standard Kit (Cards + Tasbih + Lanyard) [Rs. 559]</option>
+                        <option value="fati_007" data-price="699">Umrah Dua Cards (Hindi) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
+                    </optgroup>
+                    <optgroup label="Roman English Kits">
+                        <option value="fati_011" data-price="559">Umrah Dua Cards (Roman English) - Standard Kit (Cards + Tasbih + Lanyard) [Rs. 559]</option>
+                        <option value="fati_010" data-price="699">Umrah Dua Cards (Roman English) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
+                    </optgroup>
+                    <optgroup label="Dua Stickers">
+                        <option value="fati_stk_01" data-price="199">Dua Sticker (English) [Rs. 199]</option>
+                        <option value="fati_stk_02" data-price="199">Dua Sticker (Hindi) [Rs. 199]</option>
+                        <option value="fati_stk_03" data-price="199">Dua Sticker (Urdu) [Rs. 199]</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- 2. Fully Editable Pricing & Delivery Breakdown -->
+            <div class="bg-indigo-50/40 p-3.5 rounded-xl border border-indigo-100 space-y-3">
+                <div class="flex items-center justify-between text-xs font-bold text-indigo-950 pb-1 border-b border-indigo-100/80">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-calculator text-indigo-600"></i> Editable Pricing & Shipping</span>
+                    <span class="text-[10px] text-gray-500 font-normal">Edit any field to customize</span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-700 mb-1">Quantity:</label>
+                        <input type="number" id="change-product-qty" oninput="recalcChangeProductTotal()" min="1" max="100" value="1" class="w-full px-2.5 py-1.5 text-xs bg-white border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 font-bold text-[#111827]">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-700 mb-1">Unit Price (Rs):</label>
+                        <input type="number" id="change-product-unit-price" oninput="recalcChangeProductTotal()" min="0" value="559" class="w-full px-2.5 py-1.5 text-xs bg-white border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 font-bold text-indigo-900">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-700 mb-1">Delivery Fee (Rs):</label>
+                        <input type="number" id="change-product-delivery-charge" oninput="recalcChangeProductTotal()" min="0" value="0" placeholder="0" class="w-full px-2.5 py-1.5 text-xs bg-white border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 font-bold text-gray-900">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-700 mb-1">Discount (-Rs):</label>
+                        <input type="number" id="change-product-discount" oninput="recalcChangeProductTotal()" min="0" value="0" placeholder="0" class="w-full px-2.5 py-1.5 text-xs bg-white border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 font-bold text-emerald-700">
+                    </div>
+                </div>
+
+                <!-- Hidden COD input if needed -->
+                <input type="hidden" id="change-product-cod-charge" value="0">
+
+                <!-- Live Calculated Summary Banner -->
+                <div class="bg-white p-3 rounded-lg border border-indigo-200/80 shadow-2xs flex items-center justify-between flex-wrap gap-2 text-xs">
+                    <div class="space-y-0.5 text-gray-600 text-[11px]">
+                        <div>Subtotal: <b id="preview-change-subtotal" class="text-gray-900">Rs. 559</b> • Delivery: <b id="preview-change-shipping" class="text-gray-900">FREE</b></div>
+                        <div>Discount: <b id="preview-change-discount" class="text-emerald-700">Rs. 0</b> • COD Fee: <b id="preview-change-cod" class="text-gray-900">Rs. 0</b></div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[10px] text-gray-500 font-medium">Final Order Amount:</div>
+                        <div class="text-lg font-black text-indigo-700" id="change-product-final-total">Rs. 559</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Reason & Notes Field -->
+            <div>
+                <label class="block text-xs font-bold text-[#111827] mb-1">Reason / Notes:</label>
+                <input type="text" id="change-product-reason" value="Customer requested language/product change" placeholder="e.g. Changed to Urdu Kit with Free Shipping" class="w-full px-3 py-2 text-xs bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 text-gray-800">
+            </div>
+
+            <!-- 4. Shiprocket Auto-Sync Banner -->
+            <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100 text-xs space-y-1" id="change-product-sr-notice">
+                <div class="font-bold text-indigo-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck text-indigo-600"></i> Shiprocket Live Sync
+                </div>
+                <p class="text-indigo-800 text-[11px] leading-relaxed" id="change-product-sr-msg">
+                    Updated product SKU, unit price, package weight, and delivery amount will sync directly with Shiprocket API.
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+                <button type="button" onclick="closeChangeProductModal()" class="px-4 py-2.5 bg-white border border-[#E5E7EB] text-[#111827] rounded-xl text-xs font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+                    Cancel
+                </button>
+                <button type="button" onclick="submitChangeProduct()" id="btn-save-change-product" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-check text-xs"></i>
+                    <span>Save & Update Order (<span id="btn-save-total-preview">Rs. 559</span>)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // User's Firebase Configuration
@@ -632,7 +771,7 @@
         let pendingCancelOrderId = null;
         let pendingDeleteOrderId = null;
         let searchDebounceTimer = null;
-        let activeDatePreset = 'all';
+        let activeDatePreset = 'today';
 
         // Listen to Auth State
         auth.onAuthStateChanged(async (user) => {
@@ -644,7 +783,7 @@
                     
                     document.getElementById('login-section').classList.add('hidden');
                     document.getElementById('dashboard-section').classList.remove('hidden');
-                    loadOrdersAndStats();
+                    setDatePreset('today');
                 } catch (err) {
                     console.error("Token error:", err);
                     showLoginError("Could not retrieve authentication token.");
@@ -724,30 +863,63 @@
             if (preset === 'all') {
                 startInput.value = '';
                 endInput.value = '';
+                const spec = document.getElementById('filter-specific-date');
+                if (spec) spec.value = '';
             } else if (preset === 'today') {
                 startInput.value = formatDate(now);
                 endInput.value = formatDate(now);
+                const spec = document.getElementById('filter-specific-date');
+                if (spec) spec.value = formatDate(now);
             } else if (preset === 'yesterday') {
                 const yest = new Date(now);
                 yest.setDate(yest.getDate() - 1);
                 startInput.value = formatDate(yest);
                 endInput.value = formatDate(yest);
+                const spec = document.getElementById('filter-specific-date');
+                if (spec) spec.value = formatDate(yest);
+            } else if (preset === 'daybeforeyesterday') {
+                const dby = new Date(now);
+                dby.setDate(dby.getDate() - 2);
+                startInput.value = formatDate(dby);
+                endInput.value = formatDate(dby);
+                const spec = document.getElementById('filter-specific-date');
+                if (spec) spec.value = formatDate(dby);
             } else if (preset === 'last7days') {
                 const past7 = new Date(now);
                 past7.setDate(past7.getDate() - 6);
                 startInput.value = formatDate(past7);
                 endInput.value = formatDate(now);
+                const spec = document.getElementById('filter-specific-date');
+                if (spec) spec.value = '';
             } else if (preset === 'thismonth') {
                 const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
                 startInput.value = formatDate(firstDay);
                 endInput.value = formatDate(now);
+                const spec = document.getElementById('filter-specific-date');
+                if (spec) spec.value = '';
             } else if (preset === 'last30days') {
                 const past30 = new Date(now);
                 past30.setDate(past30.getDate() - 29);
                 startInput.value = formatDate(past30);
                 endInput.value = formatDate(now);
+                const spec = document.getElementById('filter-specific-date');
+                if (spec) spec.value = '';
             }
 
+            loadOrdersAndStats();
+        }
+
+        function onSpecificDateChange(val) {
+            if (!val) return;
+            const startInput = document.getElementById('filter-start-date');
+            const endInput = document.getElementById('filter-end-date');
+            startInput.value = val;
+            endInput.value = val;
+
+            document.querySelectorAll('.date-preset-btn').forEach(btn => {
+                btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer";
+            });
+            activeDatePreset = 'specific';
             loadOrdersAndStats();
         }
 
@@ -755,19 +927,23 @@
             document.querySelectorAll('.date-preset-btn').forEach(btn => {
                 btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer";
             });
+            const spec = document.getElementById('filter-specific-date');
+            if (spec) spec.value = '';
             activeDatePreset = 'custom';
             loadOrdersAndStats();
         }
 
         function resetAllDateFilters() {
-            setDatePreset('all');
+            setDatePreset('today');
         }
 
         function clearAllFilters() {
             document.getElementById('order-search-input').value = '';
             document.getElementById('filter-status').value = 'all';
             document.getElementById('filter-provider').value = 'all';
-            setDatePreset('all');
+            const spec = document.getElementById('filter-specific-date');
+            if (spec) spec.value = '';
+            setDatePreset('today');
         }
 
         // Fetch Orders and Metrics
@@ -1082,6 +1258,11 @@
                                         <i class="fa-solid fa-file-invoice text-xs"></i> Invoice
                                     </a>
                                 ` : ''}
+                                ${status !== 'CANCELLED' ? `
+                                    <button onclick="openChangeProductModal('${orderId}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Change customer product or language kit">
+                                        <i class="fa-solid fa-repeat text-indigo-600 text-xs"></i> Change
+                                    </button>
+                                ` : ''}
                                 <button onclick="openOrderDetail('${orderId}')" class="px-2 py-1 bg-white hover:bg-gray-100 border border-[#E5E7EB] text-[#111827] rounded text-[11px] font-medium transition-colors cursor-pointer" title="View full details">
                                     View
                                 </button>
@@ -1367,15 +1548,23 @@
                 badgeEl.textContent = status;
             }
 
-            const itemsHtml = (order.items || []).map(i => `
-                <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-[#E5E7EB]">
-                    <div>
-                        <div class="font-bold text-[#111827]">${i.name || i.variantName || 'Item'}</div>
-                        <div class="text-[10px] text-gray-500 font-mono">SKU: ${i.sku || 'N/A'} • Qty: ${i.quantity || 1}</div>
+            const itemsHtml = (order.items || []).map(i => {
+                const itemQty = parseInt(i.quantity || i.qty || 1, 10);
+                const rawPrice = i.unitPrice ?? i.price ?? i.sellingPrice ?? i.rate ?? (order.pricing?.subtotal ? (order.pricing.subtotal / (order.items?.length || 1)) : 0);
+                const itemPrice = parseFloat(rawPrice || 0);
+                const lineTotal = itemPrice * itemQty;
+                return `
+                    <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-[#E5E7EB]">
+                        <div>
+                            <div class="font-bold text-[#111827]">${i.name || i.variantName || 'Item'}</div>
+                            <div class="text-[10px] text-gray-500 font-mono">SKU: ${i.sku || 'N/A'} • Qty: ${itemQty}</div>
+                        </div>
+                        <div class="font-bold text-indigo-600">
+                            Rs. ${itemPrice.toFixed(2)}${itemQty > 1 ? ` <span class="text-gray-500 text-xs font-normal">(Total: Rs. ${lineTotal.toFixed(2)})</span>` : ''}
+                        </div>
                     </div>
-                    <div class="font-bold text-indigo-600">Rs. ${parseFloat(i.price || 0).toFixed(2)}</div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             const eventsHtml = (order.events || []).map(e => `
                 <div class="text-[11px] pb-1.5 border-b border-gray-100 last:border-0">
@@ -1410,7 +1599,14 @@
 
                 <!-- Items Purchased -->
                 <div>
-                    <div class="font-bold text-[#111827] text-xs mb-2">Purchased Items</div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="font-bold text-[#111827] text-xs">Purchased Items</div>
+                        ${status !== 'CANCELLED' ? `
+                            <button type="button" onclick="openChangeProductModal('${order.orderId}')" class="px-2.5 py-1 text-[11px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-colors">
+                                <i class="fa-solid fa-repeat text-indigo-600"></i> Change / Swap Product
+                            </button>
+                        ` : ''}
+                    </div>
                     <div class="space-y-1.5">${itemsHtml}</div>
                 </div>
 
@@ -1459,6 +1655,14 @@
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span>WhatsApp Customer</span>
                 </button>
+
+                <!-- Change Product Button in Modal Actions -->
+                ${status !== 'CANCELLED' ? `
+                    <button onclick="openChangeProductModal('${order.orderId}')" class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-300 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Change product, language kit, or variant">
+                        <i class="fa-solid fa-repeat text-xs"></i>
+                        <span>Change Product</span>
+                    </button>
+                ` : ''}
 
                 <!-- Move to Shiprocket button (Confirm & Dispatch) -->
                 ${!order.shipping?.shiprocketOrderId && status !== 'CANCELLED' ? `
@@ -1860,6 +2064,206 @@
 
         function sendPendingPaymentWhatsApp(orderId) {
             openWhatsAppModal(orderId, 'payment_pending_cod');
+        }
+
+        // ==========================================
+        // CHANGE ORDER PRODUCT & CUSTOM PRICING
+        // ==========================================
+        let currentChangeProductOrderId = null;
+
+        const CATALOG_PRICE_MAP = {
+            fati_002: { name: 'Umrah Dua Cards (Urdu) - Standard Kit', price: 559, weight: '120gm' },
+            fati_001: { name: 'Umrah Dua Cards (Urdu) - Full Companion Kit', price: 699, weight: '150gm' },
+            fati_005: { name: 'Umrah Dua Cards (English) - Standard Kit', price: 559, weight: '120gm' },
+            fati_004: { name: 'Umrah Dua Cards (English) - Full Companion Kit', price: 699, weight: '150gm' },
+            fati_008: { name: 'Umrah Dua Cards (Hindi) - Standard Kit', price: 559, weight: '120gm' },
+            fati_007: { name: 'Umrah Dua Cards (Hindi) - Full Companion Kit', price: 699, weight: '150gm' },
+            fati_011: { name: 'Umrah Dua Cards (Roman English) - Standard Kit', price: 559, weight: '120gm' },
+            fati_010: { name: 'Umrah Dua Cards (Roman English) - Full Companion Kit', price: 699, weight: '150gm' },
+            fati_stk_01: { name: 'Dua Sticker (English)', price: 199, weight: '30gm' },
+            fati_stk_02: { name: 'Dua Sticker (Hindi)', price: 199, weight: '30gm' },
+            fati_stk_03: { name: 'Dua Sticker (Urdu)', price: 199, weight: '30gm' }
+        };
+
+        function onProductDropdownChanged() {
+            const selectEl = document.getElementById('change-product-select');
+            const sku = selectEl ? selectEl.value : null;
+            const catItem = CATALOG_PRICE_MAP[sku];
+            if (catItem) {
+                const unitPriceInput = document.getElementById('change-product-unit-price');
+                if (unitPriceInput) unitPriceInput.value = catItem.price;
+            }
+            recalcChangeProductTotal();
+        }
+
+        function recalcChangeProductTotal() {
+            const qty = Math.max(1, parseInt(document.getElementById('change-product-qty').value, 10) || 1);
+            const unitPrice = Math.max(0, parseFloat(document.getElementById('change-product-unit-price').value) || 0);
+            const shipping = Math.max(0, parseFloat(document.getElementById('change-product-delivery-charge').value) || 0);
+            const discount = Math.max(0, parseFloat(document.getElementById('change-product-discount').value) || 0);
+            const codCharge = Math.max(0, parseFloat(document.getElementById('change-product-cod-charge').value) || 0);
+
+            const subtotal = qty * unitPrice;
+            const finalTotal = Math.max(0, subtotal + shipping + codCharge - discount);
+
+            // Update live breakdown labels
+            const subtotalEl = document.getElementById('preview-change-subtotal');
+            if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toLocaleString('en-IN')}`;
+
+            const shippingEl = document.getElementById('preview-change-shipping');
+            if (shippingEl) shippingEl.textContent = shipping > 0 ? `+ Rs. ${shipping}` : 'FREE';
+
+            const discountEl = document.getElementById('preview-change-discount');
+            if (discountEl) discountEl.textContent = discount > 0 ? `- Rs. ${discount}` : 'Rs. 0';
+
+            const codEl = document.getElementById('preview-change-cod');
+            if (codEl) codEl.textContent = codCharge > 0 ? `+ Rs. ${codCharge}` : 'Rs. 0';
+
+            const finalTotalEl = document.getElementById('change-product-final-total');
+            if (finalTotalEl) finalTotalEl.textContent = `Rs. ${finalTotal.toLocaleString('en-IN')}`;
+
+            const btnSaveTotalEl = document.getElementById('btn-save-total-preview');
+            if (btnSaveTotalEl) btnSaveTotalEl.textContent = `Rs. ${finalTotal.toLocaleString('en-IN')}`;
+        }
+
+        function openChangeProductModal(orderId) {
+            currentChangeProductOrderId = String(orderId);
+            const order = currentOrdersList.find(o => String(o.orderId) === String(orderId));
+            if (!order) {
+                alert(`Order #${orderId} details not found. Please refresh the dashboard.`);
+                return;
+            }
+
+            const customerName = order.customer?.name || 'Customer';
+            const subtitleEl = document.getElementById('change-product-modal-subtitle');
+            if (subtitleEl) {
+                subtitleEl.textContent = `Order #${orderId} • Customer: ${customerName}`;
+            }
+
+            // Populate current item details
+            const firstItem = (order.items && order.items[0]) || {};
+            const currentNameEl = document.getElementById('change-product-current-name');
+            const currentSkuEl = document.getElementById('change-product-current-sku');
+            const currentQtyEl = document.getElementById('change-product-current-qty');
+            const currentPriceEl = document.getElementById('change-product-current-price');
+
+            if (currentNameEl) currentNameEl.textContent = firstItem.name || firstItem.productName || 'Custom Kit';
+            if (currentSkuEl) currentSkuEl.textContent = firstItem.sku || 'N/A';
+            if (currentQtyEl) currentQtyEl.textContent = `${firstItem.quantity || 1} units`;
+            if (currentPriceEl) currentPriceEl.textContent = `Rs. ${(order.pricing?.total || order.pricing?.subtotal || 0)}`;
+
+            // Populate form fields with current values
+            const qtyInput = document.getElementById('change-product-qty');
+            if (qtyInput) qtyInput.value = firstItem.quantity || 1;
+
+            const unitPriceInput = document.getElementById('change-product-unit-price');
+            if (unitPriceInput) {
+                unitPriceInput.value = firstItem.unitPrice || firstItem.price || 559;
+            }
+
+            const deliveryInput = document.getElementById('change-product-delivery-charge');
+            if (deliveryInput) {
+                deliveryInput.value = order.pricing?.shipping !== undefined ? order.pricing.shipping : 0;
+            }
+
+            const discountInput = document.getElementById('change-product-discount');
+            if (discountInput) {
+                discountInput.value = order.pricing?.discount || order.pricing?.onlineDiscount || 0;
+            }
+
+            const codInput = document.getElementById('change-product-cod-charge');
+            if (codInput) {
+                codInput.value = order.pricing?.codCharge || 0;
+            }
+
+            const selectDropdown = document.getElementById('change-product-select');
+            if (selectDropdown) {
+                if (firstItem.sku && CATALOG_PRICE_MAP[firstItem.sku]) {
+                    selectDropdown.value = firstItem.sku;
+                } else {
+                    selectDropdown.value = 'fati_002';
+                }
+            }
+
+            // Shiprocket status info
+            const srMsgEl = document.getElementById('change-product-sr-msg');
+            if (srMsgEl) {
+                if (order.shipping?.shiprocketOrderId) {
+                    srMsgEl.innerHTML = `⚡ <b>Shiprocket Order #${order.shipping.shiprocketOrderId} detected.</b> The updated item, package weight, SKU, and amounts will sync directly with Shiprocket API.`;
+                } else {
+                    srMsgEl.innerHTML = `📦 <b>Order not yet moved to Shiprocket.</b> Updating will ensure the new product, custom price, and delivery fee are stored for future dispatch.`;
+                }
+            }
+
+            recalcChangeProductTotal();
+            document.getElementById('change-product-modal').classList.remove('hidden');
+        }
+
+        function closeChangeProductModal() {
+            document.getElementById('change-product-modal').classList.add('hidden');
+            currentChangeProductOrderId = null;
+        }
+
+        async function submitChangeProduct() {
+            if (!currentChangeProductOrderId) return;
+
+            const newSku = document.getElementById('change-product-select').value;
+            const quantity = parseInt(document.getElementById('change-product-qty').value, 10) || 1;
+            const unitPrice = parseFloat(document.getElementById('change-product-unit-price').value) || 0;
+            const shippingCharge = parseFloat(document.getElementById('change-product-delivery-charge').value) || 0;
+            const discount = parseFloat(document.getElementById('change-product-discount').value) || 0;
+            const codCharge = parseFloat(document.getElementById('change-product-cod-charge').value) || 0;
+            const reason = document.getElementById('change-product-reason').value.trim() || 'Customer requested product change';
+
+            const subtotal = quantity * unitPrice;
+            const finalTotal = Math.max(0, subtotal + shippingCharge + codCharge - discount);
+
+            const saveBtn = document.getElementById('btn-save-change-product');
+            const originalBtnHtml = saveBtn.innerHTML;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-xs"></i> <span>Updating...</span>`;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(currentChangeProductOrderId)}/change-product`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({
+                        newSku,
+                        quantity,
+                        unitPrice,
+                        shippingCharge,
+                        discount,
+                        codCharge,
+                        finalTotal,
+                        reason
+                    })
+                });
+
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.error?.message || result.message || 'Failed to update order product.');
+                }
+
+                alert(`✅ Success: ${result.message}`);
+                closeChangeProductModal();
+
+                // Refresh orders
+                await loadOrdersAndStats();
+
+                // If order detail modal was open, refresh it with updated order
+                const updatedOrder = result.data;
+                if (updatedOrder && !document.getElementById('order-detail-modal').classList.contains('hidden')) {
+                    openOrderDetailModal(updatedOrder);
+                }
+            } catch (err) {
+                alert(`❌ Error updating product: ${err.message}`);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalBtnHtml;
+            }
         }
 
         function closeOrderDetailModal() {

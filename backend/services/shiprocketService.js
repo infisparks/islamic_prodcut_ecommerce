@@ -607,6 +607,78 @@ const shiprocketService = {
         error: errorMsg
       };
     }
+  },
+
+  /**
+   * Update order items / weight / dimensions directly on Shiprocket API
+   */
+  updateShipmentItems: async (order) => {
+    if (!order) {
+      return { success: false, message: 'Order object is required.' };
+    }
+
+    const token = await getAuthToken();
+    const orderItems = (order.items || []).map(item => ({
+      name: item.name || item.title,
+      sku: item.sku,
+      units: item.quantity || 1,
+      selling_price: item.unitPrice || item.price || 559,
+      discount: 0,
+      tax: 0,
+      hsn: parseInt(item.hsn || '4910', 10)
+    }));
+
+    const payload = {
+      order_id: order.orderId,
+      order_items: orderItems,
+      sub_total: order.pricing ? order.pricing.subtotal : 559,
+      length: order.package ? order.package.dimensions.length : 15,
+      breadth: order.package ? order.package.dimensions.breadth : 10,
+      height: order.package ? order.package.dimensions.height : 2.5,
+      weight: order.package ? order.package.weightKg : 0.15
+    };
+
+    // If mock/test mode or mock token
+    if (!isConfigured || token.startsWith('mock_jwt_')) {
+      logger.info('SHIPROCKET_UPDATE_ORDER_MOCK_SUCCESS', { orderId: order.orderId, itemsCount: orderItems.length });
+      return { success: true, message: 'Mock Shiprocket order items updated successfully.' };
+    }
+
+    try {
+      const response = await axios.post(
+        `${config.shiprocket.baseUrl}/orders/update/adhoc`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          timeout: 15000
+        }
+      );
+
+      logger.info('SHIPROCKET_UPDATE_ORDER_SUCCESS', {
+        orderId: order.orderId,
+        status: response.status,
+        data: response.data
+      });
+
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || (err.response?.data?.errors ? JSON.stringify(err.response.data.errors) : err.message);
+      logger.warn('SHIPROCKET_UPDATE_ORDER_NOTICE', {
+        orderId: order.orderId,
+        error: errorMsg
+      });
+
+      return {
+        success: false,
+        error: errorMsg
+      };
+    }
   }
 };
 

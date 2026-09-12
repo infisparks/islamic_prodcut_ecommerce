@@ -5,6 +5,7 @@ const axios = require('axios');
 const { verifyAdminAuth } = require('../middleware/adminAuth');
 const firebaseService = require('../services/firebaseService');
 const shiprocketService = require('../services/shiprocketService');
+const { catalog, findItemBySku } = require('../config/catalog');
 const config = require('../config/env');
 const logger = require('../utils/logger');
 
@@ -618,6 +619,200 @@ const handleMoveOrderToShiprocket = async (req, res, next) => {
 
 router.post('/orders/:orderId/retry-shipping', handleMoveOrderToShiprocket);
 router.post('/orders/:orderId/move-to-shiprocket', handleMoveOrderToShiprocket);
+
+/**
+ * GET /api/admin/catalog-items
+ * Get all available products and variants for admin item swap
+ */
+router.get('/catalog-items', (req, res) => {
+  const items = [];
+  for (const prod of catalog) {
+    for (const v of prod.variants) {
+      items.push({
+        sku: v.sku,
+        productId: prod.id,
+        productName: prod.name,
+        variantName: v.name,
+        displayName: `${prod.name} - ${v.name} (Rs. ${v.price})`,
+        price: v.price,
+        weightKg: v.weightKg,
+        weightLabel: v.weightLabel,
+        category: prod.category,
+        hsn: prod.hsn,
+        dimensions: prod.dimensions
+      });
+    }
+  }
+  res.json({ success: true, data: items });
+});
+
+/**
+ * POST /api/admin/orders/:orderId/change-product
+ * Admin order product modification & Shiprocket sync
+ */
+router.post('/orders/:orderId/change-product', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const {
+      newSku,
+      quantity = 1,
+      unitPrice,
+      shippingCharge,
+      discount = 0,
+      codCharge,
+      finalTotal,
+      reason = 'Customer requested product change'
+    } = req.body;
+
+    if (!newSku) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'SKU_REQUIRED', message: 'New product SKU is required.' }
+      });
+    }
+
+    const newItem = findItemBySku(newSku);
+    if (!newItem) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_SKU', message: `Product with SKU [${newSku}] was not found in catalog.` }
+      });
+    }
+
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const qty = Math.max(1, parseInt(quantity, 10) || 1);
+    const itemPrice = (unitPrice !== undefined && unitPrice !== null && !isNaN(parseFloat(unitPrice)))
+      ? Math.max(0, parseFloat(unitPrice))
+      : newItem.unitPrice;
+
+    const oldItemSummary = (order.items || []).map(i => `${i.name || i.title || i.sku} (x${i.quantity || 1})`).join(', ');
+
+    // Construct new item object
+    const updatedItems = [
+      {
+        productId: newItem.productId,
+        sku: newItem.sku,
+        name: `${newItem.productName} - ${newItem.variantName}`,
+        productName: newItem.productName,
+        variantName: newItem.variantName,
+        quantity: qty,
+        unitPrice: itemPrice,
+        totalPrice: itemPrice * qty,
+        weightKg: newItem.weightKg,
+        weightLabel: newItem.weightLabel,
+        hsn: newItem.hsn
+      }
+    ];
+
+    const newWeightKg = Math.max(0.05, Math.round(newItem.weightKg * qty * 1000) / 1000);
+    const newDimensions = newItem.dimensions || { length: 15, breadth: 10, height: 2.5 };
+
+    const updatedPackage = {
+      weightKg: newWeightKg,
+      dimensions: newDimensions
+    };
+
+    // Calculate custom pricing
+    const lineSubtotal = itemPrice * qty;
+    const isCod = (order.paymentMethod === 'cod') || (order.payment?.provider === 'COD');
+    
+    // Delivery charge
+    let resolvedShipping = 0;
+    if (shippingCharge !== undefined && shippingCharge !== null && !isNaN(parseFloat(shippingCharge))) {
+      resolvedShipping = Math.max(0, parseFloat(shippingCharge));
+    } else if (order.pricing?.shipping !== undefined) {
+      resolvedShipping = order.pricing.shipping;
+    } else {
+      resolvedShipping = lineSubtotal >= 699 ? 0 : 49;
+    }
+
+    const resolvedDiscount = (discount !== undefined && discount !== null && !isNaN(parseFloat(discount)))
+      ? Math.max(0, parseFloat(discount))
+      : (order.pricing?.discount || 0);
+
+    const resolvedCodCharge = (codCharge !== undefined && codCharge !== null && !isNaN(parseFloat(codCharge)))
+      ? Math.max(0, parseFloat(codCharge))
+      : (order.pricing?.codCharge || (isCod ? 40 : 0));
+
+    let calculatedTotal = lineSubtotal + resolvedShipping + (isCod ? resolvedCodCharge : 0) - resolvedDiscount;
+    if (finalTotal !== undefined && finalTotal !== null && !isNaN(parseFloat(finalTotal))) {
+      calculatedTotal = Math.max(0, parseFloat(finalTotal));
+    } else {
+      calculatedTotal = Math.max(0, calculatedTotal);
+    }
+
+    const updatedPricing = {
+      ...(order.pricing || {}),
+      subtotal: lineSubtotal,
+      shipping: resolvedShipping,
+      discount: resolvedDiscount,
+      codCharge: isCod ? resolvedCodCharge : 0,
+      total: calculatedTotal
+    };
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+    const events = order.events || [];
+
+    // Attempt Shiprocket sync if already pushed to Shiprocket
+    let shiprocketSyncNotice = '';
+    const srOrderId = order.shipping?.shiprocketOrderId;
+    if (srOrderId) {
+      const orderForSr = {
+        ...order,
+        items: updatedItems,
+        pricing: updatedPricing,
+        package: updatedPackage
+      };
+      const srUpdateRes = await shiprocketService.updateShipmentItems(orderForSr);
+      if (srUpdateRes.success) {
+        shiprocketSyncNotice = ' (Synced successfully with Shiprocket)';
+      } else {
+        shiprocketSyncNotice = ` (Shiprocket Notice: ${srUpdateRes.error || 'Please verify in Shiprocket'})`;
+      }
+    }
+
+    events.push({
+      event: 'PRODUCT_CHANGED_BY_ADMIN',
+      timestamp: now,
+      details: `Product updated to [${newItem.productName} - ${newItem.variantName} (SKU: ${newItem.sku}, Qty: ${qty}, Price: Rs. ${itemPrice}, Shipping: Rs. ${resolvedShipping}, Total: Rs. ${calculatedTotal})] by ${adminEmail}. Reason: ${reason}${shiprocketSyncNotice}`
+    });
+
+    const updates = {
+      items: updatedItems,
+      package: updatedPackage,
+      pricing: updatedPricing,
+      events
+    };
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, updates);
+    logger.info('ORDER_PRODUCT_CHANGED_BY_ADMIN', {
+      orderId,
+      oldItemSummary,
+      newSku: newItem.sku,
+      unitPrice: itemPrice,
+      shipping: resolvedShipping,
+      total: calculatedTotal,
+      adminEmail,
+      shiprocketOrderId: srOrderId
+    });
+
+    res.json({
+      success: true,
+      message: `Order #${orderId} product updated to ${newItem.productName} (Total: Rs. ${calculatedTotal})!${shiprocketSyncNotice}`,
+      data: updatedOrder
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 /**
  * POST /api/admin/orders/:orderId/whatsapp
