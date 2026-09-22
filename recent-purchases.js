@@ -296,8 +296,8 @@
             setupTouchGesture(toast);
         }
 
-        // Show first notification after 10-15 seconds on page load
-        const initialDelay = Math.floor(Math.random() * 5000) + 10000; // 10s to 15s
+        // Show first notification after 30 seconds on page load
+        const initialDelay = 30000; // 30 seconds after opening the website
         setTimeout(() => {
             showToast();
         }, initialDelay);
