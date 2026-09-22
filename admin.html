@@ -1167,7 +1167,7 @@
                 } else {
                     // Online (Razorpay)
                     if (isOnlinePaid || isDelivered) {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (5% OFF)</span>`;
+                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (10% OFF)</span>`;
                         if (awb || (order.shipping && order.shipping.shiprocketOrderId)) {
                             shippingDisplay = `
                                 <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Booked'}</div>
@@ -1314,7 +1314,7 @@
                     'Subtotal (Rs)': pricing.subtotal || 0,
                     'Coupon Code': pricing.couponCode || 'None',
                     'Coupon Discount (Rs)': pricing.discount || 0,
-                    'Online Discount 5% (Rs)': pricing.onlineDiscount || 0,
+                    'Online Discount 10% (Rs)': pricing.onlineDiscount || 0,
                     'COD Fee (Rs)': pricing.codCharge || 0,
                     'Shipping Fee (Rs)': pricing.shipping || 0,
                     'Total Amount (Rs)': pricing.total || 0,
@@ -1614,7 +1614,7 @@
                 <div class="bg-indigo-50/50 p-3.5 rounded-lg border border-indigo-100 space-y-1.5">
                     <div class="flex justify-between"><span>Items Subtotal:</span> <span>Rs. ${order.pricing?.subtotal || 0}</span></div>
                     ${order.pricing?.discount ? `<div class="flex justify-between text-emerald-700"><span>Coupon Discount (${order.pricing?.couponCode}):</span> <span>-Rs. ${order.pricing?.discount}</span></div>` : ''}
-                    ${order.pricing?.onlineDiscount ? `<div class="flex justify-between text-emerald-700 font-bold"><span>Online Discount (5% OFF):</span> <span>-Rs. ${order.pricing?.onlineDiscount}</span></div>` : ''}
+                    ${order.pricing?.onlineDiscount ? `<div class="flex justify-between text-emerald-700 font-bold"><span>Online Discount (10% OFF):</span> <span>-Rs. ${order.pricing?.onlineDiscount}</span></div>` : ''}
                     ${order.pricing?.codCharge ? `<div class="flex justify-between text-amber-800 font-bold"><span>COD Handling Charge:</span> <span>+Rs. ${order.pricing?.codCharge}</span></div>` : ''}
                     <div class="flex justify-between"><span>Delivery:</span> <span>${order.pricing?.shipping ? `Rs. ${order.pricing.shipping}` : 'FREE'}</span></div>
                     <div class="flex justify-between font-bold text-sm text-[#111827] pt-1 border-t border-indigo-200">
@@ -1622,7 +1622,7 @@
                         <span class="text-indigo-700">Rs. ${order.pricing?.total || 0}</span>
                     </div>
                     <div class="text-[10px] text-gray-500 pt-1">
-                        <b>Payment Method:</b> ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (5% OFF)'} • <b>Status:</b> ${paymentStatus}
+                        <b>Payment Method:</b> ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (10% OFF)'} • <b>Status:</b> ${paymentStatus}
                     </div>
                 </div>
 

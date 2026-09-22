@@ -51,9 +51,9 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
   // Dynamic Shipping calculation based on delivery pincode and package weight (using Shiprocket COD rate)
-  // Free Shipping on orders >= ₹699 (both COD and Online)
+  // Free Shipping on orders >= ₹999 (both COD and Online)
   let shipping = 0;
-  if (subtotal >= 699) {
+  if (subtotal >= 999) {
     shipping = 0;
   } else if (deliveryPincode) {
     const shiprocketService = require('./shiprocketService');
@@ -92,13 +92,13 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   }
 
   // Payment Method Discounts & Fees:
-  // - Online Payment: 5% Instant Discount
+  // - Online Payment: 10% Instant Discount
   const isOnlinePayment = (paymentMethod !== 'cod');
   let onlineDiscount = 0;
   let codCharge = 0;
 
   if (isOnlinePayment) {
-    onlineDiscount = Math.round(subtotal * 0.05);
+    onlineDiscount = Math.round(subtotal * 0.10);
   }
 
   const total = Math.max(0, subtotal - discount - onlineDiscount + codCharge + shipping);
