@@ -904,9 +904,9 @@
             if (countEl) countEl.textContent = totalQty;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
-            // Shiprocket Dynamic Delivery Rate; 10% Online Discount
+            // Shiprocket Dynamic Delivery Rate; Tiered Online Discount (5% on <₹999, 10% on ≥₹999)
             const isOnline = (selectedPaymentMethod !== 'cod');
-            const isFreeShipping = (subtotal >= 999);
+            const isFreeShipping = (subtotal >= 699);
             const liveShippingFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 0;
             const effectiveShipping = isFreeShipping ? 0 : liveShippingFee;
 
@@ -936,14 +936,15 @@
                 if (discountRow) discountRow.classList.add('hidden');
             }
 
-            // Prepaid 10% discount (always applicable to online payments)
-            const prepaidDiscount = Math.round(subtotal * 0.10);
+            // Prepaid Tiered discount: 10% on orders >= ₹999; 5% on orders < ₹999
+            const prepaidDiscountPercent = (subtotal >= 999) ? 10 : 5;
+            const prepaidDiscount = Math.round((subtotal * prepaidDiscountPercent) / 100);
 
             // Calculations:
-            // COD Total: Subtotal - discount + Shipping (Free if subtotal >= 999)
+            // COD Total: Subtotal - discount + Shipping (Free if subtotal >= 699)
             const codTotal = Math.max(0, subtotal - discountAmount + effectiveShipping);
 
-            // Online Total: Subtotal - discount - 10% prepaid discount + Shipping (Free if subtotal >= 999)
+            // Online Total: Subtotal - discount - prepaid discount + Shipping (Free if subtotal >= 699)
             const onlineTotal = Math.max(0, subtotal - discountAmount - prepaidDiscount + effectiveShipping);
 
             // Update badge prices in Section 2
@@ -954,17 +955,17 @@
             const savingsAmountEl = document.getElementById('summary-savings-amount');
 
             if (onlineBadgePrice) {
-                onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Save Rs. ${prepaidDiscount.toFixed(2)})`;
+                onlineBadgePrice.textContent = `Pay Rs. ${onlineTotal.toFixed(2)} (Save ${prepaidDiscountPercent}% - Rs. ${prepaidDiscount.toFixed(2)})`;
             }
             if (codBadgePrice) {
                 codBadgePrice.textContent = `Pay Rs. ${codTotal.toFixed(2)}${isFreeShipping ? ' (FREE Delivery)' : ''}`;
             }
             if (onlineOfferPill) {
-                onlineOfferPill.textContent = `⚡ ₹${prepaidDiscount.toFixed(0)} OFF`;
+                onlineOfferPill.textContent = `⚡ ₹${prepaidDiscount.toFixed(0)} OFF (${prepaidDiscountPercent}% Offer)`;
             }
             const savingsPillEl = document.getElementById('summary-savings-pill');
             if (savingsPillEl) {
-                savingsPillEl.textContent = `SAVE ₹${prepaidDiscount.toFixed(0)}`;
+                savingsPillEl.textContent = `SAVE ₹${prepaidDiscount.toFixed(0)} (${prepaidDiscountPercent}% OFF)`;
             }
             if (savingsAmountEl) {
                 savingsAmountEl.textContent = `Rs. ${prepaidDiscount.toFixed(2)}`;
@@ -983,7 +984,7 @@
 
             if (selectedPaymentMethod === 'razorpay') {
                 if (onlineRow) onlineRow.classList.remove('hidden');
-                if (onlineDiscountEl) onlineDiscountEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)}`;
+                if (onlineDiscountEl) onlineDiscountEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)} (${prepaidDiscountPercent}% OFF)`;
                 if (totalEl) totalEl.textContent = `Rs. ${onlineTotal.toFixed(2)}`;
             } else {
                 if (onlineRow) onlineRow.classList.add('hidden');
@@ -995,7 +996,7 @@
             const btnSubmitSub = document.getElementById('btn-submit-sub');
             if (btnSubmitText) {
                 if (selectedPaymentMethod === 'razorpay') {
-                    btnSubmitText.innerHTML = `<span>PAY ONLINE & SAVE Rs. ${prepaidDiscount.toFixed(2)}</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
+                    btnSubmitText.innerHTML = `<span>PAY ONLINE & SAVE Rs. ${prepaidDiscount.toFixed(2)} (${prepaidDiscountPercent}% OFF)</span> <span class="text-xs opacity-90 font-bold">(Rs. ${onlineTotal.toFixed(2)})</span>`;
                 } else {
                     btnSubmitText.innerHTML = `<span>CONFIRM CASH ON DELIVERY</span> <span class="text-xs opacity-90 font-bold">(Rs. ${codTotal.toFixed(2)})</span>`;
                 }
@@ -1128,7 +1129,7 @@
                     const courierName = info.deliveryType || (info.couriers && info.couriers[0]) || 'Express Courier Partner';
                     const etd = info.estimatedDays || '3-4 Business Days';
                     const cartSubtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
-                    const isFree = (cartSubtotal >= 999);
+                    const isFree = (cartSubtotal >= 699);
 
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
@@ -1139,12 +1140,12 @@
                             </span>
                             <span class="font-bold text-emerald-800">${isFree ? `<span class="line-through text-gray-400 font-normal text-[10px] mr-1">₹${currentShippingFee}</span> FREE Delivery` : `₹${currentShippingFee} Delivery`}</span>
                         </div>
-                        <div class="text-[10px] text-emerald-700 mt-0.5">${courierName} • Cash on Delivery Available ${isFree ? '• <span class="font-bold text-emerald-800">FREE Shipping (Orders ₹999+)</span>' : ''}</div>
+                        <div class="text-[10px] text-emerald-700 mt-0.5">${courierName} • Cash on Delivery Available ${isFree ? '• <span class="font-bold text-emerald-800">FREE Shipping (Orders ₹699+)</span>' : ''}</div>
                     `;
                 } else {
                     currentShippingFee = 52;
                     const cartSubtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
-                    const isFree = (cartSubtotal >= 999);
+                    const isFree = (cartSubtotal >= 699);
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
                         <div class="flex items-center justify-between">
@@ -1157,7 +1158,7 @@
                 spinner.classList.add('hidden');
                 currentShippingFee = 52;
                 const cartSubtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
-                const isFree = (cartSubtotal >= 999);
+                const isFree = (cartSubtotal >= 699);
                 feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                 feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (${isFree ? 'FREE Delivery' : '₹52 Delivery'})`;
             }
