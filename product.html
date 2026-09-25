@@ -128,10 +128,10 @@
     <!-- Razorpay Standard Checkout SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body class="min-h-screen flex flex-col antialiased">
+<body class="min-h-screen flex flex-col antialiased bg-[#F5F6F8]">
 
-    <!-- TOP ANNOUNCEMENT BANNER (Guaranteed 1 Row on All Mobile Screens) -->
-    <div class="bg-onyx text-gold-300 text-[9.5px] min-[360px]:text-[10.5px] sm:text-xs py-1.5 px-2 text-center font-bold flex items-center justify-center gap-1.5 sm:gap-2.5 border-b border-gold-500/30 whitespace-nowrap overflow-hidden tracking-tight">
+    <!-- TOP ANNOUNCEMENT BANNER (Desktop Only) -->
+    <div class="hidden sm:flex bg-onyx text-gold-300 text-[9.5px] min-[360px]:text-[10.5px] sm:text-xs py-1.5 px-2 text-center font-bold items-center justify-center gap-1.5 sm:gap-2.5 border-b border-gold-500/30 whitespace-nowrap overflow-hidden tracking-tight">
         <span class="flex items-center gap-1 flex-shrink-0"><i class="fa-solid fa-gift text-gold-400 text-[10px]"></i> Free Tawaf Tasbih</span>
         <span class="text-gold-600/80 flex-shrink-0">•</span>
         <span class="text-emerald-400 flex items-center gap-1 flex-shrink-0"><i class="fa-solid fa-shield-halved text-[10px]"></i> 100% Cash on Delivery</span>
@@ -139,8 +139,8 @@
         <a href="tel:+919970347703" class="text-gold-300 hover:underline flex items-center gap-1 font-bold flex-shrink-0"><i class="fa-solid fa-phone text-[9.5px]"></i> <span class="hidden xs:inline">Call:</span> +91 99703 47703</a>
     </div>
 
-    <!-- MAIN HEADER -->
-    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xs">
+    <!-- MAIN HEADER (Desktop Only - On Mobile, Floating Overlays are used directly over top hero) -->
+    <header class="hidden sm:block sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xs">
         <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
             <!-- Left: Back to Home Link -->
             <a href="index.html" class="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-700 hover:text-gold-700 bg-sand hover:bg-gold-50 px-3 py-1.5 rounded-xl border border-gray-300 transition-colors" title="Back to All Products">
@@ -170,7 +170,7 @@
         </div>
     </header>
 
-    <!-- BREADCRUMB -->
+    <!-- BREADCRUMB (Desktop Only) -->
     <div class="hidden sm:block bg-white border-b border-gray-200 text-[11px] text-gray-500 py-2 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto flex items-center gap-1.5 flex-wrap">
             <a href="index.html" class="hover:text-gold-600 flex items-center gap-1"><i class="fa-solid fa-house text-[10px]"></i> Home</a>
@@ -182,38 +182,39 @@
     </div>
 
     <!-- MAIN PRODUCT DETAIL CONTAINER -->
-    <main class="flex-grow max-w-6xl mx-auto w-full px-2.5 sm:px-6 py-2 sm:py-6">
+    <main class="flex-grow max-w-6xl mx-auto w-full px-0 sm:px-6 py-0 sm:py-6">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-10">
 
             <!-- LEFT COLUMN: MEDIA SHOWCASE & ZOOM GALLERY (lg:col-span-6) -->
-            <div class="lg:col-span-6 space-y-2">
+            <div class="lg:col-span-6 space-y-3">
                 
-                <!-- Main Media Frame (Compact on mobile to preserve screen height) -->
-                <div class="relative w-full aspect-[4/3] max-h-[220px] xs:max-h-[260px] sm:max-h-[460px] rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border-2 border-gold-500/40 shadow-card-premium flex items-center justify-center select-none group">
+                <!-- Main Media Frame (Flat top, rounded bottom on mobile) -->
+                <div class="relative w-full aspect-square max-h-[460px] sm:max-h-[520px] rounded-t-none rounded-b-3xl sm:rounded-3xl overflow-hidden bg-white shadow-sm flex items-center justify-center select-none group border-b sm:border border-gray-200/90">
                     
-                    <!-- Floating Overlay Badges -->
-                    <div class="absolute top-2.5 left-2.5 z-20 flex items-center gap-1 flex-wrap max-w-[80%] pointer-events-none">
-                        <span id="pdp-badge" class="bg-black/85 backdrop-blur-md text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/50 uppercase shadow-md">
-                            CARD • AUTHENTIC
-                        </span>
-                        <span id="pdp-sku-badge" class="hidden xs:inline-block bg-purple-950/85 backdrop-blur-md text-purple-200 text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-purple-400/40 shadow-md">
-                            SKU: fati_001
-                        </span>
-                        <span id="pdp-weight-badge" class="bg-emerald-950/85 backdrop-blur-md text-emerald-300 text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/40 shadow-md">
-                            150gm
-                        </span>
+                    <!-- Mobile Floating Top Bar (Back Button + Cart) -->
+                    <div class="absolute top-3 left-3 right-3 z-30 flex items-center justify-between pointer-events-auto sm:hidden">
+                        <!-- Left: Back Button -->
+                        <a href="index.html" class="w-10 h-10 rounded-full bg-white/95 hover:bg-white text-gray-800 backdrop-blur-md shadow-md border border-gray-200/90 flex items-center justify-center transition-transform active:scale-90" title="Back to Store">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        </a>
+
+                        <!-- Right: Cart Button -->
+                        <a href="checkout.html" class="w-10 h-10 rounded-full bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx shadow-md border border-gold-500/40 flex items-center justify-center relative transition-transform active:scale-90" title="View Cart">
+                            <i class="fa-solid fa-cart-shopping text-xs"></i>
+                            <span id="floating-cart-count" class="bg-gold-500 text-onyx font-extrabold text-[9px] w-4 h-4 rounded-full flex items-center justify-center absolute -top-1 -right-1">0</span>
+                        </a>
                     </div>
 
                     <!-- Slide Counter Badge on Top-Right -->
-                    <div class="absolute top-2.5 right-2.5 z-20 pointer-events-none">
-                        <span id="pdp-media-counter" class="bg-black/80 backdrop-blur-md text-gold-300 font-mono text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/40 shadow-md">
+                    <div class="absolute top-16 sm:top-3 right-3 z-20 pointer-events-none">
+                        <span id="pdp-media-counter" class="bg-black/75 backdrop-blur-md text-gold-300 font-mono text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/30 shadow-xs">
                             1 / 1
                         </span>
                     </div>
 
-                    <!-- Image View Container (Click opens big screen lightbox modal) -->
-                    <div id="pdp-image-container" onclick="openBigScreenMediaModal()" class="w-full h-full flex items-center justify-center overflow-hidden p-2 sm:p-4 select-none relative cursor-zoom-in" title="Click to view full screen with zoom">
-                        <img id="pdp-main-image" src="product/umrah_card_english.webp" alt="Product View" fetchpriority="high" decoding="async" width="600" height="600" class="max-w-full max-h-full object-contain rounded-xl pointer-events-none select-none transition-transform duration-200 group-hover:scale-[1.03]">
+                    <!-- Image View Container (Touches screen edge-to-edge, zero padding, uncropped 1:1 fit with bottom curve) -->
+                    <div id="pdp-image-container" onclick="openBigScreenMediaModal()" class="w-full h-full flex items-center justify-center overflow-hidden p-0 select-none relative cursor-zoom-in" title="Click to view full screen with zoom">
+                        <img id="pdp-main-image" src="product/umrah_card_urdu.webp" alt="Product View" fetchpriority="high" decoding="async" width="800" height="800" class="w-full h-full object-contain block pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.01]">
                     </div>
                     <script>
                         if (window.__INITIAL_PDP_IMAGE__) {
@@ -223,13 +224,13 @@
                     </script>
 
                     <!-- Tap to View Full Screen Indicator Pill -->
-                    <button type="button" onclick="openBigScreenMediaModal()" class="absolute bottom-2.5 right-2.5 z-20 flex items-center gap-1.5 bg-black/80 hover:bg-gold-500 hover:text-onyx backdrop-blur-md text-gold-300 text-[9.5px] sm:text-[10px] font-bold px-2.5 py-1 rounded-xl border border-gold-500/40 shadow-md transition-all cursor-pointer">
+                    <button type="button" onclick="openBigScreenMediaModal()" class="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 bg-black/75 hover:bg-gold-500 hover:text-onyx backdrop-blur-md text-gold-300 text-[9.5px] sm:text-[10px] font-bold px-2.5 py-1 rounded-xl border border-gold-500/40 shadow-md transition-all cursor-pointer">
                         <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
                         <span>Tap to Zoom</span>
                     </button>
 
                     <!-- Video View Container (hidden when image selected) -->
-                    <div id="pdp-video-container" class="hidden w-full h-full flex items-center justify-center p-1 bg-black rounded-2xl overflow-hidden">
+                    <div id="pdp-video-container" class="hidden w-full h-full flex items-center justify-center p-2 bg-black overflow-hidden">
                         <video id="pdp-main-video" controls autoplay loop playsinline preload="auto" class="w-full h-full max-h-full object-contain rounded-xl">
                             <source id="pdp-video-source" src="product/mantasha_card.mp4" type="video/mp4">
                             Your browser does not support video playback.
@@ -237,18 +238,18 @@
                     </div>
 
                     <!-- Media Slide Arrows -->
-                    <button onclick="prevPdpMedia()" class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Previous Media">
-                        <i class="fa-solid fa-chevron-left text-[10px] sm:text-xs"></i>
+                    <button onclick="prevPdpMedia()" class="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center border border-gray-200/90 backdrop-blur-md transition-transform active:scale-90 shadow-md cursor-pointer" title="Previous Media">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
                     </button>
-                    <button onclick="nextPdpMedia()" class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-black/75 hover:bg-gold-500 hover:text-onyx text-gold-400 flex items-center justify-center border border-gold-500/40 backdrop-blur-md transition-transform active:scale-95 shadow-xl cursor-pointer" title="Next Media">
-                        <i class="fa-solid fa-chevron-right text-[10px] sm:text-xs"></i>
+                    <button onclick="nextPdpMedia()" class="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center border border-gray-200/90 backdrop-blur-md transition-transform active:scale-90 shadow-md cursor-pointer" title="Next Media">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
 
             </div>
 
             <!-- RIGHT COLUMN: PRODUCT DETAILS & BUY ACTIONS (lg:col-span-6) -->
-            <div class="lg:col-span-6 flex flex-col justify-between space-y-2.5 sm:space-y-4">
+            <div class="lg:col-span-6 flex flex-col justify-between space-y-2.5 sm:space-y-4 px-3 sm:px-0">
                 
                 <div>
                     <!-- Title & Rating (Ultra-Compact on mobile) -->
@@ -1382,10 +1383,13 @@
             document.getElementById('pdp-rating').textContent = `${p.rating} Verified Reviews`;
             document.getElementById('pdp-desc').textContent = p.desc;
 
-            // Badges
-            document.getElementById('pdp-badge').textContent = p.badge;
-            document.getElementById('pdp-sku-badge').textContent = `SKU: ${activeSku}`;
-            document.getElementById('pdp-weight-badge').textContent = activeWeight;
+            // Badges (if present)
+            const pdpBadgeEl = document.getElementById('pdp-badge');
+            if (pdpBadgeEl) pdpBadgeEl.textContent = p.badge;
+            const pdpSkuBadgeEl = document.getElementById('pdp-sku-badge');
+            if (pdpSkuBadgeEl) pdpSkuBadgeEl.textContent = `SKU: ${activeSku}`;
+            const pdpWeightBadgeEl = document.getElementById('pdp-weight-badge');
+            if (pdpWeightBadgeEl) pdpWeightBadgeEl.textContent = activeWeight;
             
             // Estimated Delivery Date (+4 Days)
             const estDeliveryDateStr = getFormattedEstimatedDelivery(4);
@@ -2049,6 +2053,8 @@
             const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - discount12 - prepaidDiscount + activeFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
+            const floatingCartEl = document.getElementById('floating-cart-count');
+            if (floatingCartEl) floatingCartEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
                 if (isFreeShipping) {
