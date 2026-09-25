@@ -2019,7 +2019,7 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            const isFreeShipping = (subtotalPrice >= 999);
+            const isFreeShipping = (subtotalPrice >= 699);
             const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 49;
             const effectiveFee = isFreeShipping ? 0 : courierFee;
 
@@ -2036,14 +2036,15 @@
                 }
             }
 
-            // Prepaid 10% discount (always applicable to online payments)
-            const prepaidDiscount = isOnline ? Math.round(subtotalPrice * 0.10) : 0;
+            // Prepaid Tiered discount: 10% on orders >= ₹999; 5% on orders < ₹999
+            const prepaidDiscountPercent = (subtotalPrice >= 999) ? 10 : 5;
+            const prepaidDiscount = isOnline ? Math.round((subtotalPrice * prepaidDiscountPercent) / 100) : 0;
             const prepaidRowEl = document.getElementById('cart-prepaid-discount-row');
             const prepaidAmtEl = document.getElementById('cart-prepaid-discount-amount');
             if (prepaidRowEl && prepaidAmtEl) {
                 if (isOnline && prepaidDiscount > 0) {
                     prepaidRowEl.classList.remove('hidden');
-                    prepaidAmtEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)}`;
+                    prepaidAmtEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)} (${prepaidDiscountPercent}% OFF)`;
                 } else {
                     prepaidRowEl.classList.add('hidden');
                 }
@@ -2059,7 +2060,7 @@
             if (shippingFeeEl) {
                 if (isFreeShipping) {
                     shippingFeeEl.className = "font-extrabold text-emerald-700";
-                    shippingFeeEl.textContent = 'FREE Delivery (Orders ₹999+)';
+                    shippingFeeEl.textContent = 'FREE Delivery (Orders ₹699+)';
                 } else if (currentShippingFee === null || currentShippingFee === undefined) {
                     shippingFeeEl.className = "font-semibold text-gray-500";
                     shippingFeeEl.textContent = 'Enter Pincode';
