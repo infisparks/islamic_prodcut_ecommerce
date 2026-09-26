@@ -1571,57 +1571,66 @@
             });
         }
 
+        const POUCH_SHOWCASE_IMAGES = [
+            'product/card/699-1.webp',
+            'product/card/699-2.webp',
+            'product/prodcut_more/umrahcard_urdu_1.webp',
+            'product/prodcut_more/umrahcard_urdu_6.webp',
+            'product/prodcut_more/umrahcard_urdu_7.webp',
+            'product/prodcut_more/umrahcard_urdu_8.webp',
+            'product/prodcut_more/umrahcard_urdu_9.webp',
+            'product/prodcut_more/umrahcard_urdu_10.webp',
+            'product/prodcut_more/umrahcard_roman_2.webp'
+        ];
+
+        function isPouchShowcaseImage(url) {
+            if (!url) return false;
+            return POUCH_SHOWCASE_IMAGES.some(pImg => url.includes(pImg) || pImg.includes(url));
+        }
+
         function getPdpMediaList() {
             const items = [];
             const p = currentProduct;
             const hasVariants = p.variants && p.variants.length > 0;
             const activeVariant = hasVariants ? p.variants[currentVariantIndex] : null;
 
-            // 1. ON STARTING / SELECTING: If Janamaz combo is chosen, show BOTH the main Card kit AND the chosen Janamaz color together
-            if (activeVariant && activeVariant.hasJanamaz) {
-                const curColorObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
-                const leadCardImg = (activeVariant.images && activeVariant.images[0]) || activeVariant.image || 'product/card/699-1.webp';
-                
+            const isCombo = activeVariant && activeVariant.hasJanamaz;
+            const hasPouch = activeVariant && (activeVariant.price === 699 || activeVariant.price === 899 || (activeVariant.includes && activeVariant.includes.some(inc => inc.includes('Pouch'))));
+
+            const curColorObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
+            const leadCardImg = (activeVariant && activeVariant.images && activeVariant.images[0]) || (activeVariant && activeVariant.image) || (hasPouch ? 'product/card/699-1.webp' : 'product/card/559-1.webp');
+
+            // 1. ON STARTING / SELECTING: If Janamaz combo is chosen, show Duo Split View & Janamaz photo
+            if (isCombo) {
                 // 1st: Duo Split View (Cards Kit + Selected Janamaz Color side-by-side)
                 items.push({
                     type: 'combo-duo',
                     cardImg: leadCardImg,
                     janamazImg: curColorObj.image,
                     janamazColorName: curColorObj.name,
-                    title: `Mega Combo: ${p.name} Kit + Travel Janamaz (${curColorObj.name})`
+                    title: `Combo: ${p.name} + Travel Janamaz (${curColorObj.name})`
                 });
 
-                // 2nd: Umrah Card Lead Kit Inclusions Image
-                items.push({
-                    type: 'image',
-                    url: leadCardImg,
-                    title: `${p.name} - Complete Kit Inclusions`
-                });
-
-                // 3rd: Selected Janamaz Mat Full Photo
+                // 2nd: Selected Janamaz Mat Full Photo
                 items.push({
                     type: 'image',
                     url: curColorObj.image,
                     title: `Pocket Travel Janamaz (${curColorObj.name})`
                 });
+            }
 
-                // 4th: Second Kit Inclusions Image (if present)
-                if (activeVariant.images && activeVariant.images[1]) {
-                    items.push({
-                        type: 'image',
-                        url: activeVariant.images[1],
-                        title: `${p.name} - Package Details`
-                    });
-                }
-            } else if (activeVariant && activeVariant.images && activeVariant.images.length > 0) {
+            // 2. Variant Lead Kit Inclusions Images
+            if (activeVariant && activeVariant.images && activeVariant.images.length > 0) {
                 activeVariant.images.forEach((imgUrl, index) => {
-                    items.push({
-                        type: 'image',
-                        url: imgUrl,
-                        title: `${p.name} - ${activeVariant.shortName || 'Kit'} (View ${index + 1})`
-                    });
+                    if (!items.some(it => it.url === imgUrl)) {
+                        items.push({
+                            type: 'image',
+                            url: imgUrl,
+                            title: `${p.name} - ${activeVariant.shortName || 'Kit'} (View ${index + 1})`
+                        });
+                    }
                 });
-            } else if (activeVariant && activeVariant.image) {
+            } else if (activeVariant && activeVariant.image && !items.some(it => it.url === activeVariant.image)) {
                 items.push({
                     type: 'image',
                     url: activeVariant.image,
@@ -1629,9 +1638,29 @@
                 });
             }
 
-            // 2. THEN: Show all language-specific images for this edition
+            // 3. For 699 and 899 (WITH POUCH): Show pouch showcase images prominently at the start
+            if (hasPouch) {
+                POUCH_SHOWCASE_IMAGES.forEach((pouchImg) => {
+                    if (!items.some(it => it.url === pouchImg)) {
+                        items.push({
+                            type: 'image',
+                            url: pouchImg,
+                            title: `${p.name} - Protective Travel Zipper Pouch & Companion Set`
+                        });
+                    }
+                });
+            }
+
+            // 4. Other product / language cards images:
+            // For 559 & 799 (NO POUCH): STRICTLY FILTER OUT all pouch images!
+            // For 699 & 899 (WITH POUCH): Add remaining general card ritual & guide images
             if (p.images && Array.isArray(p.images) && p.images.length > 0) {
                 p.images.forEach((imgUrl, index) => {
+                    const isPouch = isPouchShowcaseImage(imgUrl);
+                    if (!hasPouch && isPouch) {
+                        // Omit pouch images when customer selects 559 or 799
+                        return;
+                    }
                     if (!items.some(it => it.url === imgUrl)) {
                         items.push({
                             type: 'image',
@@ -1641,13 +1670,16 @@
                     }
                 });
             } else if (p.image && !items.some(it => it.url === p.image)) {
-                items.push({ type: 'image', url: p.image, title: 'Product Image' });
+                if (hasPouch || !isPouchShowcaseImage(p.image)) {
+                    items.push({ type: 'image', url: p.image, title: 'Product Image' });
+                }
             }
 
-            // 3. Product video
+            // 5. Product demo video
             if (p.video) {
                 items.push({ type: 'video', url: p.video, title: 'Product Demo Video' });
             }
+
             return items;
         }
 
@@ -2464,7 +2496,12 @@
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
             const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 110;
-            const effectiveFee = 110;
+            const hasFreeShipping = cart.some(item => {
+                const p = products.find(prod => prod.id === item.id);
+                const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
+                return (v && v.hasJanamaz) || (item.janamazColor !== undefined);
+            });
+            const effectiveFee = hasFreeShipping ? 0 : 110;
 
             // Auto Apply Offer for Orders >= 999 (12% off)
             const discount12 = (subtotalPrice >= 999) ? Math.round(subtotalPrice * 0.12) : 0;
@@ -2493,7 +2530,7 @@
                 }
             }
 
-            const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 110;
+            const activeFee = effectiveFee;
             const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - discount12 - prepaidDiscount + activeFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
@@ -2501,8 +2538,8 @@
             if (floatingCartEl) floatingCartEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                shippingFeeEl.className = "font-bold text-onyx";
-                shippingFeeEl.textContent = `Rs. ${effectiveFee.toFixed(2)}`;
+                shippingFeeEl.className = hasFreeShipping ? "font-bold text-emerald-700" : "font-bold text-onyx";
+                shippingFeeEl.textContent = hasFreeShipping ? "FREE" : `Rs. ${effectiveFee.toFixed(2)}`;
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
 
@@ -2869,7 +2906,8 @@
                             },
                             items: cart.map(i => ({
                                 sku: i.sku,
-                                quantity: i.qty
+                                quantity: i.qty,
+                                janamazColor: i.janamazColor || undefined
                             }))
                         })
                     });
@@ -2932,7 +2970,8 @@
                 },
                 items: cart.map(i => ({
                     sku: i.sku,
-                    quantity: i.qty
+                    quantity: i.qty,
+                    janamazColor: i.janamazColor || undefined
                 })),
                 paymentMethod: effectivePaymentMethod,
                 verificationToken: verificationToken || undefined,

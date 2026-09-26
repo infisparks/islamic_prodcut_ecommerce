@@ -18,7 +18,9 @@ const catalog = [
         price: 559,
         weightKg: 0.12,
         weightLabel: "120gm",
-        image: "product/card/559-1.webp"
+        image: "product/card/559-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
       },
       {
         sku: "fati_001",
@@ -26,7 +28,29 @@ const catalog = [
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/card/699-1.webp"
+        image: "product/card/699-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_013",
+        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+        price: 799,
+        weightKg: 0.23,
+        weightLabel: "230gm",
+        image: "product/card/559-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
+      },
+      {
+        sku: "fati_003",
+        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+        price: 899,
+        weightKg: 0.26,
+        weightLabel: "260gm",
+        image: "product/card/699-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
       }
     ]
   },
@@ -43,7 +67,9 @@ const catalog = [
         price: 559,
         weightKg: 0.12,
         weightLabel: "120gm",
-        image: "product/card/559-1.webp"
+        image: "product/card/559-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
       },
       {
         sku: "fati_004",
@@ -51,7 +77,29 @@ const catalog = [
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/card/699-1.webp"
+        image: "product/card/699-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_014",
+        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+        price: 799,
+        weightKg: 0.23,
+        weightLabel: "230gm",
+        image: "product/card/559-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
+      },
+      {
+        sku: "fati_006",
+        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+        price: 899,
+        weightKg: 0.26,
+        weightLabel: "260gm",
+        image: "product/card/699-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
       }
     ]
   },
@@ -68,7 +116,9 @@ const catalog = [
         price: 559,
         weightKg: 0.12,
         weightLabel: "120gm",
-        image: "product/card/559-1.webp"
+        image: "product/card/559-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
       },
       {
         sku: "fati_007",
@@ -76,7 +126,29 @@ const catalog = [
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/card/699-1.webp"
+        image: "product/card/699-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_015",
+        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+        price: 799,
+        weightKg: 0.23,
+        weightLabel: "230gm",
+        image: "product/card/559-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
+      },
+      {
+        sku: "fati_009",
+        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+        price: 899,
+        weightKg: 0.26,
+        weightLabel: "260gm",
+        image: "product/card/699-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
       }
     ]
   },
@@ -93,7 +165,9 @@ const catalog = [
         price: 559,
         weightKg: 0.12,
         weightLabel: "120gm",
-        image: "product/card/559-1.webp"
+        image: "product/card/559-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
       },
       {
         sku: "fati_010",
@@ -101,7 +175,29 @@ const catalog = [
         price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/card/699-1.webp"
+        image: "product/card/699-1.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_016",
+        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+        price: 799,
+        weightKg: 0.23,
+        weightLabel: "230gm",
+        image: "product/card/559-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
+      },
+      {
+        sku: "fati_012",
+        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+        price: 899,
+        weightKg: 0.26,
+        weightLabel: "260gm",
+        image: "product/card/699-1.webp",
+        hasJanamaz: true,
+        freeShipping: true
       }
     ]
   },
@@ -117,7 +213,9 @@ const catalog = [
         name: "Compact Peel & Stick (English)",
         price: 199,
         weightKg: 0.03,
-        weightLabel: "30gm"
+        weightLabel: "30gm",
+        hasJanamaz: false,
+        freeShipping: false
       }
     ]
   },
@@ -133,7 +231,9 @@ const catalog = [
         name: "Compact Peel & Stick (Hindi)",
         price: 199,
         weightKg: 0.03,
-        weightLabel: "30gm"
+        weightLabel: "30gm",
+        hasJanamaz: false,
+        freeShipping: false
       }
     ]
   },
@@ -149,7 +249,9 @@ const catalog = [
         name: "Compact Peel & Stick (Urdu)",
         price: 199,
         weightKg: 0.03,
-        weightLabel: "30gm"
+        weightLabel: "30gm",
+        hasJanamaz: false,
+        freeShipping: false
       }
     ]
   }
@@ -158,21 +260,42 @@ const catalog = [
 // Helper to look up an item by SKU
 function findItemBySku(sku) {
   for (const product of catalog) {
-    for (const variant of product.variants) {
-      if (variant.sku === sku) {
-        return {
-          productId: product.id,
-          productName: product.name,
-          category: product.category,
-          hsn: product.hsn,
-          dimensions: product.dimensions,
-          sku: variant.sku,
-          variantName: variant.name,
-          unitPrice: variant.price,
-          weightKg: variant.weightKg,
-          weightLabel: variant.weightLabel
-        };
+    if (product.variants) {
+      for (const variant of product.variants) {
+        if (variant.sku === sku) {
+          return {
+            productId: product.id,
+            productName: product.name,
+            category: product.category,
+            hsn: product.hsn,
+            dimensions: product.dimensions,
+            sku: variant.sku,
+            variantName: variant.name,
+            unitPrice: variant.price,
+            weightKg: variant.weightKg,
+            weightLabel: variant.weightLabel,
+            hasJanamaz: !!variant.hasJanamaz,
+            freeShipping: !!variant.freeShipping,
+            image: variant.image || product.image
+          };
+        }
       }
+    } else if (product.sku === sku) {
+      return {
+        productId: product.id,
+        productName: product.name,
+        category: product.category,
+        hsn: product.hsn,
+        dimensions: product.dimensions,
+        sku: product.sku,
+        variantName: product.name,
+        unitPrice: product.price,
+        weightKg: product.weightKg,
+        weightLabel: product.weightLabel,
+        hasJanamaz: false,
+        freeShipping: false,
+        image: product.image
+      };
     }
   }
   return null;

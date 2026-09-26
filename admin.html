@@ -1553,11 +1553,14 @@
                 const rawPrice = i.unitPrice ?? i.price ?? i.sellingPrice ?? i.rate ?? (order.pricing?.subtotal ? (order.pricing.subtotal / (order.items?.length || 1)) : 0);
                 const itemPrice = parseFloat(rawPrice || 0);
                 const lineTotal = itemPrice * itemQty;
+                const janamazBadge = i.janamazColor ? `<span class="inline-flex items-center gap-1 text-[9.5px] font-extrabold text-amber-900 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300 mt-0.5">🎁 Janamaz Color: ${i.janamazColor}</span>` : '';
                 return `
                     <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-[#E5E7EB]">
                         <div>
                             <div class="font-bold text-[#111827]">${i.name || i.variantName || 'Item'}</div>
-                            <div class="text-[10px] text-gray-500 font-mono">SKU: ${i.sku || 'N/A'} • Qty: ${itemQty}</div>
+                            ${i.variantName && i.variantName !== i.name ? `<div class="text-[11px] text-gray-600 font-medium">${i.variantName}</div>` : ''}
+                            ${janamazBadge}
+                            <div class="text-[10px] text-gray-500 font-mono mt-0.5">SKU: ${i.sku || 'N/A'} • Qty: ${itemQty}</div>
                         </div>
                         <div class="font-bold text-indigo-600">
                             Rs. ${itemPrice.toFixed(2)}${itemQty > 1 ? ` <span class="text-gray-500 text-xs font-normal">(Total: Rs. ${lineTotal.toFixed(2)})</span>` : ''}

@@ -298,15 +298,19 @@ const shiprocketService = {
         .replace('T', ' ')
         .substring(0, 19);
 
-      const orderItems = order.items.map(item => ({
-        name: item.name,
-        sku: item.sku,
-        units: item.quantity,
-        selling_price: item.unitPrice,
-        discount: 0,
-        tax: 0,
-        hsn: parseInt(item.hsn || '4910', 10)
-      }));
+      const orderItems = order.items.map(item => {
+        const variantStr = item.variantName ? ` (${item.variantName})` : '';
+        const janamazStr = item.janamazColor ? ` [Color: ${item.janamazColor}]` : '';
+        return {
+          name: `${item.name}${variantStr}${janamazStr}`.slice(0, 190),
+          sku: item.sku,
+          units: item.quantity,
+          selling_price: item.unitPrice,
+          discount: 0,
+          tax: 0,
+          hsn: parseInt(item.hsn || '4910', 10)
+        };
+      });
 
       const paymentMethod = (order.payment && order.payment.provider === 'COD') ? 'COD' : 'Prepaid';
 
@@ -608,15 +612,19 @@ const shiprocketService = {
     }
 
     const token = await getAuthToken();
-    const orderItems = (order.items || []).map(item => ({
-      name: item.name || item.title,
-      sku: item.sku,
-      units: item.quantity || 1,
-      selling_price: item.unitPrice || item.price || 559,
-      discount: 0,
-      tax: 0,
-      hsn: parseInt(item.hsn || '4910', 10)
-    }));
+    const orderItems = (order.items || []).map(item => {
+      const variantStr = item.variantName ? ` (${item.variantName})` : '';
+      const janamazStr = item.janamazColor ? ` [Color: ${item.janamazColor}]` : '';
+      return {
+        name: `${item.name || item.title || 'Product'}${variantStr}${janamazStr}`.slice(0, 190),
+        sku: item.sku,
+        units: item.quantity || 1,
+        selling_price: item.unitPrice || item.price || 559,
+        discount: 0,
+        tax: 0,
+        hsn: parseInt(item.hsn || '4910', 10)
+      };
+    });
 
     const payload = {
       order_id: order.orderId,

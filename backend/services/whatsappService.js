@@ -99,7 +99,11 @@ async function sendAdminOrderNotificationWhatsApp(order) {
   const adminPhone = config.whatsapp.notifyNumber || '918600380233';
 
   const itemsList = (order.items || [])
-    .map((i, idx) => `${idx + 1}. *${i.name || i.title || i.sku || 'Product'}* (${i.variantName || i.variant || 'Standard'}) x${i.quantity || 1} - ₹${((i.unitPrice || i.price || 0) * (i.quantity || 1))}`)
+    .map((i, idx) => {
+      const variantDetail = i.variantName || i.variant || 'Standard';
+      const janamazDetail = i.janamazColor ? ` • Janamaz Color: ${i.janamazColor}` : '';
+      return `${idx + 1}. *${i.name || i.title || i.sku || 'Product'}* (${variantDetail}${janamazDetail}) x${i.quantity || 1} - ₹${((i.unitPrice || i.price || 0) * (i.quantity || 1))}`;
+    })
     .join('\n');
 
   const isCod = (order.payment && order.payment.provider === 'COD') || order.paymentMethod === 'cod';
@@ -149,7 +153,11 @@ async function sendOrderConfirmationWhatsApp(order) {
 
   const customerName = order.customer.name || 'Valued Customer';
   const itemsList = (order.items || [])
-    .map(i => `• *${i.name || i.title || i.sku || 'Item'}* (${i.variantName || i.variant || 'Standard'}) x${i.quantity || 1}`)
+    .map(i => {
+      const variantDetail = i.variantName || i.variant || 'Standard';
+      const janamazDetail = i.janamazColor ? ` • Janamaz Color: ${i.janamazColor}` : '';
+      return `• *${i.name || i.title || i.sku || 'Item'}* (${variantDetail}${janamazDetail}) x${i.quantity || 1}`;
+    })
     .join('\n') || '• Authentic Umrah Duas Flashcard Collection';
 
   const isCod = (order.payment && order.payment.provider === 'COD') || order.paymentMethod === 'cod';

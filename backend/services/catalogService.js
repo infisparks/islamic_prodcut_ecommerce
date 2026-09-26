@@ -33,11 +33,22 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
       maxDimensions.breadth = Math.max(maxDimensions.breadth, catalogItem.dimensions.breadth);
     }
 
+    const isCombo = catalogItem.hasJanamaz;
+    let cleanJanamazColor = null;
+    if (rawItem.janamazColor && typeof rawItem.janamazColor === 'string') {
+      cleanJanamazColor = rawItem.janamazColor.trim().slice(0, 50);
+    } else if (isCombo) {
+      cleanJanamazColor = 'Royal Gold'; // default color if not specified
+    }
+
     items.push({
       productId: catalogItem.productId,
       sku: catalogItem.sku,
       name: catalogItem.productName,
       variantName: catalogItem.variantName,
+      hasJanamaz: isCombo,
+      janamazColor: cleanJanamazColor,
+      freeShipping: !!catalogItem.freeShipping,
       quantity: qty,
       unitPrice: catalogItem.unitPrice,
       totalPrice: lineTotal,
@@ -50,8 +61,9 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Fixed delivery charge of ₹110
-  const shipping = 110;
+  // Free Shipping if any combo item with freeShipping is in cart; otherwise fixed delivery charge of ₹110
+  const hasFreeShipping = items.some(i => i.freeShipping || i.hasJanamaz);
+  const shipping = hasFreeShipping ? 0 : 110;
 
   // No auto 12% discount
   let discount = 0;
