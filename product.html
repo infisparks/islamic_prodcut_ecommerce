@@ -233,15 +233,15 @@
                         <img id="pdp-main-image" src="product/umrah_card_urdu.webp" alt="Product View" fetchpriority="high" decoding="async" width="800" height="800" class="w-full h-full object-contain block pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.01]">
                         
                         <!-- Duo Combo Split Showcase (Active when Mega Combo plan is selected at Slide 1) -->
-                        <div id="pdp-combo-duo-view" class="hidden w-full h-full flex flex-col items-stretch relative select-none bg-white overflow-hidden">
-                            <!-- Top 50/50 Split Showcase Images (Moved to top without empty space) -->
-                            <div class="flex-1 w-full flex flex-row items-stretch relative min-h-0 pt-0.5">
+                        <div id="pdp-combo-duo-view" class="hidden w-full h-full flex flex-col items-stretch relative select-none bg-gradient-to-b from-[#FAF7F2] via-[#F5EFE6] to-[#ECE5D8] overflow-hidden">
+                            <!-- Top 50/50 Split Showcase Images (Edge-to-edge full fill, zero bottom dead space) -->
+                            <div class="flex-1 w-full flex flex-row items-stretch relative min-h-0 overflow-hidden">
                                 <!-- Left Half (50%): Umrah Dua Card Kit (Main Kit) -->
-                                <div class="relative w-1/2 h-full flex items-center justify-center bg-white overflow-hidden border-r border-gold-300/60 px-1 py-0.5">
+                                <div class="relative w-1/2 h-full flex items-center justify-center bg-transparent overflow-hidden border-r border-gold-400/50">
                                     <span class="absolute top-2 left-2 z-20 bg-onyx/85 backdrop-blur-xs text-gold-300 text-[8px] sm:text-[9px] font-extrabold px-1.5 py-0.5 rounded-md border border-gold-500/40 shadow-xs flex items-center gap-1">
                                         <i class="fa-solid fa-star text-gold-400 text-[6.5px]"></i> Main Kit
                                     </span>
-                                    <img id="pdp-combo-card-img" src="product/card/699-1.webp" alt="Umrah Cards Kit" class="w-full h-full object-contain pointer-events-none">
+                                    <img id="pdp-combo-card-img" src="product/card/699-1.webp" alt="Umrah Cards Kit" class="w-full h-full object-cover object-center pointer-events-none">
                                 </div>
 
                                 <!-- Center Floating Plus Badge -->
@@ -250,16 +250,16 @@
                                 </div>
 
                                 <!-- Right Half (50%): Pocket Travel Janamaz in Selected Color -->
-                                <div class="relative w-1/2 h-full flex items-center justify-center bg-white overflow-hidden px-1 py-0.5">
+                                <div class="relative w-1/2 h-full flex items-center justify-center bg-transparent overflow-hidden">
                                     <span class="absolute top-2 right-2 z-20 bg-amber-600/90 backdrop-blur-xs text-white text-[8px] sm:text-[9px] font-extrabold px-1.5 py-0.5 rounded-md shadow-xs flex items-center gap-1">
                                         <i class="fa-solid fa-gift text-[6.5px]"></i> <span id="pdp-combo-janamaz-color-badge">Gold</span>
                                     </span>
-                                    <img id="pdp-combo-janamaz-img" src="product/janamaz/golden.webp" alt="Pocket Travel Janamaz" class="w-full h-full object-contain pointer-events-none animate-variant-pop">
+                                    <img id="pdp-combo-janamaz-img" src="product/janamaz/golden.webp" alt="Pocket Travel Janamaz" class="w-full h-full object-cover object-center pointer-events-none animate-variant-pop">
                                 </div>
                             </div>
 
                             <!-- Integrated Bottom 5-Thumbnail Janamaz Color Picker -->
-                            <div class="w-full bg-sand/40 border-t border-amber-300/80 p-1.5 sm:p-2 z-20 flex flex-col gap-1 select-none" onclick="event.stopPropagation()">
+                            <div class="w-full bg-white/95 backdrop-blur-md border-t border-amber-300/80 p-1.5 sm:p-2 z-20 flex flex-col gap-1 select-none shadow-xs" onclick="event.stopPropagation()">
                                 <div class="flex items-center justify-between px-0.5">
                                     <span class="text-[9.5px] sm:text-[10.5px] font-extrabold text-onyx flex items-center gap-1">
                                         <i class="fa-solid fa-palette text-amber-600 text-xs"></i> Select Janamaz Color:
