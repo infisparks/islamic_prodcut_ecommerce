@@ -204,8 +204,8 @@
             <!-- LEFT COLUMN: MEDIA SHOWCASE & ZOOM GALLERY (lg:col-span-6) -->
             <div class="lg:col-span-6 space-y-3">
                 
-                <!-- Main Media Frame (Flat top, rounded bottom on mobile) -->
-                <div class="relative w-full aspect-square max-h-[460px] sm:max-h-[520px] rounded-t-none rounded-b-3xl sm:rounded-3xl overflow-hidden bg-white shadow-sm flex items-center justify-center select-none group border-b sm:border border-gray-200/90">
+                <!-- Main Media Frame (Flat top, rounded bottom on mobile with swipe gesture support) -->
+                <div id="pdp-main-media-frame" class="relative w-full aspect-square max-h-[460px] sm:max-h-[520px] rounded-t-none rounded-b-3xl sm:rounded-3xl overflow-hidden bg-white shadow-sm flex items-center justify-center select-none group border-b sm:border border-gray-200/90 touch-pan-y">
                     
                     <!-- Mobile Floating Top Bar (Back Button + Cart) -->
                     <div class="absolute top-3 left-3 right-3 z-30 flex items-center justify-between pointer-events-auto sm:hidden">
@@ -231,6 +231,46 @@
                     <!-- Image View Container (Touches screen edge-to-edge, zero padding, uncropped 1:1 fit with bottom curve) -->
                     <div id="pdp-image-container" onclick="openBigScreenMediaModal()" class="w-full h-full flex items-center justify-center overflow-hidden p-0 select-none relative cursor-zoom-in" title="Click to view full screen with zoom">
                         <img id="pdp-main-image" src="product/umrah_card_urdu.webp" alt="Product View" fetchpriority="high" decoding="async" width="800" height="800" class="w-full h-full object-contain block pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.01]">
+                        
+                        <!-- Duo Combo Split Showcase (Active when Mega Combo plan is selected at Slide 1) -->
+                        <div id="pdp-combo-duo-view" class="hidden w-full h-full flex flex-col items-stretch relative select-none bg-white overflow-hidden">
+                            <!-- Top 50/50 Split Showcase Images (Moved to top without empty space) -->
+                            <div class="flex-1 w-full flex flex-row items-stretch relative min-h-0 pt-0.5">
+                                <!-- Left Half (50%): Umrah Dua Card Kit (Main Kit) -->
+                                <div class="relative w-1/2 h-full flex items-center justify-center bg-white overflow-hidden border-r border-gold-300/60 px-1 py-0.5">
+                                    <span class="absolute top-2 left-2 z-20 bg-onyx/85 backdrop-blur-xs text-gold-300 text-[8px] sm:text-[9px] font-extrabold px-1.5 py-0.5 rounded-md border border-gold-500/40 shadow-xs flex items-center gap-1">
+                                        <i class="fa-solid fa-star text-gold-400 text-[6.5px]"></i> Main Kit
+                                    </span>
+                                    <img id="pdp-combo-card-img" src="product/card/699-1.webp" alt="Umrah Cards Kit" class="w-full h-full object-contain pointer-events-none">
+                                </div>
+
+                                <!-- Center Floating Plus Badge -->
+                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gold-500 text-onyx font-black text-xs flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-gold-400/40 pointer-events-none">
+                                    <i class="fa-solid fa-plus text-[8.5px] sm:text-[10px]"></i>
+                                </div>
+
+                                <!-- Right Half (50%): Pocket Travel Janamaz in Selected Color -->
+                                <div class="relative w-1/2 h-full flex items-center justify-center bg-white overflow-hidden px-1 py-0.5">
+                                    <span class="absolute top-2 right-2 z-20 bg-amber-600/90 backdrop-blur-xs text-white text-[8px] sm:text-[9px] font-extrabold px-1.5 py-0.5 rounded-md shadow-xs flex items-center gap-1">
+                                        <i class="fa-solid fa-gift text-[6.5px]"></i> <span id="pdp-combo-janamaz-color-badge">Gold</span>
+                                    </span>
+                                    <img id="pdp-combo-janamaz-img" src="product/janamaz/golden.webp" alt="Pocket Travel Janamaz" class="w-full h-full object-contain pointer-events-none animate-variant-pop">
+                                </div>
+                            </div>
+
+                            <!-- Integrated Bottom 5-Thumbnail Janamaz Color Picker -->
+                            <div class="w-full bg-sand/40 border-t border-amber-300/80 p-1.5 sm:p-2 z-20 flex flex-col gap-1 select-none" onclick="event.stopPropagation()">
+                                <div class="flex items-center justify-between px-0.5">
+                                    <span class="text-[9.5px] sm:text-[10.5px] font-extrabold text-onyx flex items-center gap-1">
+                                        <i class="fa-solid fa-palette text-amber-600 text-xs"></i> Select Janamaz Color:
+                                    </span>
+                                    <span id="pdp-combo-inline-color-name" class="text-[8.5px] sm:text-[9.5px] font-extrabold text-amber-950 bg-amber-100/90 px-2 py-0.5 rounded-full border border-amber-300">
+                                        Royal Gold
+                                    </span>
+                                </div>
+                                <div id="pdp-combo-inline-swatches" class="grid grid-cols-5 gap-1 sm:gap-1.5 w-full"></div>
+                            </div>
+                        </div>
                     </div>
                     <script>
                         if (window.__INITIAL_PDP_IMAGE__) {
@@ -240,7 +280,7 @@
                     </script>
 
                     <!-- Tap to View Full Screen Indicator Pill -->
-                    <button type="button" onclick="openBigScreenMediaModal()" class="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 bg-black/75 hover:bg-gold-500 hover:text-onyx backdrop-blur-md text-gold-300 text-[9.5px] sm:text-[10px] font-bold px-2.5 py-1 rounded-xl border border-gold-500/40 shadow-md transition-all cursor-pointer">
+                    <button id="pdp-tap-to-zoom-btn" type="button" onclick="openBigScreenMediaModal()" class="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 bg-black/75 hover:bg-gold-500 hover:text-onyx backdrop-blur-md text-gold-300 text-[9.5px] sm:text-[10px] font-bold px-2.5 py-1 rounded-xl border border-gold-500/40 shadow-md transition-all cursor-pointer">
                         <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
                         <span>Tap to Zoom</span>
                     </button>
@@ -261,9 +301,6 @@
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
-
-                <!-- Media Thumbnail Gallery Strip Below Main Image -->
-                <div id="pdp-thumbnails-strip" class="flex items-center gap-2 overflow-x-auto py-1 px-1 no-scrollbar select-none"></div>
 
             </div>
 
@@ -327,24 +364,26 @@
                         </div>
                     </div>
 
+
+
                     <p id="pdp-desc" class="hidden sm:block text-xs sm:text-sm text-gray-600 leading-relaxed mb-3">
                         Authentic Umrah Dua cards with clear translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.
                     </p>
 
-                    <!-- INTERACTIVE KIT / PACKAGE VARIANT SELECTION (Clean 2-Column Side-by-Side Grid) -->
+                    <!-- INTERACTIVE KIT / PACKAGE VARIANT SELECTION (Responsive 3-Card Grid) -->
                     <div id="pdp-variants-container" class="bg-white border border-gray-200 rounded-2xl p-2.5 sm:p-4 mb-3 shadow-xs">
                         <div class="flex items-center justify-between mb-2">
                             <label class="text-[11px] sm:text-sm font-bold text-onyx flex items-center gap-1.5">
                                 <i class="fa-solid fa-layer-group text-gold-600"></i>
-                                <span>Select Kit Option:</span>
+                                <span>Select Package Option:</span>
                             </label>
                             <span id="pdp-kit-options-badge" class="text-[9px] sm:text-[10px] font-bold text-gold-700 bg-gold-100 px-2 py-0.5 rounded-full border border-gold-300">
-                                2 Kit Options
+                                3 Package Options
                             </span>
                         </div>
 
-                        <!-- 2 Variant Cards Grid (Clean Side-by-Side on Mobile) -->
-                        <div id="pdp-variants-slider" class="grid grid-cols-2 gap-2 sm:gap-3"></div>
+                        <!-- Variant Cards Grid (Row 1: 2 Side-by-Side, Row 2: 1 Full-Width Combo) -->
+                        <div id="pdp-variants-slider" class="grid grid-cols-2 gap-2 sm:gap-2.5"></div>
 
                         <!-- Inclusions Checklist Box -->
                         <div id="pdp-inclusions-box" class="mt-2.5 pt-2 border-t border-gray-200"></div>
@@ -852,9 +891,17 @@
         </div>
     </footer>
 
-
     <!-- PRODUCT CATALOG & JAVASCRIPT ENGINE -->
     <script>
+        const janamazColors = [
+            { id: 'golden', name: 'Royal Gold', hex: '#D4AF37', border: '#C59A3F', image: 'product/janamaz/golden.webp' },
+            { id: 'black', name: 'Midnight Black', hex: '#1C1C1E', border: '#444444', image: 'product/janamaz/black.webp' },
+            { id: 'gray', name: 'Silver Gray', hex: '#8E8E93', border: '#757575', image: 'product/janamaz/gray.webp' },
+            { id: 'green', name: 'Emerald Green', hex: '#1B5E20', border: '#2E7D32', image: 'product/janamaz/green.webp' },
+            { id: 'pink', name: 'Rose Pink', hex: '#D81B60', border: '#AD1457', image: 'product/janamaz/pink.webp' }
+        ];
+        let currentJanamazColor = 'golden';
+
         const products = [
             {
                 id: 1,
@@ -870,8 +917,20 @@
                 manufacturer: "fatimacalligrapher27",
                 image: "product/card/559-1.webp",
                 images: [
-                    "product/card/559-1.webp",
-                    "product/card/559-2.webp"
+                    "product/umrah_card_urdu.webp",
+                    "product/prodcut_more/umrahcard_urdu_1.webp",
+                    "product/prodcut_more/umrahcard_urdu_2.webp",
+                    "product/prodcut_more/umrahcard_urdu_3.webp",
+                    "product/prodcut_more/umrahcard_urdu_4.webp",
+                    "product/prodcut_more/umrahcard_urdu_5.webp",
+                    "product/prodcut_more/umrahcard_urdu_6.webp",
+                    "product/prodcut_more/umrahcard_urdu_7.webp",
+                    "product/prodcut_more/umrahcard_urdu_8.webp",
+                    "product/prodcut_more/umrahcard_urdu_9.webp",
+                    "product/prodcut_more/umrahcard_urdu_10.webp",
+                    "product/prodcut_more/umrahcard_urdu_11.webp",
+                    "product/prodcut_more/umrahcard_urdu_12.webp",
+                    "product/prodcut_more/umrahcard_urdu_13.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • URDU",
@@ -909,6 +968,22 @@
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_003",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -926,8 +1001,14 @@
                 manufacturer: "fatimacalligrapher27",
                 image: "product/card/559-1.webp",
                 images: [
-                    "product/card/559-1.webp",
-                    "product/card/559-2.webp"
+                    "product/umrah_card_english.webp",
+                    "product/prodcut_more/umrahcard_english_1.webp",
+                    "product/prodcut_more/umrahcard_english_2.webp",
+                    "product/prodcut_more/umrahcard_english_3.webp",
+                    "product/prodcut_more/umrahcard_english_4.webp",
+                    "product/prodcut_more/umrahcard_english_5.webp",
+                    "product/prodcut_more/umrahcard_english_6.webp",
+                    "product/prodcut_more/umrahcard_english_7.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ENGLISH",
@@ -965,6 +1046,22 @@
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_006",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -982,8 +1079,29 @@
                 manufacturer: "fatimacalligrapher27",
                 image: "product/card/559-1.webp",
                 images: [
-                    "product/card/559-1.webp",
-                    "product/card/559-2.webp"
+                    "product/umrah_card_hindi.webp",
+                    "product/prodcut_more/umrahcard_hindi_1.webp",
+                    "product/prodcut_more/umrahcard_hindi_2.webp",
+                    "product/prodcut_more/umrahcard_hindi_3.webp",
+                    "product/prodcut_more/umrahcard_hindi_4.webp",
+                    "product/prodcut_more/umrahcard_hindi_5.webp",
+                    "product/prodcut_more/umrahcard_hindi_6.webp",
+                    "product/prodcut_more/umrahcard_hindi_7.webp",
+                    "product/prodcut_more/umrahcard_hindi_8.webp",
+                    "product/prodcut_more/umrahcard_hindi_9.webp",
+                    "product/prodcut_more/umrahcard_hindi_10.webp",
+                    "product/prodcut_more/umrahcard_hindi_11.webp",
+                    "product/prodcut_more/umrahcard_hindi_12.webp",
+                    "product/prodcut_more/umrahcard_hindi_13.webp",
+                    "product/prodcut_more/umrahcard_hindi_14.webp",
+                    "product/prodcut_more/umrahcard_hindi_15.webp",
+                    "product/prodcut_more/umrahcard_hindi_16.webp",
+                    "product/prodcut_more/umrahcard_hindi_17.webp",
+                    "product/prodcut_more/umrahcard_hindi_18.webp",
+                    "product/prodcut_more/umrahcard_hindi_19.webp",
+                    "product/prodcut_more/umrahcard_hindi_20.webp",
+                    "product/prodcut_more/umrahcard_hindi_21.webp",
+                    "product/prodcut_more/umrahcard_hindi_22.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • HINDI",
@@ -1021,6 +1139,22 @@
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_009",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -1038,8 +1172,18 @@
                 manufacturer: "fatimacalligrapher27",
                 image: "product/card/559-1.webp",
                 images: [
-                    "product/card/559-1.webp",
-                    "product/card/559-2.webp"
+                    "product/umrah_card_roman.webp",
+                    "product/prodcut_more/umrahcard_roman_1.webp",
+                    "product/prodcut_more/umrahcard_roman_2.webp",
+                    "product/prodcut_more/umrahcard_roman_3.webp",
+                    "product/prodcut_more/umrahcard_roman_4.webp",
+                    "product/prodcut_more/umrahcard_roman_5.webp",
+                    "product/prodcut_more/umrahcard_roman_6.webp",
+                    "product/prodcut_more/umrahcard_roman_7.webp",
+                    "product/prodcut_more/umrahcard_roman_8.webp",
+                    "product/prodcut_more/umrahcard_roman_9.webp",
+                    "product/prodcut_more/umrahcard_roman_10.webp",
+                    "product/prodcut_more/umrahcard_roman_11.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ROMAN",
@@ -1077,6 +1221,22 @@
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_012",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -1353,8 +1513,43 @@
             const hasVariants = p.variants && p.variants.length > 0;
             const activeVariant = hasVariants ? p.variants[currentVariantIndex] : null;
 
-            // When active variant defines specific kit images (e.g. 2 images for 559 or 699), use ONLY those 2 images
-            if (activeVariant && activeVariant.images && activeVariant.images.length > 0) {
+            // 1. ON STARTING / SELECTING: If Janamaz combo is chosen, show BOTH the main Card kit AND the chosen Janamaz color together
+            if (activeVariant && activeVariant.hasJanamaz) {
+                const curColorObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
+                const leadCardImg = (activeVariant.images && activeVariant.images[0]) || activeVariant.image || 'product/card/699-1.webp';
+                
+                // 1st: Duo Split View (Cards Kit + Selected Janamaz Color side-by-side)
+                items.push({
+                    type: 'combo-duo',
+                    cardImg: leadCardImg,
+                    janamazImg: curColorObj.image,
+                    janamazColorName: curColorObj.name,
+                    title: `Mega Combo: ${p.name} Kit + Travel Janamaz (${curColorObj.name})`
+                });
+
+                // 2nd: Umrah Card Lead Kit Inclusions Image
+                items.push({
+                    type: 'image',
+                    url: leadCardImg,
+                    title: `${p.name} - Complete Kit Inclusions`
+                });
+
+                // 3rd: Selected Janamaz Mat Full Photo
+                items.push({
+                    type: 'image',
+                    url: curColorObj.image,
+                    title: `Pocket Travel Janamaz (${curColorObj.name})`
+                });
+
+                // 4th: Second Kit Inclusions Image (if present)
+                if (activeVariant.images && activeVariant.images[1]) {
+                    items.push({
+                        type: 'image',
+                        url: activeVariant.images[1],
+                        title: `${p.name} - Package Details`
+                    });
+                }
+            } else if (activeVariant && activeVariant.images && activeVariant.images.length > 0) {
                 activeVariant.images.forEach((imgUrl, index) => {
                     items.push({
                         type: 'image',
@@ -1368,19 +1563,24 @@
                     url: activeVariant.image,
                     title: `${p.name} - ${activeVariant.shortName || 'Kit'}`
                 });
-            } else if (p.images && Array.isArray(p.images) && p.images.length > 0) {
+            }
+
+            // 2. THEN: Show all language-specific images for this edition
+            if (p.images && Array.isArray(p.images) && p.images.length > 0) {
                 p.images.forEach((imgUrl, index) => {
-                    items.push({
-                        type: 'image',
-                        url: imgUrl,
-                        title: `${p.name} - View ${index + 1}`
-                    });
+                    if (!items.some(it => it.url === imgUrl)) {
+                        items.push({
+                            type: 'image',
+                            url: imgUrl,
+                            title: `${p.name} - Detail View ${index + 1}`
+                        });
+                    }
                 });
-            } else if (p.image) {
+            } else if (p.image && !items.some(it => it.url === p.image)) {
                 items.push({ type: 'image', url: p.image, title: 'Product Image' });
             }
 
-            // Keep the video
+            // 3. Product video
             if (p.video) {
                 items.push({ type: 'video', url: p.video, title: 'Product Demo Video' });
             }
@@ -1396,6 +1596,19 @@
             return `${weekday}, ${day} ${month}`;
         }
 
+        function selectJanamazColor(colorId) {
+            currentJanamazColor = colorId;
+            currentMediaIndex = 0; // Show the selected Janamaz mat directly as the top image
+            renderPdpView();
+        }
+
+        function selectPdpVariant(idx) {
+            if (currentVariantIndex === idx) return;
+            currentVariantIndex = idx;
+            currentMediaIndex = 0; // Directly show the selected package's top image
+            renderPdpView();
+        }
+
         function renderPdpView() {
             const p = currentProduct;
             const hasVariants = p.variants && p.variants.length > 0;
@@ -1406,6 +1619,7 @@
             const activeSku = activeVariant ? activeVariant.sku : (p.sku || 'fati_001');
             const activeWeight = activeVariant ? activeVariant.weight : p.weight;
             const discountPercent = Math.round(((activeOldPrice - activePrice) / activeOldPrice) * 100);
+            const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
 
             // Update Page Meta Title & Breadcrumb
             document.title = `${p.name} | Fatima Calligrapher`;
@@ -1442,19 +1656,20 @@
             // Sticky Bottom (Mobile)
             document.getElementById('sticky-pdp-price').textContent = `Rs. ${activePrice}`;
             document.getElementById('sticky-pdp-old-price').textContent = `Rs. ${activeOldPrice}`;
-            document.getElementById('sticky-pdp-kit').textContent = activeVariant ? activeVariant.shortName : (p.badge);
+            const stickyKitLabel = activeVariant ? (activeVariant.hasJanamaz ? `${activeVariant.shortName} (${curJanamazObj.name.split(' ')[1] || curJanamazObj.name})` : activeVariant.shortName) : (p.badge);
+            document.getElementById('sticky-pdp-kit').textContent = stickyKitLabel;
 
             // WhatsApp link
-            const waMsg = encodeURIComponent(`Assalam u Alaikum! I would like to order: ${p.name} (${activeVariant ? activeVariant.name : 'Standard'}) for Rs. ${activePrice}. Please confirm.`);
+            const janamazNote = (activeVariant && activeVariant.hasJanamaz) ? ` [Janamaz Color: ${curJanamazObj.name}]` : '';
+            const waMsg = encodeURIComponent(`Assalam u Alaikum! I would like to order: ${p.name} (${activeVariant ? activeVariant.name : 'Standard'})${janamazNote} for Rs. ${activePrice}. Please confirm.`);
             document.getElementById('pdp-whatsapp-btn').href = `https://wa.me/919970347703?text=${waMsg}`;
-
 
             // Specifications Table
             document.getElementById('spec-brand').textContent = p.brand;
             document.getElementById('spec-sku').textContent = activeSku;
             document.getElementById('spec-price').innerHTML = `Rs. ${activePrice} <span class="text-gray-400 font-normal line-through">(Rs. ${activeOldPrice})</span>`;
-            document.getElementById('spec-dimensions').textContent = `${activeWeight} • ${p.dimensions}`;
-            document.getElementById('spec-material').textContent = p.material;
+            document.getElementById('spec-dimensions').textContent = (activeVariant && activeVariant.hasJanamaz) ? `${activeWeight} • ${p.dimensions} (+ Janamaz 43x25")` : `${activeWeight} • ${p.dimensions}`;
+            document.getElementById('spec-material').textContent = (activeVariant && activeVariant.hasJanamaz) ? `${p.material} + Soft Silky Janamaz` : p.material;
             document.getElementById('spec-hsn').textContent = `${p.hsn} • ${p.manufacturer}`;
 
             // Update Language Switcher Buttons state
@@ -1485,39 +1700,56 @@
             const variantsContainer = document.getElementById('pdp-variants-container');
             const variantsSlider = document.getElementById('pdp-variants-slider');
             const inclusionsBox = document.getElementById('pdp-inclusions-box');
+            const optionsBadge = document.getElementById('pdp-kit-options-badge');
 
             if (hasVariants) {
                 variantsContainer.classList.remove('hidden');
+                if (optionsBadge) {
+                    optionsBadge.textContent = `${p.variants.length} Package Options`;
+                }
+
+                variantsSlider.className = 'grid grid-cols-2 gap-2 sm:gap-2.5';
+
                 variantsSlider.innerHTML = p.variants.map((v, idx) => {
                     const isSelected = idx === currentVariantIndex;
+                    const isCombo = v.hasJanamaz;
+                    const gridColSpan = (isCombo || idx === 2) ? 'col-span-2' : 'col-span-1';
+                    let tagClass = 'bg-onyx text-gold-400';
+                    if (isCombo) tagClass = 'bg-rose-900 text-gold-300 ring-1 ring-gold-400/40 animate-pulse';
+                    else if (v.tag === 'Best Value') tagClass = 'bg-amber-100 text-amber-900';
+
                     return `
                         <div onclick="selectPdpVariant(${idx})" 
-                             class="cursor-pointer rounded-xl p-2 sm:p-3 transition-all border-2 relative flex flex-col justify-between ${
+                             class="cursor-pointer rounded-xl p-2.5 sm:p-3 transition-all border-2 relative flex flex-col justify-between ${gridColSpan} ${
                                  isSelected 
-                                    ? 'border-gold-500 bg-gold-50/90 shadow-md ring-2 ring-gold-400/40 scale-[1.01]' 
+                                    ? (isCombo ? 'border-amber-500 bg-amber-50/90 shadow-md ring-2 ring-amber-400/50 scale-[1.01]' : 'border-gold-500 bg-gold-50/90 shadow-md ring-2 ring-gold-400/40 scale-[1.01]')
                                     : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/20'
                              }">
                             <div class="flex items-start justify-between gap-1 mb-1">
-                                <span class="text-[7.5px] sm:text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase ${
-                                    v.tag === 'Best Value' ? 'bg-amber-100 text-amber-800' : 'bg-onyx text-gold-400'
-                                }">${v.tag}</span>
-                                <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center border ${
-                                    isSelected ? 'bg-gold-500 border-gold-600 text-onyx' : 'border-gray-300 bg-white'
+                                <span class="text-[7.5px] sm:text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase ${tagClass}">${v.tag}</span>
+                                <div class="w-4 h-4 rounded-full flex items-center justify-center border ${
+                                    isSelected ? 'bg-gold-500 border-gold-600 text-onyx shadow-xs' : 'border-gray-300 bg-white'
                                 }">
-                                    ${isSelected ? '<i class="fa-solid fa-check text-[8px] sm:text-[9px] font-bold"></i>' : ''}
+                                    ${isSelected ? '<i class="fa-solid fa-check text-[8.5px] font-black"></i>' : ''}
                                 </div>
                             </div>
-                            <div class="my-0.5 sm:my-1">
-                                <div class="text-[11px] sm:text-xs font-bold text-onyx leading-snug line-clamp-2">${v.shortName}</div>
+                            <div class="my-1">
+                                <div class="text-[11px] sm:text-xs font-bold text-onyx leading-snug">${v.shortName}</div>
                                 <div class="text-[8.5px] sm:text-[9px] text-gray-500 font-mono mt-0.5">SKU: <b>${v.sku}</b> (${v.weight})</div>
                             </div>
                             <div class="pt-1 border-t border-gray-200/80 flex items-baseline justify-between mt-1">
                                 <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${v.price}</span>
-                                <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${v.price * 2}</span>
+                                <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${v.oldPrice || (v.price * 2)}</span>
                             </div>
                         </div>
                     `;
                 }).join('');
+
+                // Render Janamaz Color Swatches inside the Duo Slide bottom bar
+                const activeIsCombo = activeVariant && activeVariant.hasJanamaz;
+                if (activeIsCombo) {
+                    renderComboInlineSwatches();
+                }
 
                 if (activeVariant && activeVariant.includes) {
                     inclusionsBox.innerHTML = `
@@ -1542,11 +1774,36 @@
             renderRelatedProducts();
         }
 
-        function selectPdpVariant(idx) {
-            if (currentVariantIndex === idx) return;
-            currentVariantIndex = idx;
-            currentMediaIndex = 0; // Automatically switch to the selected package's image
-            renderPdpView();
+        function renderComboInlineSwatches() {
+            const inlineSwatches = document.getElementById('pdp-combo-inline-swatches');
+            const colorNameBadge = document.getElementById('pdp-combo-inline-color-name');
+            const curColorObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
+            if (colorNameBadge) colorNameBadge.textContent = curColorObj.name;
+            if (!inlineSwatches) return;
+
+            inlineSwatches.innerHTML = janamazColors.map(c => {
+                const isColorSelected = c.id === currentJanamazColor;
+                return `
+                    <button type="button" onclick="selectJanamazColor('${c.id}')" 
+                            class="relative flex flex-col items-center gap-0.5 p-1 rounded-xl border-2 transition-all cursor-pointer ${
+                                isColorSelected 
+                                    ? 'border-gold-500 bg-gold-100/95 shadow-md ring-2 ring-gold-400/60 scale-[1.03]' 
+                                    : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/50'
+                            }" title="${c.name}">
+                        <div class="w-full aspect-[4/5] max-h-11 sm:max-h-14 rounded-md overflow-hidden bg-sand/20 flex items-center justify-center p-0.5">
+                            <img src="${c.image}" alt="${c.name}" class="w-full h-full object-contain pointer-events-none">
+                        </div>
+                        <span class="text-[7.5px] sm:text-[8.5px] font-extrabold ${isColorSelected ? 'text-onyx' : 'text-gray-600'} leading-none truncate w-full text-center">
+                            ${c.name.replace('Royal ', '').replace('Midnight ', '').replace('Silver ', '').replace('Emerald ', '').replace('Rose ', '')}
+                        </span>
+                        ${isColorSelected ? `
+                            <div class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-gold-500 text-onyx flex items-center justify-center shadow-xs border border-white">
+                                <i class="fa-solid fa-check text-[7px] font-black"></i>
+                            </div>
+                        ` : ''}
+                    </button>
+                `;
+            }).join('');
         }
 
         function renderPdpMediaView() {
@@ -1556,10 +1813,16 @@
             }
             const activeMedia = mediaList[currentMediaIndex] || mediaList[0];
             const isVideo = activeMedia.type === 'video';
+            const isComboDuo = activeMedia.type === 'combo-duo';
 
             const imgContainer = document.getElementById('pdp-image-container');
             const vidContainer = document.getElementById('pdp-video-container');
             const mainImg = document.getElementById('pdp-main-image');
+            const comboDuoView = document.getElementById('pdp-combo-duo-view');
+            const comboCardImg = document.getElementById('pdp-combo-card-img');
+            const comboJanamazImg = document.getElementById('pdp-combo-janamaz-img');
+            const comboJanamazColorBadge = document.getElementById('pdp-combo-janamaz-color-badge');
+            const zoomBtn = document.getElementById('pdp-tap-to-zoom-btn');
             const mainVid = document.getElementById('pdp-main-video');
             const vidSource = document.getElementById('pdp-video-source');
             const counterEl = document.getElementById('pdp-media-counter');
@@ -1571,6 +1834,7 @@
             if (isVideo) {
                 imgContainer.classList.add('hidden');
                 vidContainer.classList.remove('hidden');
+                if (zoomBtn) zoomBtn.classList.add('hidden');
                 vidSource.src = activeMedia.url;
                 mainVid.load();
                 mainVid.play().catch(() => {
@@ -1581,40 +1845,36 @@
                 if (mainVid) mainVid.pause();
                 vidContainer.classList.add('hidden');
                 imgContainer.classList.remove('hidden');
-                
-                if (mainImg) {
-                    mainImg.classList.remove('animate-variant-pop');
-                    void mainImg.offsetWidth; // Trigger CSS reflow for smooth animation
-                    mainImg.src = activeMedia.url;
-                    mainImg.classList.add('animate-variant-pop');
-                }
-            }
 
-            // Render Media Thumbnail Strip
-            const thumbStrip = document.getElementById('pdp-thumbnails-strip');
-            if (thumbStrip && mediaList.length > 1) {
-                thumbStrip.innerHTML = mediaList.map((item, idx) => {
-                    const isCurrent = idx === currentMediaIndex;
-                    return `
-                        <button type="button" onclick="setPdpMediaSlide(${idx})" class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 transition-all p-0.5 bg-white cursor-pointer ${
-                            isCurrent 
-                                ? 'border-gold-500 ring-2 ring-gold-400/50 scale-105 shadow-sm bg-gold-50/50' 
-                                : 'border-gray-200 hover:border-gold-300 opacity-70 hover:opacity-100'
-                        }" title="${item.title}">
-                            ${item.type === 'image' ? `
-                                <img src="${item.url}" alt="${item.title}" class="w-full h-full object-contain rounded-lg">
-                            ` : `
-                                <div class="w-full h-full bg-onyx rounded-lg flex flex-col items-center justify-center text-gold-400 text-[9px] gap-0.5 border border-gold-500/20">
-                                    <i class="fa-solid fa-circle-play text-sm text-gold-500 animate-pulse"></i>
-                                    <span class="text-[7.5px] font-extrabold uppercase text-white">Video</span>
-                                </div>
-                            `}
-                        </button>
-                    `;
-                }).join('');
-                thumbStrip.classList.remove('hidden');
-            } else if (thumbStrip) {
-                thumbStrip.classList.add('hidden');
+                if (isComboDuo) {
+                    if (mainImg) mainImg.classList.add('hidden');
+                    if (zoomBtn) zoomBtn.classList.add('hidden'); // Avoid covering the bottom thumbnail selector
+                    if (comboDuoView) {
+                        comboDuoView.classList.remove('hidden');
+                        if (comboCardImg) comboCardImg.src = activeMedia.cardImg;
+                        if (comboJanamazImg) {
+                            comboJanamazImg.classList.remove('animate-variant-pop');
+                            void comboJanamazImg.offsetWidth;
+                            comboJanamazImg.src = activeMedia.janamazImg;
+                            comboJanamazImg.classList.add('animate-variant-pop');
+                        }
+                        if (comboJanamazColorBadge) {
+                            const rawColor = activeMedia.janamazColorName || 'Gold';
+                            comboJanamazColorBadge.textContent = rawColor.replace('Royal ', '').replace('Midnight ', '').replace('Silver ', '').replace('Emerald ', '').replace('Rose ', '');
+                        }
+                        renderComboInlineSwatches();
+                    }
+                } else {
+                    if (comboDuoView) comboDuoView.classList.add('hidden');
+                    if (zoomBtn) zoomBtn.classList.remove('hidden');
+                    if (mainImg) {
+                        mainImg.classList.remove('hidden');
+                        mainImg.classList.remove('animate-variant-pop');
+                        void mainImg.offsetWidth;
+                        mainImg.src = activeMedia.url;
+                        mainImg.classList.add('animate-variant-pop');
+                    }
+                }
             }
 
             preloadPdpGalleryMedia(mediaList);
@@ -1626,7 +1886,7 @@
             }
         }
 
-        // Background idle preloader for gallery thumbnails
+        // Background idle preloader for gallery media
         const preloadedGalleryUrls = new Set();
         function preloadPdpGalleryMedia(mediaList) {
             if (!mediaList || mediaList.length <= 1) return;
@@ -1658,6 +1918,52 @@
             const list = getPdpMediaList();
             currentMediaIndex = (currentMediaIndex + 1) % list.length;
             setPdpMediaSlide(currentMediaIndex);
+        }
+
+        // FINGER SWIPE / SLIDE GESTURE CONTROLLER FOR MOBILE PDP
+        let pdpTouchStartX = 0;
+        let pdpTouchStartY = 0;
+        let pdpTouchEndX = 0;
+        let pdpTouchEndY = 0;
+        let pdpTouchStartTime = 0;
+
+        function initPdpTouchControls() {
+            const frame = document.getElementById('pdp-main-media-frame') || document.getElementById('pdp-image-container');
+            if (!frame) return;
+
+            frame.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    pdpTouchStartX = e.touches[0].clientX;
+                    pdpTouchStartY = e.touches[0].clientY;
+                    pdpTouchEndX = pdpTouchStartX;
+                    pdpTouchEndY = pdpTouchStartY;
+                    pdpTouchStartTime = Date.now();
+                }
+            }, { passive: true });
+
+            frame.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1) {
+                    pdpTouchEndX = e.touches[0].clientX;
+                    pdpTouchEndY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            frame.addEventListener('touchend', (e) => {
+                const diffX = pdpTouchEndX - pdpTouchStartX;
+                const diffY = pdpTouchEndY - pdpTouchStartY;
+                const timeDiff = Date.now() - pdpTouchStartTime;
+                
+                // Horizontal swipe detection (> 30px swipe and horizontally dominant within 800ms)
+                if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY) * 1.15 && timeDiff < 800) {
+                    if (diffX < 0) {
+                        // Swiped Left -> Next Image
+                        nextPdpMedia();
+                    } else {
+                        // Swiped Right -> Previous Image
+                        prevPdpMedia();
+                    }
+                }
+            }, { passive: true });
         }
 
         // =========================================================================
@@ -1743,7 +2049,7 @@
                 if (modalZoomControls) modalZoomControls.classList.remove('hidden');
                 if (modalImg) {
                     modalImg.classList.remove('hidden');
-                    modalImg.src = activeMedia.url;
+                    modalImg.src = activeMedia.url || activeMedia.cardImg || 'product/card/699-1.webp';
                 }
                 updateModalTransform();
             }
@@ -1994,9 +2300,13 @@
             const p = currentProduct;
             const hasVariants = p.variants && p.variants.length > 0;
             const variant = hasVariants ? p.variants[currentVariantIndex] : null;
+            const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
 
-            const cartKey = variant ? `${p.id}_${variant.sku}` : `${p.id}_default`;
+            const isCombo = variant && variant.hasJanamaz;
+            const cartKey = variant ? (isCombo ? `${p.id}_${variant.sku}_${currentJanamazColor}` : `${p.id}_${variant.sku}`) : `${p.id}_default`;
             const existing = cart.find(i => i.cartKey === cartKey);
+
+            const vName = variant ? (isCombo ? `${variant.shortName} (${curJanamazObj.name})` : variant.shortName) : '';
 
             if (existing) {
                 existing.qty += 1;
@@ -2006,11 +2316,12 @@
                     id: p.id,
                     name: p.name,
                     sku: variant ? variant.sku : p.sku,
-                    variantName: variant ? variant.shortName : '',
+                    variantName: vName,
                     price: variant ? variant.price : p.price,
                     image: (variant && variant.image) ? variant.image : p.image,
-                    weightKg: variant ? variant.weightKg : (p.weightKg || 0.15),
-                    qty: 1
+                    weightKg: variant ? (variant.weightKg || (isCombo ? 0.26 : 0.15)) : (p.weightKg || 0.15),
+                    qty: 1,
+                    janamazColor: isCombo ? curJanamazObj.name : undefined
                 });
             }
 
