@@ -970,6 +970,22 @@
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     },
                     {
+                        sku: "fati_013",
+                        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Janamaz",
+                        price: 799,
+                        oldPrice: 1598,
+                        weight: "230gm",
+                        tag: "Combo ⚡",
+                        hasJanamaz: true,
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                    },
+                    {
                         sku: "fati_003",
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
@@ -1046,6 +1062,22 @@
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_014",
+                        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Janamaz",
+                        price: 799,
+                        oldPrice: 1598,
+                        weight: "230gm",
+                        tag: "Combo ⚡",
+                        hasJanamaz: true,
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
                     },
                     {
                         sku: "fati_006",
@@ -1141,6 +1173,22 @@
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     },
                     {
+                        sku: "fati_015",
+                        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Janamaz",
+                        price: 799,
+                        oldPrice: 1598,
+                        weight: "230gm",
+                        tag: "Combo ⚡",
+                        hasJanamaz: true,
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                    },
+                    {
                         sku: "fati_009",
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
@@ -1221,6 +1269,22 @@
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_016",
+                        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Janamaz",
+                        price: 799,
+                        oldPrice: 1598,
+                        weight: "230gm",
+                        tag: "Combo ⚡",
+                        hasJanamaz: true,
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
                     },
                     {
                         sku: "fati_012",
@@ -1713,24 +1777,24 @@
                 variantsSlider.innerHTML = p.variants.map((v, idx) => {
                     const isSelected = idx === currentVariantIndex;
                     const isCombo = v.hasJanamaz;
-                    const gridColSpan = (isCombo || idx === 2) ? 'col-span-2' : 'col-span-1';
                     let tagClass = 'bg-onyx text-gold-400';
-                    if (isCombo) tagClass = 'bg-rose-900 text-gold-300 ring-1 ring-gold-400/40 animate-pulse';
+                    if (v.price === 899) tagClass = 'bg-rose-900 text-gold-300 ring-1 ring-gold-400/40 animate-pulse';
+                    else if (v.price === 799) tagClass = 'bg-indigo-900 text-gold-300 ring-1 ring-gold-400/40';
                     else if (v.tag === 'Best Value') tagClass = 'bg-amber-100 text-amber-900';
 
                     return `
                         <div onclick="selectPdpVariant(${idx})" 
-                             class="cursor-pointer rounded-xl p-2.5 sm:p-3 transition-all border-2 relative flex flex-col justify-between ${gridColSpan} ${
+                             class="cursor-pointer rounded-xl p-2.5 sm:p-3 transition-all border-2 relative flex flex-col justify-between col-span-1 ${
                                  isSelected 
                                     ? (isCombo ? 'border-amber-500 bg-amber-50/90 shadow-md ring-2 ring-amber-400/50 scale-[1.01]' : 'border-gold-500 bg-gold-50/90 shadow-md ring-2 ring-gold-400/40 scale-[1.01]')
                                     : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/20'
                              }">
                             <div class="flex items-start justify-between gap-1 mb-1">
-                                <div class="flex items-center gap-1.5 flex-wrap">
+                                <div class="flex items-center gap-1 flex-wrap">
                                     <span class="text-[7.5px] sm:text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase ${tagClass}">${v.tag}</span>
-                                    ${isCombo ? '<span class="text-[7.5px] sm:text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase bg-emerald-600 text-white flex items-center gap-0.5 shadow-2xs"><i class="fa-solid fa-truck-fast text-[7px]"></i> Free Delivery</span>' : ''}
+                                    ${isCombo ? '<span class="text-[7px] sm:text-[7.5px] font-extrabold px-1 py-0.5 rounded uppercase bg-emerald-600 text-white flex items-center gap-0.5 shadow-2xs"><i class="fa-solid fa-truck-fast text-[6.5px]"></i> Free Delivery</span>' : ''}
                                 </div>
-                                <div class="w-4 h-4 rounded-full flex items-center justify-center border ${
+                                <div class="w-4 h-4 rounded-full flex items-center justify-center border shrink-0 ${
                                     isSelected ? 'bg-gold-500 border-gold-600 text-onyx shadow-xs' : 'border-gray-300 bg-white'
                                 }">
                                     ${isSelected ? '<i class="fa-solid fa-check text-[8.5px] font-black"></i>' : ''}
@@ -1745,7 +1809,7 @@
                                     <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${v.price}</span>
                                     <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${v.oldPrice || (v.price * 2)}</span>
                                 </div>
-                                ${isCombo ? '<span class="text-[8px] sm:text-[9px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-600 text-[8px]"></i> Free Delivery</span>' : ''}
+                                ${isCombo ? '<span class="text-[7.5px] sm:text-[8px] font-extrabold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded-full border border-emerald-300 flex items-center gap-0.5"><i class="fa-solid fa-circle-check text-emerald-600 text-[7px]"></i> Free</span>' : ''}
                             </div>
                         </div>
                     `;
