@@ -2793,9 +2793,8 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            const isFreeShipping = (subtotalPrice >= 699);
-            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 49;
-            const effectiveFee = isFreeShipping ? 0 : courierFee;
+            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 110;
+            const effectiveFee = 110;
             
             // Auto Apply Coupon Discount for Orders >= Rs. 999 (RAB112)
             let discountAmount = 0;
@@ -2836,22 +2835,14 @@
                 }
             }
 
-            const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 0;
+            const activeFee = (effectiveFee !== null && effectiveFee !== undefined) ? effectiveFee : 110;
             const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - discountAmount - prepaidDiscount + activeFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                if (isFreeShipping) {
-                    shippingFeeEl.className = "font-extrabold text-emerald-700";
-                    shippingFeeEl.textContent = 'FREE Delivery (Orders ₹699+)';
-                } else if (currentShippingFee === null || currentShippingFee === undefined) {
-                    shippingFeeEl.className = "font-semibold text-gray-500";
-                    shippingFeeEl.textContent = 'Enter Pincode';
-                } else {
-                    shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.textContent = `Rs. ${effectiveFee.toFixed(2)}`;
-                }
+                shippingFeeEl.className = "font-bold text-onyx";
+                shippingFeeEl.textContent = `Rs. ${effectiveFee.toFixed(2)}`;
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
 
@@ -3220,7 +3211,7 @@
                 const result = await fetchPincodeServiceability(clean);
 
                 if (result.isServiceable) {
-                    currentShippingFee = result.shippingCharge || 50;
+                    currentShippingFee = 110;
                     updateCartUI(false);
 
                     badge.className = 'text-[11px] p-2.5 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2';
@@ -3228,7 +3219,7 @@
                         <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                         <div>
                             <div class="font-bold">✓ Delivery Available to ${result.city || ''} ${result.state ? '(' + result.state + ')' : ''}</div>
-                            <div class="text-[10px] text-emerald-700 mt-0.5">Est: <b>${result.estimatedDays || '3-4 Days'}</b> • Shipping Charge: <b>Rs. ${currentShippingFee}</b> (COD Available)</div>
+                            <div class="text-[10px] text-emerald-700 mt-0.5">Est: <b>${result.estimatedDays || '3-4 Days'}</b> • Delivery Charge: <b>Rs. 110</b> (COD Available)</div>
                         </div>
                     `;
 

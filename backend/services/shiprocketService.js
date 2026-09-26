@@ -128,29 +128,7 @@ const PINCODE_STATE_MAP = {
 };
 
 function calculateShippingCharge(pincode, weightKg = 0.15) {
-  const clean = String(pincode || '').trim().replace(/\D/g, '');
-  if (!clean || clean.length !== 6) return 50;
-
-  const prefix = clean.substring(0, 2);
-  const prefix3 = clean.substring(0, 3);
-
-  // Local Mumbai / Thane Zone (origin Bhiwandi 421302)
-  if (prefix === '40' || prefix3 === '421') {
-    return 40;
-  }
-  // Maharashtra & Gujarat Zone
-  if (['41', '42', '43', '44', '38', '39'].includes(prefix)) {
-    return 50;
-  }
-  // North / South / Metro Zone (Delhi, Bangalore, Hyderabad, UP, Rajasthan, etc.)
-  if (['11', '12', '13', '14', '16', '20', '21', '22', '24', '25', '28', '30', '50', '56', '60', '70', '80'].includes(prefix)) {
-    return 65;
-  }
-  // Special / Remote / J&K / North-East Zone
-  if (['17', '18', '19', '78', '79'].includes(prefix)) {
-    return 85;
-  }
-  return 60;
+  return 110;
 }
 
 const shiprocketService = {
@@ -230,7 +208,7 @@ const shiprocketService = {
                 pincode: cleanPincode,
                 city: locationInfo.city,
                 state: locationInfo.state,
-                shippingCharge: liveRate,
+                shippingCharge: 110,
                 estimatedDays: etdFormatted,
                 codAvailable: Boolean(bestCourier.cod),
                 couriers: couriers.slice(0, 3).map(c => c.courier_name),

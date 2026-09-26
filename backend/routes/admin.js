@@ -730,7 +730,7 @@ router.post('/orders/:orderId/change-product', async (req, res, next) => {
     } else if (order.pricing?.shipping !== undefined) {
       resolvedShipping = order.pricing.shipping;
     } else {
-      resolvedShipping = lineSubtotal >= 699 ? 0 : 49;
+      resolvedShipping = 110;
     }
 
     const resolvedDiscount = (discount !== undefined && discount !== null && !isNaN(parseFloat(discount)))
