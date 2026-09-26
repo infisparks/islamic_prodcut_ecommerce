@@ -1785,20 +1785,17 @@
                 const isColorSelected = c.id === currentJanamazColor;
                 return `
                     <button type="button" onclick="selectJanamazColor('${c.id}')" 
-                            class="relative flex flex-col items-center gap-0.5 p-1 rounded-xl border-2 transition-all cursor-pointer ${
+                            class="relative flex items-center justify-center p-1 rounded-xl border-2 transition-all cursor-pointer ${
                                 isColorSelected 
-                                    ? 'border-gold-500 bg-gold-100/95 shadow-md ring-2 ring-gold-400/60 scale-[1.03]' 
+                                    ? 'border-gold-500 bg-gold-100/95 shadow-md ring-2 ring-gold-400/60 scale-[1.04]' 
                                     : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/50'
                             }" title="${c.name}">
-                        <div class="w-full aspect-[4/5] max-h-11 sm:max-h-14 rounded-md overflow-hidden bg-sand/20 flex items-center justify-center p-0.5">
+                        <div class="w-full aspect-[4/5] min-h-12 sm:min-h-16 rounded-lg overflow-hidden flex items-center justify-center p-0.5">
                             <img src="${c.image}" alt="${c.name}" class="w-full h-full object-contain pointer-events-none">
                         </div>
-                        <span class="text-[7.5px] sm:text-[8.5px] font-extrabold ${isColorSelected ? 'text-onyx' : 'text-gray-600'} leading-none truncate w-full text-center">
-                            ${c.name.replace('Royal ', '').replace('Midnight ', '').replace('Silver ', '').replace('Emerald ', '').replace('Rose ', '')}
-                        </span>
                         ${isColorSelected ? `
-                            <div class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-gold-500 text-onyx flex items-center justify-center shadow-xs border border-white">
-                                <i class="fa-solid fa-check text-[7px] font-black"></i>
+                            <div class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gold-500 text-onyx flex items-center justify-center shadow-xs border border-white">
+                                <i class="fa-solid fa-check text-[8px] font-black"></i>
                             </div>
                         ` : ''}
                     </button>
