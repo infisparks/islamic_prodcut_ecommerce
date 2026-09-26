@@ -17,14 +17,16 @@ const catalog = [
         name: "Standard Kit (Cards + Tasbih + Lanyard)",
         price: 559,
         weightKg: 0.12,
-        weightLabel: "120gm"
+        weightLabel: "120gm",
+        image: "product/card/559-1.webp"
       },
       {
         sku: "fati_001",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
-        weightLabel: "150gm"
+        weightLabel: "150gm",
+        image: "product/card/699-1.webp"
       }
     ]
   },
@@ -40,14 +42,16 @@ const catalog = [
         name: "Standard Kit (Cards + Tasbih + Lanyard)",
         price: 559,
         weightKg: 0.12,
-        weightLabel: "120gm"
+        weightLabel: "120gm",
+        image: "product/card/559-1.webp"
       },
       {
         sku: "fati_004",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
-        weightLabel: "150gm"
+        weightLabel: "150gm",
+        image: "product/card/699-1.webp"
       }
     ]
   },
@@ -63,14 +67,16 @@ const catalog = [
         name: "Standard Kit (Cards + Tasbih + Lanyard)",
         price: 559,
         weightKg: 0.12,
-        weightLabel: "120gm"
+        weightLabel: "120gm",
+        image: "product/card/559-1.webp"
       },
       {
         sku: "fati_007",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
-        weightLabel: "150gm"
+        weightLabel: "150gm",
+        image: "product/card/699-1.webp"
       }
     ]
   },
@@ -86,14 +92,16 @@ const catalog = [
         name: "Standard Kit (Cards + Tasbih + Lanyard)",
         price: 559,
         weightKg: 0.12,
-        weightLabel: "120gm"
+        weightLabel: "120gm",
+        image: "product/card/559-1.webp"
       },
       {
         sku: "fati_010",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
         price: 699,
         weightKg: 0.15,
-        weightLabel: "150gm"
+        weightLabel: "150gm",
+        image: "product/card/699-1.webp"
       }
     ]
   },

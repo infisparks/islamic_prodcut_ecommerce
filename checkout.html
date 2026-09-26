@@ -569,8 +569,8 @@
                 image: "product/umrah_card_urdu.webp",
                 badge: "CARD • URDU",
                 variants: [
-                    { sku: "fati_002", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm" },
-                    { sku: "fati_001", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm" }
+                    { sku: "fati_002", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm", image: "product/card/559-1.webp" },
+                    { sku: "fati_001", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm", image: "product/card/699-1.webp" }
                 ]
             },
             {
@@ -581,8 +581,8 @@
                 image: "product/umrah_card_english.webp",
                 badge: "CARD • ENGLISH",
                 variants: [
-                    { sku: "fati_005", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm" },
-                    { sku: "fati_004", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm" }
+                    { sku: "fati_005", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm", image: "product/card/559-1.webp" },
+                    { sku: "fati_004", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm", image: "product/card/699-1.webp" }
                 ]
             },
             {
@@ -593,8 +593,8 @@
                 image: "product/umrah_card_hindi.webp",
                 badge: "CARD • HINDI",
                 variants: [
-                    { sku: "fati_008", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm" },
-                    { sku: "fati_007", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm" }
+                    { sku: "fati_008", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm", image: "product/card/559-1.webp" },
+                    { sku: "fati_007", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm", image: "product/card/699-1.webp" }
                 ]
             },
             {
@@ -605,8 +605,8 @@
                 image: "product/umrah_card_roman.webp",
                 badge: "CARD • ROMAN",
                 variants: [
-                    { sku: "fati_011", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm" },
-                    { sku: "fati_010", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm" }
+                    { sku: "fati_011", name: "Standard Kit (Cards + Tasbih + Lanyard)", shortName: "Cards + Tasbih + Lanyard", price: 559, oldPrice: 1118, weightKg: 0.12, weight: "120gm", image: "product/card/559-1.webp" },
+                    { sku: "fati_010", name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", shortName: "Cards + Tasbih + Lanyard + Pouch", price: 699, oldPrice: 1398, weightKg: 0.15, weight: "150gm", image: "product/card/699-1.webp" }
                 ]
             },
             {
@@ -827,7 +827,7 @@
                         sku: v ? v.sku : p.sku,
                         variantName: v ? v.shortName : '',
                         price: v ? v.price : p.price,
-                        image: p.image,
+                        image: (v && v.image) ? v.image : p.image,
                         weightKg: v ? v.weightKg : (p.weightKg || 0.10),
                         qty: 1
                     });
@@ -845,7 +845,7 @@
                         sku: defVar.sku,
                         variantName: defVar.shortName,
                         price: defVar.price,
-                        image: defProd.image,
+                        image: (defVar && defVar.image) ? defVar.image : defProd.image,
                         weightKg: defVar.weightKg,
                         qty: 1
                     }];

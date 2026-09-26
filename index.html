@@ -155,6 +155,23 @@
             100% { transform: translateX(100%) rotate(30deg); }
         }
 
+        @keyframes variantPop {
+            0% {
+                opacity: 0.35;
+                transform: scale(0.96);
+            }
+            50% {
+                transform: scale(1.015);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-variant-pop {
+            animation: variantPop 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
         /* Ultra Crisp 3D Card Flip Effect */
         .flip-card {
             perspective: 1200px;
@@ -1583,6 +1600,11 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
@@ -1593,6 +1615,11 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
@@ -1635,6 +1662,11 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
@@ -1645,6 +1677,11 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
@@ -1702,6 +1739,11 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
@@ -1712,6 +1754,11 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
@@ -1758,6 +1805,11 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        image: "product/card/559-1.webp",
+                        images: [
+                            "product/card/559-1.webp",
+                            "product/card/559-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
                     },
                     {
@@ -1768,6 +1820,11 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     }
                 ]
@@ -2148,19 +2205,40 @@
             }
         }
 
-        function getMediaItems(product) {
+        function getMediaItems(product, variantIdx = currentSelectedVariant) {
             if (!product) return [];
             const items = [];
-            
-            if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-                product.images.forEach((imgUrl, index) => {
+            const hasVariants = product.variants && product.variants.length > 0;
+            const activeVariant = hasVariants ? (product.variants[variantIdx] || product.variants[0]) : null;
+
+            // Prioritize active variant's specific kit images
+            if (activeVariant && activeVariant.images && activeVariant.images.length > 0) {
+                activeVariant.images.forEach((imgUrl, index) => {
                     items.push({
                         type: 'image',
                         url: imgUrl,
-                        title: `${product.name} - View ${index + 1}`
+                        title: `${product.name} - ${activeVariant.shortName || 'Kit'} (View ${index + 1})`
                     });
                 });
-            } else if (product.image) {
+            } else if (activeVariant && activeVariant.image) {
+                items.push({
+                    type: 'image',
+                    url: activeVariant.image,
+                    title: `${product.name} - ${activeVariant.shortName || 'Kit'}`
+                });
+            }
+            
+            if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+                product.images.forEach((imgUrl, index) => {
+                    if (!items.some(it => it.url === imgUrl)) {
+                        items.push({
+                            type: 'image',
+                            url: imgUrl,
+                            title: `${product.name} - View ${items.length + 1}`
+                        });
+                    }
+                });
+            } else if (product.image && !items.some(it => it.url === product.image)) {
                 items.push({ type: 'image', url: product.image, title: 'Full Product View' });
             }
             
@@ -2180,7 +2258,9 @@
         }
 
         function selectProductVariant(variantIndex) {
+            if (currentSelectedVariant === variantIndex) return;
             currentSelectedVariant = variantIndex;
+            currentSlideIndex = 0;
             renderQuickViewModalContent();
         }
 
@@ -2239,7 +2319,7 @@
                              onmousedown="startImageDrag(event)" onmousemove="dragImage(event)" onmouseup="stopImageDrag()" onmouseleave="stopImageDrag()"
                              ontouchstart="startImageDrag(event)" ontouchmove="dragImage(event)" ontouchend="stopImageDrag()" ondblclick="toggleModalZoom()">
                             <img id="quickview-image" src="${activeMedia.url}" alt="${p.name}" 
-                                 class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-150 origin-center pointer-events-none"
+                                 class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-150 origin-center pointer-events-none animate-variant-pop"
                                  style="transform: scale(${currentZoom}) translate(${currentPanX / currentZoom}px, ${currentPanY / currentZoom}px);">
                         </div>
                     ` : `
