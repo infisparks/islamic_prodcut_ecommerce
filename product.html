@@ -1378,6 +1378,106 @@
                 rating: "(498)",
                 desc: "Beautiful Urdu calligraphy supplication stickers. Waterproof, scratch-resistant, and easily portable for Umrah pilgrimage.",
                 features: ["Clear Naskh & Nastaliq Script", "Waterproof Protective Coating", "Easy Peel Adhesive", "Contains Daily Essential Duas"]
+            },
+            {
+                id: 8,
+                name: "Pocket Travel Janamaz (Prayer Mat)",
+                category: "janamaz",
+                brand: "fatimacalligrapher27",
+                hsn: "5705",
+                color: "5 Colors Available",
+                size: "Full Size (100 * 60 cm), Pouch (15 * 10 cm)",
+                dimensions: "15 * 10 * 2 cm (Folded)",
+                material: "Waterproof Silky Fabric with Corner Weighted Pockets & Zipper Pouch",
+                manufacturer: "fatimacalligrapher27",
+                image: "product/janamaz/golden.webp",
+                images: [
+                    "product/janamaz/golden.webp",
+                    "product/janamaz/green.webp",
+                    "product/janamaz/pink.webp",
+                    "product/janamaz/black.webp",
+                    "product/janamaz/gray.webp"
+                ],
+                badge: "TRAVEL JANAMAZ",
+                soldCount: "2,150 sold",
+                rating: "(734)",
+                price: 299,
+                oldPrice: 598,
+                weight: "150gm",
+                desc: "Ultra-compact, pocket-size foldable travel Janamaz prayer mat with matching zipper travel pouch. Water-resistant, lightweight, and easy to carry anywhere for Umrah, Hajj, and daily travel.",
+                features: ["Pocket-Sized Foldable Design", "Matching Zipper Travel Pouch Included", "Water-Resistant & Easy to Clean", "Corner Weighted Pockets Against Wind", "5 Elegant Islamic Color Choices"],
+                variants: [
+                    {
+                        sku: "fati_jnm_01",
+                        name: "Pocket Travel Janamaz (Royal Gold)",
+                        shortName: "Royal Gold",
+                        colorId: "golden",
+                        colorName: "Royal Gold",
+                        price: 299,
+                        oldPrice: 598,
+                        weight: "150gm",
+                        tag: "Most Popular",
+                        image: "product/janamaz/golden.webp",
+                        images: ["product/janamaz/golden.webp"],
+                        includes: ["Pocket Foldable Travel Janamaz Mat (Royal Gold)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
+                    },
+                    {
+                        sku: "fati_jnm_02",
+                        name: "Pocket Travel Janamaz (Emerald Green)",
+                        shortName: "Emerald Green",
+                        colorId: "green",
+                        colorName: "Emerald Green",
+                        price: 299,
+                        oldPrice: 598,
+                        weight: "150gm",
+                        tag: "Classic Green",
+                        image: "product/janamaz/green.webp",
+                        images: ["product/janamaz/green.webp"],
+                        includes: ["Pocket Foldable Travel Janamaz Mat (Emerald Green)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
+                    },
+                    {
+                        sku: "fati_jnm_03",
+                        name: "Pocket Travel Janamaz (Rose Pink)",
+                        shortName: "Rose Pink",
+                        colorId: "pink",
+                        colorName: "Rose Pink",
+                        price: 299,
+                        oldPrice: 598,
+                        weight: "150gm",
+                        tag: "Special Edition",
+                        image: "product/janamaz/pink.webp",
+                        images: ["product/janamaz/pink.webp"],
+                        includes: ["Pocket Foldable Travel Janamaz Mat (Rose Pink)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
+                    },
+                    {
+                        sku: "fati_jnm_04",
+                        name: "Pocket Travel Janamaz (Midnight Black)",
+                        shortName: "Midnight Black",
+                        colorId: "black",
+                        colorName: "Midnight Black",
+                        price: 299,
+                        oldPrice: 598,
+                        weight: "150gm",
+                        tag: "Sleek Black",
+                        image: "product/janamaz/black.webp",
+                        images: ["product/janamaz/black.webp"],
+                        includes: ["Pocket Foldable Travel Janamaz Mat (Midnight Black)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
+                    },
+                    {
+                        sku: "fati_jnm_05",
+                        name: "Pocket Travel Janamaz (Slate Gray)",
+                        shortName: "Slate Gray",
+                        colorId: "gray",
+                        colorName: "Slate Gray",
+                        price: 299,
+                        oldPrice: 598,
+                        weight: "150gm",
+                        tag: "Modern Gray",
+                        image: "product/janamaz/gray.webp",
+                        images: ["product/janamaz/gray.webp"],
+                        includes: ["Pocket Foldable Travel Janamaz Mat (Slate Gray)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
+                    }
+                ]
             }
         ];
 
@@ -1591,6 +1691,26 @@
         function getPdpMediaList() {
             const items = [];
             const p = currentProduct;
+
+            if (p.category === 'janamaz' || p.id === 8) {
+                const curColorObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
+                items.push({
+                    type: 'image',
+                    url: curColorObj.image,
+                    title: `Pocket Travel Janamaz - ${curColorObj.name}`
+                });
+                janamazColors.forEach(c => {
+                    if (c.id !== curColorObj.id) {
+                        items.push({
+                            type: 'image',
+                            url: c.image,
+                            title: `Pocket Travel Janamaz - ${c.name}`
+                        });
+                    }
+                });
+                return items;
+            }
+
             const hasVariants = p.variants && p.variants.length > 0;
             const activeVariant = hasVariants ? p.variants[currentVariantIndex] : null;
 
@@ -1694,6 +1814,12 @@
 
         function selectJanamazColor(colorId) {
             currentJanamazColor = colorId;
+            if (currentProduct.category === 'janamaz' || currentProduct.id === 8) {
+                if (currentProduct.variants) {
+                    const vIdx = currentProduct.variants.findIndex(v => v.colorId === colorId);
+                    if (vIdx !== -1) currentVariantIndex = vIdx;
+                }
+            }
             currentMediaIndex = 0; // Show the selected Janamaz mat directly as the top image
             renderPdpView();
         }
@@ -1701,6 +1827,12 @@
         function selectPdpVariant(idx) {
             if (currentVariantIndex === idx) return;
             currentVariantIndex = idx;
+            if (currentProduct.category === 'janamaz' || currentProduct.id === 8) {
+                const v = currentProduct.variants && currentProduct.variants[idx];
+                if (v && v.colorId) {
+                    currentJanamazColor = v.colorId;
+                }
+            }
             currentMediaIndex = 0; // Directly show the selected package's top image
             renderPdpView();
         }
@@ -1716,11 +1848,12 @@
             const activeWeight = activeVariant ? activeVariant.weight : p.weight;
             const discountPercent = Math.round(((activeOldPrice - activePrice) / activeOldPrice) * 100);
             const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
+            const isJanamazProd = (p.category === 'janamaz' || p.id === 8);
 
             // Update Page Meta Title & Breadcrumb
             document.title = `${p.name} | Fatima Calligrapher`;
             document.getElementById('breadcrumb-product-name').textContent = p.name;
-            document.getElementById('pdp-title').textContent = p.name;
+            document.getElementById('pdp-title').textContent = isJanamazProd ? `Pocket Travel Janamaz (${curJanamazObj.name})` : p.name;
             document.getElementById('pdp-rating').textContent = `${p.rating} Verified Reviews`;
             document.getElementById('pdp-desc').textContent = p.desc;
 
@@ -1752,11 +1885,13 @@
             // Sticky Bottom (Mobile)
             document.getElementById('sticky-pdp-price').textContent = `Rs. ${activePrice}`;
             document.getElementById('sticky-pdp-old-price').textContent = `Rs. ${activeOldPrice}`;
-            const stickyKitLabel = activeVariant ? (activeVariant.hasJanamaz ? `${activeVariant.shortName} (${curJanamazObj.name.split(' ')[1] || curJanamazObj.name})` : activeVariant.shortName) : (p.badge);
+            const stickyKitLabel = isJanamazProd 
+                ? `Color: ${curJanamazObj.name}` 
+                : (activeVariant ? (activeVariant.hasJanamaz ? `${activeVariant.shortName} (${curJanamazObj.name.split(' ')[1] || curJanamazObj.name})` : activeVariant.shortName) : (p.badge));
             document.getElementById('sticky-pdp-kit').textContent = stickyKitLabel;
 
             // WhatsApp link
-            const janamazNote = (activeVariant && activeVariant.hasJanamaz) ? ` [Janamaz Color: ${curJanamazObj.name}]` : '';
+            const janamazNote = (activeVariant && activeVariant.hasJanamaz) ? ` [Janamaz Color: ${curJanamazObj.name}]` : (isJanamazProd ? ` [Color: ${curJanamazObj.name}]` : '');
             const waMsg = encodeURIComponent(`Assalam u Alaikum! I would like to order: ${p.name} (${activeVariant ? activeVariant.name : 'Standard'})${janamazNote} for Rs. ${activePrice}. Please confirm.`);
             document.getElementById('pdp-whatsapp-btn').href = `https://wa.me/919970347703?text=${waMsg}`;
 
@@ -1764,15 +1899,15 @@
             document.getElementById('spec-brand').textContent = p.brand;
             document.getElementById('spec-sku').textContent = activeSku;
             document.getElementById('spec-price').innerHTML = `Rs. ${activePrice} <span class="text-gray-400 font-normal line-through">(Rs. ${activeOldPrice})</span>`;
-            document.getElementById('spec-dimensions').textContent = (activeVariant && activeVariant.hasJanamaz) ? `${activeWeight} • ${p.dimensions} (+ Janamaz 43x25")` : `${activeWeight} • ${p.dimensions}`;
-            document.getElementById('spec-material').textContent = (activeVariant && activeVariant.hasJanamaz) ? `${p.material} + Soft Silky Janamaz` : p.material;
+            document.getElementById('spec-dimensions').textContent = isJanamazProd ? `150gm • Folded 15x10cm (Open 100x60cm)` : ((activeVariant && activeVariant.hasJanamaz) ? `${activeWeight} • ${p.dimensions} (+ Janamaz 43x25")` : `${activeWeight} • ${p.dimensions}`);
+            document.getElementById('spec-material').textContent = isJanamazProd ? `Waterproof Silky Fabric + Matching Zipper Pouch` : ((activeVariant && activeVariant.hasJanamaz) ? `${p.material} + Soft Silky Janamaz` : p.material);
             document.getElementById('spec-hsn').textContent = `${p.hsn} • ${p.manufacturer}`;
 
             // Update Language Switcher Buttons state
             const langSection = document.getElementById('pdp-language-selector-section');
             const languages = ['English', 'Urdu', 'Hindi', 'Roman'];
             if (langSection) {
-                if (['English', 'Urdu', 'Hindi', 'Roman'].includes(p.language)) {
+                if (!isJanamazProd && ['English', 'Urdu', 'Hindi', 'Roman'].includes(p.language)) {
                     langSection.classList.remove('hidden');
                     languages.forEach(l => {
                         const btn = document.getElementById(`lang-btn-${l}`);
@@ -1792,7 +1927,7 @@
             // Render Media
             renderPdpMediaView();
 
-            // Render Variants
+            // Render Variants / Color Section
             const variantsContainer = document.getElementById('pdp-variants-container');
             const variantsSlider = document.getElementById('pdp-variants-slider');
             const inclusionsBox = document.getElementById('pdp-inclusions-box');
@@ -1801,10 +1936,15 @@
             if (hasVariants) {
                 variantsContainer.classList.remove('hidden');
                 if (optionsBadge) {
-                    optionsBadge.textContent = `${p.variants.length} Package Options`;
+                    optionsBadge.textContent = isJanamazProd ? '5 Colors Available' : `${p.variants.length} Package Options`;
                 }
 
-                variantsSlider.className = 'grid grid-cols-2 gap-2 sm:gap-2.5';
+                const variantHeaderLabel = document.querySelector('#pdp-variants-container label span');
+                if (variantHeaderLabel) {
+                    variantHeaderLabel.textContent = isJanamazProd ? 'Select Janamaz Color:' : 'Select Package Option:';
+                }
+
+                variantsSlider.className = isJanamazProd ? 'grid grid-cols-5 gap-1.5 sm:gap-2.5' : 'grid grid-cols-2 gap-2 sm:gap-2.5';
 
                 variantsSlider.innerHTML = p.variants.map((v, idx) => {
                     const isSelected = idx === currentVariantIndex;
@@ -1812,7 +1952,38 @@
                     let tagClass = 'bg-onyx text-gold-400';
                     if (v.price === 899) tagClass = 'bg-rose-900 text-gold-300 ring-1 ring-gold-400/40 animate-pulse';
                     else if (v.price === 799) tagClass = 'bg-indigo-900 text-gold-300 ring-1 ring-gold-400/40';
-                    else if (v.tag === 'Best Value') tagClass = 'bg-amber-100 text-amber-900';
+                    else if (v.tag === 'Best Value' || v.tag === 'Most Popular') tagClass = 'bg-amber-100 text-amber-900';
+                    else if (v.tag) tagClass = 'bg-sand text-onyx border border-gray-300';
+
+                    if (isJanamazProd) {
+                        const colorHex = janamazColors.find(c => c.id === v.colorId)?.hex || '#D4AF37';
+                        return `
+                            <div onclick="selectPdpVariant(${idx})" 
+                                 class="cursor-pointer rounded-xl p-1.5 sm:p-2 transition-all border-2 relative flex flex-col justify-between items-center text-center col-span-1 ${
+                                     isSelected 
+                                        ? 'border-gold-500 bg-gold-50/95 shadow-md ring-2 ring-gold-400/50 scale-[1.02]' 
+                                        : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/20'
+                                 }">
+                                <div class="w-full flex items-center justify-between gap-0.5 mb-1">
+                                    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/20 shrink-0 shadow-2xs" style="background-color: ${colorHex};"></span>
+                                    <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center border shrink-0 ${
+                                        isSelected ? 'bg-gold-500 border-gold-600 text-onyx shadow-xs' : 'border-gray-300 bg-white'
+                                    }">
+                                        ${isSelected ? '<i class="fa-solid fa-check text-[7px] sm:text-[8px] font-black"></i>' : ''}
+                                    </div>
+                                </div>
+                                <div class="w-full aspect-square rounded-lg overflow-hidden my-0.5 bg-pearl flex items-center justify-center p-0.5 border border-gray-100">
+                                    <img src="${v.image}" alt="${v.shortName}" class="w-full h-full object-contain pointer-events-none">
+                                </div>
+                                <div class="my-0.5 w-full">
+                                    <div class="text-[9.5px] sm:text-[11px] font-bold text-onyx truncate leading-tight">${v.shortName}</div>
+                                </div>
+                                <div class="pt-0.5 border-t border-gray-200/80 w-full flex items-center justify-center mt-0.5">
+                                    <span class="font-extrabold text-[10px] sm:text-xs text-onyx">Rs. ${v.price}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
 
                     return `
                         <div onclick="selectPdpVariant(${idx})" 
@@ -1853,7 +2024,31 @@
                     renderComboInlineSwatches();
                 }
 
-                if (activeVariant && activeVariant.includes) {
+                if (isJanamazProd) {
+                    inclusionsBox.innerHTML = `
+                        <div class="font-bold text-[10px] sm:text-[11px] text-onyx mb-1 flex items-center gap-1">
+                            <i class="fa-solid fa-box-open text-emerald-600"></i> Included in Selected Package:
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[10px] sm:text-xs text-gray-700">
+                            <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="font-medium truncate">Travel Janamaz Mat (${curJanamazObj.name})</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="font-medium truncate">Matching Travel Zipper Pouch</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="font-medium truncate">Water-Resistant Silky Smooth Fabric</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="font-medium truncate">Corner Weighted Wind Protection</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (activeVariant && activeVariant.includes) {
                     inclusionsBox.innerHTML = `
                         <div class="font-bold text-[10px] sm:text-[11px] text-onyx mb-1 flex items-center gap-1">
                             <i class="fa-solid fa-box-open text-emerald-600"></i> Included in Selected Package:
@@ -2402,10 +2597,21 @@
             const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
 
             const isCombo = variant && variant.hasJanamaz;
-            const cartKey = variant ? (isCombo ? `${p.id}_${variant.sku}_${currentJanamazColor}` : `${p.id}_${variant.sku}`) : `${p.id}_default`;
+            const isJanamazProd = (p.category === 'janamaz' || p.id === 8);
+            const cartKey = variant 
+                ? ((isCombo || isJanamazProd) ? `${p.id}_${variant.sku}_${currentJanamazColor}` : `${p.id}_${variant.sku}`) 
+                : `${p.id}_default`;
             const existing = cart.find(i => i.cartKey === cartKey);
 
-            const vName = variant ? (isCombo ? `${variant.shortName} (${curJanamazObj.name})` : variant.shortName) : '';
+            const vName = isJanamazProd 
+                ? (variant ? variant.shortName : curJanamazObj.name)
+                : (variant ? (isCombo ? `${variant.shortName} (${curJanamazObj.name})` : variant.shortName) : '');
+
+            const itemImage = isJanamazProd
+                ? curJanamazObj.image
+                : ((variant && variant.image) ? variant.image : p.image);
+
+            const itemDisplayName = isJanamazProd ? `Pocket Travel Janamaz (${curJanamazObj.name})` : p.name;
 
             if (existing) {
                 existing.qty += 1;
@@ -2413,14 +2619,14 @@
                 cart.push({
                     cartKey,
                     id: p.id,
-                    name: p.name,
+                    name: itemDisplayName,
                     sku: variant ? variant.sku : p.sku,
                     variantName: vName,
                     price: variant ? variant.price : p.price,
-                    image: (variant && variant.image) ? variant.image : p.image,
+                    image: itemImage,
                     weightKg: variant ? (variant.weightKg || (isCombo ? 0.26 : 0.15)) : (p.weightKg || 0.15),
                     qty: 1,
-                    janamazColor: isCombo ? curJanamazObj.name : undefined
+                    janamazColor: (isCombo || isJanamazProd) ? curJanamazObj.name : undefined
                 });
             }
 
@@ -2495,13 +2701,13 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 110;
+            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 120;
             const hasFreeShipping = cart.some(item => {
                 const p = products.find(prod => prod.id === item.id);
                 const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
-                return (v && v.hasJanamaz) || (item.janamazColor !== undefined);
+                return (v && v.freeShipping);
             });
-            const effectiveFee = hasFreeShipping ? 0 : 110;
+            const effectiveFee = hasFreeShipping ? 0 : 120;
 
             // Auto Apply Offer for Orders >= 999 (12% off)
             const discount12 = (subtotalPrice >= 999) ? Math.round(subtotalPrice * 0.12) : 0;
@@ -2710,7 +2916,7 @@
                     const res = await fetch(`/api/shipments/serviceability?pincode=${clean}&cod=1`);
                     const data = await res.json();
                     if (data.success && data.data && data.data.isServiceable) {
-                        currentShippingFee = 110;
+                        currentShippingFee = 120;
                         updateCartUI(false);
 
                         const estDateStr = getFormattedEstimatedDelivery(4);
@@ -2719,7 +2925,7 @@
                             <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                             <div>
                                 <div class="font-bold">✓ Delivery Available to ${data.data.city || ''} ${data.data.state ? '(' + data.data.state + ')' : ''}</div>
-                                <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> • Delivery Charge: <b>Rs. 110</b> (COD Available)</div>
+                                <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> • Delivery Charge: <b>Rs. 120</b> (COD Available)</div>
                             </div>
                         `;
                         const cityInput = document.getElementById('ship-city');
@@ -2731,7 +2937,7 @@
                         badge.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 text-sm mt-0.5 flex-shrink-0"></i><div><div class="font-bold">Delivery Not Available</div></div>`;
                     }
                 } catch (e) {
-                    currentShippingFee = 110;
+                    currentShippingFee = 120;
                     updateCartUI(false);
                 }
             }, 250);

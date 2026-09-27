@@ -128,7 +128,7 @@ const PINCODE_STATE_MAP = {
 };
 
 function calculateShippingCharge(pincode, weightKg = 0.15) {
-  return 110;
+  return 120;
 }
 
 const shiprocketService = {
@@ -208,7 +208,7 @@ const shiprocketService = {
                 pincode: cleanPincode,
                 city: locationInfo.city,
                 state: locationInfo.state,
-                shippingCharge: 110,
+                shippingCharge: 120,
                 estimatedDays: etdFormatted,
                 codAvailable: Boolean(bestCourier.cod),
                 couriers: couriers.slice(0, 3).map(c => c.courier_name),

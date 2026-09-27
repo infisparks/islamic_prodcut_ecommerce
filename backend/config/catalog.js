@@ -254,6 +254,76 @@ const catalog = [
         freeShipping: false
       }
     ]
+  },
+  {
+    id: 8,
+    name: "Pocket Travel Janamaz (Prayer Mat)",
+    category: "janamaz",
+    hsn: "5705",
+    dimensions: { length: 15, breadth: 10, height: 2 },
+    image: "product/janamaz/golden.webp",
+    variants: [
+      {
+        sku: "fati_jnm_01",
+        name: "Pocket Travel Janamaz (Royal Gold)",
+        color: "Royal Gold",
+        colorId: "golden",
+        price: 299,
+        weightKg: 0.15,
+        weightLabel: "150gm",
+        image: "product/janamaz/golden.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_jnm_02",
+        name: "Pocket Travel Janamaz (Emerald Green)",
+        color: "Emerald Green",
+        colorId: "green",
+        price: 299,
+        weightKg: 0.15,
+        weightLabel: "150gm",
+        image: "product/janamaz/green.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_jnm_03",
+        name: "Pocket Travel Janamaz (Rose Pink)",
+        color: "Rose Pink",
+        colorId: "pink",
+        price: 299,
+        weightKg: 0.15,
+        weightLabel: "150gm",
+        image: "product/janamaz/pink.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_jnm_04",
+        name: "Pocket Travel Janamaz (Midnight Black)",
+        color: "Midnight Black",
+        colorId: "black",
+        price: 299,
+        weightKg: 0.15,
+        weightLabel: "150gm",
+        image: "product/janamaz/black.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_jnm_05",
+        name: "Pocket Travel Janamaz (Slate Gray)",
+        color: "Slate Gray",
+        colorId: "gray",
+        price: 299,
+        weightKg: 0.15,
+        weightLabel: "150gm",
+        image: "product/janamaz/gray.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      }
+    ]
   }
 ];
 

@@ -52,7 +52,10 @@
         { name: "Essential Pack (Cards + Tawaf Tasbih)", image: "product/umrah_card_hindi.webp", id: 3 },
         { name: "Dua Sticker Pack (Urdu)", image: "product/umrah_Sticker_urdu.webp", id: 7 },
         { name: "Dua Sticker Pack (English)", image: "product/umrah_Sticker_English.webp", id: 5 },
-        { name: "Dua Sticker Pack (Hindi)", image: "product/umrah_Sticker_hindi.webp", id: 6 }
+        { name: "Dua Sticker Pack (Hindi)", image: "product/umrah_Sticker_hindi.webp", id: 6 },
+        { name: "Pocket Travel Janamaz (Royal Gold)", image: "product/janamaz/golden.webp", id: 8 },
+        { name: "Pocket Travel Janamaz (Emerald Green)", image: "product/janamaz/green.webp", id: 8 },
+        { name: "Pocket Travel Janamaz (Midnight Black)", image: "product/janamaz/black.webp", id: 8 }
     ];
 
     // Recent Times

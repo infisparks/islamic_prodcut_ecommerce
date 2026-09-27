@@ -61,9 +61,9 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Free Shipping if any combo item with freeShipping is in cart; otherwise fixed delivery charge of ₹110
-  const hasFreeShipping = items.some(i => i.freeShipping || i.hasJanamaz);
-  const shipping = hasFreeShipping ? 0 : 110;
+  // Free Shipping if any combo item with freeShipping is in cart; otherwise fixed delivery charge of ₹120
+  const hasFreeShipping = items.some(i => i.freeShipping);
+  const shipping = hasFreeShipping ? 0 : 120;
 
   // No auto 12% discount
   let discount = 0;

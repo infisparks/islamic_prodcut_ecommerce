@@ -652,12 +652,26 @@
                 price: 199,
                 oldPrice: 398,
                 weightKg: 0.03
+            },
+            {
+                id: 8,
+                name: "Pocket Travel Janamaz (Prayer Mat)",
+                category: "janamaz",
+                image: "product/janamaz/golden.webp",
+                badge: "TRAVEL JANAMAZ",
+                variants: [
+                    { sku: "fati_jnm_01", name: "Pocket Travel Janamaz (Royal Gold)", shortName: "Royal Gold", price: 299, oldPrice: 598, weightKg: 0.15, weight: "150gm", image: "product/janamaz/golden.webp", hasJanamaz: false, freeShipping: false },
+                    { sku: "fati_jnm_02", name: "Pocket Travel Janamaz (Emerald Green)", shortName: "Emerald Green", price: 299, oldPrice: 598, weightKg: 0.15, weight: "150gm", image: "product/janamaz/green.webp", hasJanamaz: false, freeShipping: false },
+                    { sku: "fati_jnm_03", name: "Pocket Travel Janamaz (Rose Pink)", shortName: "Rose Pink", price: 299, oldPrice: 598, weightKg: 0.15, weight: "150gm", image: "product/janamaz/pink.webp", hasJanamaz: false, freeShipping: false },
+                    { sku: "fati_jnm_04", name: "Pocket Travel Janamaz (Midnight Black)", shortName: "Midnight Black", price: 299, oldPrice: 598, weightKg: 0.15, weight: "150gm", image: "product/janamaz/black.webp", hasJanamaz: false, freeShipping: false },
+                    { sku: "fati_jnm_05", name: "Pocket Travel Janamaz (Slate Gray)", shortName: "Slate Gray", price: 299, oldPrice: 598, weightKg: 0.15, weight: "150gm", image: "product/janamaz/gray.webp", hasJanamaz: false, freeShipping: false }
+                ]
             }
         ];
 
         let checkoutCart = [];
         let selectedPaymentMethod = 'razorpay';
-        let currentShippingFee = 110;
+        let currentShippingFee = 120;
         let appliedCoupon = null;
         let isProcessing = false;
         let activeCodOrderPayload = null;
@@ -912,14 +926,14 @@
             if (countEl) countEl.textContent = totalQty;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
-            // Fixed Delivery Charge: ₹110; Free Shipping for Combos with Janamaz
+            // Fixed Delivery Charge: ₹120; Free Shipping for Combos with Janamaz
             const isOnline = (selectedPaymentMethod !== 'cod');
             const hasFreeShipping = checkoutCart.some(item => {
                 const p = catalogProducts.find(prod => prod.id === item.id);
                 const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
-                return (v && v.hasJanamaz) || (item.janamazColor !== undefined);
+                return (v && v.freeShipping);
             });
-            const effectiveShipping = hasFreeShipping ? 0 : 110;
+            const effectiveShipping = hasFreeShipping ? 0 : 120;
 
             if (shippingEl) {
                 shippingEl.className = hasFreeShipping ? "font-bold text-emerald-700" : "font-bold text-onyx";
@@ -944,10 +958,10 @@
             const prepaidDiscount = Math.round((subtotal * prepaidDiscountPercent) / 100);
 
             // Calculations:
-            // COD Total: Subtotal - discount + Shipping (₹110)
+            // COD Total: Subtotal - discount + Shipping (₹120)
             const codTotal = Math.max(0, subtotal - discountAmount + effectiveShipping);
 
-            // Online Total: Subtotal - discount - prepaid discount + Shipping (₹110)
+            // Online Total: Subtotal - discount - prepaid discount + Shipping (₹120)
             const onlineTotal = Math.max(0, subtotal - discountAmount - prepaidDiscount + effectiveShipping);
 
             // Update badge prices in Section 2
@@ -1128,7 +1142,7 @@
                             }).catch(() => {});
                     }
 
-                    currentShippingFee = 110;
+                    currentShippingFee = 120;
                     const courierName = info.deliveryType || (info.couriers && info.couriers[0]) || 'Express Courier Partner';
                     const etd = info.estimatedDays || '3-4 Business Days';
 
@@ -1139,25 +1153,25 @@
                                 <i class="fa-solid fa-circle-check text-emerald-600"></i>
                                 <span><b>${cityInput.value || city || 'Serviceable'}</b> (Est. ${etd})</span>
                             </span>
-                            <span class="font-bold text-emerald-800">₹110 Delivery</span>
+                            <span class="font-bold text-emerald-800">₹120 Delivery</span>
                         </div>
                         <div class="text-[10px] text-emerald-700 mt-0.5">${courierName} • Cash on Delivery Available</div>
                     `;
                 } else {
-                    currentShippingFee = 110;
+                    currentShippingFee = 120;
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
                         <div class="flex items-center justify-between">
                             <span><i class="fa-solid fa-truck-fast text-emerald-600 mr-1"></i> Pan-India Express Delivery</span>
-                            <span class="font-bold text-emerald-800">₹110 Delivery</span>
+                            <span class="font-bold text-emerald-800">₹120 Delivery</span>
                         </div>
                     `;
                 }
             } catch (err) {
                 spinner.classList.add('hidden');
-                currentShippingFee = 110;
+                currentShippingFee = 120;
                 feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
-                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (₹110 Delivery)`;
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (₹120 Delivery)`;
             }
 
             saveCustomerDetails();
