@@ -30,7 +30,7 @@ const catalog = [
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: false
+        freeShipping: true
       },
       {
         sku: "fati_013",
@@ -79,7 +79,7 @@ const catalog = [
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: false
+        freeShipping: true
       },
       {
         sku: "fati_014",
@@ -128,7 +128,7 @@ const catalog = [
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: false
+        freeShipping: true
       },
       {
         sku: "fati_015",
@@ -177,7 +177,7 @@ const catalog = [
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: false
+        freeShipping: true
       },
       {
         sku: "fati_016",

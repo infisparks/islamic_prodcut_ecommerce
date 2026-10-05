@@ -61,38 +61,44 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Free Shipping if any combo item with freeShipping is in cart; otherwise fixed delivery charge of ₹120
-  const hasFreeShipping = items.some(i => i.freeShipping);
-  const shipping = hasFreeShipping ? 0 : 120;
+  // Shipping Rule:
+  // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
+  // - Orders below ₹999:
+  //   * COD orders pay standard ₹120 delivery charge.
+  //   * Online (Prepaid) orders get FREE SHIPPING if containing an offer kit (₹699, ₹799, ₹899), otherwise ₹60.
+  const isOnlinePayment = (paymentMethod !== 'cod');
+  let hasFreeShipping = false;
+  let shipping = 120;
 
-  // No auto 12% discount
+  if (subtotal >= 999) {
+    hasFreeShipping = true;
+    shipping = 0;
+  } else if (isOnlinePayment) {
+    const eligibleForOnlineFreeShipping = items.some(i => i.freeShipping);
+    if (eligibleForOnlineFreeShipping) {
+      hasFreeShipping = true;
+      shipping = 0;
+    } else {
+      hasFreeShipping = false;
+      shipping = 60;
+    }
+  } else {
+    hasFreeShipping = false;
+    shipping = 120;
+  }
+
   let discount = 0;
   let appliedCoupon = null;
 
-  if (couponCode && typeof couponCode === 'string') {
-    const cleanCoupon = couponCode.trim().toUpperCase();
-    if (cleanCoupon === 'RAB112') {
-      if (subtotal >= 999) {
-        discount = Math.round(subtotal * 0.12);
-        appliedCoupon = 'RAB112';
-      } else {
-        const err = new Error('Coupon RAB112 requires a minimum order of ₹999.');
-        err.statusCode = 400;
-        err.code = 'COUPON_MIN_AMOUNT_NOT_MET';
-        err.isPublic = true;
-        throw err;
-      }
-    }
-  }
-
-  // Payment Method Discounts & Fees:
-  // - Online Payment: 10% Instant Discount on orders >= ₹999; 5% Instant Discount on orders < ₹999
-  const isOnlinePayment = (paymentMethod !== 'cod');
+  // Payment Method Discounts based on the 4 official banners:
+  // - 10% OFF on prepaid for Combo sets (₹799 / ₹899) or any order >= ₹999 (Banner 1, 2, 3)
+  // - 5% OFF on prepaid for ₹699 Full Companion Kit or orders < ₹999 (Banner 4)
   let onlineDiscount = 0;
   let codCharge = 0;
 
   if (isOnlinePayment) {
-    const prepaidDiscountRate = (subtotal >= 999) ? 0.10 : 0.05;
+    const hasCombo = items.some(i => i.hasJanamaz);
+    const prepaidDiscountRate = (hasCombo || subtotal >= 999) ? 0.10 : 0.05;
     onlineDiscount = Math.round(subtotal * prepaidDiscountRate);
   }
 

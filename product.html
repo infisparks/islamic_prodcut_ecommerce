@@ -237,11 +237,11 @@
                             <!-- Top 50/50 Split Showcase Images (Edge-to-edge full fill, zero bottom dead space) -->
                             <div class="flex-1 w-full flex flex-row items-stretch relative min-h-0 overflow-hidden">
                                 <!-- Left Half (50%): Umrah Dua Card Kit (Main Kit) -->
-                                <div class="relative w-1/2 h-full flex items-center justify-center bg-transparent overflow-hidden border-r border-gold-400/50">
+                                <div class="relative w-1/2 h-full flex items-center justify-center bg-white/40 overflow-hidden border-r border-gold-400/50 p-1 sm:p-2">
                                     <span class="absolute top-2 left-2 z-20 bg-onyx/85 backdrop-blur-xs text-gold-300 text-[8px] sm:text-[9px] font-extrabold px-1.5 py-0.5 rounded-md border border-gold-500/40 shadow-xs flex items-center gap-1">
                                         <i class="fa-solid fa-star text-gold-400 text-[6.5px]"></i> Main Kit
                                     </span>
-                                    <img id="pdp-combo-card-img" src="product/card/699-1.webp" alt="Umrah Cards Kit" class="w-full h-full object-cover object-center pointer-events-none">
+                                    <img id="pdp-combo-card-img" src="product/card/699-1.webp" alt="Umrah Cards Kit" class="w-full h-full object-contain object-center pointer-events-none">
                                 </div>
 
                                 <!-- Center Floating Plus Badge -->
@@ -250,11 +250,11 @@
                                 </div>
 
                                 <!-- Right Half (50%): Pocket Travel Janamaz in Selected Color -->
-                                <div class="relative w-1/2 h-full flex items-center justify-center bg-transparent overflow-hidden">
+                                <div class="relative w-1/2 h-full flex items-center justify-center bg-white/40 overflow-hidden p-1 sm:p-2">
                                     <span class="absolute top-2 right-2 z-20 bg-amber-600/90 backdrop-blur-xs text-white text-[8px] sm:text-[9px] font-extrabold px-1.5 py-0.5 rounded-md shadow-xs flex items-center gap-1">
                                         <i class="fa-solid fa-gift text-[6.5px]"></i> <span id="pdp-combo-janamaz-color-badge">Gold</span>
                                     </span>
-                                    <img id="pdp-combo-janamaz-img" src="product/janamaz/golden.webp" alt="Pocket Travel Janamaz" class="w-full h-full object-cover object-center pointer-events-none animate-variant-pop">
+                                    <img id="pdp-combo-janamaz-img" src="product/janamaz/golden.webp" alt="Pocket Travel Janamaz" class="w-full h-full object-contain object-center pointer-events-none animate-variant-pop">
                                 </div>
                             </div>
 
@@ -636,14 +636,14 @@
                             <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage(true);" class="accent-emerald-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">Online Pay</span>
-                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ Extra 10% OFF</span>
+                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ Extra 10% OFF + FREE Delivery</span>
                             </div>
                         </label>
                         <label id="payment-label-cod" onclick="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs">
                             <input type="radio" name="payment" id="payment-method-cod" value="cod" checked onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="accent-gold-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">Cash on Delivery</span>
-                                <span class="text-[9px] text-gray-500 font-medium block">Doorstep Pay</span>
+                                <span class="text-[9px] text-gray-500 font-medium block">Rs. 120 Delivery Charge</span>
                             </div>
                         </label>
                     </div>
@@ -947,12 +947,13 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        freeShipping: false,
                         image: "product/card/559-1.webp",
                         images: [
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_001",
@@ -962,12 +963,13 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        freeShipping: true,
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "FREE Express Delivery on Prepaid Orders", "Special 5% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_013",
@@ -983,7 +985,7 @@
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_003",
@@ -999,7 +1001,7 @@
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
             },
@@ -1041,12 +1043,13 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        freeShipping: false,
                         image: "product/card/559-1.webp",
                         images: [
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_004",
@@ -1056,12 +1059,13 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        freeShipping: true,
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "FREE Express Delivery on Prepaid Orders", "Special 5% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_014",
@@ -1077,7 +1081,7 @@
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_006",
@@ -1093,7 +1097,7 @@
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
             },
@@ -1150,12 +1154,13 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        freeShipping: false,
                         image: "product/card/559-1.webp",
                         images: [
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_007",
@@ -1165,12 +1170,13 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        freeShipping: true,
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "FREE Express Delivery on Prepaid Orders", "Special 5% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_015",
@@ -1186,7 +1192,7 @@
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_009",
@@ -1202,7 +1208,7 @@
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
             },
@@ -1248,12 +1254,13 @@
                         oldPrice: 1118,
                         weight: "120gm",
                         tag: "Popular",
+                        freeShipping: false,
                         image: "product/card/559-1.webp",
                         images: [
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_010",
@@ -1263,12 +1270,13 @@
                         oldPrice: 1398,
                         weight: "150gm",
                         tag: "Best Value",
+                        freeShipping: true,
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "FREE Express Delivery on Prepaid Orders", "Special 5% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_016",
@@ -1284,7 +1292,7 @@
                             "product/card/559-1.webp",
                             "product/card/559-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     },
                     {
                         sku: "fati_012",
@@ -1300,7 +1308,7 @@
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery Included"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on Prepaid Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
             },
@@ -1995,7 +2003,7 @@
                             <div class="flex items-start justify-between gap-1 mb-1">
                                 <div class="flex items-center gap-1 flex-wrap">
                                     <span class="text-[7.5px] sm:text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase ${tagClass}">${v.tag}</span>
-                                    ${isCombo ? '<span class="text-[7px] sm:text-[7.5px] font-extrabold px-1 py-0.5 rounded uppercase bg-emerald-600 text-white flex items-center gap-0.5 shadow-2xs"><i class="fa-solid fa-truck-fast text-[6.5px]"></i> Free Delivery</span>' : ''}
+                                    ${isCombo ? '<span class="text-[7px] sm:text-[7.5px] font-extrabold px-1 py-0.5 rounded uppercase bg-emerald-600 text-white flex items-center gap-0.5 shadow-2xs"><i class="fa-solid fa-truck-fast text-[6.5px]"></i> Free Delivery on Prepaid</span>' : ''}
                                 </div>
                                 <div class="w-4 h-4 rounded-full flex items-center justify-center border shrink-0 ${
                                     isSelected ? 'bg-gold-500 border-gold-600 text-onyx shadow-xs' : 'border-gray-300 bg-white'
@@ -2702,28 +2710,27 @@
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
             const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 120;
-            const hasFreeShipping = cart.some(item => {
+            const qualifiesForFreeShipping = (subtotalPrice >= 999) || (isOnline && cart.some(item => {
                 const p = products.find(prod => prod.id === item.id);
                 const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
-                return (v && v.freeShipping);
-            });
-            const effectiveFee = hasFreeShipping ? 0 : 120;
+                return (v && v.freeShipping) || (item.price >= 699);
+            }));
+            const hasFreeShipping = qualifiesForFreeShipping;
+            const effectiveFee = hasFreeShipping ? 0 : (isOnline ? 60 : courierFee);
 
-            // Auto Apply Offer for Orders >= 999 (12% off)
-            const discount12 = (subtotalPrice >= 999) ? Math.round(subtotalPrice * 0.12) : 0;
+            // Remove old auto 12% offer
             const discountRowEl = document.getElementById('cart-auto-discount-row');
-            const discountAmtEl = document.getElementById('cart-auto-discount-amount');
-            if (discountRowEl && discountAmtEl) {
-                if (discount12 > 0) {
-                    discountRowEl.classList.remove('hidden');
-                    discountAmtEl.textContent = `-Rs. ${discount12.toFixed(2)}`;
-                } else {
-                    discountRowEl.classList.add('hidden');
-                }
-            }
+            if (discountRowEl) discountRowEl.classList.add('hidden');
 
-            // Prepaid Tiered discount: 10% on orders >= ₹999; 5% on orders < ₹999
-            const prepaidDiscountPercent = (subtotalPrice >= 999) ? 10 : 5;
+            // Prepaid discount based on 4 official banners:
+            // - 10% OFF on prepaid for Combo sets (₹799 / ₹899) or subtotal >= ₹999 (Banner 1, 2, 3)
+            // - 5% OFF on prepaid for ₹699 Full Companion Kit or orders < ₹999 (Banner 4)
+            const hasCombo = cart.some(item => {
+                const p = products.find(prod => prod.id === item.id);
+                const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
+                return (v && v.hasJanamaz);
+            });
+            const prepaidDiscountPercent = (hasCombo || subtotalPrice >= 999) ? 10 : 5;
             const prepaidDiscount = isOnline ? Math.round((subtotalPrice * prepaidDiscountPercent) / 100) : 0;
             const prepaidRowEl = document.getElementById('cart-prepaid-discount-row');
             const prepaidAmtEl = document.getElementById('cart-prepaid-discount-amount');
@@ -2737,15 +2744,24 @@
             }
 
             const activeFee = effectiveFee;
-            const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - discount12 - prepaidDiscount + activeFee) : 0;
+            const totalWithShipping = subtotalPrice > 0 ? Math.max(0, subtotalPrice - prepaidDiscount + activeFee) : 0;
 
             if (cartCountEl) cartCountEl.textContent = totalItems;
             const floatingCartEl = document.getElementById('floating-cart-count');
             if (floatingCartEl) floatingCartEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                shippingFeeEl.className = hasFreeShipping ? "font-bold text-emerald-700" : "font-bold text-onyx";
-                shippingFeeEl.textContent = hasFreeShipping ? "FREE" : `Rs. ${effectiveFee.toFixed(2)}`;
+                if (hasFreeShipping) {
+                    shippingFeeEl.className = "font-bold text-emerald-700";
+                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(Prepaid Offer)";
+                    shippingFeeEl.innerHTML = `FREE <span class="text-[9px] text-emerald-600 font-semibold block">${tagText}</span>`;
+                } else if (!isOnline) {
+                    shippingFeeEl.className = "font-bold text-onyx";
+                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on orders above ₹999)</span>`;
+                } else {
+                    shippingFeeEl.className = "font-bold text-onyx";
+                    shippingFeeEl.textContent = `Rs. ${activeFee.toFixed(2)}`;
+                }
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
 
@@ -2809,11 +2825,11 @@
             if (selectedPaymentMethod === 'razorpay') {
                 if (rzpLabel) rzpLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 if (codLabel) codLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
-                if (btnText && !isProcessingOrder) btnText.textContent = "PAY ONLINE (EXTRA 10% OFF)";
+                if (btnText && !isProcessingOrder) btnText.textContent = "PAY ONLINE (EXTRA 10% OFF + FREE DELIVERY)";
             } else {
                 if (codLabel) codLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 if (rzpLabel) rzpLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
-                if (btnText && !isProcessingOrder) btnText.textContent = "CONFIRM & PLACE ORDER (COD)";
+                if (btnText && !isProcessingOrder) btnText.textContent = "CONFIRM & PLACE ORDER (COD • RS. 120 DELIVERY)";
             }
             updateCartUI(false);
         }
