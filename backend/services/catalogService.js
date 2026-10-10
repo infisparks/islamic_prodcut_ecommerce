@@ -65,7 +65,7 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
   // - Orders below ₹999:
   //   * COD orders pay standard ₹120 delivery charge.
-  //   * Online (Prepaid) orders get FREE SHIPPING if containing an offer kit (₹699, ₹799, ₹899), otherwise ₹60.
+  //   * Online (Prepaid) orders pay ₹100 delivery charge (₹20 discount vs COD).
   const isOnlinePayment = (paymentMethod !== 'cod');
   let hasFreeShipping = false;
   let shipping = 120;
@@ -74,14 +74,8 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
     hasFreeShipping = true;
     shipping = 0;
   } else if (isOnlinePayment) {
-    const eligibleForOnlineFreeShipping = items.some(i => i.freeShipping);
-    if (eligibleForOnlineFreeShipping) {
-      hasFreeShipping = true;
-      shipping = 0;
-    } else {
-      hasFreeShipping = false;
-      shipping = 60;
-    }
+    hasFreeShipping = false;
+    shipping = 100;
   } else {
     hasFreeShipping = false;
     shipping = 120;

@@ -2710,13 +2710,8 @@
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
             const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 120;
-            const qualifiesForFreeShipping = (subtotalPrice >= 999) || (isOnline && cart.some(item => {
-                const p = products.find(prod => prod.id === item.id);
-                const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
-                return (v && v.freeShipping) || (item.price >= 699);
-            }));
-            const hasFreeShipping = qualifiesForFreeShipping;
-            const effectiveFee = hasFreeShipping ? 0 : (isOnline ? 60 : courierFee);
+            const hasFreeShipping = (subtotalPrice >= 999);
+            const effectiveFee = hasFreeShipping ? 0 : (isOnline ? 100 : courierFee);
 
             // Remove old auto 12% offer
             const discountRowEl = document.getElementById('cart-auto-discount-row');
