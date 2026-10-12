@@ -14,33 +14,13 @@ const catalog = [
     variants: [
       {
         sku: "fati_002",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 559,
-        weightKg: 0.12,
-        weightLabel: "120gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: false,
-        freeShipping: false
-      },
-      {
-        sku: "fati_001",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 699,
+        price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: true
-      },
-      {
-        sku: "fati_013",
-        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
-        price: 799,
-        weightKg: 0.23,
-        weightLabel: "230gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: true,
-        freeShipping: true
+        freeShipping: false
       },
       {
         sku: "fati_003",
@@ -63,33 +43,13 @@ const catalog = [
     variants: [
       {
         sku: "fati_005",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 559,
-        weightKg: 0.12,
-        weightLabel: "120gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: false,
-        freeShipping: false
-      },
-      {
-        sku: "fati_004",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 699,
+        price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: true
-      },
-      {
-        sku: "fati_014",
-        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
-        price: 799,
-        weightKg: 0.23,
-        weightLabel: "230gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: true,
-        freeShipping: true
+        freeShipping: false
       },
       {
         sku: "fati_006",
@@ -112,33 +72,13 @@ const catalog = [
     variants: [
       {
         sku: "fati_008",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 559,
-        weightKg: 0.12,
-        weightLabel: "120gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: false,
-        freeShipping: false
-      },
-      {
-        sku: "fati_007",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 699,
+        price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: true
-      },
-      {
-        sku: "fati_015",
-        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
-        price: 799,
-        weightKg: 0.23,
-        weightLabel: "230gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: true,
-        freeShipping: true
+        freeShipping: false
       },
       {
         sku: "fati_009",
@@ -161,33 +101,13 @@ const catalog = [
     variants: [
       {
         sku: "fati_011",
-        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-        price: 559,
-        weightKg: 0.12,
-        weightLabel: "120gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: false,
-        freeShipping: false
-      },
-      {
-        sku: "fati_010",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 699,
+        price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
         hasJanamaz: false,
-        freeShipping: true
-      },
-      {
-        sku: "fati_016",
-        name: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)",
-        price: 799,
-        weightKg: 0.23,
-        weightLabel: "230gm",
-        image: "product/card/559-1.webp",
-        hasJanamaz: true,
-        freeShipping: true
+        freeShipping: false
       },
       {
         sku: "fati_012",
@@ -268,7 +188,7 @@ const catalog = [
         name: "Pocket Travel Janamaz (Royal Gold)",
         color: "Royal Gold",
         colorId: "golden",
-        price: 299,
+        price: 349,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/janamaz/golden.webp",
@@ -280,7 +200,7 @@ const catalog = [
         name: "Pocket Travel Janamaz (Emerald Green)",
         color: "Emerald Green",
         colorId: "green",
-        price: 299,
+        price: 349,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/janamaz/green.webp",
@@ -292,7 +212,7 @@ const catalog = [
         name: "Pocket Travel Janamaz (Rose Pink)",
         color: "Rose Pink",
         colorId: "pink",
-        price: 299,
+        price: 349,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/janamaz/pink.webp",
@@ -304,7 +224,7 @@ const catalog = [
         name: "Pocket Travel Janamaz (Midnight Black)",
         color: "Midnight Black",
         colorId: "black",
-        price: 299,
+        price: 349,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/janamaz/black.webp",
@@ -316,7 +236,7 @@ const catalog = [
         name: "Pocket Travel Janamaz (Slate Gray)",
         color: "Slate Gray",
         colorId: "gray",
-        price: 299,
+        price: 349,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/janamaz/gray.webp",
@@ -367,6 +287,20 @@ function findItemBySku(sku) {
         image: product.image
       };
     }
+  }
+  // Historical / Legacy SKU lookup to protect existing orders in production
+  const legacyCatalogMap = {
+    fati_001: { productId: 1, productName: "Umrah Dua & Guide Cards (Urdu / اردو)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_001", variantName: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", unitPrice: 599, weightKg: 0.15, weightLabel: "150gm", hasJanamaz: false, freeShipping: false, image: "product/card/699-1.webp" },
+    fati_004: { productId: 2, productName: "Umrah Dua & Guide Cards (English)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_004", variantName: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", unitPrice: 599, weightKg: 0.15, weightLabel: "150gm", hasJanamaz: false, freeShipping: false, image: "product/card/699-1.webp" },
+    fati_007: { productId: 3, productName: "Umrah Dua & Guide Cards (Hindi / हिंदी)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_007", variantName: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", unitPrice: 599, weightKg: 0.15, weightLabel: "150gm", hasJanamaz: false, freeShipping: false, image: "product/card/699-1.webp" },
+    fati_010: { productId: 4, productName: "Umrah Dua & Guide Cards (Roman English)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_010", variantName: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)", unitPrice: 599, weightKg: 0.15, weightLabel: "150gm", hasJanamaz: false, freeShipping: false, image: "product/card/699-1.webp" },
+    fati_013: { productId: 1, productName: "Umrah Dua & Guide Cards (Urdu / اردو)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_013", variantName: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)", unitPrice: 799, weightKg: 0.23, weightLabel: "230gm", hasJanamaz: true, freeShipping: true, image: "product/card/699-1.webp" },
+    fati_014: { productId: 2, productName: "Umrah Dua & Guide Cards (English)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_014", variantName: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)", unitPrice: 799, weightKg: 0.23, weightLabel: "230gm", hasJanamaz: true, freeShipping: true, image: "product/card/699-1.webp" },
+    fati_015: { productId: 3, productName: "Umrah Dua & Guide Cards (Hindi / हिंदी)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_015", variantName: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)", unitPrice: 799, weightKg: 0.23, weightLabel: "230gm", hasJanamaz: true, freeShipping: true, image: "product/card/699-1.webp" },
+    fati_016: { productId: 4, productName: "Umrah Dua & Guide Cards (Roman English)", category: "card", hsn: "4910", dimensions: { length: 15, breadth: 10, height: 2.5 }, sku: "fati_016", variantName: "Combo Kit (Cards + Tasbih + Lanyard + Travel Janamaz)", unitPrice: 799, weightKg: 0.23, weightLabel: "230gm", hasJanamaz: true, freeShipping: true, image: "product/card/699-1.webp" }
+  };
+  if (legacyCatalogMap[sku]) {
+    return legacyCatalogMap[sku];
   }
   return null;
 }

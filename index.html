@@ -42,10 +42,10 @@
 
     <!-- Ultra-Fast Preload for Critical WebP Assets -->
     <link rel="preload" as="image" href="product/hero.webp" fetchpriority="high">
-    <link rel="preload" as="image" href="product/offer/combo_offer_799.webp" fetchpriority="high">
-    <link rel="preload" as="image" href="product/offer/mega_combo_offer_899.webp">
-    <link rel="preload" as="image" href="product/offer/standard_offer_559.webp">
-    <link rel="preload" as="image" href="product/offer/companion_offer_699.webp">
+    <link rel="preload" as="image" href="product/offer/banner_1.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="product/offer/banner_2.webp">
+    <link rel="preload" as="image" href="product/offer/banner_3.webp">
+    <link rel="preload" as="image" href="product/offer/banner_4.webp">
     <link rel="preload" as="image" href="product/umrah_card_urdu.webp">
     <link rel="preload" as="image" href="product/umrah_card_english.webp">
 
@@ -295,40 +295,36 @@
             <div class="w-full max-w-6xl mx-auto my-1 sm:my-4">
                 <!-- DESKTOP / PC VIEW: Show all 4 banners side-by-side (Full Uncropped) -->
                 <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-3.5 items-stretch">
-                    <!-- Banner 1: Special Offer 1 (Combo ₹799) -->
-                    <div onclick="window.location.href='product.html?id=1&variant=2'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/combo_offer_799.webp" 
-                             alt="Umrah Card Gift Set & Travel Janamaz Combo Offer ₹799 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
-                             fetchpriority="high" decoding="async" 
-                             width="1200" height="1200"
-                             onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/combo_offer_799.png';}"
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
-                    </div>
-                    <!-- Banner 2: Special Offer 2 (Mega Combo ₹899) -->
-                    <div onclick="window.location.href='product.html?id=1&variant=3'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/mega_combo_offer_899.webp" 
-                             alt="Umrah Card Gift Set & Travel Janamaz Mega Combo Offer ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
-                             fetchpriority="high" decoding="async" 
-                             width="1200" height="1200"
-                             onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/mega_combo_offer_899.png';}"
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
-                    </div>
-                    <!-- Banner 3: Special Offer 3 (Standard Kit ₹559) -->
+                    <!-- Banner 1: Special Offer (₹599) -->
                     <div onclick="window.location.href='product.html?id=1&variant=0'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/standard_offer_559.webp" 
-                             alt="Umrah Dua Cards Standard Kit ₹559 - Order Above ₹999 Free Shipping + 10% OFF on Prepaid" 
-                             decoding="async" 
+                        <img src="product/offer/banner_1.webp" 
+                             alt="Umrah Card Gift Set - MRP ₹699 Now Only ₹599 - FREE Shipping on Prepaid Orders" 
+                             fetchpriority="high" decoding="async" 
                              width="1200" height="1200"
-                             onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/standard_offer_559.png';}"
                              class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
                     </div>
-                    <!-- Banner 4: Special Offer 4 (Full Companion Kit ₹699) -->
+                    <!-- Banner 2: Special Offer (₹899) -->
                     <div onclick="window.location.href='product.html?id=1&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/companion_offer_699.webp" 
-                             alt="Umrah Dua Cards Full Companion Kit ₹699 - FREE Shipping + Special 5% OFF on Prepaid Orders" 
+                        <img src="product/offer/banner_2.webp" 
+                             alt="Umrah Card Gift Set & Travel Janamaz - MRP ₹1118 Now Only ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
+                             fetchpriority="high" decoding="async" 
+                             width="1200" height="1200"
+                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
+                    </div>
+                    <!-- Banner 3: Combo Offer (₹899) -->
+                    <div onclick="window.location.href='product.html?id=1&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
+                        <img src="product/offer/banner_3.webp" 
+                             alt="Umrah Card Gift Set & Travel Janamaz Combo Offer ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
                              decoding="async" 
                              width="1200" height="1200"
-                             onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/companion_offer_699.png';}"
+                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
+                    </div>
+                    <!-- Banner 4: Special Offer (₹599) -->
+                    <div onclick="window.location.href='product.html?id=1&variant=0'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
+                        <img src="product/offer/banner_4.webp" 
+                             alt="Umrah Card Gift Set Special Offer ₹599 - FREE Shipping on Prepaid Orders" 
+                             decoding="async" 
+                             width="1200" height="1200"
                              class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
                     </div>
                 </div>
@@ -338,36 +334,32 @@
                     <!-- Carousel Container with natural aspect ratio to show entire artwork without cropping -->
                     <div class="overflow-hidden rounded-xl border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_6px_20px_rgba(0,0,0,0.5)]">
                         <div id="hero-carousel-track" class="flex transition-transform duration-500 ease-out w-full">
-                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=2'">
-                                <img src="product/offer/combo_offer_799.webp" 
-                                     alt="Umrah Card Gift Set & Travel Janamaz Combo Offer ₹799 - FREE Shipping + 10% OFF on Prepaid Orders" 
+                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=0'">
+                                <img src="product/offer/banner_1.webp" 
+                                     alt="Umrah Card Gift Set - MRP ₹699 Now Only ₹599 - FREE Shipping on Prepaid Orders" 
                                      fetchpriority="high" decoding="async" 
                                      width="1200" height="1200"
-                                     onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/combo_offer_799.png';}"
-                                     class="w-full h-auto object-contain rounded-xl block">
-                            </div>
-                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=3'">
-                                <img src="product/offer/mega_combo_offer_899.webp" 
-                                     alt="Umrah Card Gift Set & Travel Janamaz Mega Combo Offer ₹899 - FREE Shipping + 10% OFF on Prepaid Orders" 
-                                     decoding="async" 
-                                     width="1200" height="1200"
-                                     onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/mega_combo_offer_899.png';}"
-                                     class="w-full h-auto object-contain rounded-xl block">
-                            </div>
-                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=0'">
-                                <img src="product/offer/standard_offer_559.webp" 
-                                     alt="Umrah Dua Cards Standard Kit ₹559 - Order Above ₹999 Free Shipping + 10% OFF on Prepaid" 
-                                     decoding="async" 
-                                     width="1200" height="1200"
-                                     onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/standard_offer_559.png';}"
                                      class="w-full h-auto object-contain rounded-xl block">
                             </div>
                             <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=1'">
-                                <img src="product/offer/companion_offer_699.webp" 
-                                     alt="Umrah Dua Cards Full Companion Kit ₹699 - FREE Shipping + 5% OFF on Prepaid Orders" 
+                                <img src="product/offer/banner_2.webp" 
+                                     alt="Umrah Card Gift Set & Travel Janamaz - MRP ₹1118 Now Only ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
                                      decoding="async" 
                                      width="1200" height="1200"
-                                     onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='product/offer/companion_offer_699.png';}"
+                                     class="w-full h-auto object-contain rounded-xl block">
+                            </div>
+                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=1'">
+                                <img src="product/offer/banner_3.webp" 
+                                     alt="Umrah Card Gift Set & Travel Janamaz Combo Offer ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
+                                     decoding="async" 
+                                     width="1200" height="1200"
+                                     class="w-full h-auto object-contain rounded-xl block">
+                            </div>
+                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=0'">
+                                <img src="product/offer/banner_4.webp" 
+                                     alt="Umrah Card Gift Set Special Offer ₹599 - FREE Shipping on Prepaid Orders" 
+                                     decoding="async" 
+                                     width="1200" height="1200"
                                      class="w-full h-auto object-contain rounded-xl block">
                             </div>
                         </div>
@@ -825,7 +817,7 @@
                     </button>
                     <a href="#products-grid" class="flex-1 gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold text-xs py-2.5 px-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-1.5 whitespace-nowrap hover:opacity-95 active:scale-95 transition-all">
                         <i class="fa-solid fa-bag-shopping"></i>
-                        <span>BUY DECK (₹559)</span>
+                        <span>BUY DECK (₹599)</span>
                     </a>
                 </div>
             </div>
@@ -962,7 +954,7 @@
                     <span>Complete 16 Laminated Waterproof Cards Set</span>
                 </div>
                 <a href="#products-grid" onclick="closeCardVideoModal()" class="gold-btn-shimmer gold-bg-gradient text-onyx font-extrabold px-5 py-2 rounded-xl shadow-gold-glow text-xs hover:opacity-95 active:scale-95 transition-all whitespace-nowrap">
-                    <i class="fa-solid fa-bag-shopping"></i> Order Card Deck Set (Rs. 559)
+                    <i class="fa-solid fa-bag-shopping"></i> Order Card Deck Set (Rs. 599)
                 </a>
             </div>
         </div>
@@ -1575,7 +1567,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/559-1.webp",
+                image: "product/card/699-1.webp",
                 images: [
                     "product/umrah_card_urdu.webp",
                     "product/prodcut_more/umrahcard_urdu_1.webp",
@@ -1601,33 +1593,35 @@
                 variants: [
                     {
                         sku: "fati_002",
-                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-                        shortName: "Cards + Tasbih + Lanyard",
-                        price: 559,
-                        oldPrice: 1118,
-                        weight: "120gm",
-                        tag: "Popular",
-                        image: "product/card/559-1.webp",
-                        images: [
-                            "product/card/559-1.webp",
-                            "product/card/559-2.webp"
-                        ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
-                    },
-                    {
-                        sku: "fati_001",
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
-                        oldPrice: 1398,
+                        price: 599,
+                        oldPrice: 1198,
                         weight: "150gm",
-                        tag: "Best Value",
+                        tag: "Popular",
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_003",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        freeShipping: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -1643,7 +1637,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/559-1.webp",
+                image: "product/card/699-1.webp",
                 images: [
                     "product/umrah_card_english.webp",
                     "product/prodcut_more/umrahcard_english_1.webp",
@@ -1663,33 +1657,35 @@
                 variants: [
                     {
                         sku: "fati_005",
-                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-                        shortName: "Cards + Tasbih + Lanyard",
-                        price: 559,
-                        oldPrice: 1118,
-                        weight: "120gm",
-                        tag: "Popular",
-                        image: "product/card/559-1.webp",
-                        images: [
-                            "product/card/559-1.webp",
-                            "product/card/559-2.webp"
-                        ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
-                    },
-                    {
-                        sku: "fati_004",
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
-                        oldPrice: 1398,
+                        price: 599,
+                        oldPrice: 1198,
                         weight: "150gm",
-                        tag: "Best Value",
+                        tag: "Popular",
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_006",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        freeShipping: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -1705,7 +1701,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/559-1.webp",
+                image: "product/card/699-1.webp",
                 images: [
                     "product/umrah_card_hindi.webp",
                     "product/prodcut_more/umrahcard_hindi_1.webp",
@@ -1740,33 +1736,35 @@
                 variants: [
                     {
                         sku: "fati_008",
-                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-                        shortName: "Cards + Tasbih + Lanyard",
-                        price: 559,
-                        oldPrice: 1118,
-                        weight: "120gm",
-                        tag: "Popular",
-                        image: "product/card/559-1.webp",
-                        images: [
-                            "product/card/559-1.webp",
-                            "product/card/559-2.webp"
-                        ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
-                    },
-                    {
-                        sku: "fati_007",
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
-                        oldPrice: 1398,
+                        price: 599,
+                        oldPrice: 1198,
                         weight: "150gm",
-                        tag: "Best Value",
+                        tag: "Popular",
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_009",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        freeShipping: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -1782,7 +1780,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/559-1.webp",
+                image: "product/card/699-1.webp",
                 images: [
                     "product/umrah_card_roman.webp",
                     "product/prodcut_more/umrahcard_roman_1.webp",
@@ -1806,33 +1804,35 @@
                 variants: [
                     {
                         sku: "fati_011",
-                        name: "Standard Kit (Cards + Tasbih + Lanyard)",
-                        shortName: "Cards + Tasbih + Lanyard",
-                        price: 559,
-                        oldPrice: 1118,
-                        weight: "120gm",
-                        tag: "Popular",
-                        image: "product/card/559-1.webp",
-                        images: [
-                            "product/card/559-1.webp",
-                            "product/card/559-2.webp"
-                        ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)"]
-                    },
-                    {
-                        sku: "fati_010",
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
-                        price: 699,
-                        oldPrice: 1398,
+                        price: 599,
+                        oldPrice: 1198,
                         weight: "150gm",
-                        tag: "Best Value",
+                        tag: "Popular",
                         image: "product/card/699-1.webp",
                         images: [
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
+                    },
+                    {
+                        sku: "fati_012",
+                        name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
+                        shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
+                        price: 899,
+                        oldPrice: 1798,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        freeShipping: true,
+                        image: "product/card/699-1.webp",
+                        images: [
+                            "product/card/699-1.webp",
+                            "product/card/699-2.webp"
+                        ],
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
             },
@@ -1924,8 +1924,8 @@
                 weight: "150gm",
                 sku: "fati_jnm_01",
                 soldCount: "2,150 sold",
-                price: 299,
-                oldPrice: 598,
+                price: 349,
+                oldPrice: 698,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/janamaz/golden.webp",
                 images: [
@@ -1940,11 +1940,11 @@
                 desc: "Ultra-compact foldable travel Janamaz with matching zipper pouch. Water-resistant, lightweight, and easy to carry anywhere.",
                 features: ["Pocket-Sized Foldable Design", "Matching Zipper Pouch Included", "Water-Resistant Fabric", "5 Color Choices"],
                 variants: [
-                    { sku: "fati_jnm_01", name: "Pocket Travel Janamaz (Royal Gold)", shortName: "Royal Gold", price: 299, oldPrice: 598, weight: "150gm", tag: "Most Popular", image: "product/janamaz/golden.webp" },
-                    { sku: "fati_jnm_02", name: "Pocket Travel Janamaz (Emerald Green)", shortName: "Emerald Green", price: 299, oldPrice: 598, weight: "150gm", tag: "Classic Green", image: "product/janamaz/green.webp" },
-                    { sku: "fati_jnm_03", name: "Pocket Travel Janamaz (Rose Pink)", shortName: "Rose Pink", price: 299, oldPrice: 598, weight: "150gm", tag: "Special Edition", image: "product/janamaz/pink.webp" },
-                    { sku: "fati_jnm_04", name: "Pocket Travel Janamaz (Midnight Black)", shortName: "Midnight Black", price: 299, oldPrice: 598, weight: "150gm", tag: "Sleek Black", image: "product/janamaz/black.webp" },
-                    { sku: "fati_jnm_05", name: "Pocket Travel Janamaz (Slate Gray)", shortName: "Slate Gray", price: 299, oldPrice: 598, weight: "150gm", tag: "Modern Gray", image: "product/janamaz/gray.webp" }
+                    { sku: "fati_jnm_01", name: "Pocket Travel Janamaz (Royal Gold)", shortName: "Royal Gold", price: 349, oldPrice: 698, weight: "150gm", tag: "Most Popular", image: "product/janamaz/golden.webp" },
+                    { sku: "fati_jnm_02", name: "Pocket Travel Janamaz (Emerald Green)", shortName: "Emerald Green", price: 349, oldPrice: 698, weight: "150gm", tag: "Classic Green", image: "product/janamaz/green.webp" },
+                    { sku: "fati_jnm_03", name: "Pocket Travel Janamaz (Rose Pink)", shortName: "Rose Pink", price: 349, oldPrice: 698, weight: "150gm", tag: "Special Edition", image: "product/janamaz/pink.webp" },
+                    { sku: "fati_jnm_04", name: "Pocket Travel Janamaz (Midnight Black)", shortName: "Midnight Black", price: 349, oldPrice: 698, weight: "150gm", tag: "Sleek Black", image: "product/janamaz/black.webp" },
+                    { sku: "fati_jnm_05", name: "Pocket Travel Janamaz (Slate Gray)", shortName: "Slate Gray", price: 349, oldPrice: 698, weight: "150gm", tag: "Modern Gray", image: "product/janamaz/gray.webp" }
                 ]
             }
         ];
@@ -4982,7 +4982,7 @@
 
                             <a href="#products-grid" class="w-full sm:w-auto gold-bg-gradient text-onyx font-extrabold text-xs py-2.5 px-5 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 hover:opacity-95 active:scale-95 transition-transform whitespace-nowrap">
                                 <i class="fa-solid fa-bag-shopping text-xs"></i>
-                                <span>GET COMPANION KIT (₹559)</span>
+                                <span>GET COMPANION KIT (₹599)</span>
                             </a>
                         </div>
                     </div>

@@ -619,7 +619,7 @@ const shiprocketService = {
         name: `${item.name || item.title || 'Product'}${variantStr}${janamazStr}`.slice(0, 190),
         sku: item.sku,
         units: item.quantity || 1,
-        selling_price: item.unitPrice || item.price || 559,
+        selling_price: item.unitPrice || item.price || 599,
         discount: 0,
         tax: 0,
         hsn: parseInt(item.hsn || '4910', 10)
@@ -629,7 +629,7 @@ const shiprocketService = {
     const payload = {
       order_id: order.orderId,
       order_items: orderItems,
-      sub_total: order.pricing ? order.pricing.subtotal : 559,
+      sub_total: order.pricing ? order.pricing.subtotal : 599,
       length: order.package ? order.package.dimensions.length : 15,
       breadth: order.package ? order.package.dimensions.breadth : 10,
       height: order.package ? order.package.dimensions.height : 2.5,
