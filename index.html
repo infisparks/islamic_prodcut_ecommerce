@@ -2860,14 +2860,12 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 120;
-            const comboEligible = cart.some(item => {
-                const p = products.find(prod => prod.id === item.id);
-                const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
-                return (v && v.freeShipping) || item.sku === 'fati_013' || item.sku === 'fati_003' || item.sku === 'fati_014' || item.sku === 'fati_006' || item.sku === 'fati_015' || item.sku === 'fati_009' || item.sku === 'fati_016' || item.sku === 'fati_012';
-            });
-            // Shipping Rule: STRICTLY NO FREE SHIPPING ON COD! Free shipping ONLY on Prepaid (Online) for combos
-            const hasFreeShipping = isOnline && comboEligible;
+            // Shipping Rule:
+            // - Prepaid orders of ₹598+ get FREE SHIPPING!
+            // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
+            // - Prepaid orders below ₹598 pay standard delivery: ₹120
+            // - COD orders below ₹999 pay standard delivery: ₹120
+            const hasFreeShipping = (subtotalPrice >= 999) || (isOnline && subtotalPrice >= 598);
             const effectiveFee = hasFreeShipping ? 0 : courierFee;
             
             // Remove old auto 12% offer
@@ -2896,13 +2894,14 @@
             if (shippingFeeEl) {
                 if (hasFreeShipping) {
                     shippingFeeEl.className = "font-bold text-emerald-700";
-                    shippingFeeEl.innerHTML = `FREE <span class="text-[9px] text-emerald-600 font-semibold block">(Prepaid Offer)</span>`;
+                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(Prepaid Free Shipping)";
+                    shippingFeeEl.innerHTML = `FREE <span class="text-[9px] text-emerald-600 font-semibold block">${tagText}</span>`;
                 } else if (!isOnline) {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on Prepaid only)</span>`;
+                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on Prepaid ₹598+)</span>`;
                 } else {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.textContent = `Rs. ${activeFee.toFixed(2)}`;
+                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free Delivery on ₹598+)</span>`;
                 }
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;

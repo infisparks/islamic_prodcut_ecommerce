@@ -558,7 +558,7 @@
                     <i class="fa-solid fa-bag-shopping text-gold-400 text-base"></i>
                     <div>
                         <h3 class="font-cinzel text-sm sm:text-base font-bold text-gold-300">Instant Express Checkout</h3>
-                        <p class="text-[9px] text-gray-300">✓ Free Shipping on ₹999+ • Extra 10% OFF Online</p>
+                        <p class="text-[9px] text-gray-300">✓ Free Shipping on ₹598+ (Prepaid) • Extra 10% OFF Online</p>
                     </div>
                 </div>
                 <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-pearl flex items-center justify-center text-xs cursor-pointer">
@@ -636,7 +636,7 @@
                             <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage(true);" class="accent-emerald-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">Online Pay</span>
-                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ Extra 10% OFF + FREE Delivery</span>
+                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ Extra 10% OFF + FREE Delivery (₹598+)</span>
                             </div>
                         </label>
                         <label id="payment-label-cod" onclick="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs">
@@ -2587,7 +2587,8 @@
             const isOnline = (selectedPaymentMethod === 'razorpay');
             const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 120;
             const hasFreeShipping = (subtotalPrice >= 999);
-            const effectiveFee = hasFreeShipping ? 0 : (isOnline ? 100 : courierFee);
+            const isPrepaidFreeShipping = (isOnline && subtotalPrice >= 598);
+            const effectiveFee = (hasFreeShipping || isPrepaidFreeShipping) ? 0 : courierFee;
 
             // Remove old auto 12% offer
             const discountRowEl = document.getElementById('cart-auto-discount-row');
@@ -2622,19 +2623,30 @@
             if (floatingCartEl) floatingCartEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                if (hasFreeShipping) {
+                if (hasFreeShipping || isPrepaidFreeShipping) {
                     shippingFeeEl.className = "font-bold text-emerald-700";
-                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(Prepaid Offer)";
+                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(Prepaid Free Shipping)";
                     shippingFeeEl.innerHTML = `FREE <span class="text-[9px] text-emerald-600 font-semibold block">${tagText}</span>`;
-                } else if (!isOnline) {
+                } else if (isOnline) {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on orders above ₹999)</span>`;
+                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on ₹598+ Orders)</span>`;
                 } else {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.textContent = `Rs. ${activeFee.toFixed(2)}`;
+                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on Prepaid ₹598+ or Orders Above ₹999)</span>`;
                 }
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
+
+            const checkoutBtnText = document.getElementById('checkout-btn-text');
+            if (checkoutBtnText && !isProcessingOrder) {
+                if (isOnline) {
+                    checkoutBtnText.textContent = (subtotalPrice >= 598)
+                        ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF + FREE DELIVERY)`
+                        : `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF)`;
+                } else {
+                    checkoutBtnText.textContent = "CONFIRM & PLACE ORDER (COD • RS. 120 DELIVERY)";
+                }
+            }
 
             if (!renderItems || !container) return;
 
@@ -2696,11 +2708,9 @@
             if (selectedPaymentMethod === 'razorpay') {
                 if (rzpLabel) rzpLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 if (codLabel) codLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
-                if (btnText && !isProcessingOrder) btnText.textContent = "PAY ONLINE (EXTRA 10% OFF + FREE DELIVERY)";
             } else {
                 if (codLabel) codLabel.className = "border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs";
                 if (rzpLabel) rzpLabel.className = "border border-gray-200 bg-white/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer opacity-75 transition-all hover:opacity-100";
-                if (btnText && !isProcessingOrder) btnText.textContent = "CONFIRM & PLACE ORDER (COD • RS. 120 DELIVERY)";
             }
             updateCartUI(false);
         }

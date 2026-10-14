@@ -62,20 +62,17 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
   // Shipping Rule:
+  // - Prepaid orders of ₹598+ get FREE SHIPPING!
   // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-  // - Orders below ₹999:
-  //   * COD orders pay standard ₹120 delivery charge.
-  //   * Online (Prepaid) orders pay ₹100 delivery charge (₹20 discount vs COD).
+  // - Prepaid orders below ₹598 pay standard ₹120 delivery charge.
+  // - COD orders below ₹999 pay standard ₹120 delivery charge.
   const isOnlinePayment = (paymentMethod !== 'cod');
   let hasFreeShipping = false;
   let shipping = 120;
 
-  if (subtotal >= 999) {
+  if (subtotal >= 999 || (isOnlinePayment && subtotal >= 598)) {
     hasFreeShipping = true;
     shipping = 0;
-  } else if (isOnlinePayment) {
-    hasFreeShipping = false;
-    shipping = 100;
   } else {
     hasFreeShipping = false;
     shipping = 120;
