@@ -81,15 +81,16 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   let discount = 0;
   let appliedCoupon = null;
 
-  // Payment Method Discounts based on the 4 official banners:
-  // - 10% OFF on prepaid for Combo sets (₹799 / ₹899) or any order >= ₹999 (Banner 1, 2, 3)
-  // - 5% OFF on prepaid for ₹699 Full Companion Kit or orders < ₹999 (Banner 4)
+  // Payment Method Discounts:
+  // - 10% OFF on prepaid for Combo sets (₹899) or orders >= ₹899
+  // - 0% discount on ₹599 kit (Free delivery only, no 5% off)
   let onlineDiscount = 0;
   let codCharge = 0;
 
   if (isOnlinePayment) {
     const hasCombo = items.some(i => i.hasJanamaz);
-    const prepaidDiscountRate = (hasCombo || subtotal >= 999) ? 0.10 : 0.05;
+    const isComboOr899 = (hasCombo || subtotal >= 899);
+    const prepaidDiscountRate = isComboOr899 ? 0.10 : 0;
     onlineDiscount = Math.round(subtotal * prepaidDiscountRate);
   }
 

@@ -2872,15 +2872,21 @@
             let discountAmount = 0;
             if (discountRowEl) discountRowEl.classList.add('hidden');
 
-            // Prepaid discount: Flat 10% ON PREPAIDS ("EXTRA 10% OFF ON PREPAIDS")
-            const prepaidDiscountPercent = 10;
+            // Prepaid discount: 10% OFF on ₹899+ or Combos; 0% on ₹599
+            const hasCombo = cart.some(item => {
+                const p = products.find(prod => prod.id === item.id);
+                const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
+                return (v && v.hasJanamaz);
+            });
+            const isComboOr899 = (hasCombo || subtotalPrice >= 899);
+            const prepaidDiscountPercent = isComboOr899 ? 10 : 0;
             const prepaidDiscount = isOnline ? Math.round((subtotalPrice * prepaidDiscountPercent) / 100) : 0;
             const prepaidRowEl = document.getElementById('cart-prepaid-discount-row');
             const prepaidAmtEl = document.getElementById('cart-prepaid-discount-amount');
             if (prepaidRowEl && prepaidAmtEl) {
                 if (isOnline && prepaidDiscount > 0) {
                     prepaidRowEl.classList.remove('hidden');
-                    prepaidAmtEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)} (10% OFF)`;
+                    prepaidAmtEl.textContent = `-Rs. ${prepaidDiscount.toFixed(2)} (${prepaidDiscountPercent}% OFF)`;
                 } else {
                     prepaidRowEl.classList.add('hidden');
                 }
@@ -2908,7 +2914,17 @@
 
             const checkoutBtnText = document.getElementById('checkout-btn-text');
             if (checkoutBtnText) {
-                checkoutBtnText.textContent = isOnline ? `PAY ONLINE & SAVE ${prepaidDiscountPercent}% (Rs. ${totalWithShipping.toFixed(0)})` : `CONFIRM & PLACE ORDER (COD - Rs. ${totalWithShipping.toFixed(0)})`;
+                if (isOnline) {
+                    if (prepaidDiscountPercent > 0) {
+                        checkoutBtnText.textContent = `PAY ONLINE & SAVE ${prepaidDiscountPercent}% (Rs. ${totalWithShipping.toFixed(0)})`;
+                    } else if (hasFreeShipping) {
+                        checkoutBtnText.textContent = `PAY ONLINE (FREE DELIVERY • Rs. ${totalWithShipping.toFixed(0)})`;
+                    } else {
+                        checkoutBtnText.textContent = `PAY ONLINE (Rs. ${totalWithShipping.toFixed(0)})`;
+                    }
+                } else {
+                    checkoutBtnText.textContent = `CONFIRM & PLACE ORDER (COD - Rs. ${totalWithShipping.toFixed(0)})`;
+                }
             }
 
             if (stickyBar) {

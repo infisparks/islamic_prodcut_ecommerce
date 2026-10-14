@@ -636,7 +636,7 @@
                             <input type="radio" name="payment" id="payment-method-razorpay" value="razorpay" onchange="handlePaymentMethodSelect('razorpay'); saveCustomerDetailsToStorage(true);" class="accent-emerald-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">Online Pay</span>
-                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ Extra 10% OFF + FREE Delivery (₹598+)</span>
+                                <span class="text-[9px] text-emerald-700 font-bold block">⚡ FREE Delivery on ₹598+ (10% OFF on ₹899+)</span>
                             </div>
                         </label>
                         <label id="payment-label-cod" onclick="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="border-2 border-gold-500 bg-gold-50/70 p-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all shadow-xs">
@@ -2602,7 +2602,8 @@
                 const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
                 return (v && v.hasJanamaz);
             });
-            const prepaidDiscountPercent = (hasCombo || subtotalPrice >= 999) ? 10 : 5;
+            const isComboOr899 = (hasCombo || subtotalPrice >= 899);
+            const prepaidDiscountPercent = isComboOr899 ? 10 : 0;
             const prepaidDiscount = isOnline ? Math.round((subtotalPrice * prepaidDiscountPercent) / 100) : 0;
             const prepaidRowEl = document.getElementById('cart-prepaid-discount-row');
             const prepaidAmtEl = document.getElementById('cart-prepaid-discount-amount');
@@ -2640,11 +2641,17 @@
             const checkoutBtnText = document.getElementById('checkout-btn-text');
             if (checkoutBtnText && !isProcessingOrder) {
                 if (isOnline) {
-                    checkoutBtnText.textContent = (subtotalPrice >= 598)
-                        ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF + FREE DELIVERY)`
-                        : `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF)`;
+                    if (subtotalPrice >= 598) {
+                        checkoutBtnText.textContent = (prepaidDiscountPercent > 0)
+                            ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF + FREE DELIVERY)`
+                            : `PAY ONLINE (FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`;
+                    } else {
+                        checkoutBtnText.textContent = (prepaidDiscountPercent > 0)
+                            ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF)`
+                            : `PAY ONLINE (RS. ${totalWithShipping.toFixed(0)})`;
+                    }
                 } else {
-                    checkoutBtnText.textContent = "CONFIRM & PLACE ORDER (COD • RS. 120 DELIVERY)";
+                    checkoutBtnText.textContent = `CONFIRM & PLACE ORDER (COD • RS. ${totalWithShipping.toFixed(0)})`;
                 }
             }
 
