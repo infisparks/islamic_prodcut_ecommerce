@@ -33,7 +33,7 @@ const config = {
 
   delhivery: {
     apiKey: process.env.DELHIVERY_API_KEY || 'd5409c3d766f8b5a5e54132e7cf09af8813618e2',
-    pickupLocation: process.env.DELHIVERY_PICKUP_LOCATION || 'work',
+    pickupLocation: process.env.DELHIVERY_PICKUP_LOCATION || 'FATIMACALLIGRAPHER27 B2C',
     mode: process.env.DELHIVERY_MODE || 'production',
     baseUrl: 'https://track.delhivery.com'
   },

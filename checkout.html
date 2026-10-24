@@ -1645,7 +1645,7 @@
 
             // Render Success Box
             const d = new Date();
-            d.setDate(d.getDate() + 2);
+            d.setDate(d.getDate() + 5);
             const estDateStr = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
             const detailsEl = document.getElementById('success-order-details');
@@ -1653,7 +1653,7 @@
                 <div><b>Order ID:</b> <span class="font-mono text-indigo-700 font-bold">${orderData.orderId}</span></div>
                 <div><b>Payment Method:</b> ${orderData.payment?.provider === 'COD' || selectedPaymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
                 <div><b>Total Amount:</b> <span class="font-bold text-onyx">Rs. ${orderData.pricing?.total || val}</span></div>
-                <div><b>Estimated Delivery:</b> <span class="font-bold text-emerald-700">${estDateStr} (Within 4 Days)</span></div>
+                <div><b>Estimated Delivery:</b> <span class="font-bold text-emerald-700">${estDateStr} (Within 5 Days)</span></div>
                 ${orderData.shipping?.awb ? `<div><b>Tracking AWB:</b> <span class="font-mono">${orderData.shipping.awb}</span></div>` : '<div><b>Booking Status:</b> <span class="text-indigo-700 font-semibold">Booking Confirmed • Preparing Dispatch</span></div>'}
                 <div class="text-[11px] text-gray-600 pt-1.5 border-t border-gold-200 flex items-center justify-between">
                     <span>Confirmation WhatsApp dispatched.</span>

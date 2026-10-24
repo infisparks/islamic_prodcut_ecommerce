@@ -123,7 +123,7 @@ const delhiveryService = {
         .replace('T', ' ')
         .substring(0, 19);
 
-      const pickupLocationName = config.delhivery.pickupLocation || 'work';
+      const pickupLocationName = config.delhivery.pickupLocation || 'FATIMACALLIGRAPHER27 B2C';
 
       const shipmentObj = {
         name: order.customer?.name || 'Customer',

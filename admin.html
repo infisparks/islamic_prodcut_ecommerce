@@ -1798,8 +1798,8 @@
 
         function calculateEstimatedDeliveryRange(orderDate) {
             const base = orderDate ? new Date(orderDate) : new Date();
-            const startD = new Date(base.getTime() + 2 * 86400000);
-            const endD = new Date(base.getTime() + 3 * 86400000);
+            const startD = new Date(base.getTime() + 4 * 86400000);
+            const endD = new Date(base.getTime() + 5 * 86400000);
             const startDay = startD.getDate();
             const endDay = endD.getDate();
             const monthName = endD.toLocaleString('en-US', { month: 'long' });

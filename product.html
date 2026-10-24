@@ -334,10 +334,10 @@
                         </span>
                     </div>
 
-                    <!-- Dynamic Estimated Delivery Date Callout (+4 Days) -->
+                    <!-- Dynamic Estimated Delivery Date Callout (+5 Days) -->
                     <div class="flex items-center gap-1.5 text-[11px] sm:text-xs text-emerald-900 font-semibold mb-2.5 bg-emerald-50/90 px-2.5 py-1 rounded-xl border border-emerald-200/80 w-fit">
                         <i class="fa-solid fa-truck-fast text-emerald-600 text-xs"></i>
-                        <span>Estimated Delivery: <b id="pdp-est-delivery-badge" class="font-extrabold text-emerald-950 underline decoration-emerald-500">--</b> (within 4 days)</span>
+                        <span>Estimated Delivery: <b id="pdp-est-delivery-badge" class="font-extrabold text-emerald-950 underline decoration-emerald-500">--</b> (within 5 days)</span>
                     </div>
 
                     <!-- ULTRA-COMPACT 4-COLUMN LANGUAGE SELECTOR (Slim Bar with Zero Mobile Clutter) -->
@@ -1687,7 +1687,7 @@
             return items;
         }
 
-        function getFormattedEstimatedDelivery(daysToAdd = 4) {
+        function getFormattedEstimatedDelivery(daysToAdd = 5) {
             const d = new Date();
             d.setDate(d.getDate() + daysToAdd);
             const weekday = d.toLocaleDateString('en-IN', { weekday: 'short' });

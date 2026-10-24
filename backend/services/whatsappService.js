@@ -18,11 +18,11 @@ function sanitizePhone(phone) {
 }
 
 /**
- * Calculate and format estimated delivery date as +4 days from base date.
+ * Calculate and format estimated delivery date as +5 days from base date.
  */
 function formatEstimatedDeliveryDate(baseDate) {
   const d = baseDate ? new Date(baseDate) : new Date();
-  d.setDate(d.getDate() + 2);
+  d.setDate(d.getDate() + 5);
   return d.toLocaleDateString('en-IN', {
     weekday: 'short',
     day: 'numeric',
@@ -132,7 +132,7 @@ async function sendAdminOrderNotificationWhatsApp(order) {
     `• *Address:* ${addressStr}\n\n` +
     `🛍️ *Ordered Products:*\n${itemsList}\n\n` +
     `📦 *Shipment Status:* ${order.shipping?.status || 'NOT_BOOKED'} ${order.shipping?.awb ? `(AWB: ${order.shipping.awb})` : ''}\n` +
-    `🚚 *Est. Delivery Date (+4 days):* ${deliveryDate}\n` +
+    `🚚 *Est. Delivery Date (+5 days):* ${deliveryDate}\n` +
     `📞 *Support Helpline:* +91 99703 47703\n` +
     `⏰ *Booking Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`;
 
@@ -182,7 +182,7 @@ async function sendOrderConfirmationWhatsApp(order) {
     `💰 *Total Amount:* ₹${totalAmount}\n\n` +
     `📦 *Items Ordered:*\n${itemsList}\n\n` +
     `📍 *Delivery Address:* ${customerName}, ${addressStr}\n\n` +
-    `🚚 *Estimated Delivery Date:* *${deliveryDate}* (Within 4 Days)\n\n` +
+    `🚚 *Estimated Delivery Date:* *${deliveryDate}* (Within 5 Days)\n\n` +
     `We are preparing your parcel for prompt dispatch. You will receive tracking updates here once shipped! ❤️\n\n` +
     `📞 *For Support / Help Call:* +91 99703 47703\n` +
     `*Fatima Calligrapher Team*`;
@@ -210,7 +210,7 @@ async function sendShippingConfirmationWhatsApp(order) {
     `Your order *#${order.orderId}* is on its way!\n\n` +
     `📦 *Courier Partner:* ${courier}\n` +
     `🔖 *AWB / Tracking Code:* ${awb}\n` +
-    `🗓️ *Estimated Delivery:* *${deliveryDate}* (Within 4 Days)\n` +
+    `🗓️ *Estimated Delivery:* *${deliveryDate}* (Within 5 Days)\n` +
     `🔗 *Live Tracking Link:* ${trackingUrl}\n\n` +
     `📞 *Customer Support:* +91 99703 47703\n\n` +
     `Thank you for choosing *Fatima Calligrapher*! ✨`;
