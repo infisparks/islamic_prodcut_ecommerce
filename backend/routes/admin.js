@@ -391,15 +391,19 @@ router.post('/orders/:orderId/cancel', async (req, res, next) => {
       });
     }
 
-    // If order has a Shiprocket Order ID, cancel it directly on Shiprocket API
-    const srOrderId = order.shipping ? order.shipping.shiprocketOrderId : null;
-    let srCancelMsg = '';
-    if (srOrderId) {
-      const srCancelRes = await shiprocketService.cancelOrder(srOrderId);
-      if (srCancelRes.success) {
-        srCancelMsg = ` (Shiprocket order #${srOrderId} cancelled successfully)`;
-      } else {
-        srCancelMsg = ` (Shiprocket cancellation notice: ${srCancelRes.error || 'Check Shiprocket dashboard'})`;
+    // If order has an active courier booking, cancel it via shippingService (Delhivery or Shiprocket)
+    let courierCancelMsg = '';
+    if (order.shipping && (order.shipping.shiprocketOrderId || order.shipping.awb || order.shipping.waybill)) {
+      try {
+        const cancelRes = await shippingService.cancelShipment(order);
+        if (cancelRes && cancelRes.success) {
+          courierCancelMsg = ` (${order.shipping.provider || 'Courier'} booking cancelled successfully)`;
+        } else {
+          courierCancelMsg = ` (Courier cancellation notice: ${(cancelRes && cancelRes.error) || 'Check courier dashboard'})`;
+        }
+      } catch (cancelErr) {
+        logger.warn('COURIER_CANCEL_ERROR', { error: cancelErr.message, orderId });
+        courierCancelMsg = ` (Courier cancel warning: ${cancelErr.message})`;
       }
     }
 
@@ -410,7 +414,7 @@ router.post('/orders/:orderId/cancel', async (req, res, next) => {
     events.push({
       event: 'ORDER_CANCELLED_BY_ADMIN',
       timestamp: now,
-      details: `Order cancelled by ${adminEmail}. Reason: ${reason || 'Admin manual cancellation'}${srCancelMsg}`
+      details: `Order cancelled by ${adminEmail}. Reason: ${reason || 'Admin manual cancellation'}${courierCancelMsg}`
     });
 
     const updates = {
@@ -420,11 +424,11 @@ router.post('/orders/:orderId/cancel', async (req, res, next) => {
     };
 
     const updatedOrder = await firebaseService.updateOrder(orderId, updates);
-    logger.info('ORDER_CANCELLED_BY_ADMIN', { orderId, adminEmail, reason, shiprocketOrderId: srOrderId });
+    logger.info('ORDER_CANCELLED_BY_ADMIN', { orderId, adminEmail, reason, shipping: order.shipping });
 
     res.json({
       success: true,
-      message: `Order ${orderId} has been successfully cancelled${srCancelMsg}.`,
+      message: `Order ${orderId} has been successfully cancelled${courierCancelMsg}.`,
       data: updatedOrder
     });
   } catch (err) {
@@ -512,12 +516,12 @@ const handlePermanentDeleteOrder = async (req, res, next) => {
       });
     }
 
-    // If order is active on Shiprocket, attempt to cancel it first
-    if (order.shipping && order.shipping.shiprocketOrderId) {
+    // If order has an active courier shipment, attempt to cancel it first
+    if (order.shipping && (order.shipping.shiprocketOrderId || order.shipping.awb || order.shipping.waybill)) {
       try {
-        await shiprocketService.cancelOrder(order.shipping.shiprocketOrderId);
-      } catch (srErr) {
-        logger.warn('SHIPROCKET_CANCEL_ON_DELETE_ERROR', { error: srErr.message, orderId });
+        await shippingService.cancelShipment(order);
+      } catch (cancelErr) {
+        logger.warn('COURIER_CANCEL_ON_DELETE_ERROR', { error: cancelErr.message, orderId });
       }
     }
 
