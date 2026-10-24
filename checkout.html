@@ -301,7 +301,7 @@
 
                                 <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-emerald-200/70 text-xs">
                                     <span id="badge-online-price" class="font-extrabold text-emerald-800">
-                                        Pay Rs. 599.00 <span class="font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded text-[11px] ml-1">(Save Rs. 120 vs COD)</span>
+                                        Pay Rs. 599.00 <span class="font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded text-[11px] ml-1">(Save Rs. 100 vs COD)</span>
                                     </span>
                                     <span class="text-[10px] font-bold text-emerald-700 flex items-center gap-1 shrink-0">
                                         <i class="fa-solid fa-truck-fast"></i> Priority 24h Dispatch
@@ -328,7 +328,7 @@
                                 </p>
                                 <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
                                     <span id="badge-cod-price" class="font-bold text-gray-700">
-                                        Pay Rs. 719.00 <span class="font-normal text-gray-500 text-[11px] ml-1">(Delivery: Rs. 120)</span>
+                                        Pay Rs. 699.00 <span class="font-normal text-gray-500 text-[11px] ml-1">(Delivery: Rs. 100)</span>
                                     </span>
                                     <span class="text-[10px] font-medium text-gray-400 shrink-0">
                                         Standard Delivery
@@ -383,9 +383,9 @@
                     <div id="summary-savings-banner" class="mt-3 mb-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xs flex items-center justify-between text-xs font-bold animate-pulse">
                         <span class="flex items-center gap-1.5">
                             <i class="fa-solid fa-gift text-amber-300 text-sm"></i>
-                            <span>You Save <b id="summary-savings-amount" class="text-amber-200">Rs. 120.00 (FREE Delivery)</b> with Pay Online!</span>
+                            <span>You Save <b id="summary-savings-amount" class="text-amber-200">Rs. 100.00 (FREE Delivery)</b> with Pay Online!</span>
                         </span>
-                        <span id="summary-savings-pill" class="bg-white/20 text-[9px] uppercase px-2 py-0.5 rounded-full font-black">SAVE ₹120</span>
+                        <span id="summary-savings-pill" class="bg-white/20 text-[9px] uppercase px-2 py-0.5 rounded-full font-black">SAVE ₹100</span>
                     </div>
 
                     <!-- Pricing Breakdown -->
@@ -416,12 +416,12 @@
                     <div class="mt-4 space-y-2">
                         <button type="submit" id="btn-submit-order" class="w-full gold-bg-gradient text-onyx font-black py-3.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs sm:text-sm hover:opacity-95 active:scale-98 transition-all cursor-pointer ring-2 ring-amber-400/50">
                             <i class="fa-solid fa-bolt text-xs"></i>
-                            <span id="btn-submit-text">PAY ONLINE & SAVE Rs. 120.00 (FREE Delivery) • Rs. 599.00</span>
+                            <span id="btn-submit-text">PAY ONLINE & SAVE Rs. 100.00 (FREE Delivery) • Rs. 599.00</span>
                         </button>
                         
                         <div id="btn-submit-sub" class="text-center text-[11px] pt-1">
                             <span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">
-                                Or choose <b>Cash on Delivery</b>: Rs. 719.00 (Delivery: Rs. 120)
+                                Or choose <b>Cash on Delivery</b>: Rs. 699.00 (Delivery: Rs. 100)
                             </span>
                         </div>
                     </div>
@@ -465,7 +465,7 @@
                     <span id="mobile-online-savings-tag" class="bg-emerald-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase leading-none tracking-wide whitespace-nowrap">⚡ FREE DELIVERY</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
-                    <span id="mobile-online-sub" class="text-[8.5px] text-onyx/75 font-semibold">Save Rs. 120 vs COD</span>
+                    <span id="mobile-online-sub" class="text-[8.5px] text-onyx/75 font-semibold">Save Rs. 100 vs COD</span>
                     <span id="mobile-online-price" class="text-xs font-black text-onyx font-mono">Rs. 599.00</span>
                 </div>
             </button>
@@ -666,7 +666,7 @@
 
         let checkoutCart = [];
         let selectedPaymentMethod = 'razorpay';
-        let currentShippingFee = 120;
+        let currentShippingFee = 100;
         let appliedCoupon = null;
         let isProcessing = false;
         let activeCodOrderPayload = null;
@@ -925,8 +925,8 @@
             // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY on all orders (Prepaid & COD)!
             // - Prepaid orders of ₹598+ get FREE SHIPPING!
             // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-            // - Prepaid orders below ₹598 pay standard delivery: ₹120
-            // - COD orders below ₹999 pay standard delivery: ₹120
+            // - Prepaid orders below ₹598 pay standard delivery: ₹100
+            // - COD orders below ₹999 pay standard delivery: ₹100
             const LOCAL_PINCODES = ['421305', '421302', '421308'];
             const currentPincode = (document.getElementById('cust-pincode')?.value || '').trim();
             const isLocalDelivery = LOCAL_PINCODES.includes(currentPincode);
@@ -934,8 +934,8 @@
             const isOnline = (selectedPaymentMethod !== 'cod');
             const hasFreeShipping = isLocalDelivery || (subtotal >= 999);
             const isPrepaidFree = isLocalDelivery || (subtotal >= 598);
-            const codShipping = (isLocalDelivery || hasFreeShipping) ? 0 : 120;
-            const onlineShipping = (isLocalDelivery || isPrepaidFree || hasFreeShipping) ? 0 : 120;
+            const codShipping = (isLocalDelivery || hasFreeShipping) ? 0 : 100;
+            const onlineShipping = (isLocalDelivery || isPrepaidFree || hasFreeShipping) ? 0 : 100;
             const effectiveShipping = isOnline ? onlineShipping : codShipping;
 
             if (shippingEl) {
@@ -948,14 +948,14 @@
                         shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Prepaid Free Delivery)</span>`;
                     } else {
                         shippingEl.className = "font-bold text-onyx";
-                        shippingEl.innerHTML = `Rs. 120.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Free Delivery on ₹598+)</span>`;
+                        shippingEl.innerHTML = `Rs. 100.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Free Delivery on ₹598+)</span>`;
                     }
                 } else if (hasFreeShipping) {
                     shippingEl.className = "font-bold text-emerald-700";
                     shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Above ₹999 Free Delivery)</span>`;
                 } else {
                     shippingEl.className = "font-bold text-onyx";
-                    shippingEl.innerHTML = `Rs. 120.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Pay Online ₹598+ for FREE Delivery)</span>`;
+                    shippingEl.innerHTML = `Rs. 100.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Pay Online ₹598+ for FREE Delivery)</span>`;
                 }
             }
 
@@ -986,7 +986,7 @@
             const prepaidDiscount = isOnline ? basePrepaidItemDiscount : 0;
 
             // Calculations:
-            // COD Total: Subtotal - discount + COD Delivery (Free if subtotal >= 999, else ₹120)
+            // COD Total: Subtotal - discount + COD Delivery (Free if subtotal >= 999, else ₹100)
             const codTotal = Math.max(0, subtotal - discountAmount + codShipping);
 
             // Online Total: Subtotal - discount - prepaid item discount + Online Delivery (FREE ₹0 on ₹598+)
@@ -1259,14 +1259,14 @@
                             }).catch(() => {});
                     }
 
-                    currentShippingFee = 120;
+                    currentShippingFee = 100;
                     const courierName = info.deliveryType || (info.couriers && info.couriers[0]) || 'Express Courier Partner';
                     const etd = info.estimatedDays || '3-4 Business Days';
 
                     const isSubtotalEligible = checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0) >= 598;
-                    const onlineShipTag = isSubtotalEligible ? 'FREE Online / ₹120 COD' : '₹120 COD & Online (FREE Online on ₹598+)';
+                    const onlineShipTag = isSubtotalEligible ? 'FREE Online / ₹100 COD' : '₹100 COD & Online (FREE Online on ₹598+)';
                     const courierSubTag = isSubtotalEligible 
-                        ? `${courierName} • Pay Online & Get FREE Delivery (Save ₹120)` 
+                        ? `${courierName} • Pay Online & Get FREE Delivery (Save ₹100)` 
                         : `${courierName} • Add items worth ₹598+ for FREE Online Delivery`;
 
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
@@ -1281,23 +1281,23 @@
                         <div class="text-[10px] text-emerald-700 mt-0.5">${courierSubTag}</div>
                     `;
                 } else {
-                    currentShippingFee = 120;
+                    currentShippingFee = 100;
                     const isSubtotalEligible = checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0) >= 598;
-                    const onlineShipTag = isSubtotalEligible ? 'FREE Online / ₹120 COD' : '₹120 COD & Online (FREE Online on ₹598+)';
+                    const onlineShipTag = isSubtotalEligible ? 'FREE Online / ₹100 COD' : '₹100 COD & Online (FREE Online on ₹598+)';
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
                         <div class="flex items-center justify-between">
                             <span><i class="fa-solid fa-truck-fast text-emerald-600 mr-1"></i> Pan-India Express Delivery</span>
                             <span class="font-bold text-emerald-800">${onlineShipTag}</span>
                         </div>
-                        <div class="text-[10px] text-emerald-700 mt-0.5">${isSubtotalEligible ? 'Pay Online & Get FREE Delivery (Save ₹120)' : 'Add items worth ₹598+ for FREE Online Delivery'}</div>
+                        <div class="text-[10px] text-emerald-700 mt-0.5">${isSubtotalEligible ? 'Pay Online & Get FREE Delivery (Save ₹100)' : 'Add items worth ₹598+ for FREE Online Delivery'}</div>
                     `;
                 }
             } catch (err) {
                 spinner.classList.add('hidden');
-                currentShippingFee = 120;
+                currentShippingFee = 100;
                 feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
-                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (FREE Online on ₹598+ / ₹120 COD)`;
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (FREE Online on ₹598+ / ₹100 COD)`;
             }
 
             saveCustomerDetails();

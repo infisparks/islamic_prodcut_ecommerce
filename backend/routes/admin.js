@@ -772,7 +772,7 @@ router.post('/orders/:orderId/change-product', async (req, res, next) => {
     } else if (order.pricing?.shipping !== undefined) {
       resolvedShipping = order.pricing.shipping;
     } else {
-      resolvedShipping = 120;
+      resolvedShipping = 100;
     }
 
     const resolvedDiscount = (discount !== undefined && discount !== null && !isNaN(parseFloat(discount)))

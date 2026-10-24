@@ -65,22 +65,22 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY on all orders (Prepaid & COD)!
   // - Prepaid orders of ₹598+ get FREE SHIPPING!
   // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-  // - Prepaid orders below ₹598 pay standard ₹120 delivery charge.
-  // - COD orders below ₹999 pay standard ₹120 delivery charge.
+  // - Prepaid orders below ₹598 pay standard ₹100 delivery charge.
+  // - COD orders below ₹999 pay standard ₹100 delivery charge.
   const LOCAL_FREE_PINCODES = ['421305', '421302', '421308'];
   const cleanPincode = String(deliveryPincode || '').trim();
   const isLocalFreeShipping = LOCAL_FREE_PINCODES.includes(cleanPincode);
 
   const isOnlinePayment = (paymentMethod !== 'cod');
   let hasFreeShipping = false;
-  let shipping = 120;
+  let shipping = 100;
 
   if (isLocalFreeShipping || subtotal >= 999 || (isOnlinePayment && subtotal >= 598)) {
     hasFreeShipping = true;
     shipping = 0;
   } else {
     hasFreeShipping = false;
-    shipping = 120;
+    shipping = 100;
   }
 
   let discount = 0;

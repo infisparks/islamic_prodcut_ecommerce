@@ -643,7 +643,7 @@
                             <input type="radio" name="payment" id="payment-method-cod" value="cod" checked onchange="handlePaymentMethodSelect('cod'); saveCustomerDetailsToStorage(true);" class="accent-gold-600 w-4 h-4 cursor-pointer">
                             <div class="leading-tight">
                                 <span class="font-bold text-onyx block text-xs">Cash on Delivery</span>
-                                <span class="text-[9px] text-gray-500 font-medium block">Rs. 120 Delivery Charge</span>
+                                <span class="text-[9px] text-gray-500 font-medium block">Rs. 100 Delivery Charge</span>
                             </div>
                         </label>
                     </div>
@@ -2585,7 +2585,7 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 120;
+            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 100;
             const hasFreeShipping = (subtotalPrice >= 999);
             const isPrepaidFreeShipping = (isOnline && subtotalPrice >= 598);
             const effectiveFee = (hasFreeShipping || isPrepaidFreeShipping) ? 0 : courierFee;
@@ -2820,7 +2820,7 @@
                     const res = await fetch(`/api/shipments/serviceability?pincode=${clean}&cod=1`);
                     const data = await res.json();
                     if (data.success && data.data && data.data.isServiceable) {
-                        currentShippingFee = 120;
+                        currentShippingFee = 100;
                         updateCartUI(false);
 
                         const estDateStr = getFormattedEstimatedDelivery(4);
@@ -2829,7 +2829,7 @@
                             <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                             <div>
                                 <div class="font-bold">✓ Delivery Available to ${data.data.city || ''} ${data.data.state ? '(' + data.data.state + ')' : ''}</div>
-                                <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> • Delivery Charge: <b>Rs. 120</b> (COD Available)</div>
+                                <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> • Delivery Charge: <b>Rs. 100</b> (COD Available)</div>
                             </div>
                         `;
                         const cityInput = document.getElementById('ship-city');
@@ -2841,7 +2841,7 @@
                         badge.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 text-sm mt-0.5 flex-shrink-0"></i><div><div class="font-bold">Delivery Not Available</div></div>`;
                     }
                 } catch (e) {
-                    currentShippingFee = 120;
+                    currentShippingFee = 100;
                     updateCartUI(false);
                 }
             }, 250);

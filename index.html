@@ -2863,8 +2863,9 @@
             // Shipping Rule:
             // - Prepaid orders of ₹598+ get FREE SHIPPING!
             // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-            // - Prepaid orders below ₹598 pay standard delivery: ₹120
-            // - COD orders below ₹999 pay standard delivery: ₹120
+            // - Prepaid orders below ₹598 pay standard delivery: ₹100
+            // - COD orders below ₹999 pay standard delivery: ₹100
+            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 100;
             const hasFreeShipping = (subtotalPrice >= 999) || (isOnline && subtotalPrice >= 598);
             const effectiveFee = hasFreeShipping ? 0 : courierFee;
             
@@ -3287,7 +3288,7 @@
                 const result = await fetchPincodeServiceability(clean);
 
                 if (result.isServiceable) {
-                    currentShippingFee = 120;
+                    currentShippingFee = 100;
                     updateCartUI(false);
 
                     badge.className = 'text-[11px] p-2.5 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2';
@@ -3295,7 +3296,7 @@
                         <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                         <div>
                             <div class="font-bold">✓ Delivery Available to ${result.city || ''} ${result.state ? '(' + result.state + ')' : ''}</div>
-                            <div class="text-[10px] text-emerald-700 mt-0.5">Est: <b>${result.estimatedDays || '3-4 Days'}</b> • Delivery Charge: <b>Rs. 120</b> (COD Available)</div>
+                            <div class="text-[10px] text-emerald-700 mt-0.5">Est: <b>${result.estimatedDays || '3-4 Days'}</b> • Delivery Charge: <b>Rs. 100</b> (COD Available)</div>
                         </div>
                     `;
 
