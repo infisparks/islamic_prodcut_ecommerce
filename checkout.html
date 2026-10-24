@@ -922,19 +922,27 @@
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
             // Shipping Rule:
+            // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY on all orders (Prepaid & COD)!
             // - Prepaid orders of ₹598+ get FREE SHIPPING!
             // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
             // - Prepaid orders below ₹598 pay standard delivery: ₹120
             // - COD orders below ₹999 pay standard delivery: ₹120
+            const LOCAL_PINCODES = ['421305', '421302', '421308'];
+            const currentPincode = (document.getElementById('cust-pincode')?.value || '').trim();
+            const isLocalDelivery = LOCAL_PINCODES.includes(currentPincode);
+
             const isOnline = (selectedPaymentMethod !== 'cod');
-            const hasFreeShipping = (subtotal >= 999);
-            const isPrepaidFree = (subtotal >= 598);
-            const codShipping = hasFreeShipping ? 0 : 120;
-            const onlineShipping = (isPrepaidFree || hasFreeShipping) ? 0 : 120;
+            const hasFreeShipping = isLocalDelivery || (subtotal >= 999);
+            const isPrepaidFree = isLocalDelivery || (subtotal >= 598);
+            const codShipping = (isLocalDelivery || hasFreeShipping) ? 0 : 120;
+            const onlineShipping = (isLocalDelivery || isPrepaidFree || hasFreeShipping) ? 0 : 120;
             const effectiveShipping = isOnline ? onlineShipping : codShipping;
 
             if (shippingEl) {
-                if (isOnline) {
+                if (isLocalDelivery) {
+                    shippingEl.className = "font-bold text-emerald-700";
+                    shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Nearby Local Area: Free Delivery)</span>`;
+                } else if (isOnline) {
                     if (onlineShipping === 0) {
                         shippingEl.className = "font-bold text-emerald-700";
                         shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Prepaid Free Delivery)</span>`;
@@ -1165,12 +1173,18 @@
             const clean = val.replace(/\D/g, '').slice(0, 6);
             document.getElementById('cust-pincode').value = clean;
             saveCustomerDetails();
+            renderCheckoutSummary();
 
             clearTimeout(pincodeDebounceTimer);
             if (clean.length === 6 && /^[1-9][0-9]{5}$/.test(clean)) {
-                pincodeDebounceTimer = setTimeout(() => {
+                const LOCAL_PINCODES = ['421305', '421302', '421308'];
+                if (LOCAL_PINCODES.includes(clean)) {
                     checkLivePincode(clean);
-                }, 250);
+                } else {
+                    pincodeDebounceTimer = setTimeout(() => {
+                        checkLivePincode(clean);
+                    }, 250);
+                }
             }
         }
 
@@ -1179,6 +1193,33 @@
             const feedback = document.getElementById('pincode-feedback');
             const cityInput = document.getElementById('cust-city');
             const stateInput = document.getElementById('cust-state');
+
+            const LOCAL_PINCODES = ['421305', '421302', '421308'];
+            if (LOCAL_PINCODES.includes(pincode)) {
+                if (spinner) spinner.classList.add('hidden');
+                if (cityInput && (!cityInput.value || cityInput.value === '')) cityInput.value = 'Bhiwandi';
+                if (stateInput && (!stateInput.value || stateInput.value === '')) stateInput.value = 'Maharashtra';
+                currentShippingFee = 0;
+                if (feedback) {
+                    feedback.classList.remove('hidden');
+                    feedback.className = 'mt-1 text-[11px] font-medium p-2.5 rounded-xl bg-purple-50 text-purple-900 border border-purple-300';
+                    feedback.innerHTML = `
+                        <div class="flex items-center justify-between gap-1 flex-wrap">
+                            <span class="flex items-center gap-1.5 font-bold">
+                                <i class="fa-solid fa-location-dot text-purple-600"></i>
+                                <span>Nearby Location (${pincode}) • Local Area</span>
+                            </span>
+                            <span class="font-extrabold text-purple-800 bg-purple-200/80 px-2 py-0.5 rounded text-[10px]">100% FREE DELIVERY</span>
+                        </div>
+                        <div class="text-[10px] text-purple-700 mt-1">
+                            <i class="fa-solid fa-gift text-purple-600 mr-1"></i> Special: <b>₹0 Delivery Fee</b> on all orders (Cash on Delivery & Online)! Delivered by our local team.
+                        </div>
+                    `;
+                }
+                saveCustomerDetails();
+                renderCheckoutSummary();
+                return;
+            }
 
             spinner.classList.remove('hidden');
             feedback.classList.remove('hidden');

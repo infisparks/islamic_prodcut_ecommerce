@@ -121,8 +121,13 @@ async function sendAdminOrderNotificationWhatsApp(order) {
   ].filter(Boolean);
   const addressStr = addressParts.length > 0 ? addressParts.join(', ') : 'N/A';
 
+  const LOCAL_PINCODES = ['421305', '421302', '421308'];
+  const isNearby = LOCAL_PINCODES.includes(String(order.customer?.pincode || '').trim()) || Boolean(order.isLocalDelivery);
+  const localAlert = isNearby ? `📍 *NEARBY LOCATION (${order.customer?.pincode}):* Deliver order manually (FREE Delivery applied)!\n\n` : '';
+
   const message =
     `🔔 *NEW PRODUCT BOOKING RECEIVED!*\n\n` +
+    localAlert +
     `📋 *Order ID:* #${order.orderId}\n` +
     `💳 *Payment Method:* ${paymentMethod}\n` +
     `💰 *Total Amount:* ₹${order.pricing?.total || 0}\n\n` +
@@ -131,7 +136,7 @@ async function sendAdminOrderNotificationWhatsApp(order) {
     `• *Mobile:* ${customerPhone}\n` +
     `• *Address:* ${addressStr}\n\n` +
     `🛍️ *Ordered Products:*\n${itemsList}\n\n` +
-    `📦 *Shipment Status:* ${order.shipping?.status || 'NOT_BOOKED'} ${order.shipping?.awb ? `(AWB: ${order.shipping.awb})` : ''}\n` +
+    `📦 *Shipment Status:* ${isNearby ? '📍 Local Manual Delivery' : (order.shipping?.status || 'NOT_BOOKED')} ${order.shipping?.awb ? `(AWB: ${order.shipping.awb})` : ''}\n` +
     `🚚 *Est. Delivery Date (+5 days):* ${deliveryDate}\n` +
     `📞 *Support Helpline:* +91 99703 47703\n` +
     `⏰ *Booking Time:* ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`;

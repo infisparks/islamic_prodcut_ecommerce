@@ -89,7 +89,15 @@ router.get('/orders', async (req, res, next) => {
 
     // Filter by Order Status
     if (status && status !== 'all') {
-      orders = orders.filter(o => (o.status || '').toUpperCase() === status.toUpperCase());
+      if (status === 'LOCAL_DELIVERY') {
+        const LOCAL_PINCODES = ['421305', '421302', '421308'];
+        orders = orders.filter(o => 
+          o.isLocalDelivery || 
+          LOCAL_PINCODES.includes(String(o.customer?.pincode || '').trim())
+        );
+      } else {
+        orders = orders.filter(o => (o.status || '').toUpperCase() === status.toUpperCase());
+      }
     }
 
     // Filter by Payment Provider (Razorpay, COD)

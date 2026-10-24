@@ -300,13 +300,17 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
       // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
       const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode, paymentMethod);
       const internalOrderId = reqDraftOrderId || (record && record.draftOrderId) || generateOrderId();
-      const now = new Date().toISOString();
+      const LOCAL_FREE_PINCODES = ['421305', '421302', '421308'];
+      const custPincode = String(customer.pincode || '').trim();
+      const isLocalDelivery = LOCAL_FREE_PINCODES.includes(custPincode);
 
       const orderRecord = {
         orderId: internalOrderId,
         createdAt: now,
         status: paymentMethod === 'cod' ? 'COD_PENDING' : 'PENDING_PAYMENT',
         paymentMethod: paymentMethod,
+        isLocalDelivery: isLocalDelivery,
+        localDeliveryNote: isLocalDelivery ? 'Nearby your location - Deliver order manually' : null,
         customer,
         items: trustedOrderData.items,
         pricing: trustedOrderData.pricing,
@@ -322,12 +326,13 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
           paidAt: null
         },
         shipping: {
-          provider: 'shiprocket',
+          provider: isLocalDelivery ? 'local_manual' : 'shiprocket',
+          isLocal: isLocalDelivery,
           status: 'NOT_BOOKED',
           shiprocketOrderId: null,
           shipmentId: null,
           awb: null,
-          courierName: null,
+          courierName: isLocalDelivery ? 'Local Manual Delivery' : null,
           trackingUrl: null,
           bookedAt: null,
           lastTrackingUpdate: null
@@ -336,10 +341,18 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
           {
             event: 'ORDER_INITIATED',
             timestamp: now,
-            details: `Order created via ${paymentMethod.toUpperCase()}`
+            details: `Order created via ${paymentMethod.toUpperCase()}${isLocalDelivery ? ' • Nearby location (Free Delivery - Manual Delivery)' : ''}`
           }
         ]
       };
+
+      if (isLocalDelivery) {
+        orderRecord.events.push({
+          event: 'LOCAL_DELIVERY_FLAGGED',
+          timestamp: now,
+          details: `Nearby local area order detected (PIN: ${custPincode}). Free delivery applied. Please deliver order manually.`
+        });
+      }
 
       // 2. Handle Razorpay flow
       if (paymentMethod === 'razorpay') {
