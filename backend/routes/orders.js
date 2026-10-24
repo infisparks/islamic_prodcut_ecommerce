@@ -303,6 +303,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
       const LOCAL_FREE_PINCODES = ['421305', '421302', '421308'];
       const custPincode = String(customer.pincode || '').trim();
       const isLocalDelivery = LOCAL_FREE_PINCODES.includes(custPincode);
+      const now = new Date().toISOString();
 
       const orderRecord = {
         orderId: internalOrderId,
