@@ -5,6 +5,8 @@ const axios = require('axios');
 const { verifyAdminAuth } = require('../middleware/adminAuth');
 const firebaseService = require('../services/firebaseService');
 const shiprocketService = require('../services/shiprocketService');
+const shippingService = require('../services/shippingService');
+const whatsappService = require('../services/whatsappService');
 const { catalog, findItemBySku } = require('../config/catalog');
 const config = require('../config/env');
 const logger = require('../utils/logger');
@@ -536,16 +538,31 @@ router.delete('/orders/:orderId', handlePermanentDeleteOrder);
 router.post('/orders/:orderId/delete', handlePermanentDeleteOrder);
 
 /**
- * POST /api/admin/orders/:orderId/retry-shipping
+ * POST /api/admin/orders/:orderId/ship
  * POST /api/admin/orders/:orderId/move-to-shiprocket
- * Move order to Shiprocket upon phone confirmation (COD or Prepaid)
+ * POST /api/admin/orders/:orderId/move-to-delhivery
+ * POST /api/admin/orders/:orderId/retry-shipping
+ * Move order to selected Courier (Shiprocket or Delhivery) upon manual Admin action
  */
-const handleMoveOrderToShiprocket = async (req, res, next) => {
+const handleMoveOrderToCourier = async (req, res, next) => {
   try {
     const { orderId } = req.params;
     const { convertToCod } = req.body || {};
-    let order = await firebaseService.getOrder(orderId);
+    
+    // Determine target courier from path or body (default to shiprocket or delhivery)
+    let courier = req.body?.courier;
+    if (!courier) {
+      if (req.path.includes('move-to-delhivery')) {
+        courier = 'delhivery';
+      } else if (req.path.includes('move-to-shiprocket')) {
+        courier = 'shiprocket';
+      } else {
+        courier = 'shiprocket';
+      }
+    }
+    courier = String(courier).toLowerCase().trim();
 
+    let order = await firebaseService.getOrder(orderId);
     if (!order) {
       return res.status(404).json({
         success: false,
@@ -556,7 +573,7 @@ const handleMoveOrderToShiprocket = async (req, res, next) => {
       });
     }
 
-    // Ensure customer address format is valid for Shiprocket
+    // Ensure customer address format is valid
     if (order.customer) {
       if (!order.customer.address1 && order.customer.addressLine1) {
         order.customer.address1 = order.customer.addressLine1;
@@ -566,7 +583,7 @@ const handleMoveOrderToShiprocket = async (req, res, next) => {
       }
     }
 
-    // If convertToCod is true or order was unpaid online / unverified COD
+    // Payment method adjustments
     const prov = (order.payment?.provider || order.paymentMethod || '').toLowerCase();
     const isAlreadyPaid = prov === 'razorpay' && order.payment?.status === 'CAPTURED';
     
@@ -575,18 +592,20 @@ const handleMoveOrderToShiprocket = async (req, res, next) => {
       order.payment = {
         ...(order.payment || {}),
         provider: 'COD',
-        status: 'COD_PENDING'
+        status: 'COD_CONFIRMED'
       };
     }
 
-    const shipmentDetails = await shiprocketService.createShipment(order);
+    // Dispatch booking to chosen courier (Shiprocket, Delhivery, etc.)
+    const shipmentDetails = await shippingService.bookShipment(order, courier);
     const now = new Date().toISOString();
     const events = order.events || [];
+    const carrierName = shipmentDetails.courierName || (courier === 'delhivery' ? 'Delhivery' : 'Shiprocket');
 
     events.push({
-      event: 'SHIPMENT_MOVED_TO_SHIPROCKET_BY_ADMIN',
+      event: `SHIPMENT_MOVED_TO_${courier.toUpperCase()}_BY_ADMIN`,
       timestamp: now,
-      details: `Shipment moved to Shiprocket by Admin (Phone Confirmed). AWB: ${shipmentDetails.awb || 'Pending'}`
+      details: `Shipment moved to ${carrierName} by Admin. AWB: ${shipmentDetails.awb || 'Assigned'}`
     });
 
     const updatedOrder = await firebaseService.updateOrder(orderId, {
@@ -600,25 +619,36 @@ const handleMoveOrderToShiprocket = async (req, res, next) => {
       events
     });
 
+    // Send customer shipping confirmation WhatsApp message with tracking details
+    whatsappService.sendShippingConfirmationWhatsApp(updatedOrder).catch(err => {
+      logger.error('ADMIN_MANUAL_DISPATCH_WHATSAPP_FAIL', { orderId, courier, error: err.message });
+    });
+
     res.json({
       success: true,
-      message: 'Order successfully moved to Shiprocket!',
+      message: `Order successfully moved to ${carrierName}!`,
       data: updatedOrder
     });
   } catch (err) {
-    logger.error('ADMIN_MOVE_TO_SHIPROCKET_FAILED', { orderId: req.params.orderId, error: err.message });
+    logger.error('ADMIN_MOVE_TO_COURIER_FAILED', {
+      orderId: req.params.orderId,
+      courier: req.body?.courier,
+      error: err.message
+    });
     return res.status(400).json({
       success: false,
       error: {
-        code: 'SHIPROCKET_BOOKING_FAILED',
-        message: err.message || 'Shiprocket shipment booking failed.'
+        code: 'COURIER_BOOKING_FAILED',
+        message: err.message || 'Courier shipment booking failed.'
       }
     });
   }
 };
 
-router.post('/orders/:orderId/retry-shipping', handleMoveOrderToShiprocket);
-router.post('/orders/:orderId/move-to-shiprocket', handleMoveOrderToShiprocket);
+router.post('/orders/:orderId/ship', handleMoveOrderToCourier);
+router.post('/orders/:orderId/move-to-shiprocket', handleMoveOrderToCourier);
+router.post('/orders/:orderId/move-to-delhivery', handleMoveOrderToCourier);
+router.post('/orders/:orderId/retry-shipping', handleMoveOrderToCourier);
 
 /**
  * GET /api/admin/catalog-items

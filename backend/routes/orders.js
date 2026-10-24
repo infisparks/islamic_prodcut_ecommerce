@@ -379,92 +379,78 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         // Clean up OTP store after use to prevent stale reuse
         codOtpStore.delete(cleanPhone);
 
-        // Automatically book Shiprocket for COD
-        try {
-          const shippingDetails = await shiprocketService.createShipment(orderRecord);
-          orderRecord.shipping = {
-            ...orderRecord.shipping,
-            ...shippingDetails
-          };
-          orderRecord.status = 'SHIPMENT_BOOKED';
-          orderRecord.events.push({
-            event: 'SHIPMENT_BOOKED',
-            timestamp: new Date().toISOString(),
-            details: `Shiprocket shipment confirmed with Order ID ${shippingDetails.shiprocketOrderId}`
-          });
+        // Save COD confirmed order without auto-booking courier (Admin will manually move to Shiprocket or Delhivery)
+        orderRecord.status = 'COD_CONFIRMED';
+        orderRecord.payment = {
+          provider: 'COD',
+          status: 'COD_CONFIRMED',
+          amountPaise: trustedOrderData.pricing.total * 100,
+          currency: 'INR',
+          paidAt: null
+        };
+        orderRecord.shipping = {
+          provider: null,
+          status: 'NOT_BOOKED',
+          shiprocketOrderId: null,
+          shipmentId: null,
+          awb: null,
+          courierName: null,
+          trackingUrl: null,
+          bookedAt: null,
+          lastTrackingUpdate: null
+        };
 
-          await firebaseService.saveOrder(internalOrderId, orderRecord);
-          logger.info('ORDER_CREATED_COD_SUCCESS', { internalOrderId, shiprocketOrderId: shippingDetails.shiprocketOrderId });
+        orderRecord.events.push({
+          event: 'COD_CONFIRMED',
+          timestamp: new Date().toISOString(),
+          details: 'Customer verified WhatsApp OTP. COD order confirmed. Ready for courier dispatch assignment by Admin.'
+        });
 
-          // Dispatch WhatsApp Order & Shipping notifications
-          whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(err => {
-            logger.error('WHATSAPP_COD_CONFIRM_FAIL', { orderId: internalOrderId, error: err.message });
-          });
-          whatsappService.sendShippingConfirmationWhatsApp(orderRecord).catch(err => {
-            logger.error('WHATSAPP_COD_SHIPPING_FAIL', { orderId: internalOrderId, error: err.message });
-          });
+        await firebaseService.saveOrder(internalOrderId, orderRecord);
+        logger.info('ORDER_CREATED_COD_SUCCESS', { internalOrderId, total: trustedOrderData.pricing.total });
 
-          // Dispatch Meta Conversions API (CAPI) Purchase Event from Backend
-          metaCapiService.sendEvent({
-            eventName: 'Purchase',
-            eventId: `ord_${internalOrderId}`,
-            eventSourceUrl: req.headers.referer || 'https://mantasha.store',
-            userData: {
-              name: customer.name,
-              phone: customer.phone,
-              city: customer.city,
-              state: customer.state,
-              zip: customer.pincode,
-              clientIp: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || req.ip,
-              clientUserAgent: req.headers['user-agent']
-            },
-            customData: {
-              currency: 'INR',
-              value: trustedOrderData.pricing.total,
-              order_id: internalOrderId,
-              content_type: 'product',
-              contents: trustedOrderData.items.map(i => ({ id: i.productId, quantity: i.quantity, item_price: i.price }))
-            }
-          }).catch(err => {
-            logger.error('META_CAPI_COD_PURCHASE_FAIL', { orderId: internalOrderId, error: err.message });
-          });
+        // Dispatch ONLY Order Confirmation WhatsApp notification (Message 1)
+        whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(err => {
+          logger.error('WHATSAPP_COD_CONFIRM_FAIL', { orderId: internalOrderId, error: err.message });
+        });
 
-          return res.status(201).json({
-            success: true,
-            data: {
-              orderId: internalOrderId,
-              status: orderRecord.status,
-              payment: {
-                provider: 'COD',
-                status: 'COD_PENDING'
-              },
-              shipping: orderRecord.shipping,
-              pricing: trustedOrderData.pricing,
-              customer: orderRecord.customer
-            }
-          });
-        } catch (shipErr) {
-          logger.error('COD_SHIPMENT_FAILED', { internalOrderId, error: shipErr.message });
-          orderRecord.shipping.status = 'FAILED';
-          orderRecord.status = 'SHIPMENT_FAILED';
-          orderRecord.events.push({
-            event: 'SHIPMENT_FAILED',
-            timestamp: new Date().toISOString(),
-            details: `Shipping booking failed: ${shipErr.message}`
-          });
-          await firebaseService.saveOrder(internalOrderId, orderRecord);
+        // Dispatch Meta Conversions API (CAPI) Purchase Event from Backend
+        metaCapiService.sendEvent({
+          eventName: 'Purchase',
+          eventId: `ord_${internalOrderId}`,
+          eventSourceUrl: req.headers.referer || 'https://mantasha.store',
+          userData: {
+            name: customer.name,
+            phone: customer.phone,
+            city: customer.city,
+            state: customer.state,
+            zip: customer.pincode,
+            clientIp: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || req.ip,
+            clientUserAgent: req.headers['user-agent']
+          },
+          customData: {
+            currency: 'INR',
+            value: trustedOrderData.pricing.total,
+            order_id: internalOrderId,
+            content_type: 'product',
+            contents: trustedOrderData.items.map(i => ({ id: i.productId, quantity: i.quantity, item_price: i.price }))
+          }
+        }).catch(err => {
+          logger.error('META_CAPI_COD_PURCHASE_FAIL', { orderId: internalOrderId, error: err.message });
+        });
 
-          // Even if shipment creation failed, send Order Confirmation WhatsApp
-          whatsappService.sendOrderConfirmationWhatsApp(orderRecord).catch(e => {});
-
-          return res.status(400).json({
-            success: false,
-            error: {
-              code: 'SHIPROCKET_CONFIRMATION_FAILED',
-              message: shipErr.message || 'Shiprocket could not confirm shipment booking.'
-            }
-          });
-        }
+        return res.status(201).json({
+          success: true,
+          message: 'Your COD booking has been successfully placed.',
+          data: {
+            orderId: internalOrderId,
+            status: orderRecord.status,
+            payment: orderRecord.payment,
+            shipping: orderRecord.shipping,
+            pricing: trustedOrderData.pricing,
+            customer: orderRecord.customer
+          }
+        });
       }
     });
   } catch (err) {

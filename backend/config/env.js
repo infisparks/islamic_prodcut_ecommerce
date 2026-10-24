@@ -31,6 +31,13 @@ const config = {
     baseUrl: 'https://apiv2.shiprocket.in/v1/external',
   },
 
+  delhivery: {
+    apiKey: process.env.DELHIVERY_API_KEY || 'd5409c3d766f8b5a5e54132e7cf09af8813618e2',
+    pickupLocation: process.env.DELHIVERY_PICKUP_LOCATION || 'work',
+    mode: process.env.DELHIVERY_MODE || 'production',
+    baseUrl: 'https://track.delhivery.com'
+  },
+
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID || '',
     keySecret: process.env.RAZORPAY_KEY_SECRET || '',

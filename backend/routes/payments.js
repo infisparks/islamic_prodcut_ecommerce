@@ -129,60 +129,15 @@ router.post(['/razorpay/verify', '/verify'], validatePaymentVerification, async 
         logger.error('META_CAPI_RAZORPAY_PURCHASE_FAIL', { orderId, error: err.message });
       });
 
-      // 4. Book Shiprocket Shipment
-      if (
-        !freshOrder.shipping ||
-        ['NOT_BOOKED', 'FAILED'].includes(freshOrder.shipping.status)
-      ) {
-        try {
-          logger.info('TRIGGERING_SHIPROCKET_SHIPMENT', { orderId });
-          const shipmentDetails = await shiprocketService.createShipment(freshOrder);
-
-          freshOrder.shipping = {
-            ...freshOrder.shipping,
-            ...shipmentDetails
-          };
-          freshOrder.status = 'SHIPMENT_BOOKED';
-          freshOrder.events.push({
-            event: 'SHIPMENT_BOOKED',
-            timestamp: new Date().toISOString(),
-            details: `Shiprocket order booked with AWB ${shipmentDetails.awb}`
-          });
-
-          await firebaseService.updateOrder(orderId, {
-            shipping: freshOrder.shipping,
-            status: freshOrder.status,
-            events: freshOrder.events
-          });
-
-          logger.info('SHIPMENT_BOOKED_SUCCESS', {
-            orderId,
-            awb: shipmentDetails.awb,
-            courier: shipmentDetails.courierName
-          });
-
-          // Trigger Shipping Confirmation WhatsApp message
-          whatsappService.sendShippingConfirmationWhatsApp(freshOrder).catch(err => {
-            logger.error('WHATSAPP_RAZORPAY_SHIPPING_FAIL', { orderId, error: err.message });
-          });
-        } catch (shipErr) {
-          logger.error('SHIPMENT_CREATION_FAILED_AFTER_PAYMENT', {
-            orderId,
-            error: shipErr.message
-          });
-
-          freshOrder.shipping.status = 'FAILED';
-          freshOrder.events.push({
-            event: 'SHIPMENT_FAILED',
-            timestamp: new Date().toISOString(),
-            details: `Shipping booking failed: ${shipErr.message}. Payment is safe.`
-          });
-
-          await firebaseService.updateOrder(orderId, {
-            'shipping/status': 'FAILED',
-            events: freshOrder.events
-          });
-        }
+      // 4. Do not auto-book courier. Shipping will be assigned manually by Admin via Shiprocket or Delhivery.
+      if (!freshOrder.shipping) {
+        freshOrder.shipping = {
+          provider: null,
+          status: 'NOT_BOOKED',
+          awb: null,
+          courierName: null,
+          trackingUrl: null
+        };
       }
 
       return freshOrder;
@@ -200,11 +155,11 @@ router.post(['/razorpay/verify', '/verify'], validatePaymentVerification, async 
           paidAt: updatedOrder.payment.paidAt
         },
         shipping: {
-          provider: updatedOrder.shipping.provider,
-          status: updatedOrder.shipping.status,
-          awb: updatedOrder.shipping.awb,
-          courierName: updatedOrder.shipping.courierName,
-          trackingUrl: updatedOrder.shipping.trackingUrl
+          provider: updatedOrder.shipping?.provider || null,
+          status: updatedOrder.shipping?.status || 'NOT_BOOKED',
+          awb: updatedOrder.shipping?.awb || null,
+          courierName: updatedOrder.shipping?.courierName || null,
+          trackingUrl: updatedOrder.shipping?.trackingUrl || null
         },
         pricing: updatedOrder.pricing,
         items: updatedOrder.items

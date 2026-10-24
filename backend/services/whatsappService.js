@@ -196,9 +196,13 @@ async function sendOrderConfirmationWhatsApp(order) {
 async function sendShippingConfirmationWhatsApp(order) {
   if (!order || !order.customer || !order.customer.phone) return false;
 
-  const courier = order.shipping?.courierName || 'Shiprocket Express Partner';
-  const trackingUrl = order.shipping?.trackingUrl || `https://shiprocket.co/tracking/${order.shipping?.shiprocketOrderId || ''}`;
-  const awb = order.shipping?.awb || 'Processing';
+  const isDelhivery = (order.shipping?.provider || '').toLowerCase() === 'delhivery';
+  const courier = order.shipping?.courierName || (isDelhivery ? 'Delhivery Express' : 'Shiprocket Express Partner');
+  const awb = order.shipping?.awb || order.shipping?.waybill || 'Processing';
+  const defaultTrackUrl = isDelhivery 
+    ? (awb ? `https://www.delhivery.com/track/package/${awb}` : 'https://www.delhivery.com')
+    : `https://shiprocket.co/tracking/${order.shipping?.shiprocketOrderId || awb || ''}`;
+  const trackingUrl = order.shipping?.trackingUrl || defaultTrackUrl;
   const deliveryDate = formatEstimatedDeliveryDate(order.shipping?.bookedAt || order.createdAt);
 
   const message =

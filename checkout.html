@@ -759,8 +759,8 @@
                     const order = json.data;
                     const status = (order.status || '').toUpperCase();
 
-                    // If order is completed/paid, directly show success & live tracking details
-                    if (['PAYMENT_CAPTURED', 'SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status)) {
+                    // If order is completed/paid/confirmed, directly show success & details
+                    if (['PAYMENT_CAPTURED', 'COD_CONFIRMED', 'SHIPMENT_BOOKED', 'SHIPPED', 'DELIVERED'].includes(status)) {
                         onOrderSuccess(order);
                         return;
                     }
@@ -1654,7 +1654,7 @@
                 <div><b>Payment Method:</b> ${orderData.payment?.provider === 'COD' || selectedPaymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
                 <div><b>Total Amount:</b> <span class="font-bold text-onyx">Rs. ${orderData.pricing?.total || val}</span></div>
                 <div><b>Estimated Delivery:</b> <span class="font-bold text-emerald-700">${estDateStr} (Within 4 Days)</span></div>
-                ${orderData.shipping?.awb ? `<div><b>Shiprocket AWB:</b> <span class="font-mono">${orderData.shipping.awb}</span></div>` : ''}
+                ${orderData.shipping?.awb ? `<div><b>Tracking AWB:</b> <span class="font-mono">${orderData.shipping.awb}</span></div>` : '<div><b>Booking Status:</b> <span class="text-indigo-700 font-semibold">Booking Confirmed • Preparing Dispatch</span></div>'}
                 <div class="text-[11px] text-gray-600 pt-1.5 border-t border-gold-200 flex items-center justify-between">
                     <span>Confirmation WhatsApp dispatched.</span>
                     <a href="tel:+919970347703" class="text-indigo-600 font-bold hover:underline"><i class="fa-solid fa-phone text-[10px] mr-0.5"></i> Support: +91 99703 47703</a>

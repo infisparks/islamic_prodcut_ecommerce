@@ -1148,6 +1148,9 @@
                 let paymentBadge = '';
                 let shippingDisplay = '';
 
+                const courierProvider = (order.shipping?.provider || (order.shipping?.shiprocketOrderId ? 'shiprocket' : (order.shipping?.waybill ? 'delhivery' : ''))).toLowerCase();
+                const isShipmentBooked = Boolean(awb || order.shipping?.shiprocketOrderId || order.shipping?.waybill);
+
                 if (isCod) {
                     if (isCodOtpPending) {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1"><i class="fa-solid fa-clock text-[9px]"></i> COD (OTP Not Verified)</span>`;
@@ -1158,30 +1161,36 @@
                             <div class="font-mono text-[11px] font-bold text-emerald-700">${awb || 'Delivered'}</div>
                             <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> Settled</div>
                         `;
-                    } else if (awb || (order.shipping && order.shipping.shiprocketOrderId) || ['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT'].includes(status)) {
+                    } else if (isShipmentBooked || ['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT'].includes(status)) {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">COD</span>`;
+                        const cLabel = courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket';
+                        const cColor = courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-700';
+                        const cIcon = courierProvider === 'delhivery' ? 'fa-box text-rose-600' : 'fa-truck-fast text-indigo-600';
                         shippingDisplay = `
-                            <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Shiprocket Booked'}</div>
-                            <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> ${courierName || 'OTP Verified'}</div>
+                            <div class="font-mono text-[11px] font-bold ${cColor}">${awb || 'Booked'}</div>
+                            <div class="text-[10px] text-gray-700 font-semibold flex items-center gap-1"><i class="fa-solid ${cIcon} text-[9px]"></i> ${cLabel}</div>
                         `;
                     } else if (status === 'CANCELLED') {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">COD (Cancelled)</span>`;
                         shippingDisplay = `<span class="text-[10px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">COD</span>`;
-                        shippingDisplay = `<span class="text-[10px] text-amber-800 font-semibold"><i class="fa-solid fa-clock text-[9px]"></i> Processing Dispatch</span>`;
+                        shippingDisplay = `<span class="text-[10px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
                     }
                 } else {
                     // Online (Razorpay)
                     if (isOnlinePaid || isDelivered) {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (10% OFF)</span>`;
-                        if (awb || (order.shipping && order.shipping.shiprocketOrderId)) {
+                        if (isShipmentBooked) {
+                            const cLabel = courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket';
+                            const cColor = courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-700';
+                            const cIcon = courierProvider === 'delhivery' ? 'fa-box text-rose-600' : 'fa-truck-fast text-indigo-600';
                             shippingDisplay = `
-                                <div class="font-mono text-[11px] font-bold text-indigo-700">${awb || 'Booked'}</div>
-                                <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-truck-fast text-[9px]"></i> ${courierName || 'Shiprocket'}</div>
+                                <div class="font-mono text-[11px] font-bold ${cColor}">${awb || 'Booked'}</div>
+                                <div class="text-[10px] text-gray-700 font-semibold flex items-center gap-1"><i class="fa-solid ${cIcon} text-[9px]"></i> ${cLabel}</div>
                             `;
                         } else {
-                            shippingDisplay = `<span class="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Ready to Dispatch</span>`;
+                            shippingDisplay = `<span class="text-[10px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
                         }
                     } else if (status === 'CANCELLED') {
                         paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">Online (Cancelled)</span>`;
@@ -1252,18 +1261,23 @@
                                 <button onclick="openWhatsAppModal('${orderId}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Send WhatsApp Message / Confirmation to Customer">
                                     <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i> WhatsApp
                                 </button>
-                                ${!order.shipping?.shiprocketOrderId && status !== 'CANCELLED' ? `
-                                    <button onclick="moveOrderToShiprocket('${orderId}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-300 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Shiprocket (Confirmed over phone)">
+                                ${!isShipmentBooked && status !== 'CANCELLED' ? `
+                                    <button onclick="moveOrderToCourier('${orderId}', 'shiprocket')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-300 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Shiprocket">
                                         <i class="fa-solid fa-truck-fast text-indigo-600 text-xs"></i> Shiprocket
                                     </button>
+                                    <button onclick="moveOrderToCourier('${orderId}', 'delhivery')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Delhivery">
+                                        <i class="fa-solid fa-box text-rose-600 text-xs"></i> Delhivery
+                                    </button>
                                 ` : ''}
-                                ${order.shipping && order.shipping.shiprocketOrderId ? `
+                                ${isShipmentBooked ? `
                                     <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Download Shipping Label">
                                         <i class="fa-solid fa-tag text-xs"></i> Label
                                     </a>
-                                    <a href="/api/shipments/${orderId}/invoice?redirect=1" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Download Tax Invoice">
-                                        <i class="fa-solid fa-file-invoice text-xs"></i> Invoice
-                                    </a>
+                                    ${order.shipping?.trackingUrl ? `
+                                        <a href="${order.shipping.trackingUrl}" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Track Live">
+                                            <i class="fa-solid fa-location-arrow text-xs"></i> Track
+                                        </a>
+                                    ` : ''}
                                 ` : ''}
                                 ${status !== 'CANCELLED' ? `
                                     <button onclick="openChangeProductModal('${orderId}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Change customer product or language kit">
@@ -1636,17 +1650,24 @@
                     </div>
                 </div>
 
-                <!-- Shipping & Shiprocket Details -->
-                <div class="bg-gray-50 p-3.5 rounded-lg border border-[#E5E7EB] space-y-1.5">
-                    <div class="font-bold text-[#111827] text-xs mb-1 flex items-center gap-1.5">
-                        <i class="fa-solid fa-truck text-indigo-600"></i> Shipment & Delivery Settlement
+                <!-- Shipping & Courier Details -->
+                <div class="bg-gray-50 p-3.5 rounded-lg border border-[#E5E7EB] space-y-2">
+                    <div class="font-bold text-[#111827] text-xs flex items-center justify-between">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-truck text-indigo-600"></i> Shipment & Courier Details</span>
+                        ${isShipmentBooked ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${courierProvider === 'delhivery' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'}">${courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket'} Booked</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">Pending Courier Assignment</span>`}
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div><b>Courier:</b> ${courierName || 'Pending'}</div>
-                        <div><b>AWB:</b> <span class="font-mono font-bold text-indigo-600">${awb || 'Not Generated'}</span></div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div><b>Courier Provider:</b> ${courierProvider === 'delhivery' ? 'Delhivery Express' : (courierProvider === 'shiprocket' ? 'Shiprocket Partner' : (courierName || 'Unassigned'))}</div>
+                        <div><b>AWB / Waybill:</b> <span class="font-mono font-bold ${courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-600'}">${awb || 'Not Generated Yet'}</span></div>
                         <div><b>Delivery Status:</b> <span class="font-bold ${isDelivered ? 'text-emerald-700' : 'text-gray-700'}">${status}</span></div>
-                        <div><b>Shiprocket Order:</b> #${order.shipping?.shiprocketOrderId || 'None'}</div>
+                        <div><b>Courier Reference:</b> #${order.shipping?.shiprocketOrderId || order.shipping?.waybill || 'None'}</div>
                     </div>
+                    ${isShipmentBooked && (order.shipping?.trackingUrl || awb) ? `
+                        <div class="pt-1.5 border-t border-gray-200 text-xs flex items-center justify-between">
+                            <span><b>Live Tracking:</b> <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : `https://shiprocket.co/tracking/${awb}`)}" target="_blank" class="text-indigo-600 underline font-semibold ml-1"><i class="fa-solid fa-location-arrow text-[10px]"></i> View Live Tracking</a></span>
+                            <a href="/api/shipments/${order.orderId}/label?redirect=1" target="_blank" class="text-blue-600 underline font-semibold"><i class="fa-solid fa-tag text-[10px]"></i> Download Shipping Label</a>
+                        </div>
+                    ` : ''}
                 </div>
 
                 <!-- Event History Logs -->
@@ -1674,12 +1695,23 @@
                     </button>
                 ` : ''}
 
-                <!-- Move to Shiprocket button (Confirm & Dispatch) -->
-                ${!order.shipping?.shiprocketOrderId && status !== 'CANCELLED' ? `
-                    <button onclick="moveOrderToShiprocket('${order.orderId}')" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Shiprocket upon phone confirmation">
+                <!-- Move to Courier buttons (Shiprocket or Delhivery) -->
+                ${!isShipmentBooked && status !== 'CANCELLED' ? `
+                    <button onclick="moveOrderToCourier('${order.orderId}', 'shiprocket')" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Shiprocket upon phone confirmation">
                         <i class="fa-solid fa-truck-fast text-xs"></i>
                         <span>Move to Shiprocket</span>
                     </button>
+                    <button onclick="moveOrderToCourier('${order.orderId}', 'delhivery')" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Delhivery upon phone confirmation">
+                        <i class="fa-solid fa-box text-xs"></i>
+                        <span>Move to Delhivery</span>
+                    </button>
+                ` : ''}
+
+                ${isShipmentBooked ? `
+                    <a href="/api/shipments/${order.orderId}/label?redirect=1" target="_blank" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-300 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Download Shipping Label">
+                        <i class="fa-solid fa-tag text-xs"></i>
+                        <span>Print Label (${courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket'})</span>
+                    </a>
                 ` : ''}
 
                 <!-- 1-Click Delivered Toggle in Modal -->
@@ -2293,41 +2325,53 @@
             document.getElementById('order-detail-modal').classList.add('hidden');
         }
 
-        // Move Order to Shiprocket (Confirmed over phone / Unpaid or COD unverified)
-        async function moveOrderToShiprocket(orderId) {
+        // Move Order to Courier (Shiprocket or Delhivery, or future couriers)
+        async function moveOrderToCourier(orderId, courier = 'shiprocket') {
             const order = currentOrdersList.find(o => o.orderId === orderId);
             const customerName = order?.customer?.name || 'Customer';
             const prov = (order?.payment?.provider || order?.paymentMethod || '').toLowerCase();
             const isAlreadyPaid = prov === 'razorpay' && order?.payment?.status === 'CAPTURED';
             const payTypeInfo = isAlreadyPaid ? 'Prepaid (Paid Online)' : 'Cash on Delivery (COD)';
+            const carrierLabel = courier === 'delhivery' ? 'Delhivery' : 'Shiprocket';
 
-            const confirmed = confirm(`Move Order #${orderId} (${customerName}) to Shiprocket?\n\nPayment Mode: ${payTypeInfo}\n\nThis will create courier shipment in Shiprocket and mark the order as confirmed for dispatch.`);
+            const confirmed = confirm(`Move Order #${orderId} (${customerName}) to ${carrierLabel}?\n\nPayment Mode: ${payTypeInfo}\n\nThis will generate AWB in ${carrierLabel}, mark the order as dispatched, and notify the customer via WhatsApp with tracking details.`);
             if (!confirmed) return;
 
             try {
-                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/move-to-shiprocket`, {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/ship`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${currentAdminToken}`
                     },
                     body: JSON.stringify({
+                        courier: courier,
                         convertToCod: !isAlreadyPaid
                     })
                 });
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    alert(`✅ Order #${orderId} successfully moved to Shiprocket!\nAWB: ${result.data?.shipping?.awb || 'Assigned'}`);
+                    const awb = result.data?.shipping?.awb || result.data?.shipping?.waybill || 'Assigned';
+                    alert(`✅ Order #${orderId} successfully moved to ${carrierLabel}!\nAWB / Tracking: ${awb}`);
                     closeOrderDetailModal();
                     loadOrdersAndStats();
                 } else {
-                    throw new Error(result.error?.message || result.error || result.message || 'Failed to book shipment on Shiprocket.');
+                    throw new Error(result.error?.message || result.error || result.message || `Failed to book shipment on ${carrierLabel}.`);
                 }
             } catch (err) {
-                console.error("Move to Shiprocket Error:", err);
-                alert(`❌ Failed to move order to Shiprocket:\n${err.message}`);
+                console.error(`Move to ${carrierLabel} Error:`, err);
+                alert(`❌ Failed to move order to ${carrierLabel}:\n${err.message}`);
             }
+        }
+
+        // Backward-compatible wrappers
+        function moveOrderToShiprocket(orderId) {
+            return moveOrderToCourier(orderId, 'shiprocket');
+        }
+
+        function moveOrderToDelhivery(orderId) {
+            return moveOrderToCourier(orderId, 'delhivery');
         }
 
         // Cancel Order Flow

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const firebaseService = require('../services/firebaseService');
 const shiprocketService = require('../services/shiprocketService');
+const shippingService = require('../services/shippingService');
 const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
 
@@ -250,9 +251,9 @@ router.get('/:orderId/invoice', async (req, res, next) => {
 
 /**
  * POST /api/shipments/:orderId/cancel
- * Cancel shipment on Shiprocket and update order status in Firebase
+ * Cancel shipment on Shiprocket or Delhivery and update order status in Firebase
  */
-router.get('/:orderId/cancel', async (req, res, next) => {
+router.all('/:orderId/cancel', async (req, res, next) => {
   try {
     const { orderId } = req.params;
     const order = await firebaseService.getOrder(orderId);
@@ -267,17 +268,13 @@ router.get('/:orderId/cancel', async (req, res, next) => {
       });
     }
 
-    const srOrderId = order.shipping ? order.shipping.shiprocketOrderId : null;
-    let srResult = { success: true };
-    if (srOrderId) {
-      srResult = await shiprocketService.cancelOrder(srOrderId);
-    }
+    const cancelResult = await shippingService.cancelShipment(order);
 
     const events = order.events || [];
     events.push({
       event: 'SHIPMENT_CANCELLED',
       timestamp: new Date().toISOString(),
-      details: `Shipment cancelled on Shiprocket API (ID: ${srOrderId || 'N/A'})`
+      details: `Shipment cancelled on carrier API (${order.shipping?.provider || 'Courier'})`
     });
 
     await firebaseService.updateOrder(orderId, {
@@ -289,7 +286,7 @@ router.get('/:orderId/cancel', async (req, res, next) => {
     res.json({
       success: true,
       message: 'Shipment and order cancelled successfully.',
-      data: srResult
+      data: cancelResult
     });
   } catch (err) {
     next(err);
@@ -298,7 +295,7 @@ router.get('/:orderId/cancel', async (req, res, next) => {
 
 /**
  * GET /api/shipments/:orderId/label
- * Fetch or redirect to official Shiprocket Shipping Label / Manifest PDF
+ * Fetch or redirect to official courier shipping label / manifest PDF (Shiprocket / Delhivery)
  */
 router.get('/:orderId/label', async (req, res, next) => {
   try {
@@ -316,20 +313,17 @@ router.get('/:orderId/label', async (req, res, next) => {
       });
     }
 
-    const srOrderId = order.shipping ? order.shipping.shiprocketOrderId : null;
-    const shipmentId = order.shipping ? order.shipping.shipmentId : null;
-
-    if (!srOrderId && !shipmentId) {
+    if (!order.shipping || (!order.shipping.awb && !order.shipping.shiprocketOrderId && !order.shipping.waybill)) {
       return res.status(400).json({
         success: false,
         error: {
           code: 'SHIPMENT_NOT_CREATED',
-          message: 'Shipping label is not available because shipment has not been created.'
+          message: 'Shipping label is not available because shipment has not been booked with a courier yet.'
         }
       });
     }
 
-    const result = await shiprocketService.generateShippingLabel(shipmentId, srOrderId);
+    const result = await shippingService.generateShippingLabel(order);
 
     if (redirect === 'true' || redirect === '1') {
       return res.redirect(result.labelUrl);
@@ -339,8 +333,8 @@ router.get('/:orderId/label', async (req, res, next) => {
       success: true,
       data: {
         orderId: order.orderId,
-        shiprocketOrderId: srOrderId,
-        shipmentId: shipmentId,
+        provider: order.shipping.provider,
+        awb: order.shipping.awb || order.shipping.waybill,
         labelUrl: result.labelUrl
       }
     });

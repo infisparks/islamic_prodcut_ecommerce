@@ -116,42 +116,18 @@ router.post('/razorpay', async (req, res) => {
             });
           }
 
-          // Trigger Shiprocket booking if not yet booked
-          if (
-            !freshOrder.shipping ||
-            ['NOT_BOOKED', 'FAILED'].includes(freshOrder.shipping.status)
-          ) {
-            try {
-              const shipmentDetails = await shiprocketService.createShipment(freshOrder);
-              freshOrder.shipping = {
-                ...freshOrder.shipping,
-                ...shipmentDetails
-              };
-              freshOrder.status = 'SHIPMENT_BOOKED';
-              freshOrder.events.push({
-                event: 'SHIPMENT_BOOKED_VIA_WEBHOOK',
-                timestamp: new Date().toISOString(),
-                details: `Shiprocket order booked with AWB ${shipmentDetails.awb}`
-              });
-
-              await firebaseService.updateOrder(orderId, {
-                shipping: freshOrder.shipping,
-                status: freshOrder.status,
-                events: freshOrder.events
-              });
-
-              whatsappService.sendShippingConfirmationWhatsApp(freshOrder).catch(err => {
-                logger.error('WEBHOOK_WHATSAPP_SHIPPING_FAIL', { orderId, error: err.message });
-              });
-            } catch (shipErr) {
-              logger.error('WEBHOOK_SHIPMENT_BOOKING_FAILED', {
-                orderId,
-                error: shipErr.message
-              });
-              await firebaseService.updateOrder(orderId, {
-                'shipping/status': 'FAILED'
-              });
-            }
+          // Note: Courier is NOT auto-booked. Admin manually moves order to Shiprocket or Delhivery.
+          if (!freshOrder.shipping) {
+            freshOrder.shipping = {
+              provider: null,
+              status: 'NOT_BOOKED',
+              awb: null,
+              courierName: null,
+              trackingUrl: null
+            };
+            await firebaseService.updateOrder(orderId, {
+              shipping: freshOrder.shipping
+            });
           }
         });
       } else if (eventType === 'payment.failed') {
