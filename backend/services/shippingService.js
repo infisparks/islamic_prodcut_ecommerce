@@ -34,8 +34,9 @@ const shippingService = {
    * Book shipment for an order with specified courier
    * @param {Object} order - Full order object
    * @param {string} courierName - 'shiprocket' | 'delhivery' | etc.
+   * @param {Object} [options] - Additional dispatch options (e.g. shippingMode: 'Surface' | 'Express')
    */
-  bookShipment: async (order, courierName = 'shiprocket') => {
+  bookShipment: async (order, courierName = 'shiprocket', options = {}) => {
     const courierKey = String(courierName || 'shiprocket').toLowerCase().trim();
     const carrier = carriers[courierKey];
 
@@ -45,14 +46,16 @@ const shippingService = {
 
     logger.info('DISPATCHING_SHIPMENT_TO_CARRIER', {
       orderId: order.orderId,
-      carrier: carrier.name
+      carrier: carrier.name,
+      options
     });
 
-    const shipmentDetails = await carrier.service.createShipment(order);
+    const shipmentDetails = await carrier.service.createShipment(order, options);
 
     return {
       provider: carrier.id,
       courierName: shipmentDetails.courierName || `${carrier.name} Express`,
+      shippingMode: shipmentDetails.shippingMode || options.shippingMode || null,
       status: shipmentDetails.status || 'BOOKED',
       awb: shipmentDetails.awb,
       waybill: shipmentDetails.waybill || shipmentDetails.awb,

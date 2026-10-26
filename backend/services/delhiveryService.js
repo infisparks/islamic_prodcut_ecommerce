@@ -68,12 +68,17 @@ const delhiveryService = {
   },
 
   /**
-   * Create shipment on Delhivery (B2C / Express Manifestation)
+   * Create shipment on Delhivery (B2C / CMU Manifestation)
    * API: POST https://track.delhivery.com/api/cmu/create.json
+   * Supports: Surface and Express modes
    */
-  createShipment: async (order) => {
+  createShipment: async (order, options = {}) => {
+    // Determine shipping mode: Surface or Express (defaults to Surface)
+    const requestedMode = (options && options.shippingMode) || order.shippingMode || order.shipping?.shippingMode || 'Surface';
+    const shippingMode = String(requestedMode).toLowerCase() === 'express' ? 'Express' : 'Surface';
+
     if (!isConfigured) {
-      logger.warn('DELHIVERY_NOT_CONFIGURED_MOCK_FALLBACK');
+      logger.warn('DELHIVERY_NOT_CONFIGURED_MOCK_FALLBACK', { shippingMode });
       const mockWaybill = `DEL${Math.floor(1000000000 + Math.random() * 9000000000)}`;
       return {
         provider: 'delhivery',
@@ -82,7 +87,8 @@ const delhiveryService = {
         shipmentId: mockWaybill,
         waybill: mockWaybill,
         awb: mockWaybill,
-        courierName: 'Delhivery Express (Mock)',
+        shippingMode: shippingMode,
+        courierName: `Delhivery ${shippingMode} (Mock)`,
         trackingUrl: `https://www.delhivery.com/track/package/${mockWaybill}`,
         bookedAt: new Date().toISOString()
       };
@@ -148,7 +154,9 @@ const delhiveryService = {
         shipment_width: String(widthCm),
         shipment_height: String(heightCm),
         shipment_length: String(lengthCm),
-        weight: String(weightGrams)
+        weight: String(weightGrams),
+        shipping_mode: shippingMode, // Delhivery CMU transit mode: 'Surface' or 'Express'
+        mode: shippingMode
       };
 
       const payload = {
@@ -161,6 +169,7 @@ const delhiveryService = {
       logger.info('DELHIVERY_CREATING_SHIPMENT', {
         orderId: order.orderId,
         paymentMode: shipmentObj.payment_mode,
+        shippingMode,
         totalAmount,
         pincode: customerPincode,
         pickupLocationName
@@ -199,7 +208,8 @@ const delhiveryService = {
         const waybill = String(pkg.waybill);
         logger.info('DELHIVERY_SHIPMENT_CREATED_SUCCESS', {
           orderId: order.orderId,
-          waybill
+          waybill,
+          shippingMode
         });
 
         return {
@@ -209,7 +219,8 @@ const delhiveryService = {
           shipmentId: waybill,
           waybill: waybill,
           awb: waybill,
-          courierName: 'Delhivery Express',
+          shippingMode: shippingMode,
+          courierName: `Delhivery ${shippingMode}`,
           trackingUrl: `https://www.delhivery.com/track/package/${waybill}`,
           bookedAt: new Date().toISOString()
         };
@@ -306,6 +317,137 @@ const delhiveryService = {
       logger.warn('DELHIVERY_CANCEL_ERROR', { waybill, error: err.message });
       return { success: false, error: err.message };
     }
+  },
+
+  /**
+   * Update shipment / delivery details on Delhivery via official Edit API
+   * API: POST https://track.delhivery.com/api/p/edit
+   * Updatable: name, phone, add, cod, pt, gm, shipment_length, shipment_width, shipment_height, product_details
+   */
+  updateShipment: async (waybill, updates = {}) => {
+    if (!waybill) {
+      throw new Error('Delhivery Waybill / AWB is required to update delivery details.');
+    }
+
+    if (!isConfigured) {
+      logger.warn('DELHIVERY_NOT_CONFIGURED_MOCK_UPDATE', { waybill, updates });
+      return {
+        success: true,
+        waybill,
+        message: 'Delhivery Mock: Shipment updated successfully.',
+        updatedFields: updates
+      };
+    }
+
+    try {
+      const payload = {
+        waybill: String(waybill)
+      };
+
+      if (updates.name) payload.name = String(updates.name).trim();
+      if (updates.phone) payload.phone = String(updates.phone).replace(/\D/g, '').slice(-10);
+      if (updates.address || updates.add) payload.add = String(updates.address || updates.add).trim();
+      if (updates.cod !== undefined && updates.cod !== null && updates.cod !== '') {
+        payload.cod = parseFloat(updates.cod) || 0;
+      }
+      if (updates.paymentMode || updates.pt) {
+        payload.pt = String(updates.paymentMode || updates.pt).toLowerCase() === 'cod' ? 'Cod' : 'Pre-paid';
+      }
+      if (updates.weightGrams || updates.gm) {
+        payload.gm = parseFloat(updates.weightGrams || updates.gm) || 500;
+      }
+      if (updates.length || updates.shipment_length) payload.shipment_length = parseFloat(updates.length || updates.shipment_length) || 10;
+      if (updates.width || updates.shipment_width) payload.shipment_width = parseFloat(updates.width || updates.shipment_width) || 10;
+      if (updates.height || updates.shipment_height) payload.shipment_height = parseFloat(updates.height || updates.shipment_height) || 5;
+      if (updates.productDetails || updates.product_details) {
+        payload.product_details = String(updates.productDetails || updates.product_details).slice(0, 240);
+      }
+
+      logger.info('DELHIVERY_UPDATE_SHIPMENT_REQUEST', { waybill, payload });
+
+      const response = await axios.post(
+        `${config.delhivery.baseUrl}/api/p/edit`,
+        payload,
+        {
+          headers: {
+            'Authorization': `Token ${config.delhivery.apiKey}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          timeout: 15000
+        }
+      );
+
+      const resData = response.data;
+      logger.info('DELHIVERY_UPDATE_SHIPMENT_RESPONSE', { waybill, response: resData });
+
+      const isFailed = resData?.status === false || 
+                       resData?.status === 'Failed' || 
+                       resData?.status === 'Error' ||
+                       resData?.error;
+
+      if (isFailed) {
+        const errorMsg = resData?.remark || resData?.rmk || resData?.message || resData?.error || 'Delhivery update rejected by carrier';
+        throw new Error(`Delhivery update failed: ${errorMsg}`);
+      }
+
+      return {
+        success: true,
+        waybill,
+        message: resData?.message || resData?.remark || 'Delhivery shipment details updated successfully.',
+        data: resData
+      };
+    } catch (err) {
+      const errMsg = err.response?.data?.remark ||
+                     err.response?.data?.rmk ||
+                     err.response?.data?.error ||
+                     err.response?.data?.message ||
+                     err.message;
+
+      logger.error('DELHIVERY_UPDATE_SHIPMENT_FAILED', {
+        waybill,
+        error: errMsg,
+        status: err.response?.status
+      });
+
+      throw new Error(errMsg);
+    }
+  },
+
+  /**
+   * Sync and parse real-time tracking status from Delhivery Tracking API
+   * API: GET https://track.delhivery.com/api/v1/packages/json/?waybill=...
+   */
+  syncDeliveryStatus: async (waybill) => {
+    if (!waybill) {
+      throw new Error('Delhivery Waybill is required to sync status.');
+    }
+
+    if (!isConfigured) {
+      return {
+        success: true,
+        rawStatus: 'Mock In Transit',
+        statusLocation: 'Delhi Hub',
+        statusDateTime: new Date().toISOString(),
+        instructions: 'Mock Package in Transit',
+        message: 'Delhivery Mock: Status checked successfully.'
+      };
+    }
+
+    const trackingData = await delhiveryService.trackShipment(waybill);
+    const shipmentObj = trackingData?.ShipmentData?.[0]?.Shipment || trackingData?.packages?.[0] || {};
+    const statusObj = shipmentObj?.Status || {};
+    const rawStatus = (statusObj.Status || shipmentObj.status || '').trim();
+
+    return {
+      success: true,
+      rawStatus: rawStatus || 'Manifested',
+      statusDateTime: statusObj.StatusDateTime,
+      statusLocation: statusObj.StatusLocation,
+      instructions: statusObj.Instructions,
+      expectedDeliveryDate: shipmentObj.ExpectedDeliveryDate,
+      fullData: trackingData
+    };
   }
 };
 

@@ -5,6 +5,7 @@ const axios = require('axios');
 const { verifyAdminAuth } = require('../middleware/adminAuth');
 const firebaseService = require('../services/firebaseService');
 const shiprocketService = require('../services/shiprocketService');
+const delhiveryService = require('../services/delhiveryService');
 const shippingService = require('../services/shippingService');
 const whatsappService = require('../services/whatsappService');
 const { catalog, findItemBySku } = require('../config/catalog');
@@ -559,7 +560,7 @@ router.post('/orders/:orderId/delete', handlePermanentDeleteOrder);
 const handleMoveOrderToCourier = async (req, res, next) => {
   try {
     const { orderId } = req.params;
-    const { convertToCod } = req.body || {};
+    const { convertToCod, shippingMode } = req.body || {};
     
     // Determine target courier from path or body (default to shiprocket or delhivery)
     let courier = req.body?.courier;
@@ -573,6 +574,9 @@ const handleMoveOrderToCourier = async (req, res, next) => {
       }
     }
     courier = String(courier).toLowerCase().trim();
+
+    // Mode resolution for Delhivery: 'Surface' or 'Express'
+    const mode = String(shippingMode || 'Surface').toLowerCase() === 'express' ? 'Express' : 'Surface';
 
     let order = await firebaseService.getOrder(orderId);
     if (!order) {
@@ -609,15 +613,15 @@ const handleMoveOrderToCourier = async (req, res, next) => {
     }
 
     // Dispatch booking to chosen courier (Shiprocket, Delhivery, etc.)
-    const shipmentDetails = await shippingService.bookShipment(order, courier);
+    const shipmentDetails = await shippingService.bookShipment(order, courier, { shippingMode: mode });
     const now = new Date().toISOString();
     const events = order.events || [];
-    const carrierName = shipmentDetails.courierName || (courier === 'delhivery' ? 'Delhivery' : 'Shiprocket');
+    const carrierName = shipmentDetails.courierName || (courier === 'delhivery' ? `Delhivery ${mode}` : 'Shiprocket');
 
     events.push({
       event: `SHIPMENT_MOVED_TO_${courier.toUpperCase()}_BY_ADMIN`,
       timestamp: now,
-      details: `Shipment moved to ${carrierName} by Admin. AWB: ${shipmentDetails.awb || 'Assigned'}`
+      details: `Shipment moved to ${carrierName}${courier === 'delhivery' ? ` (${mode})` : ''} by Admin. AWB: ${shipmentDetails.awb || 'Assigned'}`
     });
 
     const updatedOrder = await firebaseService.updateOrder(orderId, {
@@ -661,6 +665,230 @@ router.post('/orders/:orderId/ship', handleMoveOrderToCourier);
 router.post('/orders/:orderId/move-to-shiprocket', handleMoveOrderToCourier);
 router.post('/orders/:orderId/move-to-delhivery', handleMoveOrderToCourier);
 router.post('/orders/:orderId/retry-shipping', handleMoveOrderToCourier);
+
+/**
+ * POST /api/admin/orders/:orderId/delhivery/update
+ * Update package & delivery details directly on Delhivery via /api/p/edit API
+ * Only available for orders booked with Delhivery
+ */
+router.post('/orders/:orderId/delhivery/update', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const {
+      name,
+      phone,
+      address,
+      cod,
+      paymentMode,
+      weightGrams,
+      length,
+      width,
+      height,
+      productDetails
+    } = req.body || {};
+
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const provider = (order.shipping?.provider || '').toLowerCase();
+    const waybill = order.shipping?.waybill || order.shipping?.awb;
+
+    if (provider !== 'delhivery' || !waybill) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'NOT_DELHIVERY_ORDER',
+          message: 'The Update Delivery system is only available for active Delhivery orders with an assigned Waybill/AWB.'
+        }
+      });
+    }
+
+    // Call Delhivery Edit API (/api/p/edit)
+    const updateResult = await delhiveryService.updateShipment(waybill, {
+      name,
+      phone,
+      address,
+      cod,
+      paymentMode,
+      weightGrams,
+      length,
+      width,
+      height,
+      productDetails
+    });
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+    const events = order.events || [];
+
+    events.push({
+      event: 'DELHIVERY_SHIPMENT_UPDATED_BY_ADMIN',
+      timestamp: now,
+      details: `Delhivery shipment updated via /api/p/edit API by ${adminEmail}. Waybill: ${waybill}`
+    });
+
+    // Update customer and package attributes in Firebase
+    const updates = { events };
+
+    if (name) {
+      updates['customer.name'] = name;
+      if (!order.customer) order.customer = {};
+      order.customer.name = name;
+    }
+    if (phone) {
+      updates['customer.phone'] = phone;
+      if (!order.customer) order.customer = {};
+      order.customer.phone = phone;
+    }
+    if (address) {
+      updates['customer.address1'] = address;
+      updates['customer.addressLine1'] = address;
+      if (!order.customer) order.customer = {};
+      order.customer.address1 = address;
+      order.customer.addressLine1 = address;
+    }
+    if (cod !== undefined && cod !== null && cod !== '') {
+      const parsedCod = parseFloat(cod);
+      updates['pricing.total'] = parsedCod;
+      if (!order.pricing) order.pricing = {};
+      order.pricing.total = parsedCod;
+    }
+    if (weightGrams) {
+      const parsedWeightKg = parseFloat(weightGrams) / 1000;
+      updates['package.weight'] = parsedWeightKg;
+      if (!order.package) order.package = {};
+      order.package.weight = parsedWeightKg;
+    }
+    if (length || width || height) {
+      if (!order.package) order.package = {};
+      if (length) {
+        updates['package.length'] = parseFloat(length);
+        order.package.length = parseFloat(length);
+      }
+      if (width) {
+        updates['package.breadth'] = parseFloat(width);
+        order.package.breadth = parseFloat(width);
+      }
+      if (height) {
+        updates['package.height'] = parseFloat(height);
+        order.package.height = parseFloat(height);
+      }
+    }
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, updates);
+
+    res.json({
+      success: true,
+      message: 'Delhivery delivery details updated successfully!',
+      data: {
+        order: updatedOrder,
+        delhiveryResponse: updateResult
+      }
+    });
+  } catch (err) {
+    logger.error('ADMIN_DELHIVERY_UPDATE_FAILED', {
+      orderId: req.params.orderId,
+      error: err.message
+    });
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'DELHIVERY_UPDATE_FAILED',
+        message: err.message || 'Failed to update delivery details on Delhivery API.'
+      }
+    });
+  }
+});
+
+/**
+ * POST /api/admin/orders/:orderId/delhivery/sync-status
+ * Sync and refresh real-time delivery tracking status from Delhivery Tracking API
+ * Only available for orders booked with Delhivery
+ */
+router.post('/orders/:orderId/delhivery/sync-status', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const provider = (order.shipping?.provider || '').toLowerCase();
+    const waybill = order.shipping?.waybill || order.shipping?.awb;
+
+    if (provider !== 'delhivery' || !waybill) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'NOT_DELHIVERY_ORDER',
+          message: 'Delivery sync is only available for active Delhivery orders with a valid waybill.'
+        }
+      });
+    }
+
+    const syncResult = await delhiveryService.syncDeliveryStatus(waybill);
+    const now = new Date().toISOString();
+    const rawStatus = (syncResult.rawStatus || '').toUpperCase();
+
+    const updates = {
+      'shipping.lastTrackingUpdate': now,
+      'shipping.delhiveryStatus': syncResult.rawStatus || 'Unknown'
+    };
+
+    if (['IN TRANSIT', 'IN_TRANSIT', 'DISPATCHED'].some(s => rawStatus.includes(s))) {
+      updates.status = 'SHIPPED';
+      updates['shipping.status'] = 'IN_TRANSIT';
+    } else if (['OUT FOR DELIVERY', 'OUT_FOR_DELIVERY'].some(s => rawStatus.includes(s))) {
+      updates.status = 'OUT_FOR_DELIVERY';
+      updates['shipping.status'] = 'OUT_FOR_DELIVERY';
+    } else if (['DELIVERED'].some(s => rawStatus.includes(s))) {
+      updates.status = 'DELIVERED';
+      updates['shipping.status'] = 'DELIVERED';
+    } else if (['RTO', 'RETURN'].some(s => rawStatus.includes(s))) {
+      updates.status = 'RTO';
+      updates['shipping.status'] = 'RTO';
+    }
+
+    const events = order.events || [];
+    events.push({
+      event: 'DELHIVERY_STATUS_SYNCED',
+      timestamp: now,
+      details: `Delhivery status synced: ${syncResult.rawStatus || 'Active'}${syncResult.statusLocation ? ` at ${syncResult.statusLocation}` : ''}`
+    });
+    updates.events = events;
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, updates);
+
+    res.json({
+      success: true,
+      message: `Delhivery status synced: ${syncResult.rawStatus || 'Updated'}`,
+      data: {
+        order: updatedOrder,
+        syncResult
+      }
+    });
+  } catch (err) {
+    logger.error('ADMIN_DELHIVERY_SYNC_FAILED', {
+      orderId: req.params.orderId,
+      error: err.message
+    });
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'DELHIVERY_SYNC_FAILED',
+        message: err.message || 'Failed to sync delivery status from Delhivery.'
+      }
+    });
+  }
+});
 
 /**
  * GET /api/admin/catalog-items
@@ -803,9 +1031,12 @@ router.post('/orders/:orderId/change-product', async (req, res, next) => {
     const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
     const events = order.events || [];
 
-    // Attempt Shiprocket sync if already pushed to Shiprocket
-    let shiprocketSyncNotice = '';
+    // Attempt Carrier sync if already pushed to Shiprocket or Delhivery
+    let carrierSyncNotice = '';
     const srOrderId = order.shipping?.shiprocketOrderId;
+    const isDelhiveryBooked = (order.shipping?.provider || '').toLowerCase() === 'delhivery';
+    const delhiveryWaybill = order.shipping?.waybill || order.shipping?.awb;
+
     if (srOrderId) {
       const orderForSr = {
         ...order,
@@ -815,16 +1046,29 @@ router.post('/orders/:orderId/change-product', async (req, res, next) => {
       };
       const srUpdateRes = await shiprocketService.updateShipmentItems(orderForSr);
       if (srUpdateRes.success) {
-        shiprocketSyncNotice = ' (Synced successfully with Shiprocket)';
+        carrierSyncNotice = ' (Synced successfully with Shiprocket)';
       } else {
-        shiprocketSyncNotice = ` (Shiprocket Notice: ${srUpdateRes.error || 'Please verify in Shiprocket'})`;
+        carrierSyncNotice = ` (Shiprocket Notice: ${srUpdateRes.error || 'Please verify in Shiprocket'})`;
+      }
+    } else if (isDelhiveryBooked && delhiveryWaybill) {
+      try {
+        const totalAmount = Math.round(calculatedTotal);
+        const weightGrams = Math.max(100, Math.round((updatedPackage.weight || 0.15) * 1000));
+        await delhiveryService.updateShipment(delhiveryWaybill, {
+          productDetails: `${newItem.productName} (${newItem.variantName}) x${qty}`,
+          weightGrams,
+          cod: isCod ? totalAmount : 0
+        });
+        carrierSyncNotice = ' (Synced successfully with Delhivery API)';
+      } catch (dErr) {
+        carrierSyncNotice = ` (Delhivery Notice: ${dErr.message || 'Please verify in Delhivery panel'})`;
       }
     }
 
     events.push({
       event: 'PRODUCT_CHANGED_BY_ADMIN',
       timestamp: now,
-      details: `Product updated to [${newItem.productName} - ${newItem.variantName} (SKU: ${newItem.sku}, Qty: ${qty}, Price: Rs. ${itemPrice}, Shipping: Rs. ${resolvedShipping}, Total: Rs. ${calculatedTotal})] by ${adminEmail}. Reason: ${reason}${shiprocketSyncNotice}`
+      details: `Product updated to [${newItem.productName} - ${newItem.variantName} (SKU: ${newItem.sku}, Qty: ${qty}, Price: Rs. ${itemPrice}, Shipping: Rs. ${resolvedShipping}, Total: Rs. ${calculatedTotal})] by ${adminEmail}. Reason: ${reason}${carrierSyncNotice}`
     });
 
     const updates = {

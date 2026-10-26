@@ -755,6 +755,225 @@
         </div>
     </div>
 
+    <!-- DELHIVERY DISPATCH MODAL (Surface vs Express Selection) -->
+    <div id="delhivery-dispatch-modal" onclick="if(event.target === this) closeDelhiveryDispatchModal()" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 border border-[#E5E7EB] shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-[#E5E7EB]">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-base shadow-xs">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-[#111827]">Move Order to Delhivery</h3>
+                        <p class="text-xs text-[#6B7280]" id="delhivery-dispatch-subtitle">Order #... • Customer: ...</p>
+                    </div>
+                </div>
+                <button onclick="closeDelhiveryDispatchModal()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Order Snapshot -->
+            <div class="bg-[#F5F6F8] p-3.5 rounded-xl border border-[#E5E7EB] text-xs space-y-1.5">
+                <div class="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">Destination & Billing Overview</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
+                    <div>
+                        <div class="text-[11px] text-[#6B7280]">Destination City / Pincode:</div>
+                        <div class="font-bold text-[#111827] text-xs sm:text-sm" id="delhivery-dispatch-dest">-</div>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-[#6B7280]">Order Value & Payment:</div>
+                        <div class="font-bold text-purple-700 text-xs sm:text-sm" id="delhivery-dispatch-payinfo">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Mode Selection (Surface vs Express) -->
+            <div>
+                <label class="block text-xs font-bold text-[#111827] mb-2">
+                    Select Delhivery Shipping Mode <span class="text-red-500">*</span>
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="delhivery-mode-cards">
+                    <!-- Surface Card -->
+                    <label class="relative flex flex-col p-3.5 border-2 rounded-xl cursor-pointer transition-all border-purple-600 bg-purple-50/40" id="label-mode-surface">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="delhivery_mode" value="Surface" checked onchange="onDelhiveryModeChange('Surface')" class="text-purple-600 focus:ring-purple-500 h-4 w-4">
+                                <span class="font-bold text-sm text-[#111827]">Surface</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">Standard</span>
+                        </div>
+                        <p class="text-[11px] text-[#6B7280] leading-relaxed">
+                            Cost-effective road/surface freight. Recommended for standard parcel delivery and heavier kits.
+                        </p>
+                    </label>
+
+                    <!-- Express Card -->
+                    <label class="relative flex flex-col p-3.5 border-2 rounded-xl cursor-pointer transition-all border-[#E5E7EB] bg-white hover:bg-gray-50" id="label-mode-express">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="delhivery_mode" value="Express" onchange="onDelhiveryModeChange('Express')" class="text-purple-600 focus:ring-purple-500 h-4 w-4">
+                                <span class="font-bold text-sm text-[#111827]">Express</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Priority Air</span>
+                        </div>
+                        <p class="text-[11px] text-[#6B7280] leading-relaxed">
+                            Faster air/priority transit channel. Recommended for express SLA delivery and urgent customer orders.
+                        </p>
+                    </label>
+                </div>
+            </div>
+
+            <!-- COD Adjustment Option -->
+            <div class="p-3 bg-gray-50 rounded-xl border border-[#E5E7EB] flex items-center justify-between">
+                <div>
+                    <label for="delhivery-dispatch-cod-toggle" class="text-xs font-bold text-[#111827] cursor-pointer">Dispatch as Cash on Delivery (COD)</label>
+                    <p class="text-[11px] text-[#6B7280]">Check if collecting payment from customer upon delivery</p>
+                </div>
+                <input type="checkbox" id="delhivery-dispatch-cod-toggle" class="h-4 w-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500 cursor-pointer">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-[#E5E7EB]">
+                <button type="button" onclick="closeDelhiveryDispatchModal()" class="px-4 py-2.5 bg-white border border-[#E5E7EB] text-[#111827] rounded-xl text-xs font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+                    Cancel
+                </button>
+                <button type="button" onclick="confirmDelhiveryDispatch()" id="btn-confirm-delhivery-dispatch" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                    <span id="btn-confirm-delhivery-text">Move to Delhivery (Surface)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELHIVERY UPDATE DELIVERY API MODAL (Official /api/p/edit Integration) -->
+    <div id="delhivery-update-modal" onclick="if(event.target === this) closeDelhiveryUpdateModal()" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-5 sm:p-6 border border-[#E5E7EB] shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scrollbar" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-[#E5E7EB]">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-base shadow-xs">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-bold text-base text-[#111827]">Update Delhivery Delivery Details</h3>
+                            <span id="delhivery-update-mode-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">Delhivery</span>
+                        </div>
+                        <p class="text-xs text-[#6B7280]">
+                            Order #<span id="delhivery-update-order-id">-</span> • AWB/Waybill: <b id="delhivery-update-waybill" class="font-mono text-purple-700">-</b>
+                        </p>
+                    </div>
+                </div>
+                <button onclick="closeDelhiveryUpdateModal()" class="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Live Status & Quick Sync Bar -->
+            <div class="bg-[#F5F6F8] p-3 rounded-xl border border-[#E5E7EB] flex items-center justify-between flex-wrap gap-2 text-xs">
+                <div>
+                    <div class="text-[11px] text-[#6B7280]">Current Delhivery Status:</div>
+                    <div class="font-bold text-[#111827] flex items-center gap-1.5" id="delhivery-update-status-display">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span id="delhivery-update-status-text">Booked & Manifested</span>
+                    </div>
+                </div>
+                <button type="button" onclick="syncDelhiveryStatusFromModal()" id="btn-sync-delhivery-modal" class="px-3 py-1.5 bg-white hover:bg-gray-50 border border-[#E5E7EB] text-[#111827] rounded-lg text-xs font-medium flex items-center gap-1 cursor-pointer transition-colors shadow-2xs">
+                    <i class="fa-solid fa-rotate text-[11px]"></i>
+                    <span>Sync Live Status</span>
+                </button>
+            </div>
+
+            <!-- Form: Grouped into Sections per User Rules -->
+            <form id="delhivery-update-form" onsubmit="event.preventDefault(); submitDelhiveryUpdate();" class="space-y-4">
+                <!-- Section 1: Consignee Details -->
+                <div class="space-y-3">
+                    <div class="text-xs font-bold text-[#111827] uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-user text-purple-600"></i> Consignee Information
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-[#111827] mb-1">
+                                Full Name <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="delhivery-update-name" required placeholder="e.g. Mudassir Ahmed" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-[#111827] mb-1">
+                                Phone Number (10 digits) <span class="text-red-500">*</span>
+                            </label>
+                            <input type="tel" id="delhivery-update-phone" required pattern="[0-9]{10}" placeholder="e.g. 9876543210" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-[#111827] mb-1">
+                            Delivery Address <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="delhivery-update-address" required placeholder="e.g. Flat 101, Galaxy Heights, Linking Road" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                    </div>
+                </div>
+
+                <!-- Section 2: Package & Billing Attributes -->
+                <div class="space-y-3 pt-2 border-t border-[#E5E7EB]">
+                    <div class="text-xs font-bold text-[#111827] uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-box text-purple-600"></i> Package & COD Parameters
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-[#111827] mb-1">
+                                COD Collectible Amount (Rs.)
+                            </label>
+                            <input type="number" id="delhivery-update-cod" min="0" placeholder="0 if Prepaid" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-[#111827] mb-1">
+                                Package Weight (Grams)
+                            </label>
+                            <input type="number" id="delhivery-update-weight" min="50" placeholder="e.g. 200" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                        </div>
+                    </div>
+
+                    <!-- Dimensions (L x W x H in cm) -->
+                    <div>
+                        <label class="block text-xs font-medium text-[#111827] mb-1">
+                            Dimensions (Length × Width × Height in cm)
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="number" id="delhivery-update-length" min="1" placeholder="L (cm)" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                            <input type="number" id="delhivery-update-width" min="1" placeholder="W (cm)" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                            <input type="number" id="delhivery-update-height" min="1" placeholder="H (cm)" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-[#111827] mb-1">
+                            Product Description / Manifest Remarks
+                        </label>
+                        <input type="text" id="delhivery-update-remarks" maxlength="240" placeholder="e.g. Umrah Dua Cards Flashcards Companion Kit" class="w-full px-3 py-2 text-xs bg-white border border-[#E5E7EB] rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500 text-[#111827]">
+                    </div>
+                </div>
+
+                <!-- API Notice -->
+                <p class="text-[11px] text-[#6B7280] italic">
+                    Updates will be pushed directly to Delhivery's official <span class="font-mono text-purple-700">/api/p/edit</span> API endpoint and saved to order history.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center justify-end gap-2 pt-2 border-t border-[#E5E7EB]">
+                    <button type="button" onclick="closeDelhiveryUpdateModal()" class="px-4 py-2.5 bg-white border border-[#E5E7EB] text-[#111827] rounded-xl text-xs font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+                        Cancel
+                    </button>
+                    <button type="submit" id="btn-save-delhivery-update" class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+                        <span id="btn-save-delhivery-text">Update on Delhivery API</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // User's Firebase Configuration
@@ -1291,8 +1510,8 @@
                                     <button onclick="moveOrderToCourier('${orderId}', 'shiprocket')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-300 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Shiprocket">
                                         <i class="fa-solid fa-truck-fast text-indigo-600 text-xs"></i> Shiprocket
                                     </button>
-                                    <button onclick="moveOrderToCourier('${orderId}', 'delhivery')" class="px-2 py-1 bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Delhivery">
-                                        <i class="fa-solid fa-box text-rose-600 text-xs"></i> Delhivery
+                                    <button onclick="openDelhiveryDispatchModal('${orderId}')" class="px-2 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-300 text-purple-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Delhivery (Select Surface or Express)">
+                                        <i class="fa-solid fa-box text-purple-600 text-xs"></i> Delhivery
                                     </button>
                                 ` : ''}
                                 ${isShipmentBooked ? `
@@ -1303,6 +1522,11 @@
                                         <a href="${order.shipping.trackingUrl}" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Track Live">
                                             <i class="fa-solid fa-location-arrow text-xs"></i> Track
                                         </a>
+                                    ` : ''}
+                                    ${courierProvider === 'delhivery' ? `
+                                        <button onclick="openDelhiveryUpdateModal('${orderId}')" class="px-2 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-300 text-purple-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Update Delhivery shipment on Delhivery API">
+                                            <i class="fa-solid fa-pen-to-square text-purple-600 text-xs"></i> Update Delivery
+                                        </button>
                                     ` : ''}
                                 ` : ''}
                                 ${status !== 'CANCELLED' ? `
@@ -1752,7 +1976,7 @@
                         <i class="fa-solid fa-truck-fast text-xs"></i>
                         <span>Move to Shiprocket</span>
                     </button>
-                    <button onclick="moveOrderToCourier('${order.orderId}', 'delhivery')" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Delhivery upon phone confirmation">
+                    <button onclick="openDelhiveryDispatchModal('${order.orderId}')" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Delhivery (Select Surface or Express)">
                         <i class="fa-solid fa-box text-xs"></i>
                         <span>Move to Delhivery</span>
                     </button>
@@ -1763,6 +1987,16 @@
                         <i class="fa-solid fa-tag text-xs"></i>
                         <span>Print Label (${courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket'})</span>
                     </a>
+                    ${courierProvider === 'delhivery' ? `
+                        <button onclick="openDelhiveryUpdateModal('${order.orderId}')" class="px-3.5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-300 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Update package details directly on Delhivery API">
+                            <i class="fa-solid fa-pen-to-square text-xs"></i>
+                            <span>Update Delivery (API)</span>
+                        </button>
+                        <button onclick="syncDelhiveryStatus('${order.orderId}')" class="px-3.5 py-2 bg-white hover:bg-gray-50 text-[#111827] border border-[#E5E7EB] rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Sync real-time status from Delhivery Tracking API">
+                            <i class="fa-solid fa-rotate text-xs"></i>
+                            <span>Sync Status</span>
+                        </button>
+                    ` : ''}
                 ` : ''}
 
                 <!-- 1-Click Delivered Toggle in Modal -->
@@ -2422,7 +2656,270 @@
         }
 
         function moveOrderToDelhivery(orderId) {
-            return moveOrderToCourier(orderId, 'delhivery');
+            return openDelhiveryDispatchModal(orderId);
+        }
+
+        // ==========================================
+        // DELHIVERY DISPATCH SYSTEM (SURFACE vs EXPRESS)
+        // ==========================================
+        let pendingDelhiveryOrderId = null;
+        let selectedDelhiveryMode = 'Surface';
+
+        function openDelhiveryDispatchModal(orderId) {
+            pendingDelhiveryOrderId = orderId;
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            if (!order) return;
+
+            const customerName = order.customer?.name || 'Customer';
+            const city = order.customer?.city || '';
+            const state = order.customer?.state || '';
+            const pincode = order.customer?.pincode || '';
+            const prov = (order.payment?.provider || order.paymentMethod || '').toLowerCase();
+            const isAlreadyPaid = prov === 'razorpay' && order.payment?.status === 'CAPTURED';
+            const total = Math.round(order.pricing?.total || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0));
+
+            document.getElementById('delhivery-dispatch-subtitle').textContent = `Order #${orderId} • ${customerName}`;
+            document.getElementById('delhivery-dispatch-dest').textContent = `${city ? city + ', ' : ''}${state ? state + ' - ' : ''}${pincode || 'No Pin'}`;
+            document.getElementById('delhivery-dispatch-payinfo').textContent = isAlreadyPaid ? `Prepaid (Rs. ${total})` : `COD (Rs. ${total})`;
+
+            // Default to Surface mode
+            selectedDelhiveryMode = 'Surface';
+            onDelhiveryModeChange('Surface');
+
+            // COD checkbox
+            const codCheckbox = document.getElementById('delhivery-dispatch-cod-toggle');
+            if (codCheckbox) {
+                codCheckbox.checked = !isAlreadyPaid;
+            }
+
+            document.getElementById('delhivery-dispatch-modal').classList.remove('hidden');
+        }
+
+        function closeDelhiveryDispatchModal() {
+            pendingDelhiveryOrderId = null;
+            document.getElementById('delhivery-dispatch-modal').classList.add('hidden');
+        }
+
+        function onDelhiveryModeChange(mode) {
+            selectedDelhiveryMode = mode;
+            const surfaceCard = document.getElementById('label-mode-surface');
+            const expressCard = document.getElementById('label-mode-express');
+            const btnText = document.getElementById('btn-confirm-delhivery-text');
+
+            if (mode === 'Surface') {
+                surfaceCard.className = 'relative flex flex-col p-3.5 border-2 rounded-xl cursor-pointer transition-all border-purple-600 bg-purple-50/40';
+                expressCard.className = 'relative flex flex-col p-3.5 border-2 rounded-xl cursor-pointer transition-all border-[#E5E7EB] bg-white hover:bg-gray-50';
+                if (btnText) btnText.textContent = 'Move to Delhivery (Surface)';
+            } else {
+                expressCard.className = 'relative flex flex-col p-3.5 border-2 rounded-xl cursor-pointer transition-all border-purple-600 bg-purple-50/40';
+                surfaceCard.className = 'relative flex flex-col p-3.5 border-2 rounded-xl cursor-pointer transition-all border-[#E5E7EB] bg-white hover:bg-gray-50';
+                if (btnText) btnText.textContent = 'Move to Delhivery (Express)';
+            }
+        }
+
+        async function confirmDelhiveryDispatch() {
+            if (!pendingDelhiveryOrderId) return;
+            const orderId = pendingDelhiveryOrderId;
+            const mode = selectedDelhiveryMode || 'Surface';
+            const convertToCod = document.getElementById('delhivery-dispatch-cod-toggle')?.checked || false;
+
+            const btn = document.getElementById('btn-confirm-delhivery-dispatch');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Booking Delhivery ${mode}...</span>`;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/ship`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({
+                        courier: 'delhivery',
+                        shippingMode: mode,
+                        convertToCod: convertToCod
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    const awb = result.data?.shipping?.awb || result.data?.shipping?.waybill || 'Assigned';
+                    alert(`✅ Order #${orderId} successfully moved to Delhivery (${mode})!\nAWB / Waybill: ${awb}`);
+                    closeDelhiveryDispatchModal();
+                    closeOrderDetailModal();
+                    loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Failed to manifest order with Delhivery.');
+                }
+            } catch (err) {
+                console.error('Delhivery dispatch error:', err);
+                alert(`❌ Delhivery Manifestation Failed:\n${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+
+        // ==========================================
+        // DELHIVERY UPDATE DELIVERY API SYSTEM (/api/p/edit)
+        // ==========================================
+        let pendingDelhiveryUpdateOrderId = null;
+
+        function openDelhiveryUpdateModal(orderId) {
+            pendingDelhiveryUpdateOrderId = orderId;
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            if (!order) return;
+
+            const customerName = order.customer?.name || '';
+            const phone = String(order.customer?.phone || '').replace(/\D/g, '').slice(-10);
+            const address = order.customer?.address1 || order.customer?.addressLine1 || '';
+            const awb = order.shipping?.awb || order.shipping?.waybill || '';
+            const mode = order.shipping?.shippingMode || (order.shipping?.courierName?.includes('Surface') ? 'Surface' : 'Express');
+            const total = Math.round(order.pricing?.total || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0));
+            const isCod = (order.payment?.provider || order.paymentMethod || '').toLowerCase() === 'cod';
+            const weightGrams = Math.round((order.package?.weight || 0.2) * 1000);
+            const length = order.package?.length || 15;
+            const width = order.package?.breadth || 10;
+            const height = order.package?.height || 5;
+            const remarks = (order.items || []).map(i => `${i.name || 'Kit'} x${i.quantity || 1}`).join(', ') || '';
+
+            document.getElementById('delhivery-update-order-id').textContent = orderId;
+            document.getElementById('delhivery-update-waybill').textContent = awb || 'Pending';
+            document.getElementById('delhivery-update-mode-badge').textContent = `Delhivery ${mode}`;
+            document.getElementById('delhivery-update-status-text').textContent = order.shipping?.delhiveryStatus || order.shipping?.status || 'Manifested';
+
+            // Populate form fields
+            document.getElementById('delhivery-update-name').value = customerName;
+            document.getElementById('delhivery-update-phone').value = phone;
+            document.getElementById('delhivery-update-address').value = address;
+            document.getElementById('delhivery-update-cod').value = isCod ? total : 0;
+            document.getElementById('delhivery-update-weight').value = weightGrams;
+            document.getElementById('delhivery-update-length').value = length;
+            document.getElementById('delhivery-update-width').value = width;
+            document.getElementById('delhivery-update-height').value = height;
+            document.getElementById('delhivery-update-remarks').value = remarks;
+
+            document.getElementById('delhivery-update-modal').classList.remove('hidden');
+        }
+
+        function closeDelhiveryUpdateModal() {
+            pendingDelhiveryUpdateOrderId = null;
+            document.getElementById('delhivery-update-modal').classList.add('hidden');
+        }
+
+        async function submitDelhiveryUpdate() {
+            if (!pendingDelhiveryUpdateOrderId) return;
+            const orderId = pendingDelhiveryUpdateOrderId;
+
+            const name = document.getElementById('delhivery-update-name').value.trim();
+            const phone = document.getElementById('delhivery-update-phone').value.trim();
+            const address = document.getElementById('delhivery-update-address').value.trim();
+            const cod = document.getElementById('delhivery-update-cod').value;
+            const weightGrams = document.getElementById('delhivery-update-weight').value;
+            const length = document.getElementById('delhivery-update-length').value;
+            const width = document.getElementById('delhivery-update-width').value;
+            const height = document.getElementById('delhivery-update-height').value;
+            const productDetails = document.getElementById('delhivery-update-remarks').value.trim();
+
+            const btn = document.getElementById('btn-save-delhivery-update');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Updating Delhivery API...</span>`;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/delhivery/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({
+                        name,
+                        phone,
+                        address,
+                        cod: cod !== '' ? parseFloat(cod) : undefined,
+                        weightGrams: weightGrams ? parseFloat(weightGrams) : undefined,
+                        length: length ? parseFloat(length) : undefined,
+                        width: width ? parseFloat(width) : undefined,
+                        height: height ? parseFloat(height) : undefined,
+                        productDetails
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert(`✅ Delhivery Delivery Details Updated Successfully!\n\n${result.message || 'Updated on Delhivery system.'}`);
+                    closeDelhiveryUpdateModal();
+                    loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Failed to update Delhivery shipment.');
+                }
+            } catch (err) {
+                console.error('Delhivery update error:', err);
+                alert(`❌ Delhivery Update Failed:\n${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+
+        async function syncDelhiveryStatus(orderId) {
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/delhivery/sync-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    const status = result.data?.syncResult?.rawStatus || 'Updated';
+                    alert(`✅ Delhivery Status Synced: ${status}`);
+                    loadOrdersAndStats();
+                    return status;
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Status sync failed.');
+                }
+            } catch (err) {
+                console.error('Delhivery sync error:', err);
+                alert(`❌ Delhivery Sync Failed:\n${err.message}`);
+            }
+        }
+
+        async function syncDelhiveryStatusFromModal() {
+            if (!pendingDelhiveryUpdateOrderId) return;
+            const btn = document.getElementById('btn-sync-delhivery-modal');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-[11px]"></i> <span>Syncing...</span>`;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(pendingDelhiveryUpdateOrderId)}/delhivery/sync-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    const status = result.data?.syncResult?.rawStatus || 'Updated';
+                    document.getElementById('delhivery-update-status-text').textContent = status;
+                    alert(`✅ Live Delhivery Status: ${status}`);
+                    loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Status sync failed.');
+                }
+            } catch (err) {
+                alert(`❌ Sync Failed:\n${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
         }
 
         // Cancel Order Flow
