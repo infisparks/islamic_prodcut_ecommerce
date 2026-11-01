@@ -42,6 +42,10 @@
 
     <!-- Ultra-Fast Preload for Critical WebP Assets -->
     <link rel="preload" as="image" href="product/hero.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="product/essentials/soap-nobg.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="product/essentials/coconut-oil-nobg.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="product/essentials/shampoo-nobg.webp">
+    <link rel="preload" as="image" href="product/essentials/hand-body-wash-nobg.webp">
     <link rel="preload" as="image" href="product/offer/banner_1.webp" fetchpriority="high">
     <link rel="preload" as="image" href="product/offer/banner_2.webp">
     <link rel="preload" as="image" href="product/offer/banner_3.webp">
@@ -297,6 +301,12 @@
                 <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-3.5 items-stretch">
                     <!-- Banner 1: Special Offer (₹599) -->
                     <div onclick="window.location.href='product.html?id=1&variant=0'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
+                        <!-- Floating Reviews Button linking to bottom reviews section -->
+                        <a href="#reviews" onclick="event.stopPropagation();" class="absolute top-3 right-3 z-30 bg-black/85 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5 transition-all hover:scale-105">
+                            <span class="text-amber-400 text-[11px]">★★★★★</span>
+                            <span>Customer Reviews</span>
+                            <i class="fa-solid fa-arrow-down text-[10px] text-gold-400"></i>
+                        </a>
                         <img src="product/offer/banner_1.webp" 
                              alt="Umrah Card Gift Set - Special Offer ₹599 - FREE Shipping on Prepaid Orders" 
                              fetchpriority="high" decoding="async" 
@@ -331,6 +341,12 @@
 
                 <!-- MOBILE VIEW: Premium Auto-Slidable Carousel (100% Uncropped & Fits ~Half Screen) -->
                 <div class="block md:hidden relative max-w-[340px] xs:max-w-[370px] mx-auto select-none" id="hero-offer-mobile-carousel">
+                    <!-- Floating Reviews Button linking to bottom reviews section -->
+                    <a href="#reviews" class="absolute top-2.5 right-2.5 z-30 bg-black/85 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shadow-md flex items-center gap-1 transition-all active:scale-95">
+                        <span class="text-amber-400 text-[9px]">★★★★★</span>
+                        <span>Reviews</span>
+                        <i class="fa-solid fa-arrow-down text-[8.5px]"></i>
+                    </a>
                     <!-- Carousel Container with natural aspect ratio to show entire artwork without cropping -->
                     <div class="overflow-hidden rounded-xl border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_6px_20px_rgba(0,0,0,0.5)]">
                         <div id="hero-carousel-track" class="flex transition-transform duration-500 ease-out w-full">
@@ -383,111 +399,244 @@
                 </div>
             </div>
 
-            <!-- HERO PILGRIM REVIEWS STRIP (Mobile: 3 Visible in 1 Row | Auto-Scrollable + Touch Drag | Tap for Fullscreen) -->
-            <div class="w-full max-w-5xl mx-auto my-2 xs:my-2.5 sm:my-3.5 px-0.5 sm:px-2">
-                <!-- Mini Header: Trust Badge + Tap to Zoom -->
-                <div class="flex items-center justify-between px-1.5 mb-1.5">
-                    <div class="flex items-center gap-1.5">
-                        <div class="flex text-amber-400 text-[10px] sm:text-xs">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        </div>
-                        <span class="text-[11px] sm:text-xs font-bold text-gold-300">Customer Reviews</span>
-                        <span class="bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 text-[8.5px] font-bold px-1.5 py-0.2 rounded-full hidden xs:inline-flex items-center gap-0.5">
-                            <i class="fa-solid fa-circle-check text-[7.5px]"></i> 100% Real
+            <!-- UMRAH ZAIREEN ESSENTIALS STRIP (2 Products Per View | Continuous Auto-Scroll | Dark Luxury Cards) -->
+            <div id="umrah-zaireen-section" class="w-full max-w-[370px] xs:max-w-[400px] sm:max-w-4xl mx-auto mt-2.5 mb-1 px-1 select-none">
+                <!-- Section Header (Single Clean Row, Never Wraps) -->
+                <div class="flex items-center justify-between mb-1.5 px-1 whitespace-nowrap overflow-hidden">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                        <h3 class="font-cinzel text-xs sm:text-sm font-bold text-gold-300 tracking-wide truncate">
+                            Umrah Zaireen Essentials
+                        </h3>
+                        <span class="text-[8px] font-sans font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 px-1.5 py-0.5 rounded-full shrink-0 flex items-center gap-1">
+                            <i class="fa-solid fa-leaf text-[7px] text-emerald-400"></i> Fragrance Free
                         </span>
                     </div>
-                    <span class="text-[9.5px] sm:text-[10.5px] text-gold-400/90 font-medium flex items-center gap-1">
-                        <i class="fa-solid fa-magnifying-glass-plus text-gold-400"></i> Tap to Fullscreen
+                    <span class="text-[9px] sm:text-[10px] text-gray-400 font-medium shrink-0 flex items-center gap-1 ml-2">
+                        <i class="fa-solid fa-hand-pointer text-gold-400 text-[8px]"></i> Tap to view
                     </span>
                 </div>
 
-                <!-- Auto-Scrollable Review Track Container (3 cards visible on mobile, 6 on desktop) -->
-                <div class="relative group/reviews" id="hero-reviews-wrapper">
-                    <!-- Left / Right Nav Arrows for Desktop -->
-                    <button type="button" onclick="scrollHeroReviews(-1)" aria-label="Previous Reviews" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-7 h-7 rounded-full bg-black/85 border border-gold-500/50 text-gold-300 hover:text-white items-center justify-center text-xs shadow-lg transition-all z-20 hover:scale-110 cursor-pointer">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <button type="button" onclick="scrollHeroReviews(1)" aria-label="Next Reviews" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-7 h-7 rounded-full bg-black/85 border border-gold-500/50 text-gold-300 hover:text-white items-center justify-center text-xs shadow-lg transition-all z-20 hover:scale-110 cursor-pointer">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
+                <!-- Auto-Scrolling Track (2 Products visible at a time on mobile, 100% Seamless Infinite Loop) -->
+                <div class="relative overflow-hidden" id="zaireen-track-wrapper">
+                    <div id="zaireen-products-track" class="flex items-stretch gap-2.5 sm:gap-4 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing py-1" style="-webkit-overflow-scrolling: touch; scroll-behavior: auto;">
+                        
+                        <!-- SET A: 1. Herbal Ihram Soap -->
+                        <div onclick="window.location.href='product.html?id=9'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/soap-nobg.webp" alt="Herbal Ihram Soap" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">60GM</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Ihram Soap</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹99</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹198</span>
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- Horizontal Scrolling Container -->
-                    <div id="hero-reviews-track" class="flex items-center gap-1.5 xs:gap-2 overflow-x-auto no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing select-none py-1" style="scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;">
-                        <div onclick="openReviewLightbox(0)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-01.webp" alt="Pilgrim Review 1" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        <!-- SET A: 2. Pure Coconut Oil -->
+                        <div onclick="window.location.href='product.html?id=10'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/coconut-oil-nobg.webp" alt="Pure Coconut Oil" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Pure Coconut Oil</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹199</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹398</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(1)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-02.webp" alt="Pilgrim Review 2" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET A: 3. Herbal Hair Shampoo -->
+                        <div onclick="window.location.href='product.html?id=11'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/shampoo-nobg.webp" alt="Herbal Hair Shampoo" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-teal-600 text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hair Shampoo</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(2)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-03.webp" alt="Pilgrim Review 3" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET A: 4. Hand & Body Wash -->
+                        <div onclick="window.location.href='product.html?id=12'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/hand-body-wash-nobg.webp" alt="Hand & Body Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hand & Body Wash</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹299</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹598</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(3)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-04.webp" alt="Pilgrim Review 4" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET B: 1. Herbal Ihram Soap (Identical Clone for Infinite Loop) -->
+                        <div onclick="window.location.href='product.html?id=9'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/soap-nobg.webp" alt="Herbal Ihram Soap" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">60GM</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Ihram Soap</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹99</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹198</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(4)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-05.webp" alt="Pilgrim Review 5" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET B: 2. Pure Coconut Oil (Identical Clone for Infinite Loop) -->
+                        <div onclick="window.location.href='product.html?id=10'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/coconut-oil-nobg.webp" alt="Pure Coconut Oil" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Pure Coconut Oil</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹199</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹398</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(5)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-06.webp" alt="Pilgrim Review 6" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET B: 3. Herbal Hair Shampoo (Identical Clone for Infinite Loop) -->
+                        <div onclick="window.location.href='product.html?id=11'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/shampoo-nobg.webp" alt="Herbal Hair Shampoo" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-teal-600 text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hair Shampoo</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(6)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-07.webp" alt="Pilgrim Review 7" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET B: 4. Hand & Body Wash (Identical Clone for Infinite Loop) -->
+                        <div onclick="window.location.href='product.html?id=12'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/hand-body-wash-nobg.webp" alt="Hand & Body Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hand & Body Wash</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹299</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹598</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(7)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-08.webp" alt="Pilgrim Review 8" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET C: 1. Herbal Ihram Soap (Identical Clone for Zero-Stutter Loop) -->
+                        <div onclick="window.location.href='product.html?id=9'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/soap-nobg.webp" alt="Herbal Ihram Soap" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">60GM</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Ihram Soap</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹99</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹198</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(8)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-09.webp" alt="Pilgrim Review 9" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET C: 2. Pure Coconut Oil (Identical Clone for Zero-Stutter Loop) -->
+                        <div onclick="window.location.href='product.html?id=10'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/coconut-oil-nobg.webp" alt="Pure Coconut Oil" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Pure Coconut Oil</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹199</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹398</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(9)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-10.webp" alt="Pilgrim Review 10" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET C: 3. Herbal Hair Shampoo (Identical Clone for Zero-Stutter Loop) -->
+                        <div onclick="window.location.href='product.html?id=11'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/shampoo-nobg.webp" alt="Herbal Hair Shampoo" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-teal-600 text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hair Shampoo</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(10)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-11.webp" alt="Pilgrim Review 11" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+
+                        <!-- SET C: 4. Hand & Body Wash (Identical Clone for Zero-Stutter Loop) -->
+                        <div onclick="window.location.href='product.html?id=12'" 
+                             class="flex-shrink-0 w-[47%] xs:w-[46.5%] sm:w-[23.5%] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="product/essentials/hand-body-wash-nobg.webp" alt="Hand & Body Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
+                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
+                            </div>
+                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hand & Body Wash</h4>
+                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
+                                <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹299</span>
+                                    <span class="text-[10px] text-gray-400 line-through">₹598</span>
+                                </div>
+                            </div>
                         </div>
-                        <div onclick="openReviewLightbox(11)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-12.webp" alt="Pilgrim Review 12" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
-                        </div>
-                        <div onclick="openReviewLightbox(12)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-13.webp" alt="Pilgrim Review 13" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
-                        </div>
-                        <div onclick="openReviewLightbox(13)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-14.webp" alt="Pilgrim Review 14" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
-                        </div>
-                        <div onclick="openReviewLightbox(14)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
-                            <img src="product/reviews/review-15.webp" alt="Pilgrim Review 15" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
-                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -527,7 +676,9 @@
         </div>
     </section>
 
-    <!-- SECTION TITLE: UMRAH DUA CARDS & STICKERS COLLECTION -->
+        <!-- SECTION TITLE: UMRAH DUA CARDS & STICKERS COLLECTION -->
+
+        <!-- SECTION TITLE: UMRAH DUA CARDS & STICKERS COLLECTION -->
     <section id="products-grid" class="pt-6 pb-2 px-4 max-w-6xl mx-auto">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-gold-200 pb-2.5 mb-3">
             <div>
@@ -540,7 +691,7 @@
         <!-- Filter Category Tabs -->
         <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-2 no-scrollbar" id="category-filter-bar">
             <button onclick="filterProducts('all')" id="filter-all" class="filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs">
-                All Products (8)
+                All Products (12)
             </button>
             <button onclick="filterProducts('card')" id="filter-card" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
                 💳 Umrah Cards (4)
@@ -550,6 +701,9 @@
             </button>
             <button onclick="filterProducts('janamaz')" id="filter-janamaz" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
                 🕋 Travel Janamaz (1)
+            </button>
+            <button onclick="filterProducts('essentials')" id="filter-essentials" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
+                🌿 Ihram Essentials (4)
             </button>
         </div>
     </section>
@@ -1138,7 +1292,114 @@
     <!-- PILGRIM REVIEWS -->
     <section id="reviews" class="py-8 px-4 bg-pearl border-t border-gold-200">
         <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-5">
+
+            <!-- Verified Pilgrim Photo Reviews Slider (Moved from hero to bottom reviews) -->
+            <div class="mb-6 pb-6 border-b border-gold-200">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-1.5">
+                        <div class="flex text-amber-500 text-xs">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="text-xs sm:text-sm font-bold text-onyx">Photo Reviews & Delivery Proofs</span>
+                        <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[9px] font-bold px-1.5 py-0.2 rounded-full inline-flex items-center gap-0.5">
+                            <i class="fa-solid fa-circle-check text-[7.5px]"></i> 100% Real
+                        </span>
+                    </div>
+                    <span class="text-[10px] text-gold-700 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-magnifying-glass-plus"></i> Tap for Fullscreen
+                    </span>
+                </div>
+<div class="relative group/reviews" id="hero-reviews-wrapper">
+                    <!-- Left / Right Nav Arrows for Desktop -->
+                    <button type="button" onclick="scrollHeroReviews(-1)" aria-label="Previous Reviews" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-7 h-7 rounded-full bg-black/85 border border-gold-500/50 text-gold-300 hover:text-white items-center justify-center text-xs shadow-lg transition-all z-20 hover:scale-110 cursor-pointer">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button type="button" onclick="scrollHeroReviews(1)" aria-label="Next Reviews" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-7 h-7 rounded-full bg-black/85 border border-gold-500/50 text-gold-300 hover:text-white items-center justify-center text-xs shadow-lg transition-all z-20 hover:scale-110 cursor-pointer">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                    <!-- Horizontal Scrolling Container -->
+                    <div id="hero-reviews-track" class="flex items-center gap-1.5 xs:gap-2 overflow-x-auto no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing select-none py-1" style="scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;">
+                        <div onclick="openReviewLightbox(0)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-01.webp" alt="Pilgrim Review 1" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(1)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-02.webp" alt="Pilgrim Review 2" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(2)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-03.webp" alt="Pilgrim Review 3" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(3)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-04.webp" alt="Pilgrim Review 4" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(4)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-05.webp" alt="Pilgrim Review 5" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(5)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-06.webp" alt="Pilgrim Review 6" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(6)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-07.webp" alt="Pilgrim Review 7" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(7)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-08.webp" alt="Pilgrim Review 8" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(8)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-09.webp" alt="Pilgrim Review 9" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(9)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-10.webp" alt="Pilgrim Review 10" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(10)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-11.webp" alt="Pilgrim Review 11" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(11)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-12.webp" alt="Pilgrim Review 12" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(12)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-13.webp" alt="Pilgrim Review 13" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(13)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-14.webp" alt="Pilgrim Review 14" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                        <div onclick="openReviewLightbox(14)" class="group relative rounded-xl overflow-hidden border border-gold-500/35 bg-black/60 backdrop-blur-xs shadow-sm hover:border-gold-400 hover:shadow-gold-glow transition-all duration-300 cursor-pointer flex-shrink-0 w-[31.3%] sm:w-[19%] md:w-[15.5%] h-24 xs:h-28 sm:h-36 flex items-center justify-center" style="scroll-snap-align: start;">
+                            <img src="product/reviews/review-15.webp" alt="Pilgrim Review 15" loading="lazy" decoding="async" width="220" height="320" class="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity pointer-events-none"></div>
+                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur-xs text-gold-400 text-[8px] font-extrabold px-1 py-0.2 rounded border border-gold-500/30 flex items-center gap-0.5"><i class="fa-solid fa-star text-amber-400 text-[7px]"></i> 5.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="text-center mb-5 mt-4">
                 <span class="text-[10px] uppercase tracking-widest text-gold-600 font-bold block mb-0.5">Pilgrim Feedback</span>
                 <h2 class="font-cinzel text-xl font-bold text-onyx">Loved By Pilgrims Across India</h2>
             </div>
@@ -1946,6 +2207,114 @@
                     { sku: "fati_jnm_04", name: "Pocket Travel Janamaz (Midnight Black)", shortName: "Midnight Black", price: 349, oldPrice: 698, weight: "150gm", tag: "Sleek Black", image: "product/janamaz/black.webp" },
                     { sku: "fati_jnm_05", name: "Pocket Travel Janamaz (Slate Gray)", shortName: "Slate Gray", price: 349, oldPrice: 698, weight: "150gm", tag: "Modern Gray", image: "product/janamaz/gray.webp" }
                 ]
+            },
+            {
+                id: 9,
+                name: "Herbal Ihram Friendly Soap (Fragrance Free)",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3401",
+                color: "Natural Herbal Gold",
+                size: "60gm Bar",
+                dimensions: "10 * 7 * 3 cm",
+                material: "Shea Butter, Sidr & Pure Aloe Vera Gel",
+                weight: "60gm",
+                sku: "fati_ess_soap",
+                soldCount: "1,240 sold",
+                price: 99,
+                oldPrice: 198,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/soap-nobg.webp",
+                images: [
+                    "product/essentials/soap-hero.webp",
+                    "product/essentials/soap-badges.webp",
+                    "product/essentials/soap-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(586)",
+                desc: "100% Fragrance-Free, SLS-Free & Paraben-Free Herbal Soap specifically crafted for pilgrims in Ihram during Hajj & Umrah.",
+                features: ["100% Fragrance Free (Ihram Friendly)", "SLS Free & No Parabens", "Enriched with Sidr & Aloe Vera", "Pure Shea Butter Nourishment"]
+            },
+            {
+                id: 10,
+                name: "Pure Coconut Oil - Ihram Friendly & Fragrance Free",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "1513",
+                color: "Crystal Clear Pure Oil",
+                size: "100ml Bottle",
+                dimensions: "12 * 5 * 5 cm",
+                material: "100% Cold-Pressed Pure Coconut Oil (Unscented)",
+                weight: "100ml",
+                sku: "fati_ess_oil",
+                soldCount: "980 sold",
+                price: 199,
+                oldPrice: 398,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/coconut-oil-nobg.webp",
+                images: [
+                    "product/essentials/coconut-oil-hero.webp",
+                    "product/essentials/coconut-oil-badges.webp",
+                    "product/essentials/coconut-oil-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(442)",
+                desc: "Specially formulated 100% pure unscented coconut oil for pilgrims in Ihram. Protects against dry skin and chafing during Tawaf & Sa'i.",
+                features: ["100% Fragrance Free (Ihram Friendly)", "Cold-Pressed Pure Coconut Oil", "Prevents Skin Chafing in Ihram", "Leak-Proof Travel Friendly Flip Cap"]
+            },
+            {
+                id: 11,
+                name: "Herbal Hair Shampoo - Ihram Friendly & Fragrance Free",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3305",
+                color: "Herbal Botanical Infusion",
+                size: "100ml Pump Bottle",
+                dimensions: "15 * 6 * 6 cm",
+                material: "Amla, Shikakai, Reetha & Natural Botanicals",
+                weight: "100ml",
+                sku: "fati_ess_shampoo",
+                soldCount: "870 sold",
+                price: 399,
+                oldPrice: 798,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/shampoo-nobg.webp",
+                images: [
+                    "product/essentials/shampoo-hero.webp",
+                    "product/essentials/shampoo-badges.webp",
+                    "product/essentials/shampoo-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(389)",
+                desc: "Premium Ayurvedic herbal hair shampoo strictly without fragrance or chemical scents for Hajj & Umrah pilgrims.",
+                features: ["Strictly Fragrance Free (Ihram Friendly)", "Amla, Shikakai & Reetha Goodness", "Gentle on Hair & Scalp", "Easy Dispenser Pump Lock"]
+            },
+            {
+                id: 12,
+                name: "Hand & Body Wash - Ihram Friendly & Fragrance Free",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3402",
+                color: "Pure Natural Clear Gel",
+                size: "100ml Pump Bottle",
+                dimensions: "15 * 6 * 6 cm",
+                material: "Aloe Vera, Sidr Leaves, Pure Honey & Botanical Extracts",
+                weight: "100ml",
+                sku: "fati_ess_wash",
+                soldCount: "1,120 sold",
+                price: 299,
+                oldPrice: 598,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/hand-body-wash-nobg.webp",
+                images: [
+                    "product/essentials/hand-body-wash-hero.webp",
+                    "product/essentials/hand-body-wash-badges.webp",
+                    "product/essentials/hand-body-wash-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(512)",
+                desc: "Premium Dermatologically Tested Hand & Body Wash strictly fragrance-free and SLS-free for pilgrims in Ihram. Formulated with Aloe Vera, Sidr leaves, and pure natural Honey.",
+                features: ["100% Fragrance Free (Ihram Friendly)", "Aloe Vera & Sidr Leaves Purification", "SLS Free & No Parabens", "Dermatologically Tested & Halal"]
             }
         ];
 
@@ -2194,8 +2563,9 @@
             const btnCard = document.getElementById('filter-card');
             const btnSticker = document.getElementById('filter-sticker');
             const btnJanamaz = document.getElementById('filter-janamaz');
+            const btnEssentials = document.getElementById('filter-essentials');
 
-            [btnAll, btnCard, btnSticker, btnJanamaz].forEach(btn => {
+            [btnAll, btnCard, btnSticker, btnJanamaz, btnEssentials].forEach(btn => {
                 if (btn) {
                     btn.className = "filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors";
                 }
@@ -2209,6 +2579,8 @@
                 btnSticker.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
             } else if (category === 'janamaz' && btnJanamaz) {
                 btnJanamaz.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
+            } else if (category === 'essentials' && btnEssentials) {
+                btnEssentials.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
             }
         }
 
@@ -5222,6 +5594,7 @@
 
             initHeroOfferCarousel();
             initHeroReviews();
+            initZaireenTrack();
             renderProducts('all');
             renderDuas('all');
             renderJourneyNav();
@@ -5272,6 +5645,81 @@
                 updateCartUI(false);
             }
         });
+
+        // Auto-Scroll Controller for Umrah Zaireen Essentials Strip (High-Performance 60fps Smooth Infinite Loop)
+        let zaireenAnimFrame = null;
+        let isZaireenTouching = false;
+        let zaireenResumeTimeout = null;
+
+        function initZaireenTrack() {
+            const track = document.getElementById('zaireen-products-track');
+            if (!track) return;
+
+            let zaireenPos = track.scrollLeft || 0;
+            const scrollSpeed = 1.4; // Energetic, fast & buttery smooth 60fps / 120fps
+
+            function step() {
+                if (!isZaireenTouching) {
+                    zaireenPos += scrollSpeed;
+                    const singleSetWidth = track.scrollWidth / 3;
+                    if (singleSetWidth > 50 && zaireenPos >= singleSetWidth) {
+                        zaireenPos -= singleSetWidth;
+                        track.scrollLeft -= singleSetWidth;
+                    } else {
+                        track.scrollLeft = zaireenPos;
+                    }
+
+                    // Fallback safety guard: if reached end of scroll container, reset seamlessly
+                    if (track.scrollLeft >= (track.scrollWidth - track.clientWidth - 4)) {
+                        zaireenPos = 0;
+                        track.scrollLeft = 0;
+                    }
+                }
+                zaireenAnimFrame = requestAnimationFrame(step);
+            }
+
+            if (zaireenAnimFrame) cancelAnimationFrame(zaireenAnimFrame);
+            zaireenAnimFrame = requestAnimationFrame(step);
+
+            function pauseScroll() {
+                isZaireenTouching = true;
+                if (zaireenResumeTimeout) clearTimeout(zaireenResumeTimeout);
+                zaireenResumeTimeout = setTimeout(() => {
+                    zaireenPos = track.scrollLeft;
+                    isZaireenTouching = false;
+                }, 1200);
+            }
+
+            track.addEventListener('touchstart', () => {
+                isZaireenTouching = true;
+                if (zaireenResumeTimeout) clearTimeout(zaireenResumeTimeout);
+            }, { passive: true });
+
+            track.addEventListener('touchmove', () => {
+                isZaireenTouching = true;
+                zaireenPos = track.scrollLeft;
+            }, { passive: true });
+
+            track.addEventListener('touchend', pauseScroll, { passive: true });
+            track.addEventListener('wheel', pauseScroll, { passive: true });
+
+            // Only bind mouse hover pause on actual mouse/pointer devices so touchscreens don't freeze
+            if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                track.addEventListener('mouseenter', () => { isZaireenTouching = true; });
+                track.addEventListener('mouseleave', () => {
+                    zaireenPos = track.scrollLeft;
+                    isZaireenTouching = false;
+                });
+            }
+        }
+
+        window.scrollZaireenTrack = function(direction) {
+            const track = document.getElementById('zaireen-products-track');
+            if (track) {
+                const cardWidth = track.firstElementChild ? track.firstElementChild.clientWidth + 10 : 160;
+                track.scrollBy({ left: cardWidth * direction, behavior: 'smooth' });
+            }
+        };
     </script>
 
 </body>

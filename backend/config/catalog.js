@@ -244,6 +244,54 @@ const catalog = [
         freeShipping: false
       }
     ]
+  },
+  {
+    id: 9,
+    name: "Herbal Ihram Friendly Soap (Fragrance Free)",
+    category: "essentials",
+    hsn: "3401",
+    sku: "fati_ess_soap",
+    dimensions: { length: 10, breadth: 7, height: 3 },
+    price: 99,
+    weightKg: 0.06,
+    weightLabel: "60gm",
+    image: "product/essentials/soap-nobg.webp"
+  },
+  {
+    id: 10,
+    name: "Pure Coconut Oil - Ihram Friendly & Fragrance Free",
+    category: "essentials",
+    hsn: "1513",
+    sku: "fati_ess_oil",
+    dimensions: { length: 12, breadth: 5, height: 5 },
+    price: 199,
+    weightKg: 0.1,
+    weightLabel: "100ml",
+    image: "product/essentials/coconut-oil-nobg.webp"
+  },
+  {
+    id: 11,
+    name: "Herbal Hair Shampoo - Ihram Friendly & Fragrance Free",
+    category: "essentials",
+    hsn: "3305",
+    sku: "fati_ess_shampoo",
+    dimensions: { length: 15, breadth: 6, height: 6 },
+    price: 399,
+    weightKg: 0.12,
+    weightLabel: "100ml",
+    image: "product/essentials/shampoo-nobg.webp"
+  },
+  {
+    id: 12,
+    name: "Hand & Body Wash - Ihram Friendly & Fragrance Free",
+    category: "essentials",
+    hsn: "3402",
+    sku: "fati_ess_wash",
+    dimensions: { length: 15, breadth: 6, height: 6 },
+    price: 299,
+    weightKg: 0.12,
+    weightLabel: "100ml",
+    image: "product/essentials/hand-body-wash-nobg.webp"
   }
 ];
 

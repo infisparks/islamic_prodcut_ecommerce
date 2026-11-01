@@ -26,7 +26,12 @@
                     4: "product/umrah_card_roman.webp",
                     5: "product/umrah_Sticker_English.webp",
                     6: "product/umrah_Sticker_hindi.webp",
-                    7: "product/umrah_Sticker_Urdu.webp"
+                    7: "product/umrah_Sticker_Urdu.webp",
+                    8: "product/janamaz/golden.webp",
+                    9: "product/essentials/soap-hero.webp",
+                    10: "product/essentials/coconut-oil-hero.webp",
+                    11: "product/essentials/shampoo-hero.webp",
+                    12: "product/essentials/hand-body-wash-hero.webp"
                 };
                 var targetImg = prodImages[pid] || "product/umrah_card_english.webp";
                 window.__INITIAL_PDP_IMAGE__ = targetImg;
@@ -230,7 +235,15 @@
 
                     <!-- Image View Container (Touches screen edge-to-edge, zero padding, uncropped 1:1 fit with bottom curve) -->
                     <div id="pdp-image-container" onclick="openBigScreenMediaModal()" class="w-full h-full flex items-center justify-center overflow-hidden p-0 select-none relative cursor-zoom-in" title="Click to view full screen with zoom">
-                        <img id="pdp-main-image" src="product/umrah_card_urdu.webp" alt="Product View" fetchpriority="high" decoding="async" width="800" height="800" class="w-full h-full object-contain block pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.01]">
+                        <script>
+                            (function() {
+                                var initialSrc = window.__INITIAL_PDP_IMAGE__ || "product/umrah_card_english.webp";
+                                document.write('<img id="pdp-main-image" src="' + initialSrc + '" alt="Product View" fetchpriority="high" decoding="async" width="800" height="800" class="w-full h-full object-contain block pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.01]">');
+                            })();
+                        </script>
+                        <noscript>
+                            <img id="pdp-main-image" src="product/umrah_card_english.webp" alt="Product View" class="w-full h-full object-contain block">
+                        </noscript>
                         
                         <!-- Duo Combo Split Showcase (Active when Mega Combo plan is selected at Slide 1) -->
                         <div id="pdp-combo-duo-view" class="hidden w-full h-full flex flex-col items-stretch relative select-none bg-gradient-to-b from-[#FAF7F2] via-[#F5EFE6] to-[#ECE5D8] overflow-hidden">
@@ -272,12 +285,6 @@
                             </div>
                         </div>
                     </div>
-                    <script>
-                        if (window.__INITIAL_PDP_IMAGE__) {
-                            var earlyMainImg = document.getElementById('pdp-main-image');
-                            if (earlyMainImg) earlyMainImg.src = window.__INITIAL_PDP_IMAGE__;
-                        }
-                    </script>
 
                     <!-- Tap to View Full Screen Indicator Pill -->
                     <button id="pdp-tap-to-zoom-btn" type="button" onclick="openBigScreenMediaModal()" class="absolute bottom-3 right-3 z-20 flex items-center gap-1.5 bg-black/75 hover:bg-gold-500 hover:text-onyx backdrop-blur-md text-gold-300 text-[9.5px] sm:text-[10px] font-bold px-2.5 py-1 rounded-xl border border-gold-500/40 shadow-md transition-all cursor-pointer">
@@ -390,7 +397,7 @@
                     </div>
 
                     <!-- TRUST & QUALITY GUARANTEE BADGES -->
-                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 border border-gray-200 shadow-xs grid grid-cols-2 gap-2.5 sm:gap-3 text-xs mb-4">
+                    <div id="pdp-trust-badges-container" class="bg-white rounded-2xl p-3.5 sm:p-4 border border-gray-200 shadow-xs grid grid-cols-2 gap-2.5 sm:gap-3 text-xs mb-4">
                         <div class="flex items-start gap-2.5">
                             <div class="w-8 h-8 rounded-xl bg-gold-50 text-gold-700 flex items-center justify-center flex-shrink-0 border border-gold-200 text-sm">
                                 <i class="fa-solid fa-droplet-slash"></i>
@@ -1362,6 +1369,134 @@
                         includes: ["Pocket Foldable Travel Janamaz Mat (Slate Gray)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
                     }
                 ]
+            },
+            {
+                id: 9,
+                name: "Herbal Ihram Friendly Soap (Fragrance Free)",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3401",
+                color: "Natural Herbal Gold",
+                size: "60gm Bar",
+                dimensions: "10 * 7 * 3 cm",
+                material: "Shea Butter, Sidr & Pure Aloe Vera Gel",
+                weight: "60gm",
+                sku: "fati_ess_soap",
+                soldCount: "1,240 sold",
+                price: 99,
+                oldPrice: 198,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/soap-hero.webp",
+                images: [
+                    "product/essentials/soap-hero.webp",
+                    "product/essentials/soap-badges.webp",
+                    "product/essentials/soap-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(586)",
+                desc: "100% Fragrance-Free, SLS-Free & Paraben-Free Herbal Soap specifically crafted for men and women in Ihram during Hajj & Umrah. Enriched with Shea Butter, Sidr, and soothing Aloe Vera Gel.",
+                features: ["100% Fragrance Free (Ihram Friendly)", "SLS Free & No Parabens", "Enriched with Sidr & Aloe Vera", "Pure Shea Butter Nourishment"],
+                theme: {
+                    accent: "amber",
+                    bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
+                    border: "border-amber-500/40"
+                }
+            },
+            {
+                id: 10,
+                name: "Pure Coconut Oil - Ihram Friendly & Fragrance Free",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "1513",
+                color: "Crystal Clear Pure Oil",
+                size: "100ml Bottle",
+                dimensions: "12 * 5 * 5 cm",
+                material: "100% Cold-Pressed Pure Coconut Oil (Unscented)",
+                weight: "100ml",
+                sku: "fati_ess_oil",
+                soldCount: "980 sold",
+                price: 199,
+                oldPrice: 398,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/coconut-oil-hero.webp",
+                images: [
+                    "product/essentials/coconut-oil-hero.webp",
+                    "product/essentials/coconut-oil-badges.webp",
+                    "product/essentials/coconut-oil-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(442)",
+                desc: "Specially formulated 100% pure unscented coconut oil for pilgrims in Ihram. Protects against dry skin, chafing, and harsh desert weather during Tawaf & Sa'i without violating Ihram conditions.",
+                features: ["100% Fragrance Free (Ihram Friendly)", "Cold-Pressed Pure Coconut Oil", "Prevents Skin Chafing in Ihram", "Leak-Proof Travel Friendly Flip Cap"],
+                theme: {
+                    accent: "emerald",
+                    bgGradient: "from-emerald-950/20 via-sand to-emerald-50/30",
+                    border: "border-emerald-500/40"
+                }
+            },
+            {
+                id: 11,
+                name: "Herbal Hair Shampoo - Ihram Friendly & Fragrance Free",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3305",
+                color: "Herbal Botanical Infusion",
+                size: "100ml Pump Bottle",
+                dimensions: "15 * 6 * 6 cm",
+                material: "Amla, Shikakai, Reetha & Natural Botanicals",
+                weight: "100ml",
+                sku: "fati_ess_shampoo",
+                soldCount: "870 sold",
+                price: 399,
+                oldPrice: 798,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/shampoo-hero.webp",
+                images: [
+                    "product/essentials/shampoo-hero.webp",
+                    "product/essentials/shampoo-badges.webp",
+                    "product/essentials/shampoo-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(389)",
+                desc: "Premium Ayurvedic herbal hair shampoo strictly without fragrance or chemical scents for Hajj & Umrah pilgrims. Nourishes roots, prevents scalp dryness, and cleanses gently.",
+                features: ["Strictly Fragrance Free (Ihram Friendly)", "Amla, Shikakai & Reetha Goodness", "Gentle on Hair & Scalp", "Easy Dispenser Pump Lock"],
+                theme: {
+                    accent: "teal",
+                    bgGradient: "from-teal-950/20 via-sand to-teal-50/30",
+                    border: "border-teal-500/40"
+                }
+            },
+            {
+                id: 12,
+                name: "Hand & Body Wash - Ihram Friendly & Fragrance Free",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3402",
+                color: "Pure Natural Clear Gel",
+                size: "100ml Pump Bottle",
+                dimensions: "15 * 6 * 6 cm",
+                material: "Aloe Vera, Sidr Leaves, Pure Honey & Botanical Extracts",
+                weight: "100ml",
+                sku: "fati_ess_wash",
+                soldCount: "1,120 sold",
+                price: 299,
+                oldPrice: 598,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/essentials/hand-body-wash-hero.webp",
+                images: [
+                    "product/essentials/hand-body-wash-hero.webp",
+                    "product/essentials/hand-body-wash-badges.webp",
+                    "product/essentials/hand-body-wash-benefits.webp"
+                ],
+                badge: "IHRAM ESSENTIAL",
+                rating: "(512)",
+                desc: "Premium Dermatologically Tested Hand & Body Wash strictly fragrance-free and SLS-free for pilgrims in Ihram. Formulated with Aloe Vera, Sidr leaves, and pure natural Honey to deeply moisturize and cleanse during Hajj & Umrah.",
+                features: ["100% Fragrance Free (Ihram Friendly)", "Aloe Vera & Sidr Leaves Purification", "SLS Free & No Parabens", "Dermatologically Tested & Halal"],
+                theme: {
+                    accent: "amber",
+                    bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
+                    border: "border-amber-500/40"
+                }
             }
         ];
 
@@ -1743,6 +1878,88 @@
 
             // Badges (if present)
             const pdpBadgeEl = document.getElementById('pdp-badge');
+            const trustBox = document.getElementById('pdp-trust-badges-container');
+            if (trustBox) {
+                if (p.category === 'essentials') {
+                    trustBox.innerHTML = `
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0 border border-amber-200 text-sm">
+                                <i class="fa-solid fa-ban-smoking"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">100% Fragrance Free</div>
+                                <div class="text-[10px] text-gray-500">Pure Ihram Halal Friendly</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 border border-emerald-200 text-sm">
+                                <i class="fa-solid fa-leaf"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">100% Natural Herbal</div>
+                                <div class="text-[10px] text-gray-500">SLS & Paraben Free</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center flex-shrink-0 border border-purple-200 text-sm">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Hajj & Umrah Tested</div>
+                                <div class="text-[10px] text-gray-500">Guaranteed Shariah Compliant</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 border border-blue-200 text-sm">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Cash on Delivery</div>
+                                <div class="text-[10px] text-gray-500">Pay cash at doorstep</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    trustBox.innerHTML = `
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-gold-50 text-gold-700 flex items-center justify-center flex-shrink-0 border border-gold-200 text-sm">
+                                <i class="fa-solid fa-droplet-slash"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">100% Waterproof</div>
+                                <div class="text-[10px] text-gray-500">Premium laminated cards</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 border border-emerald-200 text-sm">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Cash on Delivery</div>
+                                <div class="text-[10px] text-gray-500">Pay cash at your doorstep</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center flex-shrink-0 border border-purple-200 text-sm">
+                                <i class="fa-solid fa-ring"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Tasbih Counter Free</div>
+                                <div class="text-[10px] text-gray-500">Free Tawaf 7-bead tasbih</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 border border-blue-200 text-sm">
+                                <i class="fa-solid fa-book-quran"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Authentic Sunnah</div>
+                                <div class="text-[10px] text-gray-500">Authentic Hadith references</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
             if (pdpBadgeEl) pdpBadgeEl.textContent = p.badge;
             const pdpSkuBadgeEl = document.getElementById('pdp-sku-badge');
             if (pdpSkuBadgeEl) pdpSkuBadgeEl.textContent = `SKU: ${activeSku}`;
