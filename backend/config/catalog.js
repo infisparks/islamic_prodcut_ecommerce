@@ -253,8 +253,8 @@ const catalog = [
     sku: "fati_ess_soap",
     dimensions: { length: 10, breadth: 7, height: 3 },
     price: 99,
-    weightKg: 0.06,
-    weightLabel: "60gm",
+    weightKg: 0.08,
+    weightLabel: "80gm",
     image: "product/essentials/soap-nobg.webp"
   },
   {
@@ -264,9 +264,9 @@ const catalog = [
     hsn: "1513",
     sku: "fati_ess_oil",
     dimensions: { length: 12, breadth: 5, height: 5 },
-    price: 199,
-    weightKg: 0.1,
-    weightLabel: "100ml",
+    price: 149,
+    weightKg: 0.06,
+    weightLabel: "50ml",
     image: "product/essentials/coconut-oil-nobg.webp"
   },
   {
@@ -288,10 +288,22 @@ const catalog = [
     hsn: "3402",
     sku: "fati_ess_wash",
     dimensions: { length: 15, breadth: 6, height: 6 },
-    price: 299,
+    price: 399,
     weightKg: 0.12,
     weightLabel: "100ml",
     image: "product/essentials/hand-body-wash-nobg.webp"
+  },
+  {
+    id: 13,
+    name: "Herbal Face Wash - Ihram Friendly & Fragrance Free",
+    category: "essentials",
+    hsn: "3304",
+    sku: "fati_ess_facewash",
+    dimensions: { length: 12, breadth: 4, height: 4 },
+    price: 299,
+    weightKg: 0.08,
+    weightLabel: "50ml",
+    image: "product/essentials/face-wash-nobg.webp"
   }
 ];
 
