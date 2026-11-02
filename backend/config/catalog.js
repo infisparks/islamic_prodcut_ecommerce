@@ -304,6 +304,31 @@ const catalog = [
     weightKg: 0.08,
     weightLabel: "50ml",
     image: "product/essentials/face-wash-nobg.webp"
+  },
+  {
+    id: 14,
+    name: "Umrah Family Combo - Complete Ihram Essentials Kit",
+    category: "essentials",
+    hsn: "3304",
+    sku: "fati_ess_combo",
+    dimensions: { length: 24, breadth: 18, height: 8 },
+    price: 999,
+    weightKg: 0.65,
+    weightLabel: "Family Box (7 Items)",
+    image: "product/offer/combo_banner.webp",
+    freeShipping: true
+  },
+  {
+    id: 99,
+    name: "FREE GIFT: Siwak Miswak Toothbrush + Natural Loofah Scrubber",
+    category: "essentials",
+    hsn: "9603",
+    sku: "fati_free_gift",
+    dimensions: { length: 15, breadth: 5, height: 3 },
+    price: 0,
+    weightKg: 0.05,
+    weightLabel: "Gift Pack",
+    image: "product/essentials/combo-whats-inside.webp"
   }
 ];
 

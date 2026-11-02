@@ -38,7 +38,7 @@
     <!-- FontAwesome, Tailwind & Razorpay Checkout CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
     <!-- Ultra-Fast Preload for Critical WebP Assets -->
     <link rel="preload" as="image" href="product/hero.webp" fetchpriority="high">
@@ -47,6 +47,7 @@
     <link rel="preload" as="image" href="product/essentials/shampoo-nobg.webp">
     <link rel="preload" as="image" href="product/essentials/hand-body-wash-nobg.webp">
     <link rel="preload" as="image" href="product/essentials/face-wash-nobg.webp">
+    <link rel="preload" as="image" href="product/offer/combo_banner.webp" fetchpriority="high">
     <link rel="preload" as="image" href="product/offer/banner_1.webp" fetchpriority="high">
     <link rel="preload" as="image" href="product/offer/banner_2.webp">
     <link rel="preload" as="image" href="product/offer/banner_3.webp">
@@ -296,107 +297,121 @@
             
             <h1 class="sr-only">Authentic Umrah Dua Cards & Companion Kit | Fatima Calligrapher</h1>
 
-            <!-- HERO SPECIAL OFFER SHOWCASE (Desktop: 4-Tier Grid | Mobile: 4-Slide Auto-Carousel, 100% Uncropped) -->
-            <div class="w-full max-w-6xl mx-auto my-1 sm:my-4">
-                <!-- DESKTOP / PC VIEW: Show all 4 banners side-by-side (Full Uncropped) -->
-                <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-3.5 items-stretch">
-                    <!-- Banner 1: Special Offer (₹599) -->
-                    <div onclick="window.location.href='product.html?id=1&variant=0'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <!-- Floating Reviews Button linking to bottom reviews section -->
-                        <a href="#reviews" onclick="event.stopPropagation();" class="absolute top-3 right-3 z-30 bg-black/85 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5 transition-all hover:scale-105">
-                            <span class="text-amber-400 text-[11px]">★★★★★</span>
-                            <span>Customer Reviews</span>
-                            <i class="fa-solid fa-arrow-down text-[10px] text-gold-400"></i>
-                        </a>
-                        <img src="product/offer/banner_1.webp" 
-                             alt="Umrah Card Gift Set - Special Offer ₹599 - FREE Shipping on Prepaid Orders" 
-                             fetchpriority="high" decoding="async" 
-                             width="1200" height="1200"
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
-                    </div>
-                    <!-- Banner 2: Special Offer (₹899) -->
-                    <div onclick="window.location.href='product.html?id=1&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/banner_2.webp" 
-                             alt="Umrah Card Gift Set & Travel Janamaz - MRP ₹1118 Now Only ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
-                             fetchpriority="high" decoding="async" 
-                             width="1200" height="1200"
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
-                    </div>
-                    <!-- Banner 3: Combo Offer (₹899) -->
-                    <div onclick="window.location.href='product.html?id=1&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/banner_3.webp" 
-                             alt="Umrah Card Gift Set & Travel Janamaz Combo Offer ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
-                             decoding="async" 
-                             width="1200" height="1200"
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
-                    </div>
-                    <!-- Banner 4: Special Offer (₹599) -->
-                    <div onclick="window.location.href='product.html?id=1&variant=0'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.25)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/banner_4.webp" 
-                             alt="Umrah Card Gift Set - MRP ₹699 Now Only ₹599 - FREE Shipping on Prepaid Orders" 
-                             decoding="async" 
-                             width="1200" height="1200"
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.01] transition-transform duration-500">
-                    </div>
-                </div>
-
-                <!-- MOBILE VIEW: Premium Auto-Slidable Carousel (100% Uncropped & Fits ~Half Screen) -->
-                <div class="block md:hidden relative max-w-[340px] xs:max-w-[370px] mx-auto select-none" id="hero-offer-mobile-carousel">
-                    <!-- Floating Reviews Button linking to bottom reviews section -->
-                    <a href="#reviews" class="absolute top-2.5 right-2.5 z-30 bg-black/85 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shadow-md flex items-center gap-1 transition-all active:scale-95">
-                        <span class="text-amber-400 text-[9px]">★★★★★</span>
+            <!-- HERO SPECIAL OFFER SHOWCASE: UMRAH FAMILY COMBO 5-SLIDE AUTO-CAROUSEL (Launch Offer ₹999) -->
+            <div class="w-full max-w-[390px] xs:max-w-[420px] sm:max-w-xl md:max-w-2xl mx-auto my-1.5 sm:my-3 select-none">
+                <div id="hero-offer-mobile-carousel" class="group relative rounded-2xl overflow-hidden border-2 border-gold-400 bg-black/60 backdrop-blur-md shadow-[0_12px_45px_rgba(212,175,55,0.35)] hover:border-gold-300 hover:shadow-[0_16px_55px_rgba(197,154,63,0.5)] transition-all duration-300">
+                    
+                    <!-- Top Floating Reviews Button -->
+                    <a href="#reviews" onclick="event.stopPropagation();" class="absolute top-2.5 right-2.5 z-30 bg-black/85 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-lg flex items-center gap-1 transition-all hover:scale-105">
+                        <span class="text-amber-400 text-[10px]">★★★★★</span>
                         <span>Reviews</span>
-                        <i class="fa-solid fa-arrow-down text-[8.5px]"></i>
+                        <i class="fa-solid fa-arrow-down text-[9px] text-gold-400"></i>
                     </a>
-                    <!-- Carousel Container with natural aspect ratio to show entire artwork without cropping -->
-                    <div class="overflow-hidden rounded-xl border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_6px_20px_rgba(0,0,0,0.5)]">
-                        <div id="hero-carousel-track" class="flex transition-transform duration-500 ease-out w-full">
-                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=0'">
-                                <img src="product/offer/banner_1.webp" 
-                                     alt="Umrah Card Gift Set - Special Offer ₹599 - FREE Shipping on Prepaid Orders" 
-                                     fetchpriority="high" decoding="async" 
-                                     width="1200" height="1200"
-                                     class="w-full h-auto object-contain rounded-xl block">
+
+                    <!-- Left / Right Navigation Chevrons -->
+                    <button type="button" onclick="prevHeroSlide(event)" aria-label="Previous Slide" 
+                            class="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-black/65 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/50 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer opacity-85 hover:opacity-100 hover:scale-110 active:scale-95 shadow-md">
+                        <i class="fa-solid fa-chevron-left text-[11px]"></i>
+                    </button>
+                    <button type="button" onclick="nextHeroSlide(event)" aria-label="Next Slide" 
+                            class="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-black/65 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/50 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer opacity-85 hover:opacity-100 hover:scale-110 active:scale-95 shadow-md">
+                        <i class="fa-solid fa-chevron-right text-[11px]"></i>
+                    </button>
+
+                    <!-- Sliding Track (5 Gallery Slides) -->
+                    <div id="hero-carousel-track" class="flex transition-transform duration-500 ease-out" style="transform: translateX(0%);">
+                        
+                        <!-- Slide 1: Combo Launch Banner -->
+                        <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer">
+                            <div class="absolute top-2.5 left-2.5 z-20 bg-rose-950/90 text-gold-300 border border-gold-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[9.5px] font-black tracking-wider uppercase shadow-md flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                <span>Launch Offer • 57% OFF</span>
                             </div>
-                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=1'">
-                                <img src="product/offer/banner_2.webp" 
-                                     alt="Umrah Card Gift Set & Travel Janamaz - MRP ₹1118 Now Only ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
-                                     decoding="async" 
-                                     width="1200" height="1200"
-                                     class="w-full h-auto object-contain rounded-xl block">
+                            <img src="product/offer/combo_banner.webp" 
+                                 alt="Umrah Family Combo - Complete Ihram Essentials Kit - Launch Offer ₹999 + 2 Free Gifts" 
+                                 fetchpriority="high" decoding="async" 
+                                 width="1200" height="1200" 
+                                 class="w-full h-auto object-contain block pointer-events-none">
+                        </div>
+
+                        <!-- Slide 2: What's Inside Combo -->
+                        <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer">
+                            <div class="absolute top-2.5 left-2.5 z-20 bg-amber-950/90 text-gold-300 border border-gold-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[9.5px] font-black tracking-wider uppercase shadow-md flex items-center gap-1.5">
+                                <i class="fa-solid fa-gift text-gold-400 text-[9px]"></i>
+                                <span>7-in-1 Kit • Free Gifts Worth ₹299</span>
                             </div>
-                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=1'">
-                                <img src="product/offer/banner_3.webp" 
-                                     alt="Umrah Card Gift Set & Travel Janamaz Combo Offer ₹899 - FREE Shipping + Extra 10% OFF on Prepaid Orders" 
-                                     decoding="async" 
-                                     width="1200" height="1200"
-                                     class="w-full h-auto object-contain rounded-xl block">
+                            <img src="product/essentials/combo-whats-inside.webp" 
+                                 alt="What's Inside Umrah Family Combo - 5 Full-Size Essentials + 2 Free Gifts" 
+                                 loading="lazy" decoding="async" 
+                                 width="1200" height="1200" 
+                                 class="w-full h-auto object-contain block pointer-events-none">
+                        </div>
+
+                        <!-- Slide 3: Open Box with Refills on Table -->
+                        <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer">
+                            <div class="absolute top-2.5 left-2.5 z-20 bg-emerald-950/90 text-emerald-300 border border-emerald-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[9.5px] font-black tracking-wider uppercase shadow-md flex items-center gap-1.5">
+                                <i class="fa-solid fa-box-open text-emerald-400 text-[9px]"></i>
+                                <span>Complete Umrah Care Box</span>
                             </div>
-                            <div class="w-full flex-shrink-0 cursor-pointer" onclick="window.location.href='product.html?id=1&variant=0'">
-                                <img src="product/offer/banner_4.webp" 
-                                     alt="Umrah Card Gift Set - MRP ₹699 Now Only ₹599 - FREE Shipping on Prepaid Orders" 
-                                     decoding="async" 
-                                     width="1200" height="1200"
-                                     class="w-full h-auto object-contain rounded-xl block">
+                            <img src="product/essentials/combo-box-open.webp" 
+                                 alt="Complete Umrah Care Combo - Open Box on Table with Miswak Refill Pouches" 
+                                 loading="lazy" decoding="async" 
+                                 width="1200" height="1200" 
+                                 class="w-full h-auto object-contain block pointer-events-none">
+                        </div>
+
+                        <!-- Slide 4: For All The Family Members -->
+                        <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer">
+                            <div class="absolute top-2.5 left-2.5 z-20 bg-blue-950/90 text-blue-300 border border-blue-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[9.5px] font-black tracking-wider uppercase shadow-md flex items-center gap-1.5">
+                                <i class="fa-solid fa-people-roof text-blue-400 text-[9px]"></i>
+                                <span>For All Family Members in Ihram</span>
                             </div>
+                            <img src="product/essentials/combo-family.webp" 
+                                 alt="For All The Family Members - Ihram Friendly Fragrance Free Care" 
+                                 loading="lazy" decoding="async" 
+                                 width="1200" height="1200" 
+                                 class="w-full h-auto object-contain block pointer-events-none">
+                        </div>
+
+                        <!-- Slide 5: Certified & Trusted -->
+                        <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer">
+                            <div class="absolute top-2.5 left-2.5 z-20 bg-gold-950/90 text-gold-300 border border-gold-500/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[9.5px] font-black tracking-wider uppercase shadow-md flex items-center gap-1.5">
+                                <i class="fa-solid fa-certificate text-gold-400 text-[9px]"></i>
+                                <span>Govt. Lab Certified & Trusted</span>
+                            </div>
+                            <img src="product/essentials/certified-trusted.webp" 
+                                 alt="Certified & Trusted - Sairaj Cosmetics Academy Lab Certification" 
+                                 loading="lazy" decoding="async" 
+                                 width="1200" height="1200" 
+                                 class="w-full h-auto object-contain block pointer-events-none">
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Quick Action & Carousel Dots Strip -->
+                    <div class="relative p-2 sm:p-2.5 bg-gradient-to-r from-onyx via-black to-onyx border-t border-gold-500/40 flex items-center justify-between gap-2">
+                        <!-- Left Price Callout -->
+                        <div class="text-left pl-1">
+                            <div class="text-[11px] sm:text-xs font-black text-gold-300">₹999 ONLY <span class="line-through text-gray-500 text-[9.5px] font-normal">₹2300</span></div>
+                            <div class="text-[9px] text-emerald-400 font-bold">+ 2 FREE Gifts Worth ₹299</div>
+                        </div>
+
+                        <!-- Center 5 Luxury Indicator Dots -->
+                        <div class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/60 border border-gold-500/30">
+                            <button type="button" onclick="setHeroSlide(0)" aria-label="Slide 1" class="hero-dot h-1 rounded-full transition-all duration-300 w-5 bg-gold-400 shadow-sm"></button>
+                            <button type="button" onclick="setHeroSlide(1)" aria-label="Slide 2" class="hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60"></button>
+                            <button type="button" onclick="setHeroSlide(2)" aria-label="Slide 3" class="hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60"></button>
+                            <button type="button" onclick="setHeroSlide(3)" aria-label="Slide 4" class="hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60"></button>
+                            <button type="button" onclick="setHeroSlide(4)" aria-label="Slide 5" class="hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60"></button>
+                        </div>
+
+                        <!-- Right CTA Button -->
+                        <div onclick="window.location.href='product.html?id=14'" class="bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-onyx font-black text-[10px] sm:text-xs px-3 sm:px-4 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 transition-transform">
+                            <span>Order Combo</span>
+                            <i class="fa-solid fa-arrow-right text-[9px]"></i>
                         </div>
                     </div>
 
-                    <!-- Left / Right Touch Nav Arrows -->
-                    <button type="button" onclick="prevHeroSlide(event)" aria-label="Previous Offer" class="absolute left-1.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-black/80 border border-gold-500/50 text-gold-300 hover:text-white flex items-center justify-center text-[9px] shadow-lg transition-transform active:scale-90 z-20">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <button type="button" onclick="nextHeroSlide(event)" aria-label="Next Offer" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-black/80 border border-gold-500/50 text-gold-300 hover:text-white flex items-center justify-center text-[9px] shadow-lg transition-transform active:scale-90 z-20">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </button>
-
-                    <!-- Luxury Indicators (4 Slides) -->
-                    <div class="flex items-center justify-center gap-1.5 mt-1.5">
-                        <button type="button" onclick="setHeroSlide(0)" class="hero-dot h-1 rounded-full transition-all duration-300 w-5 bg-gold-400 shadow-sm" aria-label="Offer 1"></button>
-                        <button type="button" onclick="setHeroSlide(1)" class="hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60" aria-label="Offer 2"></button>
-                        <button type="button" onclick="setHeroSlide(2)" class="hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60" aria-label="Offer 3"></button>
-                        <button type="button" onclick="setHeroSlide(3)" class="hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60" aria-label="Offer 4"></button>
-                    </div>
                 </div>
             </div>
 
@@ -1867,8 +1882,31 @@
         </div>
     </div>
 
+    <!-- FLOATING RIGHT-SIDE "OUR REVIEWS" BADGE -->
+    <a href="#reviews" onclick="scrollToReviewsSection(event)" id="floating-reviews-tab" aria-label="Customer Reviews" 
+       class="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-[#121316]/95 hover:bg-black text-[#FAF7F2] border-l-2 border-t-2 border-b-2 border-gold-500 shadow-[0_4px_22px_rgba(212,175,55,0.45)] rounded-l-2xl py-3 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1 active:scale-95 group backdrop-blur-md select-none">
+        <div class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 transition-transform shadow-xs">
+            <i class="fa-solid fa-star text-gold-400"></i>
+        </div>
+        <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FAF7F2] [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Our Reviews</span>
+    </a>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        function scrollToReviewsSection(e) {
+            if (e) e.preventDefault();
+            const reviewsEl = document.getElementById('reviews');
+            if (reviewsEl) {
+                const topOffset = 80;
+                const elementPosition = reviewsEl.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - topOffset;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
         // Full catalog of 12 SKUs with kit variants and specification details (1 Image + 1 Video per product)
         const products = [
             {
@@ -2283,7 +2321,8 @@
                 images: [
                     "product/essentials/soap-hero.webp",
                     "product/essentials/soap-badges.webp",
-                    "product/essentials/soap-benefits.webp"
+                    "product/essentials/soap-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(586)",
@@ -2310,7 +2349,8 @@
                 images: [
                     "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/coconut-oil-badges.webp",
-                    "product/essentials/coconut-oil-benefits.webp"
+                    "product/essentials/coconut-oil-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(442)",
@@ -2337,7 +2377,8 @@
                 images: [
                     "product/essentials/shampoo-hero.webp",
                     "product/essentials/shampoo-badges.webp",
-                    "product/essentials/shampoo-benefits.webp"
+                    "product/essentials/shampoo-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(389)",
@@ -2364,7 +2405,8 @@
                 images: [
                     "product/essentials/hand-body-wash-hero.webp",
                     "product/essentials/hand-body-wash-badges.webp",
-                    "product/essentials/hand-body-wash-benefits.webp"
+                    "product/essentials/hand-body-wash-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(512)",
@@ -2391,23 +2433,54 @@
                 images: [
                     "product/essentials/face-wash-hero.webp",
                     "product/essentials/face-wash-badges.webp",
-                    "product/essentials/face-wash-benefits.webp"
+                    "product/essentials/face-wash-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(428)",
                 desc: "100% Fragrance-Free, SLS-Free & Paraben-Free Herbal Face Wash specifically crafted for men and women in Ihram.",
                 features: ["100% Fragrance Free (Ihram Friendly)", "Niacinamide - Brightens & Evens Skin Tone", "Licorice Infused - Soothes & Calms Skin", "SLS Free & No Parabens"]
+            },
+            {
+                id: 14,
+                name: "Umrah Family Combo - Complete Ihram Essentials Kit",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3304",
+                color: "Complete Luxury Gold Gift Box",
+                size: "Full Family Kit (7 Items)",
+                dimensions: "24 * 18 * 8 cm",
+                material: "Natural Botanicals, Aloe Vera, Sidr & Organic Extracts",
+                weight: "Family Box (7 Items)",
+                sku: "fati_ess_combo",
+                soldCount: "2,410 sold",
+                price: 999,
+                oldPrice: 2300,
+                freeShipping: true,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/offer/combo_banner.webp",
+                images: [
+                    "product/offer/combo_banner.webp",
+                    "product/essentials/combo-whats-inside.webp",
+                    "product/essentials/combo-box-open.webp",
+                    "product/essentials/combo-family.webp",
+                    "product/essentials/certified-trusted.webp"
+                ],
+                badge: "FAMILY COMBO • 57% OFF",
+                rating: "(620)",
+                desc: "Complete Umrah Family Care Combo for all family members in Ihram. Includes 5 full-size fragrance-free essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Toothbrush + Natural Loofah Scrubber). 100% Halal & Lab Certified.",
+                features: ["5 Full-Size Ihram Essentials + 2 Free Gifts", "Siwak Miswak + Loofah Worth ₹299 FREE", "100% Fragrance Free & Halal Certified", "Govt. Authorised Academy Lab Certified"]
             }
         ];
 
-        // Ensure cancelled (oldPrice) is always exactly double the selling price
+        // Ensure cancelled (oldPrice) is always double unless custom set (e.g. Combo ₹2300)
         products.forEach(p => {
             if (p.variants && p.variants.length > 0) {
                 p.variants.forEach(v => {
-                    v.oldPrice = v.price * 2;
+                    if (!v.oldPrice) v.oldPrice = v.price * 2;
                 });
                 p.oldPrice = p.variants[0].oldPrice;
-            } else {
+            } else if (!p.oldPrice) {
                 p.oldPrice = p.price * 2;
             }
         });
@@ -5460,23 +5533,47 @@
             `;
         }
 
-        // Hero Mobile Offer Carousel Controller (Auto-slidable + Touch Swipe)
+        // Hero Mobile Offer Carousel Controller (Continuous Seamless Infinite Loop + Touch Swipe)
         function initHeroOfferCarousel() {
-            let currentSlide = 0;
             const track = document.getElementById('hero-carousel-track');
-            const totalSlides = track ? track.children.length : 2;
+            const container = document.getElementById('hero-offer-mobile-carousel');
+            if (!track || !container) return;
+
+            const originalSlides = Array.from(track.children);
+            const numSlides = originalSlides.length; // 5
+            if (numSlides <= 1) return;
+
+            // Clone first slide to end and last slide to start for 100% seamless infinite looping
+            const firstClone = originalSlides[0].cloneNode(true);
+            const lastClone = originalSlides[numSlides - 1].cloneNode(true);
+            firstClone.setAttribute('data-clone', 'first');
+            lastClone.setAttribute('data-clone', 'last');
+
+            track.appendChild(firstClone);
+            track.insertBefore(lastClone, originalSlides[0]);
+
+            // Track indices:
+            // 0: Clone of Slide 4
+            // 1: Slide 0
+            // ...
+            // 5: Slide 4
+            // 6: Clone of Slide 0
+            let currentIndex = 1;
+            let isTransitioning = false;
             let slideInterval = null;
             let touchStartX = 0;
             let touchEndX = 0;
 
-            function updateHeroCarousel() {
-                const track = document.getElementById('hero-carousel-track');
+            // Initialize track position at index 1 without transition
+            track.style.transition = 'none';
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            void track.offsetWidth;
+
+            function updateDots() {
                 const dots = document.querySelectorAll('.hero-dot');
-                if (track) {
-                    track.style.transform = `translateX(-${currentSlide * 100}%)`;
-                }
+                const activeDot = (currentIndex - 1 + numSlides) % numSlides;
                 dots.forEach((dot, idx) => {
-                    if (idx === currentSlide) {
+                    if (idx === activeDot) {
                         dot.className = "hero-dot h-1 rounded-full transition-all duration-300 w-5 bg-gold-400 shadow-sm";
                     } else {
                         dot.className = "hero-dot h-1 rounded-full transition-all duration-300 w-1.5 bg-white/30 hover:bg-white/60";
@@ -5484,59 +5581,93 @@
                 });
             }
 
-            window.setHeroSlide = function(idx) {
-                currentSlide = (idx + totalSlides) % totalSlides;
-                updateHeroCarousel();
+            function moveToSlide(index, animated = true) {
+                if (animated) {
+                    isTransitioning = true;
+                    track.style.transition = 'transform 500ms cubic-bezier(0.25, 1, 0.5, 1)';
+                } else {
+                    track.style.transition = 'none';
+                }
+                currentIndex = index;
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                updateDots();
+            }
+
+            track.addEventListener('transitionend', () => {
+                isTransitioning = false;
+                // If we smoothly slid to the end clone (index 6)
+                if (currentIndex === numSlides + 1) {
+                    track.style.transition = 'none';
+                    currentIndex = 1;
+                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    void track.offsetWidth;
+                }
+                // If we smoothly slid to the start clone (index 0)
+                else if (currentIndex === 0) {
+                    track.style.transition = 'none';
+                    currentIndex = numSlides;
+                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    void track.offsetWidth;
+                }
+                updateDots();
+            });
+
+            window.setHeroSlide = function(dotIdx) {
+                if (isTransitioning) return;
+                moveToSlide(dotIdx + 1, true);
                 resetAutoSlide();
             };
 
             window.nextHeroSlide = function(e) {
                 if (e) e.stopPropagation();
-                window.setHeroSlide(currentSlide + 1);
+                if (isTransitioning) return;
+                moveToSlide(currentIndex + 1, true);
+                resetAutoSlide();
             };
 
             window.prevHeroSlide = function(e) {
                 if (e) e.stopPropagation();
-                window.setHeroSlide(currentSlide - 1);
+                if (isTransitioning) return;
+                moveToSlide(currentIndex - 1, true);
+                resetAutoSlide();
             };
 
             function startAutoSlide() {
                 if (slideInterval) clearInterval(slideInterval);
                 slideInterval = setInterval(() => {
-                    currentSlide = (currentSlide + 1) % totalSlides;
-                    updateHeroCarousel();
-                }, 3500);
+                    if (!isTransitioning) {
+                        moveToSlide(currentIndex + 1, true);
+                    }
+                }, 3200);
             }
 
             function resetAutoSlide() {
                 startAutoSlide();
             }
 
-            const container = document.getElementById('hero-offer-mobile-carousel');
-            if (container) {
-                container.addEventListener('touchstart', (e) => {
-                    touchStartX = e.changedTouches[0].screenX;
-                    clearInterval(slideInterval);
-                }, { passive: true });
+            container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                clearInterval(slideInterval);
+            }, { passive: true });
 
-                container.addEventListener('touchend', (e) => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    const diff = touchStartX - touchEndX;
-                    if (Math.abs(diff) > 40) {
-                        if (diff > 0) {
-                            window.setHeroSlide(currentSlide + 1);
-                        } else {
-                            window.setHeroSlide(currentSlide - 1);
-                        }
+            container.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 40) {
+                    if (diff > 0) {
+                        window.nextHeroSlide();
                     } else {
-                        startAutoSlide();
+                        window.prevHeroSlide();
                     }
-                }, { passive: true });
+                } else {
+                    startAutoSlide();
+                }
+            }, { passive: true });
 
-                container.addEventListener('mouseenter', () => clearInterval(slideInterval));
-                container.addEventListener('mouseleave', () => startAutoSlide());
-            }
+            container.addEventListener('mouseenter', () => clearInterval(slideInterval));
+            container.addEventListener('mouseleave', () => startAutoSlide());
 
+            updateDots();
             startAutoSlide();
         }
 

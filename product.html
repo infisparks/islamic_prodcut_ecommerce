@@ -32,7 +32,8 @@
                     10: "product/essentials/coconut-oil-hero.webp",
                     11: "product/essentials/shampoo-hero.webp",
                     12: "product/essentials/hand-body-wash-hero.webp",
-                    13: "product/essentials/face-wash-hero.webp"
+                    13: "product/essentials/face-wash-hero.webp",
+                    14: "product/offer/combo_banner.webp"
                 };
                 var targetImg = prodImages[pid] || "product/umrah_card_english.webp";
                 window.__INITIAL_PDP_IMAGE__ = targetImg;
@@ -148,7 +149,7 @@
     </noscript>
 
     <!-- Razorpay Standard Checkout SDK -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-[#F5F6F8]">
 
@@ -377,6 +378,111 @@
                     <p id="pdp-desc" class="hidden sm:block text-xs sm:text-sm text-gray-600 leading-relaxed mb-3">
                         Authentic Umrah Dua cards with clear translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.
                     </p>
+
+                    <!-- UMRAH COMBO BUILDER CONTAINER (Visible only when product ID is 14) -->
+                    <div id="pdp-combo-builder-container" class="hidden mb-3">
+                        <!-- Mode Tabs -->
+                        <div class="grid grid-cols-2 gap-1.5 p-1 bg-amber-50/80 rounded-2xl border border-gold-400/60 shadow-xs mb-3">
+                            <button type="button" id="tab-combo-standard" onclick="setComboMode('standard')" class="py-2.5 px-2 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-onyx text-gold-400 shadow-sm border border-gold-500">
+                                <i class="fa-solid fa-gift text-gold-400"></i>
+                                <span>Family Kit (₹999)</span>
+                            </button>
+                            <button type="button" id="tab-combo-custom" onclick="setComboMode('custom')" class="py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-white text-onyx border border-gray-300 hover:bg-gold-50/50">
+                                <i class="fa-solid fa-sliders text-gold-600"></i>
+                                <span>Make Your Own Combo 🛠️</span>
+                            </button>
+                        </div>
+
+                        <!-- Standard Combo View -->
+                        <div id="combo-standard-view" class="bg-white border-2 border-gold-400 rounded-2xl p-3 sm:p-4 shadow-sm">
+                            <div class="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+                                <div>
+                                    <span class="text-[9px] font-extrabold uppercase tracking-wider text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">57% OFF • Launch Limited Offer</span>
+                                    <h3 class="font-bold text-xs sm:text-sm text-onyx mt-1">Complete Umrah Care Family Box (7-in-1 Kit)</h3>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-base sm:text-lg font-black text-onyx">₹999</div>
+                                    <div class="text-[10px] text-gray-400 line-through">MRP ₹2300</div>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5 text-xs text-gray-700 mb-2">
+                                <div class="flex items-center gap-2 bg-[#fdfbf7] p-1.5 sm:p-2 rounded-xl border border-gold-100">
+                                    <span class="w-5 h-5 rounded-md bg-gold-500/20 text-gold-800 font-bold flex items-center justify-center text-[10px] shrink-0">1</span>
+                                    <span class="font-medium text-onyx flex-1 text-[11px] sm:text-xs">Herbal Ihram Soap (80gm)</span>
+                                    <span class="text-emerald-700 font-bold text-[10.5px]">80gm</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#fdfbf7] p-1.5 sm:p-2 rounded-xl border border-gold-100">
+                                    <span class="w-5 h-5 rounded-md bg-gold-500/20 text-gold-800 font-bold flex items-center justify-center text-[10px] shrink-0">2</span>
+                                    <span class="font-medium text-onyx flex-1 text-[11px] sm:text-xs">Pure Coconut Oil - Fragrance Free (50ml)</span>
+                                    <span class="text-emerald-700 font-bold text-[10.5px]">50ml</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#fdfbf7] p-1.5 sm:p-2 rounded-xl border border-gold-100">
+                                    <span class="w-5 h-5 rounded-md bg-gold-500/20 text-gold-800 font-bold flex items-center justify-center text-[10px] shrink-0">3</span>
+                                    <span class="font-medium text-onyx flex-1 text-[11px] sm:text-xs">Herbal Hair Shampoo - Fragrance Free (100ml)</span>
+                                    <span class="text-emerald-700 font-bold text-[10.5px]">100ml</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#fdfbf7] p-1.5 sm:p-2 rounded-xl border border-gold-100">
+                                    <span class="w-5 h-5 rounded-md bg-gold-500/20 text-gold-800 font-bold flex items-center justify-center text-[10px] shrink-0">4</span>
+                                    <span class="font-medium text-onyx flex-1 text-[11px] sm:text-xs">Hand & Body Wash - Fragrance Free (100ml)</span>
+                                    <span class="text-emerald-700 font-bold text-[10.5px]">100ml</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-[#fdfbf7] p-1.5 sm:p-2 rounded-xl border border-gold-100">
+                                    <span class="w-5 h-5 rounded-md bg-gold-500/20 text-gold-800 font-bold flex items-center justify-center text-[10px] shrink-0">5</span>
+                                    <span class="font-medium text-onyx flex-1 text-[11px] sm:text-xs">Herbal Face Wash - Fragrance Free (50ml)</span>
+                                    <span class="text-emerald-700 font-bold text-[10.5px]">50ml</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-emerald-50/90 p-1.5 sm:p-2 rounded-xl border border-emerald-300">
+                                    <i class="fa-solid fa-gift text-emerald-600 text-sm shrink-0"></i>
+                                    <span class="font-bold text-emerald-950 flex-1 text-[11px] sm:text-xs">FREE GIFT 1: Siwak Miswak Toothbrush + 5 Refills</span>
+                                    <span class="text-emerald-700 font-bold text-[10px]">FREE (₹199)</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-emerald-50/90 p-1.5 sm:p-2 rounded-xl border border-emerald-300">
+                                    <i class="fa-solid fa-gift text-emerald-600 text-sm shrink-0"></i>
+                                    <span class="font-bold text-emerald-950 flex-1 text-[11px] sm:text-xs">FREE GIFT 2: Natural Body Loofah Scrubber</span>
+                                    <span class="text-emerald-700 font-bold text-[10px]">FREE (₹100)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Combo Builder View -->
+                        <div id="combo-custom-view" class="hidden bg-white border-2 border-gold-400 rounded-2xl p-3 sm:p-4 shadow-sm">
+                            <div class="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+                                <div>
+                                    <h3 class="font-bold text-xs sm:text-sm text-onyx">Customise Your Own Umrah Combo</h3>
+                                    <p class="text-[10px] text-gray-500">Pick any products below to create your personalised bundle</p>
+                                </div>
+                                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                    <i class="fa-solid fa-sliders"></i> Custom Kit
+                                </span>
+                            </div>
+
+                            <!-- Free Gifts Progress Bar -->
+                            <div id="combo-free-gift-alert" class="mb-3 p-2.5 rounded-xl border transition-all text-xs">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- List of Selectable Products -->
+                            <div id="custom-combo-items-list" class="space-y-2 mb-3">
+                                <!-- Populated dynamically -->
+                            </div>
+
+                            <!-- Custom Combo Price Summary Box -->
+                            <div class="bg-gray-50 p-2.5 sm:p-3 rounded-xl border border-gray-200">
+                                <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                                    <span>Selected Items:</span>
+                                    <span id="custom-combo-count" class="font-bold text-onyx">0 items</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                                    <span>Total MRP:</span>
+                                    <span id="custom-combo-mrp" class="font-bold line-through text-gray-400">₹0</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm sm:text-base font-extrabold text-onyx pt-1.5 border-t border-gray-200">
+                                    <span>Your Custom Combo:</span>
+                                    <span id="custom-combo-total" class="text-emerald-700 text-lg font-black">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- INTERACTIVE KIT / PACKAGE VARIANT SELECTION (Responsive 3-Card Grid) -->
                     <div id="pdp-variants-container" class="bg-white border border-gray-200 rounded-2xl p-2.5 sm:p-4 mb-3 shadow-xs">
@@ -899,8 +1005,31 @@
         </div>
     </footer>
 
+    <!-- FLOATING RIGHT-SIDE "OUR REVIEWS" BADGE -->
+    <a href="#reviews" onclick="scrollToReviewsSection(event)" id="floating-reviews-tab" aria-label="Customer Reviews" 
+       class="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-[#121316]/95 hover:bg-black text-[#FAF7F2] border-l-2 border-t-2 border-b-2 border-gold-500 shadow-[0_4px_22px_rgba(212,175,55,0.45)] rounded-l-2xl py-3 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1 active:scale-95 group backdrop-blur-md select-none">
+        <div class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 transition-transform shadow-xs">
+            <i class="fa-solid fa-star text-gold-400"></i>
+        </div>
+        <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FAF7F2] [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Our Reviews</span>
+    </a>
+
     <!-- PRODUCT CATALOG & JAVASCRIPT ENGINE -->
     <script>
+        function scrollToReviewsSection(e) {
+            if (e) e.preventDefault();
+            const reviewsEl = document.getElementById('reviews');
+            if (reviewsEl) {
+                const topOffset = 80;
+                const elementPosition = reviewsEl.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - topOffset;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
         const janamazColors = [
             { id: 'golden', name: 'Royal Gold', hex: '#D4AF37', border: '#C59A3F', image: 'product/janamaz/golden.webp' },
             { id: 'black', name: 'Midnight Black', hex: '#1C1C1E', border: '#444444', image: 'product/janamaz/black.webp' },
@@ -1391,7 +1520,8 @@
                 images: [
                     "product/essentials/soap-hero.webp",
                     "product/essentials/soap-badges.webp",
-                    "product/essentials/soap-benefits.webp"
+                    "product/essentials/soap-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(586)",
@@ -1423,7 +1553,8 @@
                 images: [
                     "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/coconut-oil-badges.webp",
-                    "product/essentials/coconut-oil-benefits.webp"
+                    "product/essentials/coconut-oil-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(442)",
@@ -1455,7 +1586,8 @@
                 images: [
                     "product/essentials/shampoo-hero.webp",
                     "product/essentials/shampoo-badges.webp",
-                    "product/essentials/shampoo-benefits.webp"
+                    "product/essentials/shampoo-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(389)",
@@ -1487,7 +1619,8 @@
                 images: [
                     "product/essentials/hand-body-wash-hero.webp",
                     "product/essentials/hand-body-wash-badges.webp",
-                    "product/essentials/hand-body-wash-benefits.webp"
+                    "product/essentials/hand-body-wash-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(512)",
@@ -1519,7 +1652,8 @@
                 images: [
                     "product/essentials/face-wash-hero.webp",
                     "product/essentials/face-wash-badges.webp",
-                    "product/essentials/face-wash-benefits.webp"
+                    "product/essentials/face-wash-benefits.webp",
+                    "product/essentials/certified-trusted.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(428)",
@@ -1530,17 +1664,52 @@
                     bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
                     border: "border-amber-500/40"
                 }
+            },
+            {
+                id: 14,
+                name: "Umrah Family Combo - Complete Ihram Essentials Kit",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "3304",
+                color: "Complete Luxury Gold Gift Box",
+                size: "Full Family Kit (7 Items)",
+                dimensions: "24 * 18 * 8 cm",
+                material: "Natural Botanicals, Aloe Vera, Sidr & Organic Extracts",
+                weight: "Family Box (7 Items)",
+                sku: "fati_ess_combo",
+                soldCount: "2,410 sold",
+                price: 999,
+                oldPrice: 2300,
+                freeShipping: true,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/offer/combo_banner.webp",
+                images: [
+                    "product/offer/combo_banner.webp",
+                    "product/essentials/combo-whats-inside.webp",
+                    "product/essentials/combo-box-open.webp",
+                    "product/essentials/combo-family.webp",
+                    "product/essentials/certified-trusted.webp"
+                ],
+                badge: "FAMILY COMBO • 57% OFF",
+                rating: "(620)",
+                desc: "Complete Umrah Family Care Combo for all family members in Ihram. Includes 5 full-size fragrance-free essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Toothbrush Starter Kit + Natural Loofah Scrubber). 100% Halal, SLS-Free & Lab Certified.",
+                features: ["5 Full-Size Ihram Essentials + 2 Free Gifts", "Siwak Miswak Starter Kit + Loofah FREE (₹299 Value)", "100% Fragrance Free & Halal Certified", "Govt. Authorised Academy Lab Certified"],
+                theme: {
+                    accent: "gold",
+                    bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
+                    border: "border-gold-500/40"
+                }
             }
         ];
 
-        // Ensure cancelled (oldPrice) is always exactly double the selling price
+        // Ensure cancelled (oldPrice) is always double unless custom set (e.g. Combo ₹2300)
         products.forEach(p => {
             if (p.variants && p.variants.length > 0) {
                 p.variants.forEach(v => {
-                    v.oldPrice = v.price * 2;
+                    if (!v.oldPrice) v.oldPrice = v.price * 2;
                 });
                 p.oldPrice = p.variants[0].oldPrice;
-            } else {
+            } else if (!p.oldPrice) {
                 p.oldPrice = p.price * 2;
             }
         });
@@ -1568,7 +1737,7 @@
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     if (Array.isArray(parsed)) {
-                        cart = parsed;
+                        cart = parsed.filter(i => i.id !== 99 && i.sku !== 'fati_free_gift');
                     }
                 }
             } catch (e) {
@@ -1763,6 +1932,24 @@
                 return items;
             }
 
+            if (p.category === 'essentials' || p.id === 14) {
+                if (p.images && Array.isArray(p.images)) {
+                    p.images.forEach((imgUrl, index) => {
+                        items.push({
+                            type: 'image',
+                            url: imgUrl,
+                            title: `${p.name} - View ${index + 1}`
+                        });
+                    });
+                } else if (p.image) {
+                    items.push({ type: 'image', url: p.image, title: p.name });
+                }
+                if (p.video) {
+                    items.push({ type: 'video', url: p.video, title: 'Product Demo Video' });
+                }
+                return items;
+            }
+
             const hasVariants = p.variants && p.variants.length > 0;
             const activeVariant = hasVariants ? p.variants[currentVariantIndex] : null;
 
@@ -1889,16 +2076,313 @@
             renderPdpView();
         }
 
+        let currentComboMode = 'standard'; // 'standard' or 'custom'
+
+        const customComboItems = [
+            {
+                key: 'cards',
+                id: 1,
+                name: 'Umrah Dua Cards Companion Kit',
+                desc: '35+ Laminated Cards + Tasbih + Lanyard + Zipper Pouch',
+                price: 599,
+                mrp: 1198,
+                image: 'product/umrah_card_english.webp',
+                checked: true,
+                hasLanguage: true,
+                selectedLang: 'English',
+                langOptions: [
+                    { lang: 'English', sku: 'fati_005', img: 'product/umrah_card_english.webp' },
+                    { lang: 'Urdu', sku: 'fati_002', img: 'product/umrah_card_urdu.webp' },
+                    { lang: 'Hindi', sku: 'fati_008', img: 'product/umrah_card_hindi.webp' },
+                    { lang: 'Roman', sku: 'fati_011', img: 'product/umrah_card_roman.webp' }
+                ]
+            },
+            {
+                key: 'janamaz',
+                id: 8,
+                name: 'Pocket Foldable Travel Janamaz',
+                desc: 'Water-resistant silky prayer mat + matching travel pouch',
+                price: 349,
+                mrp: 698,
+                image: 'product/janamaz/golden.webp',
+                checked: false,
+                hasColor: true,
+                selectedColor: 'Royal Gold',
+                colorOptions: [
+                    { name: 'Royal Gold', sku: 'fati_jnm_01', img: 'product/janamaz/golden.webp', hex: '#D4AF37' },
+                    { name: 'Emerald Green', sku: 'fati_jnm_02', img: 'product/janamaz/green.webp', hex: '#0F52BA' },
+                    { name: 'Rose Pink', sku: 'fati_jnm_03', img: 'product/janamaz/pink.webp', hex: '#E0115F' },
+                    { name: 'Midnight Black', sku: 'fati_jnm_04', img: 'product/janamaz/black.webp', hex: '#1C1D21' },
+                    { name: 'Slate Gray', sku: 'fati_jnm_05', img: 'product/janamaz/gray.webp', hex: '#708090' }
+                ]
+            },
+            {
+                key: 'soap',
+                id: 9,
+                sku: 'fati_ess_soap',
+                name: 'Herbal Ihram Friendly Soap (80gm)',
+                desc: '100% Fragrance Free • Shea Butter, Sidr & Aloe Vera',
+                price: 99,
+                mrp: 198,
+                weightKg: 0.08,
+                image: 'product/essentials/soap-nobg.webp',
+                checked: true
+            },
+            {
+                key: 'oil',
+                id: 10,
+                sku: 'fati_ess_oil',
+                name: 'Pure Coconut Oil (50ml)',
+                desc: '100% Cold-Pressed Unscented Oil • Prevents Skin Chafing',
+                price: 149,
+                mrp: 298,
+                weightKg: 0.06,
+                image: 'product/essentials/coconut-oil-nobg.webp',
+                checked: true
+            },
+            {
+                key: 'shampoo',
+                id: 11,
+                sku: 'fati_ess_shampoo',
+                name: 'Herbal Hair Shampoo (100ml)',
+                desc: 'Fragrance Free • Amla, Shikakai & Reetha Infusion',
+                price: 399,
+                mrp: 798,
+                weightKg: 0.12,
+                image: 'product/essentials/shampoo-nobg.webp',
+                checked: true
+            },
+            {
+                key: 'wash',
+                id: 12,
+                sku: 'fati_ess_wash',
+                name: 'Hand & Body Wash (100ml)',
+                desc: 'Fragrance Free • Aloe Vera, Sidr Leaves & Natural Honey',
+                price: 399,
+                mrp: 798,
+                weightKg: 0.12,
+                image: 'product/essentials/hand-body-wash-nobg.webp',
+                checked: true
+            },
+            {
+                key: 'facewash',
+                id: 13,
+                sku: 'fati_ess_facewash',
+                name: 'Herbal Face Wash (50ml)',
+                desc: 'Fragrance Free • Niacinamide & Soothing Licorice Extract',
+                price: 299,
+                mrp: 598,
+                weightKg: 0.08,
+                image: 'product/essentials/face-wash-nobg.webp',
+                checked: true
+            }
+        ];
+
+        function getCustomComboTotal() {
+            return customComboItems.filter(i => i.checked).reduce((sum, i) => sum + i.price, 0);
+        }
+
+        function getCustomComboMrp() {
+            return customComboItems.filter(i => i.checked).reduce((sum, i) => sum + i.mrp, 0);
+        }
+
+        function setComboMode(mode) {
+            currentComboMode = mode;
+            const btnStd = document.getElementById('tab-combo-standard');
+            const btnCust = document.getElementById('tab-combo-custom');
+            const viewStd = document.getElementById('combo-standard-view');
+            const viewCust = document.getElementById('combo-custom-view');
+
+            if (mode === 'standard') {
+                if (btnStd) btnStd.className = "py-2.5 px-2 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-onyx text-gold-400 shadow-sm border border-gold-500";
+                if (btnCust) btnCust.className = "py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-white text-onyx border border-gray-300 hover:bg-gold-50/50";
+                if (viewStd) viewStd.classList.remove('hidden');
+                if (viewCust) viewCust.classList.add('hidden');
+            } else {
+                if (btnCust) btnCust.className = "py-2.5 px-2 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-onyx text-gold-400 shadow-sm border border-gold-500";
+                if (btnStd) btnStd.className = "py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer bg-white text-onyx border border-gray-300 hover:bg-gold-50/50";
+                if (viewCust) viewCust.classList.remove('hidden');
+                if (viewStd) viewStd.classList.add('hidden');
+                renderCustomComboBuilder();
+            }
+            renderPdpView();
+        }
+
+        function toggleCustomComboItem(key) {
+            const item = customComboItems.find(i => i.key === key);
+            if (item) {
+                item.checked = !item.checked;
+                renderCustomComboBuilder();
+                renderPdpView();
+            }
+        }
+
+        function changeCustomComboLang(e, lang) {
+            if (e) e.stopPropagation();
+            const item = customComboItems.find(i => i.key === 'cards');
+            if (item) {
+                item.selectedLang = lang;
+                const opt = item.langOptions.find(o => o.lang === lang);
+                if (opt) item.image = opt.img;
+                renderCustomComboBuilder();
+            }
+        }
+
+        function changeCustomComboColor(e, colorName) {
+            if (e) e.stopPropagation();
+            const item = customComboItems.find(i => i.key === 'janamaz');
+            if (item) {
+                item.selectedColor = colorName;
+                const opt = item.colorOptions.find(o => o.name === colorName);
+                if (opt) item.image = opt.img;
+                renderCustomComboBuilder();
+            }
+        }
+
+        function renderCustomComboBuilder() {
+            const listEl = document.getElementById('custom-combo-items-list');
+            const alertEl = document.getElementById('combo-free-gift-alert');
+            const countEl = document.getElementById('custom-combo-count');
+            const mrpEl = document.getElementById('custom-combo-mrp');
+            const totalEl = document.getElementById('custom-combo-total');
+            if (!listEl) return;
+
+            const selected = customComboItems.filter(i => i.checked);
+            const total = selected.reduce((sum, i) => sum + i.price, 0);
+            const mrp = selected.reduce((sum, i) => sum + i.mrp, 0);
+
+            if (countEl) countEl.textContent = `${selected.length} items`;
+            if (mrpEl) mrpEl.textContent = `₹${mrp}`;
+            if (totalEl) totalEl.textContent = `₹${total}`;
+
+            // Free Gift Meter
+            if (alertEl) {
+                if (selected.length >= 3) {
+                    alertEl.className = "mb-3 p-2.5 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-950 flex items-center gap-2.5 transition-all";
+                    alertEl.innerHTML = `
+                        <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm shrink-0 shadow-xs">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <div class="flex-1 text-[11px] leading-snug">
+                            <span class="font-extrabold text-emerald-900 block text-xs">🎉 2 FREE GIFTS UNLOCKED! (₹299 Value)</span>
+                            <span class="text-emerald-800">Siwak Miswak Toothbrush Starter Kit + Natural Loofah Scrubber will be included FREE in your custom kit!</span>
+                        </div>
+                    `;
+                } else {
+                    const needed = 3 - selected.length;
+                    alertEl.className = "mb-3 p-2.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-950 flex items-center gap-2.5 transition-all";
+                    alertEl.innerHTML = `
+                        <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center text-sm shrink-0 shadow-xs">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <div class="flex-1 text-[11px] leading-snug">
+                            <span class="font-bold text-amber-950 block">Select ${needed} more product${needed > 1 ? 's' : ''} to unlock 2 FREE GIFTS!</span>
+                            <span class="text-amber-800">Get Siwak Miswak Toothbrush + Natural Loofah (Worth ₹299) 100% FREE!</span>
+                        </div>
+                    `;
+                }
+            }
+
+            // Render Items
+            listEl.innerHTML = customComboItems.map(item => {
+                const isChecked = item.checked;
+                return `
+                    <div onclick="toggleCustomComboItem('${item.key}')" 
+                         class="cursor-pointer rounded-xl p-2 sm:p-2.5 transition-all border-2 relative flex flex-col gap-1.5 ${
+                             isChecked 
+                                ? 'border-gold-500 bg-gold-50/50 shadow-xs ring-1 ring-gold-400/40' 
+                                : 'border-gray-200 bg-white hover:border-gray-300 opacity-75'
+                         }">
+                        <div class="flex items-center gap-2.5">
+                            <!-- Custom Checkbox -->
+                            <div class="w-5 h-5 rounded-md flex items-center justify-center border shrink-0 transition-colors ${
+                                isChecked ? 'bg-gold-500 border-gold-600 text-onyx shadow-xs' : 'border-gray-300 bg-white'
+                            }">
+                                ${isChecked ? '<i class="fa-solid fa-check text-[10px] font-black"></i>' : ''}
+                            </div>
+
+                            <!-- Thumbnail -->
+                            <div class="w-10 h-10 rounded-lg bg-pearl border border-gray-200/80 p-0.5 overflow-hidden shrink-0 flex items-center justify-center">
+                                <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain pointer-events-none">
+                            </div>
+
+                            <!-- Info -->
+                            <div class="flex-1 min-w-0">
+                                <div class="font-bold text-xs text-onyx truncate">${item.name}</div>
+                                <div class="text-[10px] text-gray-500 truncate">${item.desc}</div>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="text-right shrink-0">
+                                <div class="font-extrabold text-xs text-onyx">₹${item.price}</div>
+                                <div class="text-[9.5px] text-gray-400 line-through">₹${item.mrp}</div>
+                            </div>
+                        </div>
+
+                        <!-- Language Options (if Dua Cards) -->
+                        ${item.hasLanguage && isChecked ? `
+                            <div class="pt-1.5 mt-0.5 border-t border-gold-200/60 flex items-center gap-1.5 flex-wrap" onclick="event.stopPropagation()">
+                                <span class="text-[9.5px] font-bold text-gray-600">Language:</span>
+                                <div class="flex items-center gap-1 flex-wrap">
+                                    ${item.langOptions.map(opt => `
+                                        <button type="button" onclick="changeCustomComboLang(event, '${opt.lang}')" 
+                                                class="px-2 py-0.5 rounded-md text-[10px] font-bold border transition-all ${
+                                                    item.selectedLang === opt.lang 
+                                                        ? 'bg-onyx text-gold-400 border-gold-500 shadow-2xs' 
+                                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gold-50'
+                                                }">
+                                            ${opt.lang}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Color Options (if Janamaz) -->
+                        ${item.hasColor && isChecked ? `
+                            <div class="pt-1.5 mt-0.5 border-t border-gold-200/60 flex items-center gap-1.5 flex-wrap" onclick="event.stopPropagation()">
+                                <span class="text-[9.5px] font-bold text-gray-600">Color:</span>
+                                <div class="flex items-center gap-1 flex-wrap">
+                                    ${item.colorOptions.map(opt => `
+                                        <button type="button" onclick="changeCustomComboColor(event, '${opt.name}')" 
+                                                class="flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold border transition-all ${
+                                                    item.selectedColor === opt.name 
+                                                        ? 'bg-onyx text-gold-400 border-gold-500 shadow-2xs' 
+                                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gold-50'
+                                                }">
+                                            <span class="w-2 h-2 rounded-full border border-black/20" style="background-color: ${opt.hex};"></span>
+                                            <span>${opt.name.split(' ')[0]}</span>
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
         function renderPdpView() {
             const p = currentProduct;
             const hasVariants = p.variants && p.variants.length > 0;
             const activeVariant = hasVariants ? p.variants[currentVariantIndex] : null;
 
-            const activePrice = activeVariant ? activeVariant.price : p.price;
-            const activeOldPrice = activePrice * 2;
-            const activeSku = activeVariant ? activeVariant.sku : (p.sku || 'fati_001');
-            const activeWeight = activeVariant ? activeVariant.weight : p.weight;
-            const discountPercent = Math.round(((activeOldPrice - activePrice) / activeOldPrice) * 100);
+            const isComboPack = (p.id === 14);
+            const activePrice = isComboPack 
+                ? (currentComboMode === 'custom' ? getCustomComboTotal() : 999) 
+                : (activeVariant ? activeVariant.price : p.price);
+            const activeOldPrice = isComboPack 
+                ? (currentComboMode === 'custom' ? getCustomComboMrp() : 2300) 
+                : (activeVariant ? (activeVariant.oldPrice || (activeVariant.price * 2)) : (p.oldPrice || (p.price * 2)));
+            const activeSku = isComboPack 
+                ? 'fati_ess_combo' 
+                : (activeVariant ? activeVariant.sku : (p.sku || 'fati_001'));
+            const activeWeight = isComboPack 
+                ? (currentComboMode === 'custom' ? 'Custom Kit' : 'Family Box (7 Items)') 
+                : (activeVariant ? activeVariant.weight : p.weight);
+            const discountPercent = activeOldPrice > activePrice 
+                ? Math.round(((activeOldPrice - activePrice) / activeOldPrice) * 100) 
+                : 50;
             const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
             const isJanamazProd = (p.category === 'janamaz' || p.id === 8);
 
@@ -1913,7 +2397,46 @@
             const pdpBadgeEl = document.getElementById('pdp-badge');
             const trustBox = document.getElementById('pdp-trust-badges-container');
             if (trustBox) {
-                if (p.category === 'essentials') {
+                if (isComboPack) {
+                    trustBox.innerHTML = `
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0 border border-amber-200 text-sm">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">2 FREE Gifts Included</div>
+                                <div class="text-[10px] text-gray-500">Miswak + Scrubber (₹299)</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 border border-emerald-200 text-sm">
+                                <i class="fa-solid fa-certificate"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Govt. Certified Lab</div>
+                                <div class="text-[10px] text-gray-500">100% Halal & Authentic</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center flex-shrink-0 border border-purple-200 text-sm">
+                                <i class="fa-solid fa-ban-smoking"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">100% Fragrance Free</div>
+                                <div class="text-[10px] text-gray-500">Safe for Men & Women in Ihram</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0 border border-blue-200 text-sm">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-onyx text-xs">Free Delivery & COD</div>
+                                <div class="text-[10px] text-gray-500">Dispatches in 24 hours</div>
+                            </div>
+                        </div>
+                    `;
+                } else if (p.category === 'essentials') {
                     trustBox.innerHTML = `
                         <div class="flex items-start gap-2.5">
                             <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center flex-shrink-0 border border-amber-200 text-sm">
@@ -2019,29 +2542,37 @@
             // Sticky Bottom (Mobile)
             document.getElementById('sticky-pdp-price').textContent = `Rs. ${activePrice}`;
             document.getElementById('sticky-pdp-old-price').textContent = `Rs. ${activeOldPrice}`;
-            const stickyKitLabel = isJanamazProd 
-                ? `Color: ${curJanamazObj.name}` 
-                : (activeVariant ? (activeVariant.hasJanamaz ? `${activeVariant.shortName} (${curJanamazObj.name.split(' ')[1] || curJanamazObj.name})` : activeVariant.shortName) : (p.badge));
+            const stickyKitLabel = isComboPack
+                ? (currentComboMode === 'custom' ? `Custom Kit (${customComboItems.filter(i => i.checked).length} Items)` : 'Family Kit (7 Items)')
+                : (isJanamazProd 
+                    ? `Color: ${curJanamazObj.name}` 
+                    : (activeVariant ? (activeVariant.hasJanamaz ? `${activeVariant.shortName} (${curJanamazObj.name.split(' ')[1] || curJanamazObj.name})` : activeVariant.shortName) : (p.badge)));
             document.getElementById('sticky-pdp-kit').textContent = stickyKitLabel;
 
             // WhatsApp link
-            const janamazNote = (activeVariant && activeVariant.hasJanamaz) ? ` [Janamaz Color: ${curJanamazObj.name}]` : (isJanamazProd ? ` [Color: ${curJanamazObj.name}]` : '');
-            const waMsg = encodeURIComponent(`Assalam u Alaikum! I would like to order: ${p.name} (${activeVariant ? activeVariant.name : 'Standard'})${janamazNote} for Rs. ${activePrice}. Please confirm.`);
+            const janamazNote = isComboPack
+                ? ` [${currentComboMode === 'custom' ? 'Custom Combo' : 'Family Combo Kit'}]`
+                : ((activeVariant && activeVariant.hasJanamaz) ? ` [Janamaz Color: ${curJanamazObj.name}]` : (isJanamazProd ? ` [Color: ${curJanamazObj.name}]` : ''));
+            const waMsg = encodeURIComponent(`Assalam u Alaikum! I would like to order: ${p.name} (${activeVariant ? activeVariant.name : (isComboPack ? (currentComboMode === 'custom' ? 'Custom Kit' : 'Standard 7-in-1 Kit') : 'Standard')})${janamazNote} for Rs. ${activePrice}. Please confirm.`);
             document.getElementById('pdp-whatsapp-btn').href = `https://wa.me/919970347703?text=${waMsg}`;
 
             // Specifications Table
             document.getElementById('spec-brand').textContent = p.brand;
             document.getElementById('spec-sku').textContent = activeSku;
             document.getElementById('spec-price').innerHTML = `Rs. ${activePrice} <span class="text-gray-400 font-normal line-through">(Rs. ${activeOldPrice})</span>`;
-            document.getElementById('spec-dimensions').textContent = isJanamazProd ? `150gm • Folded 15x10cm (Open 100x60cm)` : ((activeVariant && activeVariant.hasJanamaz) ? `${activeWeight} • ${p.dimensions} (+ Janamaz 43x25")` : `${activeWeight} • ${p.dimensions}`);
-            document.getElementById('spec-material').textContent = isJanamazProd ? `Waterproof Silky Fabric + Matching Zipper Pouch` : ((activeVariant && activeVariant.hasJanamaz) ? `${p.material} + Soft Silky Janamaz` : p.material);
+            document.getElementById('spec-dimensions').textContent = isComboPack
+                ? '0.65kg • Complete Box 24x18x8cm'
+                : (isJanamazProd ? `150gm • Folded 15x10cm (Open 100x60cm)` : ((activeVariant && activeVariant.hasJanamaz) ? `${activeWeight} • ${p.dimensions} (+ Janamaz 43x25")` : `${activeWeight} • ${p.dimensions}`));
+            document.getElementById('spec-material').textContent = isComboPack
+                ? 'Natural Botanicals, Aloe Vera, Sidr & Organic Extracts'
+                : (isJanamazProd ? `Waterproof Silky Fabric + Matching Zipper Pouch` : ((activeVariant && activeVariant.hasJanamaz) ? `${p.material} + Soft Silky Janamaz` : p.material));
             document.getElementById('spec-hsn').textContent = `${p.hsn} • ${p.manufacturer}`;
 
             // Update Language Switcher Buttons state
             const langSection = document.getElementById('pdp-language-selector-section');
             const languages = ['English', 'Urdu', 'Hindi', 'Roman'];
             if (langSection) {
-                if (!isJanamazProd && ['English', 'Urdu', 'Hindi', 'Roman'].includes(p.language)) {
+                if (!isJanamazProd && !isComboPack && ['English', 'Urdu', 'Hindi', 'Roman'].includes(p.language)) {
                     langSection.classList.remove('hidden');
                     languages.forEach(l => {
                         const btn = document.getElementById(`lang-btn-${l}`);
@@ -2061,11 +2592,20 @@
             // Render Media
             renderPdpMediaView();
 
-            // Render Variants / Color Section
+            // Render Variants / Combo Builder Section
+            const comboContainer = document.getElementById('pdp-combo-builder-container');
             const variantsContainer = document.getElementById('pdp-variants-container');
             const variantsSlider = document.getElementById('pdp-variants-slider');
             const inclusionsBox = document.getElementById('pdp-inclusions-box');
             const optionsBadge = document.getElementById('pdp-kit-options-badge');
+
+            if (isComboPack) {
+                if (comboContainer) comboContainer.classList.remove('hidden');
+                if (variantsContainer) variantsContainer.classList.add('hidden');
+                renderCustomComboBuilder();
+            } else {
+                if (comboContainer) comboContainer.classList.add('hidden');
+            }
 
             if (hasVariants) {
                 variantsContainer.classList.remove('hidden');
@@ -2726,6 +3266,76 @@
         // CART & CHECKOUT ENGINE
         function addPdpProductToCart() {
             const p = currentProduct;
+
+            // 1. Handle Custom Combo Builder items (ID 14 & custom mode: charges actual individual item prices)
+            if (p.id === 14 && currentComboMode === 'custom') {
+                const selected = customComboItems.filter(i => i.checked);
+                if (selected.length === 0) {
+                    alert('Please select at least 1 item for your custom combo.');
+                    return;
+                }
+                cart = [];
+                selected.forEach(item => {
+                    let sku = item.sku;
+                    let vName = '';
+                    let itemImage = item.image;
+                    let jColor = undefined;
+
+                    if (item.hasLanguage) {
+                        const opt = item.langOptions.find(o => o.lang === item.selectedLang) || item.langOptions[0];
+                        sku = opt.sku;
+                        vName = `${opt.lang} Edition`;
+                        itemImage = opt.img;
+                    } else if (item.hasColor) {
+                        const opt = item.colorOptions.find(o => o.name === item.selectedColor) || item.colorOptions[0];
+                        sku = opt.sku;
+                        vName = opt.name;
+                        itemImage = opt.img;
+                        jColor = opt.name;
+                    }
+
+                    cart.push({
+                        cartKey: `${item.id}_${sku}`,
+                        id: item.id,
+                        name: item.name,
+                        sku: sku,
+                        variantName: vName,
+                        price: item.price,
+                        image: itemImage,
+                        weightKg: item.weightKg || 0.15,
+                        qty: 1,
+                        janamazColor: jColor
+                    });
+                });
+
+                saveCartToStorage();
+                updateCartUI(true);
+                showToast(`Custom Combo (${selected.length} items) added to Cart!`);
+                return;
+            }
+
+            // 2. Handle Standard Umrah Family Combo (ID 14 & standard mode: fixed ₹999 package price)
+            if (p.id === 14) {
+                cart = [
+                    {
+                        cartKey: '14_fati_ess_combo',
+                        id: 14,
+                        name: p.name,
+                        sku: 'fati_ess_combo',
+                        variantName: 'Complete Family Kit (7 Items)',
+                        price: 999,
+                        image: 'product/offer/combo_banner.webp',
+                        weightKg: 0.65,
+                        qty: 1,
+                        freeShipping: true
+                    }
+                ];
+                saveCartToStorage();
+                updateCartUI(true);
+                showToast(`Umrah Family Combo added to Cart (₹999 - Complete Kit)!`);
+                return;
+            }
+
             const hasVariants = p.variants && p.variants.length > 0;
             const variant = hasVariants ? p.variants[currentVariantIndex] : null;
             const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
@@ -2778,6 +3388,77 @@
         }
 
         function buyPdpProductNow() {
+            const p = currentProduct;
+
+            // 1. If Custom Combo mode on ID 14: charges actual individual prices
+            if (p.id === 14 && currentComboMode === 'custom') {
+                const selected = customComboItems.filter(i => i.checked);
+                if (selected.length === 0) {
+                    alert('Please select at least 1 item to buy your custom combo.');
+                    return;
+                }
+                cart = [];
+                selected.forEach(item => {
+                    let sku = item.sku;
+                    let vName = '';
+                    let itemImage = item.image;
+                    let jColor = undefined;
+
+                    if (item.hasLanguage) {
+                        const opt = item.langOptions.find(o => o.lang === item.selectedLang) || item.langOptions[0];
+                        sku = opt.sku;
+                        vName = `${opt.lang} Edition`;
+                        itemImage = opt.img;
+                    } else if (item.hasColor) {
+                        const opt = item.colorOptions.find(o => o.name === item.selectedColor) || item.colorOptions[0];
+                        sku = opt.sku;
+                        vName = opt.name;
+                        itemImage = opt.img;
+                        jColor = opt.name;
+                    }
+
+                    cart.push({
+                        cartKey: `${item.id}_${sku}`,
+                        id: item.id,
+                        name: item.name,
+                        sku: sku,
+                        variantName: vName,
+                        price: item.price,
+                        image: itemImage,
+                        weightKg: item.weightKg || 0.15,
+                        qty: 1,
+                        janamazColor: jColor
+                    });
+                });
+
+                saveCartToStorage();
+                window.location.href = 'checkout.html';
+                return;
+            }
+
+            // 2. If Standard Umrah Family Combo (ID 14, fixed ₹999 combo price)
+            if (p.id === 14) {
+                cart = [
+                    {
+                        cartKey: '14_fati_ess_combo',
+                        id: 14,
+                        name: p.name,
+                        sku: 'fati_ess_combo',
+                        variantName: 'Complete Family Kit (7 Items)',
+                        price: 999,
+                        image: 'product/offer/combo_banner.webp',
+                        weightKg: 0.65,
+                        qty: 1,
+                        freeShipping: true
+                    }
+                ];
+                saveCartToStorage();
+                window.location.href = 'checkout.html';
+                return;
+            }
+
+            // 3. For any other product direct Buy Now, clear cart to buy THIS item directly
+            cart = [];
             addPdpProductToCart();
             window.location.href = 'checkout.html';
         }

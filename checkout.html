@@ -525,6 +525,34 @@
             </div>
             <h3 class="font-cinzel text-lg sm:text-xl font-bold text-onyx">Order Placed Successfully!</h3>
             <p class="text-xs text-gray-600 mt-1">Alhamdulillah, your order has been confirmed and booked for express courier dispatch.</p>
+
+            <!-- CELEBRATORY SAVINGS BADGE -->
+            <div id="success-savings-box" class="my-3.5 bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white rounded-2xl p-3.5 sm:p-4 shadow-xl border border-emerald-400/40 text-left relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-28 h-28 bg-white/15 rounded-full blur-xl pointer-events-none"></div>
+                <div class="flex items-center justify-between gap-2.5 relative z-10">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl shadow-inner shrink-0">
+                            🎉
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-200">Mubarak! Huge Savings</div>
+                            <div class="text-lg sm:text-xl font-black text-white leading-tight">
+                                You Saved <span id="success-savings-amount" class="text-amber-300 font-black">Rs. 1,301</span>!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span id="success-savings-pill" class="inline-block bg-gradient-to-r from-amber-400 to-yellow-300 text-onyx text-[10px] sm:text-[11px] font-black px-2.5 py-1 rounded-full shadow uppercase tracking-wider">
+                            57% SAVED
+                        </span>
+                    </div>
+                </div>
+                <div class="mt-2.5 pt-2 border-t border-emerald-400/30 flex items-center justify-between text-[10.5px] text-emerald-100">
+                    <span><i class="fa-solid fa-gift mr-1 text-gold-300"></i> Special Offer + FREE Fast Delivery</span>
+                    <span class="font-extrabold text-white">Applied ✓</span>
+                </div>
+            </div>
+
             <div id="success-order-details" class="my-4 text-left bg-sand/60 p-3 rounded-xl border border-gold-200 text-xs space-y-1"></div>
             <a href="index.html" class="w-full gold-bg-gradient text-onyx font-extrabold py-3 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs mt-2">
                 <i class="fa-solid fa-house"></i>
@@ -716,6 +744,29 @@
                 price: 299,
                 oldPrice: 598,
                 weightKg: 0.08
+            },
+            {
+                id: 14,
+                name: "Umrah Family Combo - Complete Ihram Essentials Kit",
+                category: "essentials",
+                image: "product/offer/combo_banner.webp",
+                badge: "LAUNCH OFFER",
+                sku: "fati_ess_combo",
+                price: 999,
+                oldPrice: 2300,
+                weightKg: 0.65,
+                freeShipping: true
+            },
+            {
+                id: 99,
+                name: "FREE GIFT: Siwak Miswak Toothbrush + Natural Loofah Scrubber",
+                category: "essentials",
+                image: "product/essentials/combo-whats-inside.webp",
+                badge: "FREE GIFT",
+                sku: "fati_free_gift",
+                price: 0,
+                oldPrice: 299,
+                weightKg: 0.05
             }
         ];
 
@@ -877,33 +928,32 @@
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     if (Array.isArray(parsed) && parsed.length > 0) {
-                        checkoutCart = parsed;
+                        checkoutCart = parsed.filter(i => i.id !== 99 && i.sku !== 'fati_free_gift');
+                        localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
                     }
                 }
             } catch (e) {}
 
             if (prodId) {
-                // Direct product checkout parameter
+                // Direct product checkout parameter: buy THIS product directly
                 const p = catalogProducts.find(prod => prod.id === prodId) || catalogProducts[1];
                 const hasVariants = p.variants && p.variants.length > 0;
                 const v = hasVariants ? (p.variants[!isNaN(variantIdx) ? variantIdx : 0] || p.variants[0]) : null;
                 const cartKey = v ? `${p.id}_${v.sku}` : `${p.id}_default`;
 
-                if (!Array.isArray(checkoutCart)) checkoutCart = [];
-                const existing = checkoutCart.find(i => i.cartKey === cartKey);
-                if (!existing) {
-                    checkoutCart.push({
-                        cartKey: cartKey,
-                        id: p.id,
-                        name: p.name,
-                        sku: v ? v.sku : p.sku,
-                        variantName: v ? v.shortName : '',
-                        price: v ? v.price : p.price,
-                        image: (v && v.image) ? v.image : p.image,
-                        weightKg: v ? v.weightKg : (p.weightKg || 0.10),
-                        qty: 1
-                    });
-                }
+                checkoutCart = [{
+                    cartKey: cartKey,
+                    id: p.id,
+                    name: p.name,
+                    sku: v ? v.sku : p.sku,
+                    variantName: v ? v.shortName : (prodId === 14 ? 'Complete Family Kit (7 Items)' : ''),
+                    price: v ? v.price : p.price,
+                    image: (v && v.image) ? v.image : p.image,
+                    weightKg: v ? v.weightKg : (p.weightKg || 0.10),
+                    qty: 1,
+                    freeShipping: p.freeShipping || (v && v.freeShipping) || false
+                }];
+
                 localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
             } else {
                 // If still empty, default to English Card Standard Kit (Rs. 599)
@@ -1031,6 +1081,7 @@
             // - 10% OFF on prepaid for Combo sets (₹899) or orders >= ₹899
             // - 0% discount on ₹599 kit (Free delivery only, no 5% off)
             const hasCombo = checkoutCart.some(item => {
+                if (item.id === 14) return true;
                 const p = catalogProducts.find(prod => prod.id === item.id);
                 const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
                 return (v && v.hasJanamaz);
@@ -1734,6 +1785,49 @@
                 currency: 'INR',
                 order_id: orderData.orderId
             });
+
+            // Calculate Total Savings
+            const itemsList = (orderData.items && orderData.items.length > 0) ? orderData.items : (checkoutCart && checkoutCart.length > 0 ? checkoutCart : []);
+            let totalMrp = 0;
+            if (itemsList.length > 0) {
+                itemsList.forEach(item => {
+                    const q = item.quantity || item.qty || 1;
+                    if (item.id === 14 || item.sku === 'fati_ess_combo') {
+                        totalMrp += 2300 * q;
+                    } else if (item.id === 8 || (item.sku && String(item.sku).startsWith('fati_jnm'))) {
+                        totalMrp += 699 * q;
+                    } else if (item.id === 9 || item.sku === 'fati_ess_soap') {
+                        totalMrp += 198 * q;
+                    } else if (item.id === 10 || item.sku === 'fati_ess_oil') {
+                        totalMrp += 298 * q;
+                    } else if (item.id === 13 || item.sku === 'fati_ess_facewash') {
+                        totalMrp += 598 * q;
+                    } else if (item.id === 11 || item.id === 12 || item.sku === 'fati_ess_shampoo' || item.sku === 'fati_ess_wash') {
+                        totalMrp += 798 * q;
+                    } else {
+                        const unitP = item.price || item.unitPrice || 599;
+                        const itemMrp = item.oldPrice || (unitP >= 550 ? unitP * 2 : 1198);
+                        totalMrp += itemMrp * q;
+                    }
+                });
+            } else {
+                totalMrp = (val >= 800) ? 2300 : (val * 2);
+            }
+
+            const freeDeliverySavings = (orderData.pricing && orderData.pricing.shipping === 0) ? 100 : (val >= 598 ? 100 : 0);
+            const totalSavings = Math.max(0, Math.round((totalMrp + freeDeliverySavings) - val));
+            const savePercent = (totalMrp + freeDeliverySavings) > 0 ? Math.min(80, Math.round((totalSavings / (totalMrp + freeDeliverySavings)) * 100)) : 50;
+
+            const savingsBox = document.getElementById('success-savings-box');
+            const savingsAmountEl = document.getElementById('success-savings-amount');
+            const savingsPillEl = document.getElementById('success-savings-pill');
+            if (savingsBox && totalSavings > 0) {
+                savingsBox.classList.remove('hidden');
+                if (savingsAmountEl) savingsAmountEl.textContent = `Rs. ${totalSavings.toLocaleString('en-IN')}`;
+                if (savingsPillEl) savingsPillEl.textContent = `${savePercent}% SAVED`;
+            } else if (savingsBox) {
+                savingsBox.classList.add('hidden');
+            }
 
             // Clear Cart
             checkoutCart = [];

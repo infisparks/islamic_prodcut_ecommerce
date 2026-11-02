@@ -20,7 +20,7 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
       throw err;
     }
 
-    const qty = parseInt(rawItem.quantity, 10);
+    const qty = parseInt(rawItem.quantity || rawItem.qty || 1, 10) || 1;
     const lineTotal = catalogItem.unitPrice * qty;
     const lineWeight = catalogItem.weightKg * qty;
 
