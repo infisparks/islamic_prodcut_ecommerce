@@ -165,6 +165,14 @@ app.use('/api/webhooks', webhooksRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/meta', metaRouter);
 
+// Admin Dashboard Route (Strict No-Cache for instant updates)
+app.get(['/admin.html', '/admin'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.sendFile(path.join(rootDir, 'admin.html'));
+});
+
 // 7. Serve existing frontend static files & media directories with high-speed caching
 const rootDir = path.resolve(__dirname, '..');
 
@@ -214,10 +222,6 @@ app.get('/checkout.html', (req, res) => {
 
 app.get('/checkout', (req, res) => {
   res.sendFile(path.join(rootDir, 'checkout.html'));
-});
-
-app.get(['/admin.html', '/admin'], (req, res) => {
-  res.sendFile(path.join(rootDir, 'admin.html'));
 });
 
 // 8. 404 handler for API routes

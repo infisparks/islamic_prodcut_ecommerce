@@ -53,56 +53,93 @@
 
     <style>
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background-color: #F5F6F8;
-            color: #111827;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            letter-spacing: -0.011em;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .admin-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 1px 2px -1px rgba(15, 23, 42, 0.02);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .admin-card:hover {
+            box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
         }
         .custom-scrollbar::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F1F5F9;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #D1D5DB;
-            border-radius: 4px;
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+        .stat-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -4px rgba(15, 23, 42, 0.08);
+            border-color: #CBD5E1;
+        }
+        .action-btn {
+            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .action-btn:active {
+            transform: scale(0.97);
         }
         @media print {
             .no-print { display: none !important; }
         }
     </style>
 </head>
-<body class="bg-[#F5F6F8] text-[#111827] antialiased min-h-screen flex flex-col">
+<body class="bg-[#F8FAFC] text-[#0F172A] antialiased min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
 
     <!-- LOGIN OVERLAY / SCREEN -->
-    <div id="login-section" class="fixed inset-0 z-50 bg-[#F5F6F8] flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl border border-[#E5E7EB] shadow-sm max-w-md w-full p-6 sm:p-8">
+    <div id="login-section" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-2xl max-w-md w-full p-6 sm:p-8 relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600"></div>
             <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mx-auto mb-3 border border-indigo-100">
+                <div class="w-13 h-13 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-indigo-100 shadow-xs">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h1 class="text-xl sm:text-2xl font-bold text-[#111827]">Store Admin Login</h1>
-                <p class="text-xs text-[#6B7280] mt-1">Sign in with your Firebase Admin account to manage orders</p>
+                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Store Admin Login</h1>
+                <p class="text-xs text-slate-500 mt-1 font-medium">Sign in with your Firebase Admin account to manage orders</p>
             </div>
 
             <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-[#111827] mb-1">Admin Email <span class="text-red-500">*</span></label>
-                    <input type="email" id="login-email" required placeholder="admin@example.com" class="w-full px-3 py-2 text-sm rounded-lg border border-[#E5E7EB] focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white placeholder-gray-400">
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Admin Email <span class="text-rose-500">*</span></label>
+                    <input type="email" id="login-email" required placeholder="admin@example.com" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 bg-white placeholder-slate-400 font-medium transition-all shadow-2xs">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-[#111827] mb-1">Password <span class="text-red-500">*</span></label>
-                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-3 py-2 text-sm rounded-lg border border-[#E5E7EB] focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white placeholder-gray-400">
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Password <span class="text-rose-500">*</span></label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 bg-white placeholder-slate-400 font-medium transition-all shadow-2xs">
                 </div>
 
-                <div id="login-error-msg" class="hidden p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700"></div>
+                <div id="login-error-msg" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium"></div>
 
-                <button type="submit" id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                <button type="submit" id="login-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-sm hover:shadow flex items-center justify-center gap-2 cursor-pointer active:scale-98">
                     <span>Sign In to Dashboard</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
 
-            <div class="mt-6 pt-4 border-t border-[#E5E7EB] text-center text-xs text-[#6B7280]">
+            <div class="mt-6 pt-4 border-t border-slate-100 text-center text-[11px] text-slate-400 font-medium">
                 Protected by Firebase Authentication & Realtime Database
             </div>
         </div>
@@ -112,92 +149,101 @@
     <div id="dashboard-section" class="hidden flex-grow flex flex-col min-h-screen">
         
         <!-- TOP NAVIGATION HEADER BAR (Clean Full-Width Header - No Sidebar) -->
-        <header class="bg-white border-b border-[#E5E7EB] sticky top-0 z-30 shadow-xs">
-            <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/90 sticky top-0 z-30 shadow-[0_1px_3px_0_rgba(15,23,42,0.03)]">
+            <div class="max-w-[1680px] mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <!-- Brand / Logo -->
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm shadow-sm">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-700 via-indigo-600 to-indigo-500 text-white font-black flex items-center justify-center text-sm shadow-sm ring-2 ring-indigo-500/20">
                         FC
                     </div>
                     <div>
-                        <div class="text-sm font-bold text-[#111827] leading-none flex items-center gap-2">
+                        <div class="text-sm sm:text-base font-extrabold text-slate-900 leading-none flex items-center gap-2">
                             <span>FATIMA CALLIGRAPHER</span>
-                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                Live Store
+                            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>Live Store</span>
                             </span>
                         </div>
-                        <div class="text-[10.5px] text-[#6B7280] font-medium mt-0.5">Admin Management Portal</div>
+                        <div class="text-[11px] text-slate-500 font-medium mt-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-store text-indigo-500 text-[10px]"></i>
+                            <span>Admin Management & Fulfillment Portal</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Center Quick Navigation & Helpline -->
-                <div class="flex items-center gap-2.5 text-xs flex-wrap">
-                    <a href="/" target="_blank" class="px-3 py-1.5 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors flex items-center gap-1.5 border border-gray-200">
+                <div class="flex items-center gap-2 text-xs flex-wrap">
+                    <a href="/" target="_blank" class="px-3.5 py-1.5 rounded-xl text-slate-700 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 font-bold transition-all flex items-center gap-1.5 border border-slate-200/90 shadow-2xs">
                         <i class="fa-solid fa-arrow-up-right-from-square text-indigo-600 text-xs"></i>
                         <span>Storefront</span>
                     </a>
-                    <a href="tel:+919970347703" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-800 font-bold hover:bg-indigo-100 transition-colors flex items-center gap-1.5 border border-indigo-100">
+                    <a href="tel:+919970347703" class="px-3.5 py-1.5 rounded-xl bg-indigo-50/80 text-indigo-900 font-bold hover:bg-indigo-100 transition-colors flex items-center gap-1.5 border border-indigo-200/80 shadow-2xs">
                         <i class="fa-solid fa-phone text-indigo-600 text-xs"></i>
                         <span>+91 99703 47703</span>
                     </a>
-                    <a href="https://wa.me/919970347703" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 font-bold hover:bg-emerald-100 transition-colors flex items-center gap-1.5 border border-emerald-200">
+                    <a href="https://wa.me/919970347703" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-900 font-bold hover:bg-emerald-100 transition-colors flex items-center gap-1.5 border border-emerald-200 shadow-2xs">
                         <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i>
-                        <span>WhatsApp</span>
+                        <span>WhatsApp Helpline</span>
                     </a>
                 </div>
 
                 <!-- Right User Info & Logout -->
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center flex-shrink-0" id="user-avatar-initial">
+                    <div class="flex items-center gap-2.5 bg-slate-50/90 border border-slate-200/80 px-3 py-1.5 rounded-xl shadow-2xs">
+                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-indigo-700 text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-2xs" id="user-avatar-initial">
                             A
                         </div>
                         <div class="hidden md:block text-left">
-                            <div class="text-xs font-bold text-[#111827] max-w-[150px] truncate" id="admin-user-email">admin@example.com</div>
-                            <div class="text-[10px] text-[#6B7280] font-medium">Store Admin</div>
+                            <div class="text-xs font-bold text-slate-900 max-w-[150px] truncate" id="admin-user-email">admin@example.com</div>
+                            <div class="text-[9.5px] text-slate-500 font-medium">Store Admin</div>
                         </div>
                     </div>
-                    <button onclick="handleAdminLogout()" title="Logout" class="px-3 py-1.5 text-xs text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg font-bold transition-colors cursor-pointer flex items-center gap-1.5">
+                    <button onclick="handleAdminLogout()" title="Logout" class="px-3 py-1.5 text-xs text-rose-700 hover:text-white hover:bg-rose-600 border border-rose-200/90 rounded-xl font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs active:scale-95">
                         <i class="fa-solid fa-right-from-bracket text-xs"></i>
                         <span>Logout</span>
                     </button>
                 </div>
-            </div>
-        </header>
+            </div></header>
 
         <!-- MAIN CONTENT AREA -->
         <main class="flex-grow flex flex-col min-w-0 max-w-[1600px] w-full mx-auto">
             
             <!-- SUB-HEADER / ACTIONS TOOLBAR -->
-            <div class="bg-white/80 border-b border-[#E5E7EB] px-4 sm:px-6 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div class="bg-white border-b border-slate-200/90 px-4 sm:px-6 py-3.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-2xs">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-bold text-[#111827]">Orders & Realtime Analytics</h2>
-                    <p class="text-xs text-[#6B7280]">Realtime revenue tracking, order product editing, and automated Shiprocket settlement</p>
+                    <h2 class="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                        <span>Orders & Realtime Analytics</span>
+                        <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200/80">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span>Live Sync</span>
+                        </span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5 font-medium">Realtime revenue metrics, multi-item custom kit breakdown, and 1-click dispatch operations</p>
                 </div>
 
                 <!-- Export & Refresh Actions Toolbar -->
                 <div class="flex items-center gap-2 flex-wrap">
                     <!-- Excel Export Button -->
-                    <button onclick="exportToExcel()" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer" title="Export current filtered data to Excel (.xlsx)">
-                        <i class="fa-solid fa-file-excel text-emerald-600 text-sm"></i>
+                    <button onclick="exportToExcel()" class="action-btn px-3.5 py-2 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200/90 hover:border-emerald-300 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer" title="Export current filtered data to Excel (.xlsx)">
+                        <i class="fa-solid fa-file-excel text-emerald-600 text-xs"></i>
                         <span>Export Excel</span>
                     </button>
 
                     <!-- CSV Export Button -->
-                    <button onclick="exportToCSV()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer" title="Export current filtered data to CSV (.csv)">
-                        <i class="fa-solid fa-file-csv text-blue-600 text-sm"></i>
+                    <button onclick="exportToCSV()" class="action-btn px-3.5 py-2 bg-white hover:bg-blue-50 text-slate-700 hover:text-blue-800 border border-slate-200/90 hover:border-blue-300 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer" title="Export current filtered data to CSV (.csv)">
+                        <i class="fa-solid fa-file-csv text-blue-600 text-xs"></i>
                         <span>Export CSV</span>
                     </button>
 
                     <!-- PDF Report Export Button -->
-                    <button onclick="exportToPDF()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer" title="Download printable PDF Executive Report">
-                        <i class="fa-solid fa-file-pdf text-rose-600 text-sm"></i>
+                    <button onclick="exportToPDF()" class="action-btn px-3.5 py-2 bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-800 border border-slate-200/90 hover:border-rose-300 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer" title="Download printable PDF Executive Report">
+                        <i class="fa-solid fa-file-pdf text-rose-600 text-xs"></i>
                         <span>Export PDF</span>
                     </button>
 
                     <!-- Refresh Button -->
-                    <button onclick="loadOrdersAndStats()" class="px-3 py-1.5 bg-white hover:bg-gray-50 border border-[#E5E7EB] rounded-lg text-xs font-medium text-[#111827] flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer" title="Refresh data">
-                        <i class="fa-solid fa-arrows-rotate text-gray-500" id="refresh-icon"></i>
+                    <button onclick="loadOrdersAndStats()" class="action-btn px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer" title="Refresh data">
+                        <i class="fa-solid fa-arrows-rotate text-xs text-slate-300" id="refresh-icon"></i>
                         <span>Refresh</span>
                     </button>
                 </div>
@@ -207,59 +253,47 @@
             <div class="p-4 sm:p-6 space-y-6 flex-grow">
                 
                 <!-- DATE RANGE SELECTOR & PRESETS BAR -->
-                <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs space-y-3">
+                <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                         
                         <!-- Presets -->
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="text-xs font-bold text-[#111827] mr-1 flex items-center gap-1">
+                            <span class="text-xs font-bold text-slate-800 mr-1 flex items-center gap-1.5">
                                 <i class="fa-regular fa-calendar-days text-indigo-600"></i> Date:
                             </span>
-                            <button type="button" onclick="setDatePreset('all')" id="btn-preset-all" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                                All Time
-                            </button>
-                            <button type="button" onclick="setDatePreset('today')" id="btn-preset-today" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-semibold bg-indigo-600 text-white transition-colors cursor-pointer">
-                                Today
-                            </button>
-                            <button type="button" onclick="setDatePreset('yesterday')" id="btn-preset-yesterday" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                                Yesterday
-                            </button>
-                            <button type="button" onclick="setDatePreset('daybeforeyesterday')" id="btn-preset-daybeforeyesterday" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                                Day Before Yesterday
-                            </button>
-                            <button type="button" onclick="setDatePreset('last7days')" id="btn-preset-last7days" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                                Last 7 Days
-                            </button>
-                            <button type="button" onclick="setDatePreset('thismonth')" id="btn-preset-thismonth" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                                This Month
-                            </button>
-                            <button type="button" onclick="setDatePreset('last30days')" id="btn-preset-last30days" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer">
-                                Last 30 Days
-                            </button>
+                            <div class="inline-flex p-0.5 bg-slate-100 rounded-xl gap-0.5 flex-wrap border border-slate-200/60">
+                                <button type="button" onclick="setDatePreset('all')" id="btn-preset-all" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer">All Time</button>
+                                <button type="button" onclick="setDatePreset('today')" id="btn-preset-today" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-bold bg-slate-900 text-white shadow-xs transition-all cursor-pointer">Today</button>
+                                <button type="button" onclick="setDatePreset('yesterday')" id="btn-preset-yesterday" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer">Yesterday</button>
+                                <button type="button" onclick="setDatePreset('daybeforeyesterday')" id="btn-preset-daybeforeyesterday" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer">Day Before</button>
+                                <button type="button" onclick="setDatePreset('last7days')" id="btn-preset-last7days" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer">Last 7 Days</button>
+                                <button type="button" onclick="setDatePreset('thismonth')" id="btn-preset-thismonth" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer">This Month</button>
+                                <button type="button" onclick="setDatePreset('last30days')" id="btn-preset-last30days" class="date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer">Last 30 Days</button>
+                            </div>
                         </div>
 
                         <!-- Specific Single Date & Custom Range Pickers -->
                         <div class="flex items-center gap-2 flex-wrap">
                             <!-- Specific Date Selector -->
-                            <div class="flex items-center gap-1.5 text-xs bg-indigo-50/80 border border-indigo-200 rounded-lg px-2 py-1 shadow-2xs" title="Filter by a single specific date">
-                                <span class="text-indigo-800 font-bold text-[11px] flex items-center gap-1">
-                                    <i class="fa-solid fa-calendar-day text-indigo-600"></i> Specific Date:
+                            <div class="flex items-center gap-1.5 text-xs bg-indigo-50/70 border border-indigo-200/80 rounded-xl px-2.5 py-1 shadow-2xs" title="Filter by a single specific date">
+                                <span class="text-indigo-900 font-bold text-[11px] flex items-center gap-1">
+                                    <i class="fa-solid fa-calendar-day text-indigo-600"></i> Specific:
                                 </span>
                                 <input type="date" id="filter-specific-date" onchange="onSpecificDateChange(this.value)" class="bg-transparent border-0 text-xs font-semibold text-indigo-950 focus:outline-none cursor-pointer">
                             </div>
 
                             <!-- Custom Range Pickers -->
-                            <div class="flex items-center gap-1.5 text-xs bg-gray-50 border border-[#E5E7EB] rounded-lg px-2 py-1">
-                                <span class="text-[#6B7280] font-medium text-[11px]">From:</span>
-                                <input type="date" id="filter-start-date" onchange="onCustomDateChange()" class="bg-transparent border-0 text-xs font-semibold text-[#111827] focus:outline-none cursor-pointer">
+                            <div class="flex items-center gap-1.5 text-xs bg-white border border-slate-200 rounded-xl px-2.5 py-1 shadow-2xs">
+                                <span class="text-slate-500 font-medium text-[11px]">From:</span>
+                                <input type="date" id="filter-start-date" onchange="onCustomDateChange()" class="bg-transparent border-0 text-xs font-semibold text-slate-900 focus:outline-none cursor-pointer">
                             </div>
 
-                            <div class="flex items-center gap-1.5 text-xs bg-gray-50 border border-[#E5E7EB] rounded-lg px-2 py-1">
-                                <span class="text-[#6B7280] font-medium text-[11px]">To:</span>
-                                <input type="date" id="filter-end-date" onchange="onCustomDateChange()" class="bg-transparent border-0 text-xs font-semibold text-[#111827] focus:outline-none cursor-pointer">
+                            <div class="flex items-center gap-1.5 text-xs bg-white border border-slate-200 rounded-xl px-2.5 py-1 shadow-2xs">
+                                <span class="text-slate-500 font-medium text-[11px]">To:</span>
+                                <input type="date" id="filter-end-date" onchange="onCustomDateChange()" class="bg-transparent border-0 text-xs font-semibold text-slate-900 focus:outline-none cursor-pointer">
                             </div>
 
-                            <button type="button" onclick="resetAllDateFilters()" class="px-2.5 py-1 text-xs text-gray-500 hover:text-[#111827] bg-white hover:bg-gray-100 border border-[#E5E7EB] rounded-lg font-medium transition-colors cursor-pointer" title="Reset date filters">
+                            <button type="button" onclick="resetAllDateFilters()" class="px-2.5 py-1 text-xs text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl font-semibold transition-colors cursor-pointer shadow-2xs" title="Reset date filters">
                                 <i class="fa-solid fa-rotate-left mr-1"></i> Reset
                             </button>
                         </div>
@@ -270,66 +304,76 @@
                 <div class="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
                     
                     <!-- 1. Total Orders & Units -->
-                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
-                        <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Total Booked</span>
-                            <i class="fa-solid fa-boxes-stacked text-indigo-500"></i>
+                    <div class="stat-card p-4 rounded-2xl bg-white border border-slate-200/90">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-1.5">
+                            <span class="uppercase tracking-wider text-[10px]">Total Booked</span>
+                            <span class="w-7 h-7 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs shadow-2xs"><i class="fa-solid fa-boxes-stacked"></i></span>
                         </div>
-                        <div class="text-xl sm:text-2xl font-bold text-[#111827]" id="stat-total-orders">0</div>
-                        <div class="text-[10.5px] text-[#6B7280] mt-1" id="stat-items-sold">0 units sold</div>
+                        <div class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight" id="stat-total-orders">0</div>
+                        <div class="text-[11px] text-slate-500 font-semibold mt-1 flex items-center gap-1" id="stat-items-sold">
+                            <i class="fa-solid fa-cubes text-[10px] text-slate-400"></i>
+                            <span>0 units sold</span>
+                        </div>
                     </div>
 
                     <!-- 2. Gross Booked Revenue -->
-                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
-                        <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Gross Booked</span>
-                            <i class="fa-solid fa-indian-rupee-sign text-indigo-600"></i>
+                    <div class="stat-card p-4 rounded-2xl bg-white border border-slate-200/90">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-1.5">
+                            <span class="uppercase tracking-wider text-[10px]">Gross Revenue</span>
+                            <span class="w-7 h-7 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs shadow-2xs"><i class="fa-solid fa-indian-rupee-sign"></i></span>
                         </div>
-                        <div class="text-xl sm:text-2xl font-bold text-indigo-600" id="stat-total-revenue">Rs. 0</div>
-                        <div class="text-[10.5px] text-[#6B7280] mt-1" id="stat-aov">AOV: Rs. 0 / order</div>
+                        <div class="text-2xl sm:text-3xl font-black text-indigo-700 tracking-tight" id="stat-total-revenue">Rs. 0</div>
+                        <div class="text-[11px] text-slate-500 font-semibold mt-1" id="stat-aov">AOV: Rs. 0 / order</div>
                     </div>
 
-                    <!-- 3. REALIZED DELIVERED REVENUE (Calculates only marked DELIVERED) -->
-                    <div class="bg-white p-4 rounded-xl border-2 border-emerald-500/80 bg-emerald-50/30 shadow-xs">
-                        <div class="flex items-center justify-between text-xs font-bold text-emerald-900 mb-1">
-                            <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-emerald-600"></i> Delivered Total</span>
-                            <span class="bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase">Realized</span>
+                    <!-- 3. REALIZED DELIVERED REVENUE (Highlighted Card) -->
+                    <div class="stat-card p-4 rounded-2xl bg-gradient-to-br from-emerald-50/90 via-white to-emerald-50/50 border-2 border-emerald-500/90 relative overflow-hidden shadow-xs">
+                        <div class="flex items-center justify-between text-xs font-bold text-emerald-950 mb-1.5">
+                            <span class="flex items-center gap-1.5 uppercase tracking-wider text-[10px]">
+                                <i class="fa-solid fa-circle-check text-emerald-600"></i> Delivered Total
+                            </span>
+                            <span class="bg-emerald-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-2xs">Realized</span>
                         </div>
-                        <div class="text-xl sm:text-2xl font-black text-emerald-700" id="stat-delivered-revenue">Rs. 0</div>
-                        <div class="text-[10.5px] text-emerald-800 font-bold mt-1" id="stat-delivered-count-text">0 Orders Delivered</div>
+                        <div class="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight" id="stat-delivered-revenue">Rs. 0</div>
+                        <div class="text-[11px] text-emerald-900 font-bold mt-1 flex items-center gap-1" id="stat-delivered-count-text">
+                            <i class="fa-solid fa-truck-ramp-box text-[10px] text-emerald-600"></i>
+                            <span>0 Orders Delivered</span>
+                        </div>
                     </div>
 
-                    <!-- 4. Online Paid (Razorpay) -->
-                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
-                        <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Paid Online</span>
-                            <i class="fa-solid fa-bolt text-indigo-600"></i>
+                    <!-- 4. Online Paid -->
+                    <div class="stat-card p-4 rounded-2xl bg-white border border-slate-200/90">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-1.5">
+                            <span class="uppercase tracking-wider text-[10px]">Paid Online</span>
+                            <span class="w-7 h-7 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs shadow-2xs"><i class="fa-solid fa-bolt"></i></span>
                         </div>
-                        <div class="text-xl sm:text-2xl font-bold text-indigo-600" id="stat-paid-revenue">Rs. 0</div>
-                        <div class="text-[10.5px] text-indigo-700 font-semibold mt-1" id="stat-paid-orders">0 Orders</div>
+                        <div class="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight" id="stat-paid-revenue">Rs. 0</div>
+                        <div class="text-[11px] text-emerald-800 font-bold mt-1" id="stat-paid-orders">0 Orders</div>
                     </div>
 
                     <!-- 5. COD Expected Revenue -->
-                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs">
-                        <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>COD Expected</span>
-                            <i class="fa-solid fa-hand-holding-dollar text-amber-600"></i>
+                    <div class="stat-card p-4 rounded-2xl bg-white border border-slate-200/90">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-1.5">
+                            <span class="uppercase tracking-wider text-[10px]">COD Expected</span>
+                            <span class="w-7 h-7 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs shadow-2xs"><i class="fa-solid fa-hand-holding-dollar"></i></span>
                         </div>
-                        <div class="text-xl sm:text-2xl font-bold text-amber-600" id="stat-cod-revenue">Rs. 0</div>
-                        <div class="text-[10.5px] text-amber-800 font-semibold mt-1" id="stat-cod-orders">0 Orders</div>
+                        <div class="text-2xl sm:text-3xl font-black text-amber-700 tracking-tight" id="stat-cod-revenue">Rs. 0</div>
+                        <div class="text-[11px] text-amber-900 font-bold mt-1" id="stat-cod-orders">0 Orders</div>
                     </div>
 
                     <!-- 6. Delivery & Cancellations Status Breakdown -->
-                    <div class="bg-white p-4 rounded-xl border border-[#E5E7EB] shadow-xs col-span-2 lg:col-span-1">
-                        <div class="flex items-center justify-between text-xs font-medium text-[#6B7280] mb-1">
-                            <span>Fulfillment</span>
-                            <i class="fa-solid fa-truck-fast text-blue-600"></i>
+                    <div class="stat-card p-4 rounded-2xl bg-white border border-slate-200/90 col-span-2 lg:col-span-1">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-1.5">
+                            <span class="uppercase tracking-wider text-[10px]">Fulfillment</span>
+                            <span class="w-7 h-7 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xs shadow-2xs"><i class="fa-solid fa-truck-fast"></i></span>
                         </div>
-                        <div class="flex items-center gap-1 flex-wrap mt-1">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200" title="Shipped / In Transit">
+                        <div class="flex items-center gap-1.5 flex-wrap mt-2">
+                            <span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs flex items-center gap-1" title="Shipped / In Transit">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                                 <span id="stat-shipped-orders">0</span> In-Transit
                             </span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200" title="Cancelled">
+                            <span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-rose-50 text-rose-700 border border-rose-200 shadow-2xs flex items-center gap-1" title="Cancelled">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                                 <span id="stat-cancelled-orders">0</span> Cancelled
                             </span>
                         </div>
@@ -337,20 +381,20 @@
                 </div>
 
                 <!-- ORDERS TABLE CARD -->
-                <div class="bg-white rounded-xl border border-[#E5E7EB] shadow-xs overflow-hidden">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
                     
                     <!-- TOOLBAR & FILTERS -->
-                    <div class="p-4 border-b border-[#E5E7EB] flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="p-4 border-b border-slate-200/90 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-50/70">
                         
                         <!-- Search Box -->
                         <div class="relative flex-grow max-w-lg">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                            <input type="text" id="order-search-input" oninput="debounceSearch()" placeholder="Search by Order ID, Name, Phone, City, Pincode, SKU, AWB..." class="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-[#E5E7EB] focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white placeholder-gray-400">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            <input type="text" id="order-search-input" oninput="debounceSearch()" placeholder="Search Order ID, Customer Name, Phone, City, Pincode, SKU, AWB..." class="w-full pl-9 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 bg-white placeholder-slate-400 font-semibold transition-all shadow-2xs text-slate-900">
                         </div>
 
                         <!-- Status & Provider Filters -->
                         <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 flex-wrap">
-                            <select id="filter-status" onchange="loadOrdersAndStats()" class="px-3 py-2 text-xs rounded-lg border border-[#E5E7EB] bg-white text-[#111827] focus:outline-none focus:border-indigo-600">
+                            <select id="filter-status" onchange="loadOrdersAndStats()" class="px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 bg-white text-slate-800 font-bold focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 shadow-2xs cursor-pointer">
                                 <option value="all">All Order Statuses</option>
                                 <option value="LOCAL_DELIVERY">📍 Nearby Location (421305, 421302, 421308)</option>
                                 <option value="OTP_NOT_VERIFIED">⚠️ COD (OTP Not Verified / Leads)</option>
@@ -362,38 +406,39 @@
                                 <option value="CANCELLED">Cancelled</option>
                             </select>
 
-                            <select id="filter-provider" onchange="loadOrdersAndStats()" class="px-3 py-2 text-xs rounded-lg border border-[#E5E7EB] bg-white text-[#111827] focus:outline-none focus:border-indigo-600">
+                            <select id="filter-provider" onchange="loadOrdersAndStats()" class="px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 bg-white text-slate-800 font-bold focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 shadow-2xs cursor-pointer">
                                 <option value="all">All Payment Methods</option>
                                 <option value="razorpay">Online Payment (Razorpay)</option>
                                 <option value="cod">Cash on Delivery (COD)</option>
                             </select>
 
-                            <button type="button" onclick="clearAllFilters()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-[#111827] rounded-lg text-xs font-semibold transition-colors cursor-pointer" title="Reset all search queries and dropdown filters">
-                                <i class="fa-solid fa-filter-circle-xmark mr-1"></i> Clear Filters
+                            <button type="button" onclick="clearAllFilters()" class="action-btn px-3.5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold border border-slate-200 transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5" title="Reset all search queries and dropdown filters">
+                                <i class="fa-solid fa-filter-circle-xmark text-slate-400"></i>
+                                <span>Clear Filters</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- DATA TABLE -->
                     <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full text-left text-xs text-[#111827]" id="admin-orders-table">
-                            <thead class="bg-gray-50/80 text-[#6B7280] font-medium border-b border-[#E5E7EB]">
+                        <table class="w-full text-left text-xs text-slate-800" id="admin-orders-table">
+                            <thead class="bg-slate-50/90 text-slate-600 font-extrabold uppercase tracking-wider text-[11px] border-b border-slate-200/90 select-none">
                                 <tr>
-                                    <th class="py-3 px-4">Order ID & Date</th>
-                                    <th class="py-3 px-4">Customer Details</th>
-                                    <th class="py-3 px-4 min-w-[240px]">Items & Selected Products</th>
-                                    <th class="py-3 px-4">Total Amount</th>
-                                    <th class="py-3 px-4">Payment Method</th>
-                                    <th class="py-3 px-4">Shipping / AWB</th>
-                                    <th class="py-3 px-4">Delivery Settlement</th>
-                                    <th class="py-3 px-4 text-right">Actions</th>
+                                    <th class="py-3.5 px-4">Order ID & Date</th>
+                                    <th class="py-3.5 px-4">Customer Details</th>
+                                    <th class="py-3.5 px-4 min-w-[250px]">Items & Selected Products</th>
+                                    <th class="py-3.5 px-4">Total Amount</th>
+                                    <th class="py-3.5 px-4">Payment Method</th>
+                                    <th class="py-3.5 px-4">Shipping / AWB</th>
+                                    <th class="py-3.5 px-4">Delivery Settlement</th>
+                                    <th class="py-3.5 px-4 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="orders-table-body" class="divide-y divide-[#E5E7EB]">
+                            <tbody id="orders-table-body" class="divide-y divide-slate-200 border-b border-slate-200">
                                 <tr>
-                                    <td colspan="8" class="text-center py-12 text-gray-400">
+                                    <td colspan="8" class="text-center py-12 text-slate-400">
                                         <i class="fa-solid fa-spinner fa-spin text-xl mb-2 text-indigo-600"></i>
-                                        <div>Loading orders...</div>
+                                        <div class="font-medium text-xs text-slate-500">Loading orders...</div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -401,18 +446,18 @@
                     </div>
 
                     <!-- FOOTER FINANCIAL SUMMARY & COUNT -->
-                    <div class="p-3.5 border-t border-[#E5E7EB] bg-gray-50/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#6B7280]">
+                    <div class="p-3.5 border-t border-slate-200 bg-slate-50/70 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
                         <div class="flex items-center gap-3 flex-wrap">
-                            <span id="table-count-summary" class="font-bold text-[#111827]">Showing 0 orders</span>
-                            <span class="text-gray-300">•</span>
+                            <span id="table-count-summary" class="font-extrabold text-slate-900">Showing 0 orders</span>
+                            <span class="text-slate-300">•</span>
                             <span id="table-revenue-summary" class="text-indigo-700 font-bold">Filtered Booked: Rs. 0.00</span>
-                            <span class="text-gray-300">•</span>
-                            <span id="table-delivered-summary" class="text-emerald-700 font-bold bg-emerald-100/70 px-2 py-0.5 rounded">Delivered: Rs. 0.00</span>
-                            <span class="text-gray-300">•</span>
-                            <span id="table-items-summary" class="text-gray-600 font-medium">0 Total Units</span>
+                            <span class="text-slate-300">•</span>
+                            <span id="table-delivered-summary" class="text-emerald-800 font-bold bg-emerald-100/80 px-2 py-0.5 rounded-md border border-emerald-200">Delivered: Rs. 0.00</span>
+                            <span class="text-slate-300">•</span>
+                            <span id="table-items-summary" class="text-slate-600 font-medium">0 Total Units</span>
                         </div>
-                        <div class="text-[11px] text-gray-400 flex items-center gap-1">
-                            <i class="fa-solid fa-cloud-arrow-down"></i> Auto-synced with Firebase Database
+                        <div class="text-[11px] text-slate-400 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-cloud-arrow-down text-slate-400"></i> Auto-synced with Firebase Database
                         </div>
                     </div>
                 </div>
@@ -422,7 +467,7 @@
 
     <!-- ORDER DETAIL MODAL / DRAWER -->
     <div id="order-detail-modal" onclick="if(event.target === this) closeOrderDetailModal()" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] flex flex-col border border-[#E5E7EB] shadow-xl overflow-hidden" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[92vh] flex flex-col border border-slate-200 shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
             <div class="p-4 border-b border-[#E5E7EB] flex items-center justify-between bg-gray-50/80">
                 <div class="flex items-center gap-2">
                     <h3 class="font-bold text-sm text-[#111827]" id="modal-order-id">Order Details</h3>
@@ -448,7 +493,7 @@
 
     <!-- CANCEL ORDER CONFIRMATION MODAL -->
     <div id="cancel-confirm-modal" onclick="if(event.target === this) closeCancelModal()" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl max-w-sm w-full p-6 border border-[#E5E7EB] shadow-xl" onclick="event.stopPropagation()">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 border border-slate-200 shadow-2xl" onclick="event.stopPropagation()">
             <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-xl mx-auto mb-3 border border-red-100">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
@@ -1073,11 +1118,11 @@
 
             // Reset preset button styles
             document.querySelectorAll('.date-preset-btn').forEach(btn => {
-                btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer";
+                btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer";
             });
             const activeBtn = document.getElementById(`btn-preset-${preset}`);
             if (activeBtn) {
-                activeBtn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-semibold bg-indigo-600 text-white transition-colors cursor-pointer";
+                activeBtn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-bold bg-slate-900 text-white shadow-xs transition-all cursor-pointer";
             }
 
             const now = new Date();
@@ -1145,7 +1190,7 @@
             endInput.value = val;
 
             document.querySelectorAll('.date-preset-btn').forEach(btn => {
-                btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer";
+                btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer";
             });
             activeDatePreset = 'specific';
             loadOrdersAndStats();
@@ -1153,7 +1198,7 @@
 
         function onCustomDateChange() {
             document.querySelectorAll('.date-preset-btn').forEach(btn => {
-                btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer";
+                btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer";
             });
             const spec = document.getElementById('filter-specific-date');
             if (spec) spec.value = '';
@@ -1493,9 +1538,12 @@
             if (orders.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="8" class="text-center py-12 text-gray-400">
-                            <i class="fa-solid fa-box-open text-2xl mb-2 text-gray-300"></i>
-                            <div class="text-xs font-medium">No matching orders found for selected criteria.</div>
+                        <td colspan="8" class="text-center py-16 text-slate-400">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-xl mx-auto mb-2 border border-slate-200">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                            <div class="text-xs font-bold text-slate-600">No matching orders found</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Try clearing your filters or selecting a wider date range</div>
                         </td>
                     </tr>
                 `;
@@ -1510,13 +1558,12 @@
                 const customerCity = (order.customer && order.customer.city) || '';
                 const customerPincode = (order.customer && order.customer.pincode) || '';
                 const itemsCount = (order.items || []).reduce((s, i) => s + (i.quantity || 1), 0);
-                const itemsNames = (order.items || []).map(i => `${i.name || i.variantName} (x${i.quantity || 1})`).join(', ');
                 const total = order.pricing ? `Rs. ${parseFloat(order.pricing.total).toFixed(2)}` : 'Rs. 0.00';
                 
                 const LOCAL_PINCODES = ['421305', '421302', '421308'];
                 const isNearbyLocation = LOCAL_PINCODES.includes(String(customerPincode).trim()) || Boolean(order.isLocalDelivery);
 
-                // Robust Payment Method & COD Detection (Case-insensitive & field fallback)
+                // Robust Payment Method & COD Detection
                 const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
                 const hasCodCharge = (order.pricing?.codCharge || 0) > 0;
                 const hasCodEvent = (order.events || []).some(e => (e.event || '').includes('COD'));
@@ -1530,8 +1577,6 @@
                 const isDelivered = status === 'DELIVERED';
                 const isCodOtpPending = isCod && (status === 'OTP_NOT_VERIFIED' || paymentStatus === 'OTP_NOT_VERIFIED' || shippingStatus === 'OTP_NOT_VERIFIED');
                 const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || status === 'SHIPMENT_BOOKED' || status === 'SHIPPED' || status === 'DELIVERED' || status === 'IN_TRANSIT' || status === 'OUT_FOR_DELIVERY' || Boolean(order.payment && (order.payment.razorpayPaymentId || order.payment.status === 'CAPTURED')));
-                const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED';
-
 
                 let paymentBadge = '';
                 let shippingDisplay = '';
@@ -1541,81 +1586,81 @@
 
                 if (isCod) {
                     if (isCodOtpPending) {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1"><i class="fa-solid fa-clock text-[9px]"></i> COD (OTP Not Verified)</span>`;
-                        shippingDisplay = `<div class="text-[10px] font-bold text-amber-700 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-600"></i> OTP Not Entered</div>`;
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-900 border border-amber-300 flex items-center gap-1.5 shadow-2xs"><i class="fa-solid fa-clock text-amber-600 text-[10px]"></i> COD (OTP Pending)</span>`;
+                        shippingDisplay = `<div class="text-[10.5px] font-bold text-amber-700 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-600"></i> OTP Not Entered</div>`;
                     } else if (isDelivered) {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">COD</span>`;
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hand-holding-dollar text-emerald-600 text-[10px]"></i> COD Settled</span>`;
                         shippingDisplay = `
-                            <div class="font-mono text-[11px] font-bold text-emerald-700">${awb || 'Delivered'}</div>
-                            <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9px]"></i> Settled</div>
+                            <div class="font-mono text-xs font-bold text-emerald-800">${awb || 'Delivered'}</div>
+                            <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9.5px]"></i> Settled</div>
                         `;
                     } else if (isShipmentBooked || ['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT'].includes(status)) {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">COD</span>`;
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-900 border border-amber-200/90 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hand-holding-dollar text-amber-600 text-[10px]"></i> COD</span>`;
                         const cLabel = courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket';
                         const cColor = courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-700';
                         const cIcon = courierProvider === 'delhivery' ? 'fa-box text-rose-600' : 'fa-truck-fast text-indigo-600';
                         shippingDisplay = `
-                            <div class="font-mono text-[11px] font-bold ${cColor}">${awb || 'Booked'}</div>
-                            <div class="text-[10px] text-gray-700 font-semibold flex items-center gap-1"><i class="fa-solid ${cIcon} text-[9px]"></i> ${cLabel}</div>
+                            <div class="font-mono text-xs font-bold ${cColor}">${awb || 'Booked'}</div>
+                            <div class="text-[10.5px] text-slate-600 font-semibold flex items-center gap-1 mt-0.5"><i class="fa-solid ${cIcon} text-[9.5px]"></i> ${cLabel}</div>
                         `;
                     } else if (status === 'CANCELLED') {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">COD (Cancelled)</span>`;
-                        shippingDisplay = `<span class="text-[10px] text-rose-700 font-semibold">Cancelled</span>`;
+                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600">COD (Cancelled)</span>`;
+                        shippingDisplay = `<span class="text-[10.5px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">COD</span>`;
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-900 border border-amber-200 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hand-holding-dollar text-amber-600 text-[10px]"></i> COD</span>`;
                         if (isNearbyLocation) {
                             shippingDisplay = `
-                                <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 flex items-center gap-1 w-max">
-                                    <i class="fa-solid fa-location-dot text-[9px] text-purple-600"></i> Nearby • Deliver Manually
+                                <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 flex items-center gap-1 w-max">
+                                    <i class="fa-solid fa-location-dot text-[9px] text-purple-600"></i> Nearby • Hand-Deliver
                                 </div>
                                 <div class="text-[9.5px] text-purple-600 font-medium mt-0.5">Free Delivery (PIN: ${customerPincode})</div>
                             `;
                         } else {
-                            shippingDisplay = `<span class="text-[10px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
+                            shippingDisplay = `<span class="text-[10.5px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
                         }
                     }
                 } else {
                     // Online (Razorpay)
                     if (isOnlinePaid || isDelivered) {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">⚡ Online (10% OFF)</span>`;
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-bolt text-emerald-600 text-[10px]"></i> Online Paid</span>`;
                         if (isShipmentBooked) {
                             const cLabel = courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket';
                             const cColor = courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-700';
                             const cIcon = courierProvider === 'delhivery' ? 'fa-box text-rose-600' : 'fa-truck-fast text-indigo-600';
                             shippingDisplay = `
-                                <div class="font-mono text-[11px] font-bold ${cColor}">${awb || 'Booked'}</div>
-                                <div class="text-[10px] text-gray-700 font-semibold flex items-center gap-1"><i class="fa-solid ${cIcon} text-[9px]"></i> ${cLabel}</div>
+                                <div class="font-mono text-xs font-bold ${cColor}">${awb || 'Booked'}</div>
+                                <div class="text-[10.5px] text-slate-600 font-semibold flex items-center gap-1 mt-0.5"><i class="fa-solid ${cIcon} text-[9.5px]"></i> ${cLabel}</div>
                             `;
                         } else {
                             if (isNearbyLocation) {
                                 shippingDisplay = `
-                                    <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 flex items-center gap-1 w-max">
-                                        <i class="fa-solid fa-location-dot text-[9px] text-purple-600"></i> Nearby • Deliver Manually
+                                    <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 flex items-center gap-1 w-max">
+                                        <i class="fa-solid fa-location-dot text-[9px] text-purple-600"></i> Nearby • Hand-Deliver
                                     </div>
                                     <div class="text-[9.5px] text-purple-600 font-medium mt-0.5">Free Delivery (PIN: ${customerPincode})</div>
                                 `;
                             } else {
-                                shippingDisplay = `<span class="text-[10px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
+                                shippingDisplay = `<span class="text-[10.5px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
                             }
                         }
                     } else if (status === 'CANCELLED') {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-gray-100 text-gray-600">Online (Cancelled)</span>`;
-                        shippingDisplay = `<span class="text-[10px] text-rose-700 font-semibold">Cancelled</span>`;
+                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600">Online (Cancelled)</span>`;
+                        shippingDisplay = `<span class="text-[10.5px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">⏳ Payment Pending</span>`;
-                        shippingDisplay = `<span class="text-[10px] font-semibold text-gray-400">Awaiting Online Payment</span>`;
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hourglass-half text-amber-600 text-[10px]"></i> Payment Pending</span>`;
+                        shippingDisplay = `<span class="text-[10.5px] font-semibold text-slate-400">Awaiting Online Payment</span>`;
                     }
                 }
 
                 // 1-Click Delivered Toggle Button Cell
                 let deliveredActionCell = '';
                 if (status === 'CANCELLED') {
-                    deliveredActionCell = `<span class="px-2 py-1 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">CANCELLED</span>`;
+                    deliveredActionCell = `<span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">CANCELLED</span>`;
                 } else if (isCodOtpPending) {
-                    deliveredActionCell = `<span class="text-[10px] text-amber-700 font-semibold bg-amber-50 px-2 py-1 rounded border border-amber-200">OTP Pending</span>`;
+                    deliveredActionCell = `<span class="text-[10.5px] text-amber-800 font-bold bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">OTP Pending</span>`;
                 } else if (isDelivered) {
                     deliveredActionCell = `
-                        <button onclick="toggleDeliveredStatus('${orderId}', false)" class="px-2.5 py-1 bg-emerald-600 hover:bg-rose-600 text-white rounded-lg text-[11px] font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer group" title="Click to Uncheck / Revert Delivery status">
+                        <button onclick="toggleDeliveredStatus('${orderId}', false)" class="action-btn px-3 py-1.5 bg-emerald-600 hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer group" title="Click to Uncheck / Revert Delivery status">
                             <i class="fa-solid fa-circle-check text-xs group-hover:hidden"></i>
                             <i class="fa-solid fa-rotate-left text-xs hidden group-hover:inline"></i>
                             <span class="group-hover:hidden">Delivered</span>
@@ -1624,90 +1669,106 @@
                     `;
                 } else {
                     deliveredActionCell = `
-                        <button onclick="toggleDeliveredStatus('${orderId}', true)" class="px-2.5 py-1 bg-white hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 border border-gray-300 hover:border-emerald-500 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Click to mark this order as Delivered">
-                            <i class="fa-regular fa-circle-check text-gray-400"></i>
+                        <button onclick="toggleDeliveredStatus('${orderId}', true)" class="action-btn px-3 py-1.5 bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-300 hover:border-emerald-500 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Click to mark this order as Delivered">
+                            <i class="fa-regular fa-circle-check text-slate-400 text-xs"></i>
                             <span>Mark Delivered</span>
                         </button>
                     `;
                 }
 
                 return `
-                    <tr class="hover:bg-gray-50/70 transition-colors ${isDelivered ? 'bg-emerald-50/20' : (isCodOtpPending ? 'bg-amber-50/20' : (isNearbyLocation ? 'bg-purple-50/15' : ''))}">
-                        <td class="py-3 px-4 font-mono font-bold text-indigo-600">
-                            <button onclick="openOrderDetail('${orderId}')" class="hover:underline text-left cursor-pointer">
-                                ${orderId}
+                    <tr class="border-b border-slate-200 hover:bg-slate-50/80 transition-colors ${isDelivered ? 'bg-emerald-50/15' : (isCodOtpPending ? 'bg-amber-50/15' : (isNearbyLocation ? 'bg-purple-50/15' : ''))}">
+                        <td class="py-3.5 px-4 font-mono font-bold text-indigo-600">
+                            <button onclick="openOrderDetail('${orderId}')" class="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-800 hover:underline font-mono font-black text-xs cursor-pointer group">
+                                <span>${orderId}</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
                             </button>
-                            <div class="text-[10px] font-normal text-gray-500 font-sans mt-0.5">${dateStr}</div>
+                            <div class="text-[10px] font-medium text-slate-400 font-sans mt-0.5 flex items-center gap-1">
+                                <i class="fa-regular fa-clock text-[9px]"></i>
+                                <span>${dateStr}</span>
+                            </div>
                         </td>
-                        <td class="py-3 px-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full ${isNearbyLocation ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700'} font-bold text-[10px] flex items-center justify-center">
-                                    ${customerName[0] || 'C'}
+                        <td class="py-3.5 px-4">
+                            <div class="flex items-start gap-2.5">
+                                <div class="w-8 h-8 rounded-xl ${isNearbyLocation ? 'bg-purple-100 text-purple-700 ring-1 ring-purple-200' : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200'} font-black text-xs flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                                    ${(customerName[0] || 'C').toUpperCase()}
                                 </div>
                                 <div>
-                                    <div class="font-semibold text-[#111827] flex items-center gap-1">
+                                    <div class="font-bold text-slate-900 text-xs flex items-center gap-1.5 flex-wrap">
                                         <span>${customerName}</span>
-                                        ${isNearbyLocation ? `<span class="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-purple-100 text-purple-800 border border-purple-200">Nearby</span>` : ''}
+                                        ${isNearbyLocation ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-100 text-purple-800 border border-purple-200 shadow-2xs">📍 Nearby</span>` : ''}
                                     </div>
-                                    <div class="text-[10px] text-gray-500">${customerPhone} • ${customerCity} <b>${customerPincode}</b></div>
-                                    ${isNearbyLocation ? `<div class="text-[9.5px] font-bold text-purple-700 flex items-center gap-1 mt-0.5"><i class="fa-solid fa-person-walking text-[9px]"></i> Nearby your location - Deliver manually</div>` : ''}
+                                    <div class="text-[11px] text-slate-500 font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
+                                        <span class="font-mono text-slate-600 font-semibold">${customerPhone}</span>
+                                        <span class="text-slate-300">•</span>
+                                        <span>${customerCity}</span>
+                                        <b class="text-slate-800">${customerPincode}</b>
+                                    </div>
+                                    ${isNearbyLocation ? `<div class="text-[10px] font-bold text-purple-700 flex items-center gap-1 mt-1 bg-purple-50/80 px-2 py-0.5 rounded-md border border-purple-200/60 w-max"><i class="fa-solid fa-person-walking text-[9px]"></i> Free delivery • Hand-deliver order</div>` : ''}
                                 </div>
                             </div>
                         </td>
-                        <td class="py-3 px-4">
+                        <td class="py-3.5 px-4">
                             ${renderAdminItemsCell(order)}
                         </td>
-                        <td class="py-3 px-4 font-bold text-[#111827]">${total}</td>
-                        <td class="py-3 px-4">${paymentBadge}</td>
-                        <td class="py-3 px-4">
+                        <td class="py-3.5 px-4 font-black text-slate-900 text-xs sm:text-sm tracking-tight whitespace-nowrap">${total}</td>
+                        <td class="py-3.5 px-4">${paymentBadge}</td>
+                        <td class="py-3.5 px-4">
                             ${shippingDisplay}
                         </td>
-                        <td class="py-3 px-4">
+                        <td class="py-3.5 px-4">
                             ${deliveredActionCell}
                         </td>
-                        <td class="py-3 px-4 text-right">
+                        <td class="py-3.5 px-4 text-right">
                             <div class="flex items-center justify-end gap-1.5 flex-wrap">
-                                <button onclick="openWhatsAppModal('${orderId}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Send WhatsApp Message / Confirmation to Customer">
-                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i> WhatsApp
+                                <button onclick="openWhatsAppModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Send WhatsApp Message">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i>
+                                    <span>WhatsApp</span>
                                 </button>
                                 ${!isShipmentBooked && status !== 'CANCELLED' ? `
-                                    <button onclick="moveOrderToCourier('${orderId}', 'shiprocket')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-300 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Shiprocket">
-                                        <i class="fa-solid fa-truck-fast text-indigo-600 text-xs"></i> Shiprocket
+                                    <button onclick="moveOrderToCourier('${orderId}', 'shiprocket')" class="action-btn px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200/90 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Ship with Shiprocket">
+                                        <i class="fa-solid fa-truck-fast text-xs"></i>
+                                        <span>Shiprocket</span>
                                     </button>
-                                    <button onclick="openDelhiveryDispatchModal('${orderId}')" class="px-2 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-300 text-purple-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Move this order to Delhivery (Select Surface or Express)">
-                                        <i class="fa-solid fa-box text-purple-600 text-xs"></i> Delhivery
+                                    <button onclick="openDelhiveryDispatchModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200/90 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Ship with Delhivery">
+                                        <i class="fa-solid fa-box text-xs"></i>
+                                        <span>Delhivery</span>
                                     </button>
                                 ` : ''}
                                 ${isShipmentBooked ? `
-                                    <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="px-2 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Download Shipping Label">
-                                        <i class="fa-solid fa-tag text-xs"></i> Label
+                                    <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="action-btn px-2.5 py-1.5 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Download Shipping Label">
+                                        <i class="fa-solid fa-tag text-xs"></i>
+                                        <span>Label</span>
                                     </a>
                                     ${order.shipping?.trackingUrl ? `
-                                        <a href="${order.shipping.trackingUrl}" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Track Live">
-                                            <i class="fa-solid fa-location-arrow text-xs"></i> Track
+                                        <a href="${order.shipping.trackingUrl}" target="_blank" class="action-btn px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Track Shipment">
+                                            <i class="fa-solid fa-location-arrow text-xs"></i>
+                                            <span>Track</span>
                                         </a>
                                     ` : ''}
                                     ${courierProvider === 'delhivery' ? `
-                                        <button onclick="openDelhiveryUpdateModal('${orderId}')" class="px-2 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-300 text-purple-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Update Delhivery shipment on Delhivery API">
-                                            <i class="fa-solid fa-pen-to-square text-purple-600 text-xs"></i> Update Delivery
+                                        <button onclick="openDelhiveryUpdateModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Update Delhivery shipment">
+                                            <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                            <span>Update</span>
                                         </button>
                                     ` : ''}
                                 ` : ''}
                                 ${status !== 'CANCELLED' ? `
-                                    <button onclick="openChangeProductModal('${orderId}')" class="px-2 py-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 rounded text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer" title="Change customer product or language kit">
-                                        <i class="fa-solid fa-repeat text-indigo-600 text-xs"></i> Change
+                                    <button onclick="openChangeProductModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-indigo-50/60 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Change Customer Product">
+                                        <i class="fa-solid fa-repeat text-xs"></i>
+                                        <span>Change</span>
                                     </button>
                                 ` : ''}
-                                <button onclick="openOrderDetail('${orderId}')" class="px-2 py-1 bg-white hover:bg-gray-100 border border-[#E5E7EB] text-[#111827] rounded text-[11px] font-medium transition-colors cursor-pointer" title="View full details">
-                                    View
+                                <button onclick="openOrderDetail('${orderId}')" class="action-btn px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-200/90 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="View Order Details">
+                                    <span>View</span>
                                 </button>
                                 ${status !== 'CANCELLED' ? `
-                                    <button onclick="promptCancelOrder('${orderId}')" class="px-2 py-1 bg-white hover:bg-amber-50 border border-amber-200 text-amber-700 rounded text-[11px] font-medium transition-colors cursor-pointer" title="Cancel this order">
-                                        Cancel
+                                    <button onclick="promptCancelOrder('${orderId}')" class="action-btn px-2.5 py-1.5 bg-white hover:bg-amber-50 text-amber-700 hover:text-amber-900 border border-amber-200 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="Cancel this order">
+                                        <span>Cancel</span>
                                     </button>
                                 ` : ''}
-                                <button onclick="promptPermanentDeleteOrder('${orderId}')" class="px-2 py-1 bg-white hover:bg-rose-50 border border-rose-200 text-rose-600 rounded text-[11px] font-medium transition-colors cursor-pointer" title="Permanently delete order from database">
-                                    <i class="fa-solid fa-trash-can text-[10px]"></i>
+                                <button onclick="promptPermanentDeleteOrder('${orderId}')" class="action-btn p-1.5 px-2 bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-rose-200/90 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="Permanently delete order">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
                         </td>
@@ -1716,7 +1777,6 @@
             }).join('');
         }
 
-        // ==========================================
         // EXPORT TO EXCEL (.XLSX)
         // ==========================================
         function exportToExcel() {
@@ -2089,7 +2149,7 @@
 
                 <!-- Customer & Address Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div class="bg-gray-50 p-3 rounded-lg border border-[#E5E7EB] space-y-1">
+                    <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/90 space-y-1.5 shadow-2xs">
                         <div class="font-bold text-[#111827] text-xs mb-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-user text-indigo-600"></i> Customer Info
                         </div>
@@ -2098,7 +2158,7 @@
                         <div><b>Email:</b> ${order.customer?.email || '-'}</div>
                     </div>
 
-                    <div class="bg-gray-50 p-3 rounded-lg border border-[#E5E7EB] space-y-1">
+                    <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/90 space-y-1.5 shadow-2xs">
                         <div class="font-bold text-[#111827] text-xs mb-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-location-dot text-indigo-600"></i> Shipping Address
                         </div>
@@ -2123,7 +2183,7 @@
                 </div>
 
                 <!-- Pricing & Payment Breakdown -->
-                <div class="bg-indigo-50/50 p-3.5 rounded-lg border border-indigo-100 space-y-1.5">
+                <div class="bg-indigo-50/40 p-4 rounded-xl border border-indigo-100/90 space-y-2 shadow-2xs">
                     <div class="flex justify-between"><span>Items Subtotal:</span> <span>Rs. ${order.pricing?.subtotal || 0}</span></div>
                     ${order.pricing?.discount ? `<div class="flex justify-between text-emerald-700"><span>Coupon Discount (${order.pricing?.couponCode}):</span> <span>-Rs. ${order.pricing?.discount}</span></div>` : ''}
                     ${order.pricing?.onlineDiscount ? `<div class="flex justify-between text-emerald-700 font-bold"><span>Online Discount (10% OFF):</span> <span>-Rs. ${order.pricing?.onlineDiscount}</span></div>` : ''}
@@ -2139,7 +2199,7 @@
                 </div>
 
                 <!-- Shipping & Courier Details -->
-                <div class="bg-gray-50 p-3.5 rounded-lg border border-[#E5E7EB] space-y-2">
+                <div class="bg-slate-50/80 p-4 rounded-xl border border-slate-200/90 space-y-2.5 shadow-2xs">
                     <div class="font-bold text-[#111827] text-xs flex items-center justify-between">
                         <span class="flex items-center gap-1.5"><i class="fa-solid fa-truck text-indigo-600"></i> Shipment & Courier Details</span>
                         ${isShipmentBooked ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${courierProvider === 'delhivery' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'}">${courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket'} Booked</span>` : (isNearbyLocation ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">Nearby Location • Manual Delivery</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">Pending Courier Assignment</span>`)}
