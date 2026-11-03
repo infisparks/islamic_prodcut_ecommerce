@@ -381,7 +381,7 @@
                                 <tr>
                                     <th class="py-3 px-4">Order ID & Date</th>
                                     <th class="py-3 px-4">Customer Details</th>
-                                    <th class="py-3 px-4">Items & SKU</th>
+                                    <th class="py-3 px-4 min-w-[240px]">Items & Selected Products</th>
                                     <th class="py-3 px-4">Total Amount</th>
                                     <th class="py-3 px-4">Payment Method</th>
                                     <th class="py-3 px-4">Shipping / AWB</th>
@@ -1287,6 +1287,170 @@
             }
         }
 
+        // ==========================================
+        // CUSTOM KIT & ITEM DISPLAY HELPERS
+        // ==========================================
+        function parseItemMeta(item) {
+            const name = (item.name || item.variantName || 'Item').trim();
+            const sku = (item.sku || '').toLowerCase();
+            const nameLower = name.toLowerCase();
+
+            let baseName = name;
+            let icon = '📦';
+            let tag = '';
+            let tagClass = 'bg-gray-100 text-gray-700 border-gray-200';
+
+            if (sku.includes('soap') || nameLower.includes('soap')) {
+                baseName = 'Herbal Ihram Soap';
+                icon = '🧼';
+                tag = '80g';
+                tagClass = 'bg-emerald-50 text-emerald-800 border-emerald-200 font-semibold';
+            } else if (sku.includes('oil') || nameLower.includes('coconut oil')) {
+                baseName = 'Pure Coconut Oil';
+                icon = '🥥';
+                tag = '50ml';
+                tagClass = 'bg-amber-50 text-amber-800 border-amber-200 font-semibold';
+            } else if (sku.includes('shampoo') || nameLower.includes('shampoo')) {
+                baseName = 'Herbal Shampoo';
+                icon = '🧴';
+                tag = '100ml';
+                tagClass = 'bg-teal-50 text-teal-800 border-teal-200 font-semibold';
+            } else if (sku.includes('wash') && !sku.includes('face') && !nameLower.includes('face')) {
+                baseName = 'Hand & Body Wash';
+                icon = '🫧';
+                tag = '100ml';
+                tagClass = 'bg-cyan-50 text-cyan-800 border-cyan-200 font-semibold';
+            } else if (sku.includes('facewash') || nameLower.includes('face wash')) {
+                baseName = 'Herbal Face Wash';
+                icon = '🌿';
+                tag = '50ml';
+                tagClass = 'bg-green-50 text-green-800 border-green-200 font-semibold';
+            } else if (sku.includes('jnm') || nameLower.includes('janamaz') || item.janamazColor) {
+                baseName = 'Pocket Janamaz';
+                icon = '📿';
+                const col = item.janamazColor || (item.variantName ? item.variantName.replace(/Pocket Travel Janamaz|Prayer Mat|\(|\)/gi, '').trim() : '');
+                tag = col || 'Mat';
+                tagClass = 'bg-rose-50 text-rose-800 border-rose-200 font-bold';
+            } else if (nameLower.includes('card') || sku.includes('fati_00')) {
+                baseName = 'Umrah Dua Cards';
+                icon = '📖';
+                let lang = '';
+                if (name.includes('Urdu') || sku === 'fati_002' || sku === 'fati_003') lang = 'Urdu';
+                else if (name.includes('English') || sku === 'fati_005' || sku === 'fati_006') lang = 'English';
+                else if (name.includes('Hindi') || sku === 'fati_008' || sku === 'fati_009') lang = 'Hindi';
+                else if (name.includes('Roman') || sku === 'fati_011' || sku === 'fati_012') lang = 'Roman';
+                tag = lang ? `${lang}` : 'Edition';
+                tagClass = 'bg-indigo-50 text-indigo-800 border-indigo-200 font-bold';
+            } else if (sku.includes('gift') || nameLower.includes('gift')) {
+                baseName = 'Free Gifts Pack';
+                icon = '🎁';
+                tag = 'FREE';
+                tagClass = 'bg-emerald-100 text-emerald-900 border-emerald-300 font-black';
+            }
+
+            return { baseName, icon, tag, tagClass };
+        }
+
+        const expandedOrderItems = new Set();
+        function toggleOrderItemsExpand(e, orderId) {
+            if (e) e.stopPropagation();
+            const container = document.getElementById(`items-list-${orderId}`);
+            const btn = document.getElementById(`items-toggle-btn-${orderId}`);
+            if (!container || !btn) return;
+            const isCurrentlyExpanded = expandedOrderItems.has(orderId);
+            if (isCurrentlyExpanded) {
+                expandedOrderItems.delete(orderId);
+            } else {
+                expandedOrderItems.add(orderId);
+            }
+            const isExp = expandedOrderItems.has(orderId);
+            const hiddenItems = container.querySelectorAll('.extra-item');
+            hiddenItems.forEach(el => {
+                if (isExp) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
+            btn.innerHTML = isExp 
+                ? `<span class="flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-[10px] text-indigo-600"></i><span>Collapse items</span></span><i class="fa-solid fa-chevron-up text-[9px] text-indigo-500"></i>` 
+                : `<span class="flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-[10px] text-indigo-600"></i><span>View ${hiddenItems.length} more products</span></span><i class="fa-solid fa-chevron-down text-[9px] text-indigo-500"></i>`;
+        }
+
+        function renderAdminItemsCell(order) {
+            const items = order.items || [];
+            const itemsCount = items.reduce((s, i) => s + (i.quantity || 1), 0);
+            const orderId = order.orderId || '';
+
+            if (items.length === 0) {
+                return `<div class="text-gray-400 italic text-[11px]">No items</div>`;
+            }
+
+            const isStandardFamilyBox = items.length === 1 && (items[0].sku === 'fati_ess_combo' || items[0].id === 14);
+            const isCustomKit = items.length > 1;
+
+            let badgeHtml = '';
+            if (isCustomKit) {
+                badgeHtml = `
+                    <div class="mb-2">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10.5px] font-black bg-amber-50 text-amber-900 border border-amber-300/80 shadow-2xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            <i class="fa-solid fa-sliders text-amber-600 text-[9.5px]"></i>
+                            <span>Custom Kit</span>
+                            <span class="bg-amber-200/90 text-amber-950 text-[9px] font-black px-1.5 py-0.2 rounded">${itemsCount} items</span>
+                        </span>
+                    </div>
+                `;
+            } else if (isStandardFamilyBox) {
+                badgeHtml = `
+                    <div class="mb-2">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10.5px] font-black bg-emerald-50 text-emerald-900 border border-emerald-300/80 shadow-2xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <i class="fa-solid fa-gift text-emerald-600 text-[9.5px]"></i>
+                            <span>Family Kit (7-in-1)</span>
+                        </span>
+                    </div>
+                `;
+            }
+
+            const isExpanded = expandedOrderItems.has(orderId);
+            const itemsListHtml = items.map((item, idx) => {
+                const meta = parseItemMeta(item);
+                const qty = item.quantity || item.qty || 1;
+                const isExtra = idx >= 3 && !isExpanded;
+                return `
+                    <div class="${idx >= 3 ? 'extra-item' : ''} ${isExtra ? 'hidden' : ''} flex items-center justify-between gap-1.5 text-[11px] bg-white hover:bg-slate-50/80 p-1.5 px-2 rounded-lg border border-slate-200/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="w-5 h-5 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-xs shrink-0">${meta.icon}</span>
+                            <span class="font-bold text-slate-900 truncate text-[11.5px]">${meta.baseName}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            ${meta.tag ? `<span class="text-[9px] px-1.5 py-0.5 rounded border ${meta.tagClass}">${meta.tag}</span>` : ''}
+                            <span class="text-[9.5px] font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded font-mono">x${qty}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const extraCount = items.length - 3;
+            const toggleBtnHtml = extraCount > 0 ? `
+                <button type="button" id="items-toggle-btn-${orderId}" onclick="toggleOrderItemsExpand(event, '${orderId}')" class="w-full mt-1.5 py-1 px-2.5 rounded-lg text-[10.5px] font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-50/70 hover:bg-indigo-100/80 border border-indigo-200/80 flex items-center justify-between transition-all cursor-pointer shadow-2xs">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-layer-group text-[10px] text-indigo-600"></i>
+                        <span>${isExpanded ? 'Collapse items' : `View ${extraCount} more products`}</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-${isExpanded ? 'up' : 'down'} text-[9px] text-indigo-500"></i>
+                </button>
+            ` : '';
+
+            return `
+                <div class="min-w-[230px] max-w-[340px]">
+                    ${badgeHtml}
+                    <div id="items-list-${orderId}" class="space-y-1">
+                        ${itemsListHtml}
+                    </div>
+                    ${toggleBtnHtml}
+                </div>
+            `;
+        }
+
         // Render Table Rows
         function renderOrdersTable(orders, summary) {
             const tbody = document.getElementById('orders-table-body');
@@ -1490,9 +1654,8 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="py-3 px-4 max-w-[180px]">
-                            <div class="font-medium truncate" title="${itemsNames}">${itemsNames || 'Items'}</div>
-                            <div class="text-[10px] text-gray-500">${itemsCount} ${itemsCount === 1 ? 'unit' : 'units'}</div>
+                        <td class="py-3 px-4">
+                            ${renderAdminItemsCell(order)}
                         </td>
                         <td class="py-3 px-4 font-bold text-[#111827]">${total}</td>
                         <td class="py-3 px-4">${paymentBadge}</td>
@@ -1820,22 +1983,70 @@
                 badgeEl.textContent = status;
             }
 
-            const itemsHtml = (order.items || []).map(i => {
+            const isStandardFamilyBox = (order.items || []).length === 1 && ((order.items[0].sku === 'fati_ess_combo') || (order.items[0].id === 14));
+            const isCustomKitOrder = (order.items || []).length > 1;
+
+            let kitHeaderBanner = '';
+            if (isCustomKitOrder) {
+                kitHeaderBanner = `
+                    <div class="p-3 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-100/80 border-2 border-amber-400 rounded-xl mb-3 shadow-xs">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black text-base shadow-xs shrink-0">
+                                <i class="fa-solid fa-sliders"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-black text-amber-950 text-xs sm:text-sm flex items-center gap-1.5 flex-wrap">
+                                    <span>🛠️ CUSTOM KIT ORDER</span>
+                                    <span class="bg-amber-300 text-amber-950 text-[10px] font-black px-2 py-0.2 rounded-full border border-amber-500/60">${order.items.length} ITEMS SELECTED</span>
+                                </div>
+                                <div class="text-[11px] text-amber-900/90 font-medium mt-0.5">Customer specifically customized this package. Please verify and pack all ${order.items.length} products listed below:</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (isStandardFamilyBox) {
+                kitHeaderBanner = `
+                    <div class="p-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100/80 border-2 border-emerald-400 rounded-xl mb-3 shadow-xs">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-base shadow-xs shrink-0">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-black text-emerald-950 text-xs sm:text-sm flex items-center gap-1.5 flex-wrap">
+                                    <span>🎁 COMPLETE UMRAH CARE FAMILY BOX</span>
+                                    <span class="bg-emerald-200 text-emerald-950 text-[10px] font-black px-2 py-0.2 rounded-full border border-emerald-400">7-in-1 Kit</span>
+                                </div>
+                                <div class="text-[11px] text-emerald-900/90 font-medium mt-0.5">Pack 5 Skincare Essentials (Soap, Coconut Oil, Shampoo, Body Wash, Face Wash) + 2 Free Gifts (Miswak + Loofah).</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const itemsHtml = (order.items || []).map((i, idx) => {
                 const itemQty = parseInt(i.quantity || i.qty || 1, 10);
                 const rawPrice = i.unitPrice ?? i.price ?? i.sellingPrice ?? i.rate ?? (order.pricing?.subtotal ? (order.pricing.subtotal / (order.items?.length || 1)) : 0);
                 const itemPrice = parseFloat(rawPrice || 0);
                 const lineTotal = itemPrice * itemQty;
-                const janamazBadge = i.janamazColor ? `<span class="inline-flex items-center gap-1 text-[9.5px] font-extrabold text-amber-900 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300 mt-0.5">🎁 Janamaz Color: ${i.janamazColor}</span>` : '';
+                const meta = parseItemMeta(i);
                 return `
-                    <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg border border-[#E5E7EB]">
-                        <div>
-                            <div class="font-bold text-[#111827]">${i.name || i.variantName || 'Item'}</div>
-                            ${i.variantName && i.variantName !== i.name ? `<div class="text-[11px] text-gray-600 font-medium">${i.variantName}</div>` : ''}
-                            ${janamazBadge}
-                            <div class="text-[10px] text-gray-500 font-mono mt-0.5">SKU: ${i.sku || 'N/A'} • Qty: ${itemQty}</div>
+                    <div class="flex items-center justify-between p-2.5 bg-white hover:bg-slate-50/80 rounded-xl border-2 ${isCustomKitOrder ? 'border-amber-200/80' : 'border-[#E5E7EB]'} shadow-2xs transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-sm shrink-0">
+                                ${meta.icon}
+                            </div>
+                            <div>
+                                <div class="font-bold text-slate-900 text-xs sm:text-sm flex items-center gap-1.5 flex-wrap">
+                                    <span>${meta.baseName}</span>
+                                    ${meta.tag ? `<span class="text-[9.5px] px-2 py-0.5 rounded border ${meta.tagClass}">${meta.tag}</span>` : ''}
+                                    ${itemQty > 1 ? `<span class="bg-indigo-100 text-indigo-800 text-[10px] font-black px-1.5 py-0.2 rounded font-mono">Qty: ${itemQty}</span>` : ''}
+                                </div>
+                                <div class="text-[10.5px] text-slate-400 font-mono mt-0.5">SKU: ${i.sku || 'N/A'} • Unit Price: Rs. ${itemPrice.toFixed(2)}</div>
+                            </div>
                         </div>
-                        <div class="font-bold text-indigo-600">
-                            Rs. ${itemPrice.toFixed(2)}${itemQty > 1 ? ` <span class="text-gray-500 text-xs font-normal">(Total: Rs. ${lineTotal.toFixed(2)})</span>` : ''}
+                        <div class="font-black text-indigo-700 text-xs sm:text-sm text-right">
+                            Rs. ${lineTotal.toFixed(2)}
+                            ${itemQty > 1 ? `<div class="text-[9.5px] text-slate-400 font-normal">(${itemQty} x Rs. ${itemPrice.toFixed(0)})</div>` : ''}
                         </div>
                     </div>
                 `;
@@ -1907,6 +2118,7 @@
                             </button>
                         ` : ''}
                     </div>
+                    ${kitHeaderBanner}
                     <div class="space-y-1.5">${itemsHtml}</div>
                 </div>
 
