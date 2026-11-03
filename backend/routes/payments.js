@@ -61,14 +61,9 @@ router.post(['/razorpay/verify', '/verify'], validatePaymentVerification, async 
     const updatedOrder = await withLock(`order_fulfillment_${orderId}`, async () => {
       const freshOrder = await firebaseService.getOrder(orderId);
 
-      // Check if already captured & shipped
-      if (
-        freshOrder.payment &&
-        freshOrder.payment.status === 'CAPTURED' &&
-        freshOrder.shipping &&
-        ['BOOKED', 'AWB_ASSIGNED', 'SHIPPED', 'DELIVERED'].includes(freshOrder.shipping.status)
-      ) {
-        logger.info('ORDER_ALREADY_FULFILLED_IDEMPOTENT', { orderId });
+      // Check if already captured & processed (Strict Idempotency Guard)
+      if (freshOrder.payment && freshOrder.payment.status === 'CAPTURED') {
+        logger.info('ORDER_ALREADY_CAPTURED_IDEMPOTENT', { orderId });
         return freshOrder;
       }
 

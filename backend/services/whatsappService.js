@@ -2,6 +2,10 @@ const axios = require('axios');
 const config = require('../config/env');
 const logger = require('../utils/logger');
 
+// Strict Idempotency / De-duplication Sets to guarantee Admin & Customer never receive duplicate messages
+const adminNotifiedOrderIds = new Set();
+const customerNotifiedOrderIds = new Set();
+
 /**
  * Clean and format Indian phone number to 91XXXXXXXXXX format.
  */
@@ -92,9 +96,26 @@ async function sendCodOtpWhatsApp(phone, otp) {
 
 /**
  * Send WhatsApp alert to Admin / Owner (918600380233) when a product is booked.
+ * Strict idempotency: exactly ONE alert per order ID is ever sent to the admin.
  */
 async function sendAdminOrderNotificationWhatsApp(order) {
-  if (!order) return false;
+  if (!order || !order.orderId) return false;
+
+  const orderId = String(order.orderId).trim();
+
+  // De-duplication check: Skip if admin was already notified for this order
+  if (adminNotifiedOrderIds.has(orderId)) {
+    logger.info('WHATSAPP_ADMIN_ALREADY_NOTIFIED_SKIP', { orderId });
+    return false;
+  }
+
+  if (order.notifications && order.notifications.adminNotified) {
+    logger.info('WHATSAPP_ADMIN_ALREADY_NOTIFIED_RECORD_SKIP', { orderId });
+    return false;
+  }
+
+  adminNotifiedOrderIds.add(orderId);
+  setTimeout(() => adminNotifiedOrderIds.delete(orderId), 24 * 60 * 60 * 1000);
 
   const adminPhone = config.whatsapp.notifyNumber || '918600380233';
 
@@ -149,12 +170,33 @@ async function sendAdminOrderNotificationWhatsApp(order) {
  * Send Order Confirmation WhatsApp message to Customer.
  */
 async function sendOrderConfirmationWhatsApp(order) {
-  if (!order || !order.customer || !order.customer.phone) return false;
+  if (!order || !order.customer || !order.customer.phone || !order.orderId) return false;
 
-  // Always send Admin notification alert to 918600380233
+  const orderId = String(order.orderId).trim();
+
+  // 1. Dispatch Admin Notification (guaranteed exactly once via idempotency guard)
   sendAdminOrderNotificationWhatsApp(order).catch(err => {
     logger.error('WHATSAPP_ADMIN_NOTIFY_FAILED', { orderId: order.orderId, error: err.message });
   });
+
+  const adminPhone = config.whatsapp.notifyNumber || '918600380233';
+  const cleanAdminPhone = sanitizePhone(adminPhone);
+  const cleanCustomerPhone = sanitizePhone(order.customer.phone);
+
+  // If order was booked with Admin's own mobile number (e.g. testing the booking),
+  // suppress customer confirmation so Admin receives strictly ONE notification message.
+  if (cleanAdminPhone && cleanCustomerPhone && cleanAdminPhone === cleanCustomerPhone) {
+    logger.info('WHATSAPP_CUSTOMER_IS_ADMIN_SKIP_CONFIRMATION', { orderId, phone: cleanCustomerPhone });
+    return true;
+  }
+
+  // De-duplicate customer confirmation
+  if (customerNotifiedOrderIds.has(orderId)) {
+    logger.info('WHATSAPP_CUSTOMER_ALREADY_NOTIFIED_SKIP', { orderId });
+    return false;
+  }
+  customerNotifiedOrderIds.add(orderId);
+  setTimeout(() => customerNotifiedOrderIds.delete(orderId), 24 * 60 * 60 * 1000);
 
   const customerName = order.customer.name || 'Valued Customer';
   const itemsList = (order.items || [])

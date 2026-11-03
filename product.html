@@ -3863,9 +3863,10 @@
                     body: JSON.stringify({ phone: whatsappOtpPhone, otp: code })
                 });
                 const data = await res.json();
-                if (res.ok && data.success && data.data && data.data.verificationToken) {
+                const token = data.verificationToken || (data.data && data.data.verificationToken);
+                if (res.ok && data.success && token) {
                     closeWhatsAppOtpModal();
-                    executeOrderCreation(data.data.verificationToken);
+                    executeOrderCreation(token);
                 } else {
                     const isWarning = data.attemptsLeft !== undefined && data.attemptsLeft <= 3;
                     statusBox.className = isWarning 
