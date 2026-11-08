@@ -33,7 +33,10 @@
                     11: "product/essentials/shampoo-hero.webp",
                     12: "product/essentials/hand-body-wash-hero.webp",
                     13: "product/essentials/face-wash-hero.webp",
-                    14: "product/offer/combo_banner.webp"
+                    14: "product/offer/offer_6_ihram_kit_1299.webp",
+                    15: "product/miswak/box.webp",
+                    16: "product/offer/offer_2_cards_ihram_1848.webp",
+                    17: "product/offer/offer_3_mega_combo_2198.webp"
                 };
                 var targetImg = prodImages[pid] || "product/umrah_card_english.webp";
                 window.__INITIAL_PDP_IMAGE__ = targetImg;
@@ -828,7 +831,7 @@
                     <i class="fa-solid fa-bag-shopping text-gold-400 text-base"></i>
                     <div>
                         <h3 class="font-cinzel text-sm sm:text-base font-bold text-gold-300">Instant Express Checkout</h3>
-                        <p class="text-[9px] text-gray-300">✓ Free Shipping on ₹598+ (Prepaid) • Extra 10% OFF Online</p>
+                        <p class="text-[9px] text-gray-300">✓ 100% Free Shipping on All Prepaid Orders • Extra 10% OFF Online</p>
                     </div>
                 </div>
                 <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-pearl flex items-center justify-center text-xs cursor-pointer">
@@ -1092,6 +1095,141 @@
         </div>
     </div>
 
+    
+    <!-- LANGUAGE & QUANTITY CONFIRMATION MODAL WITH 3D DIGITAL DUA CARD PREVIEW -->
+    <div id="language-confirm-modal" onclick="if(event.target === this) closeLanguageConfirmModal()" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
+        <div class="bg-[#0d121c] rounded-3xl max-w-[420px] w-full border-2 border-amber-500/75 shadow-[0_0_50px_rgba(217,119,6,0.3)] overflow-hidden flex flex-col relative animate-in fade-in zoom-in duration-150" onclick="event.stopPropagation()">
+            
+            <!-- Compact Luxury Header -->
+            <div class="px-4 py-2.5 bg-gradient-to-r from-black via-slate-950 to-black border-b border-amber-500/30 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs border border-amber-500/40 shrink-0">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-cinzel text-xs sm:text-sm font-bold text-amber-300 leading-tight">Confirm Card Language</h3>
+                        <p class="text-[9.5px] text-gray-300">Apni zuban chun kar sample card check karein</p>
+                    </div>
+                </div>
+                <button onclick="closeLanguageConfirmModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-amber-500 hover:text-black text-gray-300 flex items-center justify-center text-xs cursor-pointer transition-colors" title="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Body (Ultra-compact, zero-overflow design) -->
+            <div class="p-3 sm:p-3.5 space-y-2.5 text-xs">
+                
+                <!-- 3D Realistic Umrah Dua Card Preview (Authentic Physical Card Layout) -->
+                <div class="relative w-full bg-white rounded-2xl border-4 border-amber-400 p-2.5 sm:p-3 shadow-2xl text-slate-900 select-none transition-all duration-200">
+                    <!-- Top Badge -->
+                    <div class="text-center mb-1">
+                        <span id="modal-card-top-badge" class="bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-black px-2.5 py-0.5 rounded-full inline-block">
+                            Talbiyah (#11)
+                        </span>
+                    </div>
+
+                    <!-- Arabic Dua -->
+                    <div class="font-arabic text-[13px] sm:text-[14px] font-extrabold text-gray-950 text-center leading-relaxed my-1" dir="rtl" id="modal-card-arabic">
+                        لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ.
+                    </div>
+
+                    <!-- Pronunciation / Transliteration Box -->
+                    <div class="bg-sky-50 border border-sky-200 p-1.5 rounded-xl text-center my-1 shadow-2xs">
+                        <div id="modal-card-transliteration" class="text-[9.5px] sm:text-[10px] font-bold text-blue-900 leading-tight">
+                            Labbaika Allahumma Labbaik, Labbaika laa shareeka laka Labbaik, innal-hamda wan-ni'mata laka wal-mulk, laa shareeka lak.
+                        </div>
+                    </div>
+
+                    <!-- Translation Box (Dynamically switches to chosen language) -->
+                    <div class="bg-amber-50/60 border border-amber-200 p-1.5 rounded-xl text-center my-1 shadow-2xs">
+                        <div id="modal-card-translation" class="text-[9.5px] sm:text-[10px] font-medium text-gray-800 leading-tight">
+                            حاضر ہوں! اے اللہ میں حاضر ہوں، حاضر ہوں، تیرا کوئی شریک نہیں۔ بیشک تمام حمد و ثنا اور نعمتیں تیری ہیں اور بادشاہی بھی تیری ہے، تیرا کوئی شریک نہیں۔
+                        </div>
+                        <div id="modal-card-reference" class="text-[8.5px] font-bold text-gray-500 mt-0.5">
+                            (صحیح البخاری 1549)
+                        </div>
+                    </div>
+
+                    <!-- Masnoon Note -->
+                    <div id="modal-card-note" class="bg-slate-100 text-slate-700 text-[8.5px] font-bold py-0.5 px-2 rounded-full text-center mt-1">
+                        تلبیہ کے بعد اپنی دعائیں مانگنا مسنون ہے
+                    </div>
+
+                    <!-- Card Bottom (Lanyard Hole Punch + Card Number) -->
+                    <div class="flex items-center justify-between pt-1 border-t border-gray-100 mt-1 flex-shrink-0">
+                        <div class="text-[9px] font-bold text-emerald-700 flex items-center gap-1">
+                            <i class="fa-solid fa-shield-halved text-[9px]"></i> 100% Waterproof
+                        </div>
+                        <!-- Realistic Lanyard Hole Punch -->
+                        <div class="w-4 h-4 rounded-full border-2 border-gray-400 bg-gray-200 flex items-center justify-center shadow-inner" title="Lanyard Hole Punch">
+                            <div class="w-1.5 h-1.5 rounded-full bg-onyx"></div>
+                        </div>
+                        <!-- Card Number Badge -->
+                        <div class="w-5 h-5 rounded-full bg-onyx text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
+                            11
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Selection Grid (4 Compact Luxury Buttons) -->
+                <div>
+                    <div class="flex items-center justify-between text-[11px] font-bold text-gray-300 mb-1.5">
+                        <span class="text-amber-300">Choose Language:</span>
+                        <span class="text-[9.5px] text-gray-400 font-normal">Click to see card preview</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-1.5" id="lang-modal-tiles">
+                        <!-- Urdu -->
+                        <button type="button" onclick="setModalLanguage('Urdu')" id="modal-lang-tile-Urdu" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                            <span class="font-extrabold text-[11px]">🇵🇰 Urdu (اردو)</span>
+                            <i class="fa-solid fa-circle-check text-xs tile-check"></i>
+                        </button>
+                        <!-- Hindi -->
+                        <button type="button" onclick="setModalLanguage('Hindi')" id="modal-lang-tile-Hindi" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                            <span class="font-extrabold text-[11px]">🇮🇳 Hindi (हिंदी)</span>
+                            <i class="fa-solid fa-circle-check text-xs tile-check"></i>
+                        </button>
+                        <!-- English -->
+                        <button type="button" onclick="setModalLanguage('English')" id="modal-lang-tile-English" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                            <span class="font-extrabold text-[11px]">🇬🇧 English</span>
+                            <i class="fa-solid fa-circle-check text-xs tile-check"></i>
+                        </button>
+                        <!-- Roman -->
+                        <button type="button" onclick="setModalLanguage('Roman')" id="modal-lang-tile-Roman" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                            <span class="font-extrabold text-[11px]">🔤 Roman Urdu</span>
+                            <i class="fa-solid fa-circle-check text-xs tile-check"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quantity & Price Row (1 Compact Row) -->
+                <div class="p-2 bg-white/5 rounded-xl border border-amber-500/30 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10.5px] font-bold text-gray-300">Qty:</span>
+                        <div class="flex items-center bg-black/60 rounded-lg border border-amber-500/40 p-0.5">
+                            <button type="button" onclick="changeModalQty(-1)" class="w-5 h-5 rounded bg-white/10 hover:bg-amber-500 hover:text-black text-white font-bold text-xs flex items-center justify-center cursor-pointer active:scale-95 transition-all">-</button>
+                            <span id="modal-qty-display" class="w-6 text-center font-bold text-xs text-amber-300 font-mono">1</span>
+                            <button type="button" onclick="changeModalQty(1)" class="w-5 h-5 rounded bg-white/10 hover:bg-amber-500 hover:text-black text-white font-bold text-xs flex items-center justify-center cursor-pointer active:scale-95 transition-all">+</button>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>Prepaid Free Delivery</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs sm:text-sm font-black text-amber-300 font-mono" id="modal-total-price">Rs. 599</span>
+                        <span class="text-[9px] text-gray-400 line-through ml-1" id="modal-mrp-price">MRP 1198</span>
+                    </div>
+                </div>
+
+                <!-- Confirm CTA Button -->
+                <button type="button" onclick="confirmLanguageAndProceed()" id="modal-confirm-btn" class="w-full gold-bg-gradient hover:opacity-95 text-slate-950 font-black py-2.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs transition-all cursor-pointer active:scale-98">
+                    <i class="fa-solid fa-circle-check text-sm"></i>
+                    <span id="modal-confirm-btn-text">Confirm Urdu & Proceed to Checkout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- PILGRIM REVIEWS -->
     <section id="reviews" class="py-8 px-4 bg-white border-t border-gold-200">
         <div class="max-w-4xl mx-auto">
@@ -1237,29 +1375,31 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 599,
-                        oldPrice: 1198,
+                        oldPrice: 698,
                         weight: "150gm",
-                        tag: "Popular",
+                        tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
+                            "product/offer/offer_5_cards_only_599.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
                         sku: "fati_003",
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
-                        price: 899,
-                        oldPrice: 1798,
+                        price: 898,
+                        oldPrice: 1106,
                         weight: "260gm",
-                        tag: "Mega Combo 🔥",
+                        tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
+                            "product/offer/offer_1_cards_janamaz_898.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
@@ -1302,29 +1442,31 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 599,
-                        oldPrice: 1198,
+                        oldPrice: 698,
                         weight: "150gm",
-                        tag: "Popular",
+                        tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
+                            "product/offer/offer_5_cards_only_599.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
                         sku: "fati_006",
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
-                        price: 899,
-                        oldPrice: 1798,
+                        price: 898,
+                        oldPrice: 1106,
                         weight: "260gm",
-                        tag: "Mega Combo 🔥",
+                        tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
+                            "product/offer/offer_1_cards_janamaz_898.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
@@ -1382,29 +1524,31 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 599,
-                        oldPrice: 1198,
+                        oldPrice: 698,
                         weight: "150gm",
-                        tag: "Popular",
+                        tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
+                            "product/offer/offer_5_cards_only_599.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
                         sku: "fati_009",
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
-                        price: 899,
-                        oldPrice: 1798,
+                        price: 898,
+                        oldPrice: 1106,
                         weight: "260gm",
-                        tag: "Mega Combo 🔥",
+                        tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
+                            "product/offer/offer_1_cards_janamaz_898.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
@@ -1451,29 +1595,31 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 599,
-                        oldPrice: 1198,
+                        oldPrice: 698,
                         weight: "150gm",
-                        tag: "Popular",
+                        tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
+                            "product/offer/offer_5_cards_only_599.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
-                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Order Above ₹999 for FREE Delivery & 10% OFF on Prepaid"]
+                        includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
                         sku: "fati_012",
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
-                        price: 899,
-                        oldPrice: 1798,
+                        price: 898,
+                        oldPrice: 1106,
                         weight: "260gm",
-                        tag: "Mega Combo 🔥",
+                        tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
+                            "product/offer/offer_1_cards_janamaz_898.webp",
                             "product/card/699-1.webp",
                             "product/card/699-2.webp"
                         ],
@@ -1834,19 +1980,19 @@
                 weight: "Family Box (7 Items)",
                 sku: "fati_ess_combo",
                 soldCount: "2,410 sold",
-                price: 999,
-                oldPrice: 2300,
+                price: 1299,
+                oldPrice: 1548,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/combo_banner.webp",
+                image: "product/offer/offer_6_ihram_kit_1299.webp",
                 images: [
-                    "product/offer/combo_banner.webp",
+                    "product/offer/offer_6_ihram_kit_1299.webp",
                     "product/essentials/combo-whats-inside.webp",
                     "product/essentials/combo-box-open.webp",
                     "product/essentials/combo-family.webp",
                     "product/essentials/certified-trusted.webp"
                 ],
-                badge: "FAMILY COMBO • 57% OFF",
+                badge: "OFFER NO.6 • SAVE ₹249",
                 rating: "(620)",
                 desc: "Complete Umrah Family Care Combo for all family members in Ihram. Includes 5 full-size fragrance-free essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Toothbrush Starter Kit + Natural Loofah Scrubber). 100% Halal, SLS-Free & Lab Certified.",
                 features: ["5 Full-Size Ihram Essentials + 2 Free Gifts", "Siwak Miswak Starter Kit + Loofah FREE (₹299 Value)", "100% Fragrance Free & Halal Certified", "Govt. Authorised Academy Lab Certified"],
@@ -1854,6 +2000,116 @@
                     accent: "gold",
                     bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
                     border: "border-gold-500/40"
+                }
+            },
+            {
+                id: 16,
+                name: "Umrah Essentials Combo - Dua Cards + Complete Ihram Kit",
+                category: "combo",
+                brand: "fatimacalligrapher27",
+                hsn: "3304",
+                color: "Luxury Gold Gift Box",
+                size: "Essentials Combo (8 Items)",
+                dimensions: "24 * 18 * 10 cm",
+                material: "Waterproof Cards + Botanical Ihram Toiletries",
+                weight: "800gm",
+                sku: "fati_combo_cards_ihram",
+                soldCount: "1,520 sold",
+                price: 1848,
+                oldPrice: 2156,
+                freeShipping: true,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/offer/offer_2_cards_ihram_1848.webp",
+                images: [
+                    "product/offer/offer_2_cards_ihram_1848.webp",
+                    "product/essentials/combo-whats-inside.webp",
+                    "product/offer/offer_5_cards_only_599.webp",
+                    "product/essentials/combo-family.webp",
+                    "product/essentials/certified-trusted.webp"
+                ],
+                badge: "OFFER NO.2 • SAVE ₹308",
+                rating: "(580)",
+                desc: "Complete Umrah Essentials Combo for Zaireen. Includes Waterproof Umrah Dua Cards + 5 Full-Size Fragrance-Free Ihram Care Essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Brush + Loofah Scrubber) + Tasbih & Velvet Pouch. 100% Halal & Lab Certified.",
+                features: ["Waterproof Umrah Dua Cards Included", "5 Full-Size Fragrance-Free Ihram Essentials", "2 FREE Gifts Worth ₹299 (Siwak Miswak + Loofah)", "FREE Shipping on Prepaid Orders + Extra 10% OFF"],
+                theme: {
+                    accent: "gold",
+                    bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
+                    border: "border-gold-500/40"
+                }
+            },
+            {
+                id: 17,
+                name: "Umrah Mega Combo - Cards + Travel Janamaz + Ihram Kit",
+                category: "combo",
+                brand: "fatimacalligrapher27",
+                hsn: "3304",
+                color: "Imperial Gold Master Box",
+                size: "Mega Luxury Combo (9 Items)",
+                dimensions: "26 * 20 * 12 cm",
+                material: "Waterproof Cards, Travel Janamaz & Botanicals",
+                weight: "950gm",
+                sku: "fati_combo_mega_2198",
+                soldCount: "2,840 sold",
+                price: 2198,
+                oldPrice: 2606,
+                hasJanamaz: true,
+                freeShipping: true,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/offer/offer_3_mega_combo_2198.webp",
+                images: [
+                    "product/offer/offer_3_mega_combo_2198.webp",
+                    "product/offer/offer_1_cards_janamaz_898.webp",
+                    "product/essentials/combo-whats-inside.webp",
+                    "product/essentials/combo-family.webp",
+                    "product/essentials/certified-trusted.webp"
+                ],
+                badge: "OFFER NO.3 • SAVE ₹408",
+                rating: "(740)",
+                desc: "The Ultimate All-in-One Umrah Mega Combo for Pilgrims. Includes Waterproof Umrah Dua Cards + Pocket Travel Janamaz + 5 Full-Size Ihram Essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Toothbrush Starter Kit + Loofah Scrubber) + Tasbih & Velvet Pouch.",
+                features: ["Waterproof Dua Cards + Foldable Pocket Janamaz", "5 Premium Ihram Friendly Personal Care Products", "2 FREE Gifts Worth ₹299 (Siwak + Loofah)", "FREE Shipping on Prepaid Orders + Extra 10% OFF"],
+                theme: {
+                    accent: "gold",
+                    bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
+                    border: "border-gold-500/40"
+                }
+            },
+            {
+                id: 15,
+                name: "Siwak Natural Miswak Toothbrush Starter Kit (1 Handle + 5 Refills)",
+                category: "essentials",
+                brand: "fatimacalligrapher27",
+                hsn: "9603",
+                color: "Natural Beige",
+                size: "Starter Kit (1 Handle + 5 Refills)",
+                dimensions: "18 * 6 * 2.5 cm",
+                material: "Natural Salvadora Persica Miswak Fibers & Biodegradable Handle",
+                weight: "60gm",
+                sku: "fati_siwak_01",
+                soldCount: "1,840 sold",
+                price: 99,
+                oldPrice: 199,
+                freeShipping: false,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/miswak/box.webp",
+                images: [
+                    "product/miswak/box.webp",
+                    "product/miswak/benefits.webp",
+                    "product/miswak/comparison.webp",
+                    "product/miswak/how_to_use.webp"
+                ],
+                badge: "SUNNAH ORAL CARE • 50% OFF",
+                rating: "(485)",
+                desc: "Siwak Natural Miswak Oral Care Toothbrush Starter Kit with 1 Handle and 5 Replaceable Miswak Tips. Revive the prophetic Sunnah with 100% natural miswak bristles — no nylon, no plastic fibers, zero chemical bleaches. Perfect for daily oral hygiene, travel, and Ihram.",
+                features: [
+                    "Sunnah Revival: 100% Natural Miswak Fibers",
+                    "Includes 1 Reusable Handle + 5 Biodegradable Refills",
+                    "Chemical Free, Alcohol Free & Ihram Friendly",
+                    "Promotes Healthy Gums & Naturally Freshens Breath"
+                ],
+                theme: {
+                    accent: "emerald",
+                    bgGradient: "from-emerald-950/20 via-sand to-emerald-50/30",
+                    border: "border-emerald-500/40"
                 }
             }
         ];
@@ -2331,6 +2587,18 @@
                 weightKg: 0.08,
                 image: 'product/essentials/face-wash-nobg.webp',
                 checked: true
+            },
+            {
+                key: 'miswak',
+                id: 15,
+                sku: 'fati_siwak_01',
+                name: 'Siwak Miswak Starter Kit (1 Handle + 5 Refills)',
+                desc: '100% Natural Miswak Fibers • Prophetic Sunnah Oral Care',
+                price: 99,
+                mrp: 199,
+                weightKg: 0.06,
+                image: 'product/miswak/box.webp',
+                checked: false
             }
         ];
 
@@ -3457,6 +3725,12 @@
         function addPdpProductToCart() {
             const p = currentProduct;
 
+            // If product has language options, validate & confirm language + quantity first!
+            if ((p.category === 'card' || p.category === 'sticker') && !isDirectAddingFromModal) {
+                openLanguageConfirmModal('cart');
+                return;
+            }
+
             // 1. Handle Custom Combo Builder items (ID 14 & custom mode: charges actual individual item prices)
             if (p.id === 14 && currentComboMode === 'custom') {
                 const selected = customComboItems.filter(i => i.checked);
@@ -3504,25 +3778,29 @@
                 return;
             }
 
-            // 2. Handle Standard Umrah Family Combo (ID 14 & standard mode: fixed ₹999 package price)
-            if (p.id === 14) {
-                cart = [
-                    {
-                        cartKey: '14_fati_ess_combo',
-                        id: 14,
+            // 2. Handle Combos (ID 14: Ihram Kit Only ₹1299, ID 16: Cards+Ihram ₹1848, ID 17: Mega Combo ₹2198)
+            if (p.id === 14 || p.id === 16 || p.id === 17) {
+                const existing = cart.find(i => i.id === p.id);
+                if (existing) {
+                    existing.qty += 1;
+                } else {
+                    cart.push({
+                        cartKey: `${p.id}_${p.sku}`,
+                        id: p.id,
                         name: p.name,
-                        sku: 'fati_ess_combo',
-                        variantName: 'Complete Family Kit (7 Items)',
-                        price: 999,
-                        image: 'product/offer/combo_banner.webp',
-                        weightKg: 0.65,
+                        sku: p.sku,
+                        variantName: p.size || 'Complete Combo Pack',
+                        price: p.price,
+                        image: p.image,
+                        weightKg: p.weightKg || 0.65,
                         qty: 1,
+                        hasJanamaz: !!p.hasJanamaz,
                         freeShipping: true
-                    }
-                ];
+                    });
+                }
                 saveCartToStorage();
                 updateCartUI(true);
-                showToast(`Umrah Family Combo added to Cart (₹999 - Complete Kit)!`);
+                showToast(`${p.name} added to Cart (₹${p.price})!`);
                 return;
             }
 
@@ -3580,6 +3858,12 @@
         function buyPdpProductNow() {
             const p = currentProduct;
 
+            // If product has language options, validate & confirm language + quantity first!
+            if (p.category === 'card' || p.category === 'sticker') {
+                openLanguageConfirmModal('buy');
+                return;
+            }
+
             // 1. If Custom Combo mode on ID 14: charges actual individual prices
             if (p.id === 14 && currentComboMode === 'custom') {
                 const selected = customComboItems.filter(i => i.checked);
@@ -3626,19 +3910,20 @@
                 return;
             }
 
-            // 2. If Standard Umrah Family Combo (ID 14, fixed ₹999 combo price)
-            if (p.id === 14) {
+            // 2. If Combos (ID 14: Ihram Kit Only ₹1299, ID 16: Cards+Ihram ₹1848, ID 17: Mega Combo ₹2198)
+            if (p.id === 14 || p.id === 16 || p.id === 17) {
                 cart = [
                     {
-                        cartKey: '14_fati_ess_combo',
-                        id: 14,
+                        cartKey: `${p.id}_${p.sku}`,
+                        id: p.id,
                         name: p.name,
-                        sku: 'fati_ess_combo',
-                        variantName: 'Complete Family Kit (7 Items)',
-                        price: 999,
-                        image: 'product/offer/combo_banner.webp',
-                        weightKg: 0.65,
+                        sku: p.sku,
+                        variantName: p.size || 'Complete Combo Pack',
+                        price: p.price,
+                        image: p.image,
+                        weightKg: p.weightKg || 0.65,
                         qty: 1,
+                        hasJanamaz: !!p.hasJanamaz,
                         freeShipping: true
                     }
                 ];
@@ -3651,6 +3936,213 @@
             cart = [];
             addPdpProductToCart();
             window.location.href = 'checkout.html';
+        }
+
+        
+        // ==========================================
+        // LANGUAGE & QUANTITY CONFIRMATION MODAL LOGIC
+        // ==========================================
+        let modalTargetAction = 'buy'; // 'buy' or 'cart'
+        let modalSelectedLang = 'English';
+        let modalSelectedQty = 1;
+        let isDirectAddingFromModal = false;
+
+        const LANG_PREVIEW_DATA = {
+            'Urdu': {
+                name: 'Urdu',
+                label: 'Urdu (اردو)',
+                badge: 'Talbiyah (اردو - #11)',
+                arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ.',
+                transliteration: 'Labbaika Allahumma Labbaik, Labbaika laa shareeka laka Labbaik, innal-hamda wan-ni\'mata laka wal-mulk, laa shareeka lak.',
+                translation: 'حاضر ہوں! اے اللہ میں حاضر ہوں، حاضر ہوں، تیرا کوئی شریک نہیں۔ بیشک تمام حمد و ثنا اور نعمتیں تیری ہیں اور بادشاہی بھی تیری ہے، تیرا کوئی شریک نہیں۔',
+                reference: '(صحیح البخاری 1549)',
+                note: 'تلبیہ کے بعد اپنی دعائیں مانگنا مسنون ہے'
+            },
+            'Hindi': {
+                name: 'Hindi',
+                label: 'Hindi (हिंदी)',
+                badge: 'तल्बिया (हिंदी - #11)',
+                arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ.',
+                transliteration: 'लब्बैक अल्लाहुम्मा लब्बैक, लब्बैक ला शरीका लका लब्बैक, इन्नल-हमदा वन-नि\'मता लका वल-मुल्क, ला शरीका लक.',
+                translation: 'हाज़िर हूँ! ऐ अल्लाह मैं हाज़िर हूँ, तेरा कोई शरीक नहीं, हाज़िर हूँ। बेशक तमाम तारीफ़ें और नेमतें तेरी ही हैं और मुल्क भी तेरा ही है, तेरा कोई शरीक नहीं।',
+                reference: '(सहीह अल-बुख़ारी 1549)',
+                note: 'तल्बिया के बाद अपनी दुआएं मांगना मसनून है'
+            },
+            'English': {
+                name: 'English',
+                label: 'English',
+                badge: 'Talbiyah (English - #11)',
+                arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ.',
+                transliteration: 'Labbaika Allahumma Labbaik, Labbaika laa shareeka laka Labbaik, innal-hamda wan-ni\'mata laka wal-mulk, laa shareeka lak.',
+                translation: 'Here I am, O Allah, here I am. Here I am, You have no partner, here I am. Verily all praise, grace, and sovereignty belong to You. You have no partner.',
+                reference: '(Sahih al-Bukhari 1549)',
+                note: 'It is Sunnah to make personal Duas after Talbiyah'
+            },
+            'Roman': {
+                name: 'Roman Urdu',
+                label: 'Roman English',
+                badge: 'Talbiyah (Roman - #11)',
+                arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ.',
+                transliteration: 'Labbaika Allahumma Labbaik, Labbaika laa shareeka laka Labbaik, innal-hamda wan-ni\'mata laka wal-mulk, laa shareeka lak.',
+                translation: 'Hazir hun! Aie Allah main hazir hun, hazir hun, tera koi shareek nahi, hazir hun. Beshak tamam tar hamd o sana, aur tamam tar rehmatien teri hain aur mulk bhi tera hi hai tera koi shareek nahi hai.',
+                reference: '(Sahih al-Bukhari 1549)',
+                note: 'Talbiyah ke baad apni duaien krna masnoon hai.'
+            }
+        };
+
+        function openLanguageConfirmModal(action = 'buy') {
+            modalTargetAction = action;
+            modalSelectedQty = 1;
+            modalSelectedLang = currentProduct.language || 'English';
+            if (modalSelectedLang === 'Roman English') modalSelectedLang = 'Roman';
+
+            updateLanguageModalUI();
+            const modalEl = document.getElementById('language-confirm-modal');
+            if (modalEl) modalEl.classList.remove('hidden');
+        }
+
+        function closeLanguageConfirmModal() {
+            const modalEl = document.getElementById('language-confirm-modal');
+            if (modalEl) modalEl.classList.add('hidden');
+        }
+
+        function setModalLanguage(lang) {
+            modalSelectedLang = lang;
+            updateLanguageModalUI();
+        }
+
+        function changeModalQty(delta) {
+            modalSelectedQty = Math.max(1, Math.min(10, modalSelectedQty + delta));
+            updateLanguageModalUI();
+        }
+
+        function updateLanguageModalUI() {
+            const data = LANG_PREVIEW_DATA[modalSelectedLang] || LANG_PREVIEW_DATA['English'];
+            
+            // Update 3D Physical Card Sample Elements
+            const cardBadge = document.getElementById('modal-card-top-badge');
+            const cardArabic = document.getElementById('modal-card-arabic');
+            const cardTrans = document.getElementById('modal-card-transliteration');
+            const cardTransl = document.getElementById('modal-card-translation');
+            const cardRef = document.getElementById('modal-card-reference');
+            const cardNote = document.getElementById('modal-card-note');
+
+            if (cardBadge) cardBadge.textContent = data.badge;
+            if (cardArabic) cardArabic.textContent = data.arabic;
+            if (cardTrans) cardTrans.textContent = data.transliteration;
+            if (cardTransl) cardTransl.textContent = data.translation;
+            if (cardRef) cardRef.textContent = data.reference;
+            if (cardNote) cardNote.textContent = data.note;
+
+            // Update tiles active classes (matching website dark luxury gold aesthetic)
+            ['Urdu', 'Hindi', 'English', 'Roman'].forEach(l => {
+                const tile = document.getElementById(`modal-lang-tile-${l}`);
+                if (!tile) return;
+                const check = tile.querySelector('.tile-check');
+                if (l === modalSelectedLang) {
+                    tile.className = 'lang-modal-tile px-2.5 py-1.5 rounded-xl border-2 border-amber-400 bg-gradient-to-r from-amber-500/25 to-amber-600/35 text-amber-300 shadow-sm text-left transition-all cursor-pointer flex items-center justify-between font-extrabold';
+                    if (check) check.className = 'fa-solid fa-circle-check text-xs text-amber-300 tile-check';
+                } else {
+                    tile.className = 'lang-modal-tile px-2.5 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-amber-400/40 text-gray-300 text-left transition-all cursor-pointer flex items-center justify-between font-semibold';
+                    if (check) check.className = 'fa-solid fa-circle text-xs text-white/20 tile-check';
+                }
+            });
+
+            // Update Qty display & price
+            const qtyDisplay = document.getElementById('modal-qty-display');
+            if (qtyDisplay) qtyDisplay.textContent = modalSelectedQty;
+
+            const hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
+            const variant = hasVariants ? currentProduct.variants[currentVariantIndex] : null;
+            const unitPrice = variant ? variant.price : (currentProduct.price || 599);
+            const unitMrp = variant ? (variant.oldPrice || unitPrice * 2) : 1198;
+            const totalPrice = unitPrice * modalSelectedQty;
+            const totalMrp = unitMrp * modalSelectedQty;
+
+            const totalEl = document.getElementById('modal-total-price');
+            const mrpEl = document.getElementById('modal-mrp-price');
+            const subTitleEl = document.getElementById('modal-package-subtitle');
+            const btnTextEl = document.getElementById('modal-confirm-btn-text');
+
+            if (totalEl) totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+            if (mrpEl) mrpEl.textContent = `MRP Rs. ${totalMrp.toFixed(2)}`;
+            if (subTitleEl) subTitleEl.textContent = `${variant ? variant.shortName : currentProduct.name} (${modalSelectedQty} ${modalSelectedQty === 1 ? 'Kit' : 'Kits'})`;
+
+            if (btnTextEl) {
+                if (modalTargetAction === 'buy') {
+                    btnTextEl.textContent = `Confirm ${data.name} & Proceed (Rs. ${totalPrice.toFixed(0)})`;
+                } else {
+                    btnTextEl.textContent = `Confirm ${data.name} & Add (${modalSelectedQty}x) to Cart`;
+                }
+            }
+        }
+
+        function confirmLanguageAndProceed() {
+            // 1. Switch product language
+            switchProductLanguage(modalSelectedLang);
+
+            // 2. Add with confirmed quantity
+            const p = currentProduct;
+            const hasVariants = p.variants && p.variants.length > 0;
+            const variant = hasVariants ? p.variants[currentVariantIndex] : null;
+            const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
+            const isCombo = variant && variant.hasJanamaz;
+            const isJanamazProd = (p.category === 'janamaz' || p.id === 8);
+            const cartKey = variant 
+                ? ((isCombo || isJanamazProd) ? `${p.id}_${variant.sku}_${currentJanamazColor}` : `${p.id}_${variant.sku}`) 
+                : `${p.id}_default`;
+
+            const vName = isJanamazProd 
+                ? (variant ? variant.shortName : curJanamazObj.name)
+                : (variant ? (isCombo ? `${variant.shortName} (${curJanamazObj.name})` : variant.shortName) : '');
+
+            const itemImage = isJanamazProd
+                ? curJanamazObj.image
+                : ((variant && variant.image) ? variant.image : p.image);
+
+            const itemDisplayName = isJanamazProd ? `Pocket Travel Janamaz (${curJanamazObj.name})` : p.name;
+
+            if (modalTargetAction === 'buy') {
+                // Direct Buy: Set cart strictly to confirmed product & quantity
+                cart = [{
+                    cartKey,
+                    id: p.id,
+                    name: itemDisplayName,
+                    sku: variant ? variant.sku : p.sku,
+                    variantName: vName,
+                    price: variant ? variant.price : p.price,
+                    image: itemImage,
+                    weightKg: variant ? (variant.weightKg || (isCombo ? 0.26 : 0.15)) : (p.weightKg || 0.15),
+                    qty: modalSelectedQty,
+                    janamazColor: (isCombo || isJanamazProd) ? curJanamazObj.name : undefined
+                }];
+                saveCartToStorage();
+                closeLanguageConfirmModal();
+                window.location.href = 'checkout.html';
+            } else {
+                // Add to Cart
+                const existing = cart.find(i => i.cartKey === cartKey);
+                if (existing) {
+                    existing.qty += modalSelectedQty;
+                } else {
+                    cart.push({
+                        cartKey,
+                        id: p.id,
+                        name: itemDisplayName,
+                        sku: variant ? variant.sku : p.sku,
+                        variantName: vName,
+                        price: variant ? variant.price : p.price,
+                        image: itemImage,
+                        weightKg: variant ? (variant.weightKg || (isCombo ? 0.26 : 0.15)) : (p.weightKg || 0.15),
+                        qty: modalSelectedQty,
+                        janamazColor: (isCombo || isJanamazProd) ? curJanamazObj.name : undefined
+                    });
+                }
+                saveCartToStorage();
+                updateCartUI(true);
+                closeLanguageConfirmModal();
+                showToast(`${p.name} (${modalSelectedQty}x) added to Cart!`);
+            }
         }
 
         function showToast(msg) {
@@ -3708,7 +4200,7 @@
             const isOnline = (selectedPaymentMethod === 'razorpay');
             const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 100;
             const hasFreeShipping = (subtotalPrice >= 999);
-            const isPrepaidFreeShipping = (isOnline && subtotalPrice >= 598);
+            const isPrepaidFreeShipping = isOnline; // 100% Free Shipping on All Prepaid Orders
             const effectiveFee = (hasFreeShipping || isPrepaidFreeShipping) ? 0 : courierFee;
 
             // Remove old auto 12% offer
@@ -3747,14 +4239,11 @@
             if (shippingFeeEl) {
                 if (hasFreeShipping || isPrepaidFreeShipping) {
                     shippingFeeEl.className = "font-bold text-emerald-700";
-                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(Prepaid Free Shipping)";
+                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(100% Free Prepaid Shipping)";
                     shippingFeeEl.innerHTML = `FREE <span class="text-[9px] text-emerald-600 font-semibold block">${tagText}</span>`;
-                } else if (isOnline) {
-                    shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on ₹598+ Orders)</span>`;
                 } else {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on Prepaid ₹598+ or Orders Above ₹999)</span>`;
+                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Pay Online for 100% FREE Delivery)</span>`;
                 }
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
@@ -3762,15 +4251,9 @@
             const checkoutBtnText = document.getElementById('checkout-btn-text');
             if (checkoutBtnText && !isProcessingOrder) {
                 if (isOnline) {
-                    if (subtotalPrice >= 598) {
-                        checkoutBtnText.textContent = (prepaidDiscountPercent > 0)
-                            ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF + FREE DELIVERY)`
-                            : `PAY ONLINE (FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`;
-                    } else {
-                        checkoutBtnText.textContent = (prepaidDiscountPercent > 0)
-                            ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF)`
-                            : `PAY ONLINE (RS. ${totalWithShipping.toFixed(0)})`;
-                    }
+                    checkoutBtnText.textContent = (prepaidDiscountPercent > 0)
+                        ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF + FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`
+                        : `PAY ONLINE (FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`;
                 } else {
                     checkoutBtnText.textContent = `CONFIRM & PLACE ORDER (COD • RS. ${totalWithShipping.toFixed(0)})`;
                 }

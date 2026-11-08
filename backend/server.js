@@ -241,16 +241,31 @@ app.use(errorHandler);
 // Start server if run directly
 if (require.main === module) {
   const PORT = config.port;
-  app.listen(PORT, () => {
+  const os = require('os');
+  const nets = os.networkInterfaces();
+  let lanIp = 'localhost';
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      if (net.family === 'IPv4' && !net.internal) {
+        lanIp = net.address;
+        break;
+      }
+    }
+    if (lanIp !== 'localhost') break;
+  }
+
+  app.listen(PORT, '0.0.0.0', () => {
     logger.info('SERVER_STARTED', {
       port: PORT,
+      lanIp,
       nodeEnv: config.nodeEnv,
       paymentMode: config.paymentMode,
       shiprocketMode: config.shiprocketMode
     });
     console.log(`\n======================================================`);
     console.log(`🚀 FATIMA CALLIGRAPHER SECURE BACKEND RUNNING`);
-    console.log(`🌐 Storefront URL: http://localhost:${PORT}`);
+    console.log(`🌐 Local Storefront URL:   http://localhost:${PORT}`);
+    console.log(`📱 Mobile Network URL:     http://${lanIp}:${PORT}`);
     console.log(`🔒 Environment: ${config.nodeEnv} | Mode: ${config.paymentMode.toUpperCase()}`);
     console.log(`======================================================\n`);
   });

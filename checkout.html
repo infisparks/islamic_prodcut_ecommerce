@@ -749,13 +749,49 @@
                 id: 14,
                 name: "Umrah Family Combo - Complete Ihram Essentials Kit",
                 category: "essentials",
-                image: "product/offer/combo_banner.webp",
-                badge: "LAUNCH OFFER",
+                image: "product/offer/offer_6_ihram_kit_1299.webp",
+                badge: "OFFER NO.6",
                 sku: "fati_ess_combo",
-                price: 999,
-                oldPrice: 2300,
+                price: 1299,
+                oldPrice: 1548,
                 weightKg: 0.65,
                 freeShipping: true
+            },
+            {
+                id: 16,
+                name: "Umrah Essentials Combo - Dua Cards + Complete Ihram Kit",
+                category: "combo",
+                image: "product/offer/offer_2_cards_ihram_1848.webp",
+                badge: "OFFER NO.2",
+                sku: "fati_combo_cards_ihram",
+                price: 1848,
+                oldPrice: 2156,
+                weightKg: 0.80,
+                freeShipping: true
+            },
+            {
+                id: 17,
+                name: "Umrah Mega Combo - Cards + Travel Janamaz + Ihram Kit",
+                category: "combo",
+                image: "product/offer/offer_3_mega_combo_2198.webp",
+                badge: "OFFER NO.3",
+                sku: "fati_combo_mega_2198",
+                price: 2198,
+                oldPrice: 2606,
+                weightKg: 0.95,
+                hasJanamaz: true,
+                freeShipping: true
+            },
+            {
+                id: 15,
+                name: "Siwak Natural Miswak Toothbrush Starter Kit (1 Handle + 5 Refills)",
+                category: "essentials",
+                image: "product/miswak/box.webp",
+                badge: "SUNNAH ORAL CARE",
+                sku: "fati_siwak_01",
+                price: 99,
+                oldPrice: 199,
+                weightKg: 0.06
             },
             {
                 id: 99,
@@ -1027,10 +1063,9 @@
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
             // Shipping Rule:
-            // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY on all orders (Prepaid & COD)!
-            // - Prepaid orders of ₹598+ get FREE SHIPPING!
+            // - ALL Prepaid / Online orders get 100% FREE SHIPPING (₹0)!
             // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-            // - Prepaid orders below ₹598 pay standard delivery: ₹100
+            // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY!
             // - COD orders below ₹999 pay standard delivery: ₹100
             const LOCAL_PINCODES = ['421305', '421302', '421308'];
             const currentPincode = (document.getElementById('cust-pincode')?.value || '').trim();
@@ -1038,9 +1073,8 @@
 
             const isOnline = (selectedPaymentMethod !== 'cod');
             const hasFreeShipping = isLocalDelivery || (subtotal >= 999);
-            const isPrepaidFree = isLocalDelivery || (subtotal >= 598);
             const codShipping = (isLocalDelivery || hasFreeShipping) ? 0 : 100;
-            const onlineShipping = (isLocalDelivery || isPrepaidFree || hasFreeShipping) ? 0 : 100;
+            const onlineShipping = 0; // 100% Free Shipping on ALL Prepaid Orders
             const effectiveShipping = isOnline ? onlineShipping : codShipping;
 
             if (shippingEl) {
@@ -1048,19 +1082,14 @@
                     shippingEl.className = "font-bold text-emerald-700";
                     shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Nearby Local Area: Free Delivery)</span>`;
                 } else if (isOnline) {
-                    if (onlineShipping === 0) {
-                        shippingEl.className = "font-bold text-emerald-700";
-                        shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Prepaid Free Delivery)</span>`;
-                    } else {
-                        shippingEl.className = "font-bold text-onyx";
-                        shippingEl.innerHTML = `Rs. 100.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Free Delivery on ₹598+)</span>`;
-                    }
+                    shippingEl.className = "font-bold text-emerald-700";
+                    shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(100% Free Prepaid Shipping)</span>`;
                 } else if (hasFreeShipping) {
                     shippingEl.className = "font-bold text-emerald-700";
                     shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Above ₹999 Free Delivery)</span>`;
                 } else {
                     shippingEl.className = "font-bold text-onyx";
-                    shippingEl.innerHTML = `Rs. 100.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Pay Online ₹598+ for FREE Delivery)</span>`;
+                    shippingEl.innerHTML = `Rs. 100.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Pay Online for 100% FREE Delivery)</span>`;
                 }
             }
 
@@ -1078,16 +1107,16 @@
             }
 
             // Prepaid discount:
-            // - 10% OFF on prepaid for Combo sets (₹899) or orders >= ₹899
-            // - 0% discount on ₹599 kit (Free delivery only, no 5% off)
+            // - 10% OFF on prepaid for Combo sets (₹898+) or orders >= ₹898
+            // - 0% discount on ₹599 kit (Free delivery only, no extra 10% off)
             const hasCombo = checkoutCart.some(item => {
-                if (item.id === 14) return true;
+                if (item.id === 14 || item.id === 16 || item.id === 17) return true;
                 const p = catalogProducts.find(prod => prod.id === item.id);
                 const v = p && p.variants ? p.variants.find(vr => vr.sku === item.sku) : null;
                 return (v && v.hasJanamaz);
             });
-            const isComboOr899 = (hasCombo || subtotal >= 899);
-            const prepaidDiscountPercent = isComboOr899 ? 10 : 0;
+            const isComboOr898 = (hasCombo || subtotal >= 898);
+            const prepaidDiscountPercent = isComboOr898 ? 10 : 0;
             const basePrepaidItemDiscount = Math.round((subtotal * prepaidDiscountPercent) / 100);
             const prepaidDiscount = isOnline ? basePrepaidItemDiscount : 0;
 
@@ -1369,11 +1398,8 @@
                     const courierName = info.deliveryType || (info.couriers && info.couriers[0]) || 'Express Courier Partner';
                     const etd = info.estimatedDays || '3-4 Business Days';
 
-                    const isSubtotalEligible = checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0) >= 598;
-                    const onlineShipTag = isSubtotalEligible ? 'FREE Online / ₹100 COD' : '₹100 COD & Online (FREE Online on ₹598+)';
-                    const courierSubTag = isSubtotalEligible 
-                        ? `${courierName} • Pay Online & Get FREE Delivery (Save ₹100)` 
-                        : `${courierName} • Add items worth ₹598+ for FREE Online Delivery`;
+                    const onlineShipTag = 'FREE Online / ₹100 COD';
+                    const courierSubTag = `${courierName} • Pay Online & Get 100% FREE Delivery (Save ₹100)`;
 
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
@@ -1388,22 +1414,21 @@
                     `;
                 } else {
                     currentShippingFee = 100;
-                    const isSubtotalEligible = checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0) >= 598;
-                    const onlineShipTag = isSubtotalEligible ? 'FREE Online / ₹100 COD' : '₹100 COD & Online (FREE Online on ₹598+)';
+                    const onlineShipTag = 'FREE Online / ₹100 COD';
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
                         <div class="flex items-center justify-between">
                             <span><i class="fa-solid fa-truck-fast text-emerald-600 mr-1"></i> Pan-India Express Delivery</span>
                             <span class="font-bold text-emerald-800">${onlineShipTag}</span>
                         </div>
-                        <div class="text-[10px] text-emerald-700 mt-0.5">${isSubtotalEligible ? 'Pay Online & Get FREE Delivery (Save ₹100)' : 'Add items worth ₹598+ for FREE Online Delivery'}</div>
+                        <div class="text-[10px] text-emerald-700 mt-0.5">Pay Online & Get 100% FREE Delivery (Save ₹100)</div>
                     `;
                 }
             } catch (err) {
                 spinner.classList.add('hidden');
                 currentShippingFee = 100;
                 feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
-                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (FREE Online on ₹598+ / ₹100 COD)`;
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Express Courier (100% FREE Online / ₹100 COD)`;
             }
 
             saveCustomerDetails();
@@ -1793,7 +1818,15 @@
                 itemsList.forEach(item => {
                     const q = item.quantity || item.qty || 1;
                     if (item.id === 14 || item.sku === 'fati_ess_combo') {
-                        totalMrp += 2300 * q;
+                        totalMrp += 1548 * q;
+                    } else if (item.id === 16 || item.sku === 'fati_combo_cards_ihram') {
+                        totalMrp += 2156 * q;
+                    } else if (item.id === 17 || item.sku === 'fati_combo_mega_2198') {
+                        totalMrp += 2606 * q;
+                    } else if (item.sku === 'fati_003' || item.sku === 'fati_006' || item.sku === 'fati_009' || item.sku === 'fati_012') {
+                        totalMrp += 1106 * q;
+                    } else if (item.sku === 'fati_002' || item.sku === 'fati_005' || item.sku === 'fati_008' || item.sku === 'fati_011') {
+                        totalMrp += 698 * q;
                     } else if (item.id === 8 || (item.sku && String(item.sku).startsWith('fati_jnm'))) {
                         totalMrp += 699 * q;
                     } else if (item.id === 9 || item.sku === 'fati_ess_soap') {
@@ -1802,6 +1835,8 @@
                         totalMrp += 298 * q;
                     } else if (item.id === 13 || item.sku === 'fati_ess_facewash') {
                         totalMrp += 598 * q;
+                    } else if (item.id === 15 || item.sku === 'fati_siwak_01') {
+                        totalMrp += 199 * q;
                     } else if (item.id === 11 || item.id === 12 || item.sku === 'fati_ess_shampoo' || item.sku === 'fati_ess_wash') {
                         totalMrp += 798 * q;
                     } else {

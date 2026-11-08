@@ -62,10 +62,9 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
   // Shipping Rule:
+  // - ALL Prepaid (Online) orders get 100% FREE SHIPPING (Rs. 0)!
   // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY on all orders (Prepaid & COD)!
-  // - Prepaid orders of ₹598+ get FREE SHIPPING!
   // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-  // - Prepaid orders below ₹598 pay standard ₹100 delivery charge.
   // - COD orders below ₹999 pay standard ₹100 delivery charge.
   const LOCAL_FREE_PINCODES = ['421305', '421302', '421308'];
   const cleanPincode = String(deliveryPincode || '').trim();
@@ -75,7 +74,7 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   let hasFreeShipping = false;
   let shipping = 100;
 
-  if (isLocalFreeShipping || subtotal >= 999 || (isOnlinePayment && subtotal >= 598)) {
+  if (isLocalFreeShipping || subtotal >= 999 || isOnlinePayment) {
     hasFreeShipping = true;
     shipping = 0;
   } else {
@@ -87,15 +86,15 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   let appliedCoupon = null;
 
   // Payment Method Discounts:
-  // - 10% OFF on prepaid for Combo sets (₹899) or orders >= ₹899
-  // - 0% discount on ₹599 kit (Free delivery only, no 5% off)
+  // - 10% OFF on prepaid for Combo sets (₹898+) or orders >= ₹898
+  // - 0% discount on ₹599 kit (Free delivery only, no extra 10% off)
   let onlineDiscount = 0;
   let codCharge = 0;
 
   if (isOnlinePayment) {
-    const hasCombo = items.some(i => i.hasJanamaz);
-    const isComboOr899 = (hasCombo || subtotal >= 899);
-    const prepaidDiscountRate = isComboOr899 ? 0.10 : 0;
+    const hasCombo = items.some(i => i.hasJanamaz || i.sku === 'fati_ess_combo' || i.sku === 'fati_combo_cards_ihram' || i.sku === 'fati_combo_mega_2198');
+    const isComboOr898 = (hasCombo || subtotal >= 898);
+    const prepaidDiscountRate = isComboOr898 ? 0.10 : 0;
     onlineDiscount = Math.round(subtotal * prepaidDiscountRate);
   }
 

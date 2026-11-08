@@ -1370,6 +1370,26 @@
                 icon = '🌿';
                 tag = '50ml';
                 tagClass = 'bg-green-50 text-green-800 border-green-200 font-semibold';
+            } else if (sku.includes('siwak') || sku.includes('miswak') || nameLower.includes('siwak') || nameLower.includes('miswak')) {
+                baseName = 'Siwak Miswak Starter Kit';
+                icon = '🪥';
+                tag = '1+5 Refills';
+                tagClass = 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
+            } else if (sku.includes('cards_ihram') || sku.includes('offer_2') || nameLower.includes('cards + complete ihram') || nameLower.includes('cards + ihram')) {
+                baseName = 'Cards + Ihram Kit';
+                icon = '🎁';
+                tag = 'Offer 2 (₹1848)';
+                tagClass = 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
+            } else if (sku.includes('combo_mega') || sku.includes('offer_3') || nameLower.includes('mega combo')) {
+                baseName = 'Mega Umrah Combo';
+                icon = '👑';
+                tag = 'Offer 3 (₹2198)';
+                tagClass = 'bg-gold-100 text-amber-950 border-gold-400 font-black';
+            } else if (sku === 'fati_ess_combo' || nameLower.includes('family combo') || nameLower.includes('ihram essentials kit')) {
+                baseName = 'Umrah Ihram Kit';
+                icon = '📦';
+                tag = 'Offer 6 (₹1299)';
+                tagClass = 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold';
             } else if (sku.includes('jnm') || nameLower.includes('janamaz') || item.janamazColor) {
                 baseName = 'Pocket Janamaz';
                 icon = '📿';
