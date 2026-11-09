@@ -254,7 +254,7 @@ if (require.main === module) {
     if (lanIp !== 'localhost') break;
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  app.listen(PORT, () => {
     logger.info('SERVER_STARTED', {
       port: PORT,
       lanIp,
