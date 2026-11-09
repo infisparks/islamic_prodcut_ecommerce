@@ -310,9 +310,9 @@
                             </div>
                         </label>
 
-                        <!-- CASH ON DELIVERY (Clean Secondary Option) -->
-                        <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" 
-                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all">
+                        <!-- CASH ON DELIVERY (Temporarily Disabled - Hidden) -->
+                        <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" style="display: none !important;"
+                            class="hidden items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all">
                             <input type="radio" name="payment_method" value="cod" id="radio-cod" class="mt-0.5 text-onyx focus:ring-onyx accent-onyx w-4 h-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-1.5 flex-wrap">
@@ -419,7 +419,7 @@
                             <span id="btn-submit-text">PAY ONLINE & SAVE Rs. 100.00 (FREE Delivery) • Rs. 599.00</span>
                         </button>
                         
-                        <div id="btn-submit-sub" class="text-center text-[11px] pt-1">
+                        <div id="btn-submit-sub" class="text-center text-[11px] pt-1" style="display: none !important;">
                             <span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">
                                 Or choose <b>Cash on Delivery</b>: Rs. 699.00 (Delivery: Rs. 100)
                             </span>
@@ -451,36 +451,29 @@
         </form>
     </main>
 
-    <!-- MOBILE STICKY BOTTOM DUAL CONFIRM BAR (High-Converting 65/35 Hero Online Bar) -->
+    <!-- MOBILE STICKY BOTTOM DUAL CONFIRM BAR (Online Only Mode) -->
     <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 p-2 px-2.5 z-40 shadow-[0_-6px_25px_rgba(0,0,0,0.08)]">
-        <div class="grid grid-cols-5 gap-2 max-w-md mx-auto">
+        <div class="max-w-md mx-auto">
             
-            <!-- Online Button (Left: 60% Width - Dominant Hero with Radiant Shimmer & Live Savings) -->
+            <!-- Online Button (Full Width - Dominant Hero with Radiant Shimmer) -->
             <button type="button" onclick="submitWithPaymentMethod('razorpay')" 
-                class="col-span-3 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30">
+                class="w-full flex flex-col justify-between px-3.5 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30">
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="font-black text-[11px] text-onyx tracking-tight flex items-center gap-1">
-                        <i class="fa-solid fa-bolt text-emerald-700 text-[10px]"></i> PAY ONLINE
+                        <i class="fa-solid fa-bolt text-emerald-700 text-[10px]"></i> PAY ONLINE & CONFIRM ORDER
                     </span>
                     <span id="mobile-online-savings-tag" class="bg-emerald-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase leading-none tracking-wide whitespace-nowrap">⚡ FREE DELIVERY</span>
                 </div>
                 <div class="flex items-center justify-between w-full leading-none">
-                    <span id="mobile-online-sub" class="text-[8.5px] text-onyx/75 font-semibold">Save Rs. 100 vs COD</span>
+                    <span id="mobile-online-sub" class="text-[8.5px] text-onyx/75 font-semibold">100% Encrypted & Safe Checkout</span>
                     <span id="mobile-online-price" class="text-xs font-black text-onyx font-mono">Rs. 599.00</span>
                 </div>
             </button>
 
-            <!-- COD Button (Right: 40% Width - Clean Secondary Cash Option) -->
-            <button type="button" onclick="submitWithPaymentMethod('cod')" 
-                class="col-span-2 w-full flex flex-col justify-between px-2 py-1.5 rounded-xl bg-onyx hover:bg-black text-white shadow-2xs active:scale-[0.98] transition-all border border-gray-700/80 cursor-pointer h-[48px]">
-                <div class="flex items-center justify-between w-full leading-none">
-                    <span class="font-bold text-[10px] text-white tracking-tight">PAY COD</span>
-                    <span class="text-gray-400 text-[7.5px]">Doorstep</span>
-                </div>
-                <div class="flex items-center justify-between w-full leading-none">
-                    <span class="text-[8px] text-gray-400">Cash</span>
-                    <span id="mobile-cod-price" class="text-[10.5px] font-bold text-amber-300 font-mono">Rs. 679.00</span>
-                </div>
+            <!-- COD Button (Temporarily Hidden) -->
+            <button type="button" id="mobile-cod-btn" onclick="submitWithPaymentMethod('cod')" style="display: none !important;"
+                class="hidden">
+                <span id="mobile-cod-price">Rs. 0.00</span>
             </button>
 
         </div>
@@ -1139,10 +1132,7 @@
             const savingsAmountEl = document.getElementById('summary-savings-amount');
 
             if (onlineBadgePrice) {
-                const saveBadge = totalPrepaidSavings > 0
-                    ? `<span class="font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded text-[11px] ml-1">(Save Rs. ${totalPrepaidSavings.toFixed(0)} vs COD)</span>`
-                    : '';
-                onlineBadgePrice.innerHTML = `Pay Rs. ${onlineTotal.toFixed(2)} ${saveBadge}`;
+                onlineBadgePrice.innerHTML = `Pay Rs. ${onlineTotal.toFixed(2)}`;
             }
             if (codBadgePrice) {
                 const codNote = codShipping > 0
@@ -1250,7 +1240,7 @@
                 }
             }
             if (mobileOnlineSub) {
-                mobileOnlineSub.textContent = `Save Rs. ${totalPrepaidSavings.toFixed(0)} vs COD`;
+                mobileOnlineSub.textContent = `100% Encrypted & Safe Checkout`;
             }
 
             if (checkoutCart.length === 0) {
@@ -1435,26 +1425,19 @@
             renderCheckoutSummary();
         }
 
-        // PAYMENT METHOD SELECTOR
+        // PAYMENT METHOD SELECTOR (Prepaid Only - COD Temporarily Disabled)
         function selectPaymentMethod(method) {
-            selectedPaymentMethod = (method === 'cod') ? 'cod' : 'razorpay';
+            selectedPaymentMethod = 'razorpay';
             
             const radioCod = document.getElementById('radio-cod');
             const radioRzp = document.getElementById('radio-razorpay');
             const labelCod = document.getElementById('payment-label-cod');
             const labelRzp = document.getElementById('payment-label-razorpay');
 
-            if (selectedPaymentMethod === 'cod') {
-                if (radioCod) radioCod.checked = true;
-                if (radioRzp) radioRzp.checked = false;
-                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-onyx bg-gray-50/80 cursor-pointer transition-all shadow-2xs";
-                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-emerald-50/20 cursor-pointer transition-all";
-            } else {
-                if (radioCod) radioCod.checked = false;
-                if (radioRzp) radioRzp.checked = true;
-                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition-all shadow-2xs";
-                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all";
-            }
+            if (radioCod) radioCod.checked = false;
+            if (radioRzp) radioRzp.checked = true;
+            if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition-all shadow-2xs";
+            if (labelCod) labelCod.style.display = "none";
 
             renderCheckoutSummary();
         }
