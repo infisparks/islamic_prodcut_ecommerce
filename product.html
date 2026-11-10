@@ -1987,6 +1987,8 @@
                 image: "product/offer/offer_6_ihram_kit_1299.webp",
                 images: [
                     "product/offer/offer_6_ihram_kit_1299.webp",
+                    "product/essentials/fragrance-free-ihram.webp",
+                    "product/essentials/family-zaireen-combo.webp",
                     "product/essentials/combo-whats-inside.webp",
                     "product/essentials/combo-box-open.webp",
                     "product/essentials/combo-family.webp",
@@ -2022,6 +2024,8 @@
                 image: "product/offer/offer_2_cards_ihram_1848.webp",
                 images: [
                     "product/offer/offer_2_cards_ihram_1848.webp",
+                    "product/essentials/fragrance-free-ihram.webp",
+                    "product/essentials/family-zaireen-combo.webp",
                     "product/essentials/combo-whats-inside.webp",
                     "product/offer/offer_5_cards_only_599.webp",
                     "product/essentials/combo-family.webp",
@@ -2058,6 +2062,8 @@
                 image: "product/offer/offer_3_mega_combo_2198.webp",
                 images: [
                     "product/offer/offer_3_mega_combo_2198.webp",
+                    "product/essentials/fragrance-free-ihram.webp",
+                    "product/essentials/family-zaireen-combo.webp",
                     "product/offer/offer_1_cards_janamaz_898.webp",
                     "product/essentials/combo-whats-inside.webp",
                     "product/essentials/combo-family.webp",
@@ -2344,7 +2350,7 @@
                 return items;
             }
 
-            if (p.category === 'essentials' || p.id === 14) {
+            if (p.category === 'essentials' || p.id === 14 || p.id === 16 || p.id === 17) {
                 if (p.images && Array.isArray(p.images)) {
                     p.images.forEach((imgUrl, index) => {
                         items.push({
