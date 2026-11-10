@@ -1299,14 +1299,28 @@
         </div>
     </footer>
 
-    <!-- FLOATING RIGHT-SIDE "OUR REVIEWS" BADGE -->
-    <a href="#reviews" onclick="scrollToReviewsSection(event)" id="floating-reviews-tab" aria-label="Customer Reviews" 
-       class="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-[#121316]/95 hover:bg-black text-[#FAF7F2] border-l-2 border-t-2 border-b-2 border-gold-500 shadow-[0_4px_22px_rgba(212,175,55,0.45)] rounded-l-2xl py-3 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1 active:scale-95 group backdrop-blur-md select-none">
-        <div class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 transition-transform shadow-xs">
-            <i class="fa-solid fa-star text-gold-400"></i>
-        </div>
-        <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FAF7F2] [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Our Reviews</span>
-    </a>
+    <!-- FLOATING RIGHT-SIDE ACTIONS CONTAINER (Reviews & Top Products/Store) -->
+    <div class="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-end gap-2.5 sm:gap-3 pointer-events-none select-none">
+        
+        <!-- 1. OUR REVIEWS TAB -->
+        <a href="#reviews" onclick="scrollToReviewsSection(event)" id="floating-reviews-tab" aria-label="Customer Reviews" 
+           class="pointer-events-auto bg-[#121316]/95 hover:bg-black text-[#FAF7F2] border-l-2 border-t-2 border-b-2 border-gold-500 shadow-[0_4px_22px_rgba(212,175,55,0.45)] rounded-l-2xl py-2.5 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-1.5 sm:gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1 active:scale-95 group backdrop-blur-md">
+            <div class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 transition-transform shadow-xs">
+                <i class="fa-solid fa-star text-gold-400"></i>
+            </div>
+            <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FAF7F2] [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Our Reviews</span>
+        </a>
+
+        <!-- 2. TOP PRODUCTS / EXPLORE STORE TAB -->
+        <a href="index.html" id="floating-store-tab" aria-label="Explore Top Products & Combos" 
+           class="pointer-events-auto gold-bg-gradient hover:brightness-110 text-onyx border-l-2 border-t-2 border-b-2 border-gold-300 shadow-[0_6px_25px_rgba(212,175,55,0.6)] rounded-l-2xl py-2.5 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-1.5 sm:gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1.5 active:scale-95 group backdrop-blur-md">
+            <div class="w-6 h-6 rounded-full bg-onyx text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 group-hover:rotate-12 transition-transform shadow-sm">
+                <i class="fa-solid fa-bag-shopping text-gold-400"></i>
+            </div>
+            <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-onyx [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Top Products</span>
+        </a>
+
+    </div>
 
     <!-- PRODUCT CATALOG & JAVASCRIPT ENGINE -->
     <script>
