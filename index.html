@@ -300,18 +300,36 @@
             <!-- HERO SPECIAL OFFER SHOWCASE (Desktop: 4-Banner Line | Mobile: 8-Slide Auto-Carousel) -->
             <div class="w-full mx-auto my-1.5 sm:my-3.5 select-none">
                 
-                <!-- DESKTOP / PC VIEW: Show 5 Official Offer Banners side-by-side in a line -->
+                <!-- DESKTOP / PC VIEW: Show 5 Official Offer Banners side-by-side in a line (Sorted by Increasing Price: ₹599 -> ₹898 -> ₹1299 -> ₹1848 -> ₹2198) -->
                 <div class="hidden md:grid md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-3 items-stretch max-w-7xl mx-auto">
-                    <!-- Offer 1: Umrah Cards + Travel Janamaz (₹898) -->
-                    <div onclick="window.location.href='product.html?id=2&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/offer_1_cards_janamaz_898.webp" 
-                             alt="Offer No.1: Umrah Cards + Travel Janamaz Combo - ₹898" 
+                    <!-- 1. Offer 5: Umrah Cards Only Gift Set (₹599) -->
+                    <div onclick="window.location.href='product.html?id=2'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
+                        <img src="product/offer/offer_5_cards_only_599.webp" 
+                             alt="Offer No.5: Umrah Card Gift Set - ₹599" 
                              fetchpriority="high" decoding="async" 
                              width="1200" height="1200" 
                              class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
                     </div>
 
-                    <!-- Offer 2: Umrah Cards + Ihram Kit (₹1848) -->
+                    <!-- 2. Offer 1: Umrah Cards + Travel Janamaz (₹898) -->
+                    <div onclick="window.location.href='product.html?id=2&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
+                        <img src="product/offer/offer_1_cards_janamaz_898.webp" 
+                             alt="Offer No.1: Umrah Cards + Travel Janamaz Combo - ₹898" 
+                             loading="lazy" decoding="async" 
+                             width="1200" height="1200" 
+                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                    </div>
+
+                    <!-- 3. Offer 6: Ihram Kit Only (₹1299) -->
+                    <div onclick="window.location.href='product.html?id=14'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
+                        <img src="product/offer/offer_6_ihram_kit_1299.webp" 
+                             alt="Offer No.6: Complete Ihram Kit Only - ₹1299" 
+                             loading="lazy" decoding="async" 
+                             width="1200" height="1200" 
+                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                    </div>
+
+                    <!-- 4. Offer 2: Umrah Cards + Ihram Kit (₹1848) -->
                     <div onclick="window.location.href='product.html?id=16'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
                         <img src="product/offer/offer_2_cards_ihram_1848.webp" 
                              alt="Offer No.2: Umrah Cards + Ihram Kit Combo - ₹1848" 
@@ -320,7 +338,7 @@
                              class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
                     </div>
 
-                    <!-- Offer 3: Umrah Mega Combo (₹2198) -->
+                    <!-- 5. Offer 3: Umrah Mega Combo (₹2198) -->
                     <div onclick="window.location.href='product.html?id=17'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
                         <img src="product/offer/offer_3_mega_combo_2198.webp" 
                              alt="Offer No.3: Umrah Mega Combo (Cards + Janamaz + Ihram Kit) - ₹2198" 
@@ -328,27 +346,9 @@
                              width="1200" height="1200" 
                              class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
                     </div>
-
-                    <!-- Offer 5: Umrah Cards Only Gift Set (₹599) -->
-                    <div onclick="window.location.href='product.html?id=2'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/offer_5_cards_only_599.webp" 
-                             alt="Offer No.5: Umrah Card Gift Set - ₹599" 
-                             loading="lazy" decoding="async" 
-                             width="1200" height="1200" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
-                    </div>
-
-                    <!-- Offer 6: Ihram Kit Only (₹1299) -->
-                    <div onclick="window.location.href='product.html?id=14'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/offer_6_ihram_kit_1299.webp" 
-                             alt="Offer No.6: Complete Ihram Kit Only - ₹1299" 
-                             loading="lazy" decoding="async" 
-                             width="1200" height="1200" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
-                    </div>
                 </div>
 
-                <!-- MOBILE VIEW: Premium Auto-Slidable Carousel (5 Official Offer Slides) -->
+                <!-- MOBILE VIEW: Premium Auto-Slidable Carousel (5 Official Offer Slides in Increasing Price Order) -->
                 <div class="block md:hidden w-full max-w-[390px] xs:max-w-[420px] sm:max-w-xl mx-auto">
                     <div id="hero-offer-mobile-carousel" class="group relative rounded-2xl overflow-hidden border-2 border-gold-400 bg-black/60 backdrop-blur-md shadow-[0_12px_45px_rgba(212,175,55,0.35)] hover:border-gold-300 hover:shadow-[0_16px_55px_rgba(197,154,63,0.5)] transition-all duration-300">
                         
@@ -362,19 +362,37 @@
                             <i class="fa-solid fa-chevron-right text-[11px]"></i>
                         </button>
 
-                        <!-- Sliding Track (5 Official Offers) -->
+                        <!-- Sliding Track (5 Official Offers in Increasing Price Order: ₹599 -> ₹898 -> ₹1299 -> ₹1848 -> ₹2198) -->
                         <div id="hero-carousel-track" class="flex transition-transform duration-500 ease-out" style="transform: translateX(0%);">
                             
-                            <!-- Slide 1: Offer 1 - Cards + Travel Janamaz (₹898) -->
-                            <div onclick="window.location.href='product.html?id=2&variant=1'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <img src="product/offer/offer_1_cards_janamaz_898.webp" 
-                                     alt="Offer No.1: Umrah Cards + Travel Janamaz - ₹898" 
+                            <!-- Slide 1: Offer 5 - Cards Only Gift Set (₹599) -->
+                            <div onclick="window.location.href='product.html?id=2'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                                <img src="product/offer/offer_5_cards_only_599.webp" 
+                                     alt="Offer No.5: Umrah Cards Gift Set - ₹599" 
                                      fetchpriority="high" decoding="async" 
                                      width="1200" height="1200" 
                                      class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
-                            <!-- Slide 2: Offer 2 - Cards + Ihram Kit (₹1848) -->
+                            <!-- Slide 2: Offer 1 - Cards + Travel Janamaz (₹898) -->
+                            <div onclick="window.location.href='product.html?id=2&variant=1'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                                <img src="product/offer/offer_1_cards_janamaz_898.webp" 
+                                     alt="Offer No.1: Umrah Cards + Travel Janamaz - ₹898" 
+                                     loading="lazy" decoding="async" 
+                                     width="1200" height="1200" 
+                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                            </div>
+
+                            <!-- Slide 3: Offer 6 - Ihram Kit Only (₹1299) -->
+                            <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                                <img src="product/offer/offer_6_ihram_kit_1299.webp" 
+                                     alt="Offer No.6: Umrah Family Ihram Kit - ₹1299" 
+                                     loading="lazy" decoding="async" 
+                                     width="1200" height="1200" 
+                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                            </div>
+
+                            <!-- Slide 4: Offer 2 - Cards + Ihram Kit (₹1848) -->
                             <div onclick="window.location.href='product.html?id=16'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
                                 <img src="product/offer/offer_2_cards_ihram_1848.webp" 
                                      alt="Offer No.2: Umrah Cards + Ihram Kit - ₹1848" 
@@ -383,28 +401,10 @@
                                      class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
-                            <!-- Slide 3: Offer 3 - Mega Combo (₹2198) -->
+                            <!-- Slide 5: Offer 3 - Mega Combo (₹2198) -->
                             <div onclick="window.location.href='product.html?id=17'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
                                 <img src="product/offer/offer_3_mega_combo_2198.webp" 
                                      alt="Offer No.3: Mega Umrah Combo - ₹2198" 
-                                     loading="lazy" decoding="async" 
-                                     width="1200" height="1200" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
-                            </div>
-
-                            <!-- Slide 4: Offer 5 - Cards Only Gift Set (₹599) -->
-                            <div onclick="window.location.href='product.html?id=2'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <img src="product/offer/offer_5_cards_only_599.webp" 
-                                     alt="Offer No.5: Umrah Cards Gift Set - ₹599" 
-                                     loading="lazy" decoding="async" 
-                                     width="1200" height="1200" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
-                            </div>
-
-                            <!-- Slide 5: Offer 6 - Ihram Kit Only (₹1299) -->
-                            <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <img src="product/offer/offer_6_ihram_kit_1299.webp" 
-                                     alt="Offer No.6: Umrah Family Ihram Kit - ₹1299" 
                                      loading="lazy" decoding="async" 
                                      width="1200" height="1200" 
                                      class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
@@ -5686,10 +5686,22 @@
 
             const HERO_SLIDES_META = [
                 {
+                    price: '₹599 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹698</span>',
+                    sub: 'Offer No.5 • Save ₹99 | 100% Free Prepaid Delivery',
+                    ctaText: 'Order Cards (₹599)',
+                    ctaLink: 'product.html?id=2'
+                },
+                {
                     price: '₹898 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹1106</span>',
                     sub: 'Offer No.1 • Save ₹208 | Extra 10% OFF on Prepaid',
                     ctaText: 'Order Kit (₹898)',
                     ctaLink: 'product.html?id=2&variant=1'
+                },
+                {
+                    price: '₹1299 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹1548</span>',
+                    sub: 'Offer No.6 • Save ₹249 | 5 Essentials + 2 FREE Gifts',
+                    ctaText: 'Order Ihram Kit (₹1299)',
+                    ctaLink: 'product.html?id=14'
                 },
                 {
                     price: '₹1848 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹2156</span>',
@@ -5702,18 +5714,6 @@
                     sub: 'Offer No.3 • Save ₹408 | Extra 10% OFF on Prepaid',
                     ctaText: 'Order Mega Combo (₹2198)',
                     ctaLink: 'product.html?id=17'
-                },
-                {
-                    price: '₹599 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹698</span>',
-                    sub: 'Offer No.5 • Save ₹99 | 100% Free Prepaid Delivery',
-                    ctaText: 'Order Cards (₹599)',
-                    ctaLink: 'product.html?id=2'
-                },
-                {
-                    price: '₹1299 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹1548</span>',
-                    sub: 'Offer No.6 • Save ₹249 | 5 Essentials + 2 FREE Gifts',
-                    ctaText: 'Order Ihram Kit (₹1299)',
-                    ctaLink: 'product.html?id=14'
                 }
             ];
 
