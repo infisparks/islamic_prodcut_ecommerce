@@ -22,15 +22,6 @@ const codOtpStore = new Map();
  */
 router.post('/send-cod-otp', async (req, res, next) => {
   try {
-    // COD is temporarily disabled per store policy
-    return res.status(400).json({
-      success: false,
-      error: {
-        code: 'COD_TEMPORARILY_DISABLED',
-        message: 'Cash on Delivery is temporarily paused. Please choose Online Payment via UPI, Cards, or NetBanking.'
-      }
-    });
-    
     const { phone, customer, items, couponCode } = req.body;
     const cleanPhone = String(phone || '').replace(/\D/g, '');
 
@@ -395,16 +386,8 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         });
       }
 
-      // 3. Handle COD flow (Temporarily paused per store policy)
+      // 3. Handle COD flow
       if (paymentMethod === 'cod') {
-        return res.status(400).json({
-          success: false,
-          error: {
-            code: 'COD_TEMPORARILY_DISABLED',
-            message: 'Cash on Delivery (COD) is temporarily unavailable. Please complete your order using Online Payment via UPI, Cards, or NetBanking.'
-          }
-        });
-
         logger.info('ORDER_CREATED_COD_INITIATED', { internalOrderId });
 
         // Clean up OTP store after use to prevent stale reuse
