@@ -358,6 +358,35 @@ const catalog = [
     image: "product/miswak/box.webp"
   },
   {
+    id: 18,
+    name: "Umrah Dua & Guide Cards for Kids (Kids Edition)",
+    category: "card",
+    hsn: "4910",
+    dimensions: { length: 15, breadth: 10, height: 2.5 },
+    variants: [
+      {
+        sku: "fati_kids_001",
+        name: "Kids Full Companion Kit (Cards + Tasbih + Lanyard + Velvet Pouch)",
+        price: 599,
+        weightKg: 0.15,
+        weightLabel: "150gm",
+        image: "product/offer/offer_kids_cards_599.webp",
+        hasJanamaz: false,
+        freeShipping: false
+      },
+      {
+        sku: "fati_kids_002",
+        name: "Kids Mega Combo Kit (Kids Cards + Travel Janamaz + Pouch + Lanyard)",
+        price: 898,
+        weightKg: 0.26,
+        weightLabel: "260gm",
+        image: "product/offer/offer_kids_cards_599.webp",
+        hasJanamaz: true,
+        freeShipping: true
+      }
+    ]
+  },
+  {
     id: 99,
     name: "FREE GIFT: Siwak Miswak Toothbrush + Natural Loofah Scrubber",
     category: "essentials",

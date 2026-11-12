@@ -300,8 +300,8 @@
             <!-- HERO SPECIAL OFFER SHOWCASE (Desktop: 4-Banner Line | Mobile: 8-Slide Auto-Carousel) -->
             <div class="w-full mx-auto my-1.5 sm:my-3.5 select-none">
                 
-                <!-- DESKTOP / PC VIEW: Show 5 Official Offer Banners side-by-side in a line (Sorted by Increasing Price: ₹599 -> ₹898 -> ₹1299 -> ₹1848 -> ₹2198) -->
-                <div class="hidden md:grid md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-3 items-stretch max-w-7xl mx-auto">
+                <!-- DESKTOP / PC VIEW: Show 6 Official Offer Banners side-by-side in a line (Sorted by Increasing Price: ₹599 (Adult & Kids) -> ₹898 -> ₹1299 -> ₹1848 -> ₹2198) -->
+                <div class="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-2.5 lg:gap-3 items-stretch max-w-7xl mx-auto">
                     <!-- 1. Offer 5: Umrah Cards Only Gift Set (₹599) -->
                     <div onclick="window.location.href='product.html?id=2'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
                         <img src="product/offer/offer_5_cards_only_599.webp" 
@@ -311,7 +311,20 @@
                              class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
                     </div>
 
-                    <!-- 2. Offer 1: Umrah Cards + Travel Janamaz (₹898) -->
+                    <!-- 2. Offer 5 (KIDS): Umrah Card Gift Set for KIDS (₹599) -->
+                    <div onclick="window.location.href='product.html?id=18'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
+                        <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-amber-950/90 border border-amber-400/80 text-amber-300 text-[9px] sm:text-[11px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
+                            <i class="fa-solid fa-child text-amber-400 text-[9px] sm:text-[10px]"></i>
+                            <span>Kids Edition</span>
+                        </span>
+                        <img src="product/offer/offer_kids_cards_599.webp" 
+                             alt="Offer No.5: Umrah Card Gift Set for KIDS - ₹599" 
+                             loading="lazy" decoding="async" 
+                             width="1200" height="1200" 
+                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                    </div>
+
+                    <!-- 3. Offer 1: Umrah Cards + Travel Janamaz (₹898) -->
                     <div onclick="window.location.href='product.html?id=2&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 backdrop-blur-xs shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
                         <img src="product/offer/offer_1_cards_janamaz_898.webp" 
                              alt="Offer No.1: Umrah Cards + Travel Janamaz Combo - ₹898" 
@@ -374,7 +387,7 @@
                             <i class="fa-solid fa-chevron-right text-[11px]"></i>
                         </button>
 
-                        <!-- Sliding Track (5 Official Offers in Increasing Price Order: ₹599 -> ₹898 -> ₹1299 -> ₹1848 -> ₹2198) -->
+                        <!-- Sliding Track (6 Official Offers in Increasing Price Order: ₹599 (Adult & Kids) -> ₹898 -> ₹1299 -> ₹1848 -> ₹2198) -->
                         <div id="hero-carousel-track" class="flex transition-transform duration-500 ease-out" style="transform: translateX(0%);">
                             
                             <!-- Slide 1: Offer 5 - Cards Only Gift Set (₹599) -->
@@ -382,6 +395,19 @@
                                 <img src="product/offer/offer_5_cards_only_599.webp" 
                                      alt="Offer No.5: Umrah Cards Gift Set - ₹599" 
                                      fetchpriority="high" decoding="async" 
+                                     width="1200" height="1200" 
+                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                            </div>
+
+                            <!-- Slide 2: Offer 5 (KIDS) - Umrah Card Gift Set for KIDS (₹599) -->
+                            <div onclick="window.location.href='product.html?id=18'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                                <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-950/90 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
+                                    <i class="fa-solid fa-child text-amber-400 text-[10px]"></i>
+                                    <span>Kids Edition</span>
+                                </span>
+                                <img src="product/offer/offer_kids_cards_599.webp" 
+                                     alt="Offer No.5: Umrah Card Gift Set for KIDS - ₹599" 
+                                     loading="lazy" decoding="async" 
                                      width="1200" height="1200" 
                                      class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
@@ -847,7 +873,7 @@
                 All Products (12)
             </button>
             <button onclick="filterProducts('card')" id="filter-card" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
-                💳 Umrah Cards (4)
+                💳 Umrah Cards (5)
             </button>
             <button onclick="filterProducts('sticker')" id="filter-sticker" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
                 🏷️ Dua Stickers (3)
@@ -2270,6 +2296,72 @@
                             "product/card/699-2.webp"
                         ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
+                    }
+                ]
+            },
+            {
+                id: 18,
+                name: "Umrah Dua & Guide Cards for Kids (Kids Edition)",
+                category: "card",
+                language: "Kids Edition",
+                brand: "fatimacalligrapher27",
+                hsn: "4910",
+                color: "Kids Illustrated Full Color",
+                size: "Free Size (4 * 6 * 1 inch)",
+                dimensions: "4 * 6 * 1 inch",
+                material: "100% Waterproof Laminated, Neck Lanyard & Tasbih",
+                manufacturer: "fatimacalligrapher27",
+                image: "product/offer/offer_kids_cards_599.webp",
+                images: [
+                    "product/offer/offer_kids_cards_599.webp",
+                    "product/kids/kids_cover.webp",
+                    "product/kids/kids_card_7.webp",
+                    "product/kids/kids_card_1.webp",
+                    "product/kids/kids_card_2.webp",
+                    "product/kids/kids_card_3.webp",
+                    "product/kids/kids_card_4.webp",
+                    "product/kids/kids_card_5.webp",
+                    "product/kids/kids_card_6.webp",
+                    "product/kids/kids_card_8.webp"
+                ],
+                video: "product/mantasha_card.mp4",
+                badge: "KIDS SPECIAL • ₹599",
+                soldCount: "940 sold",
+                rating: "(380)",
+                desc: "Specially designed Umrah Dua & Guide Cards for Kids. Child-friendly cute illustrations, authentic Duas with easy transliteration & meaning, Umrah Certificate, Neck Lanyard and Tawaf Tasbih counter.",
+                features: ["Kid-Friendly Visual Illustrations", "Easy Transliteration & Meanings", "Official Umrah Certificate Included", "100% Waterproof Laminated + Lanyard"],
+                variants: [
+                    {
+                        sku: "fati_kids_001",
+                        name: "Kids Full Companion Kit (Cards + Tasbih + Lanyard + Velvet Pouch)",
+                        shortName: "Kids Cards + Tasbih + Lanyard + Pouch",
+                        price: 599,
+                        oldPrice: 698,
+                        weight: "150gm",
+                        tag: "Popular 🌟",
+                        image: "product/offer/offer_kids_cards_599.webp",
+                        images: [
+                            "product/offer/offer_kids_cards_599.webp",
+                            "product/kids/kids_cover.webp"
+                        ],
+                        includes: ["Illustrated Waterproof Kids Dua Cards", "Official Umrah Certificate Card", "Kids Neck Lanyard (Ribbon)", "Tawaf Tasbih Counter Beads", "Protective Umrah Mubarak Velvet Pouch"]
+                    },
+                    {
+                        sku: "fati_kids_002",
+                        name: "Kids Mega Combo Kit (Kids Cards + Travel Janamaz + Pouch + Lanyard)",
+                        shortName: "Kids Cards + Travel Janamaz + Pouch",
+                        price: 899,
+                        oldPrice: 1598,
+                        weight: "260gm",
+                        tag: "Mega Combo 🔥",
+                        hasJanamaz: true,
+                        freeShipping: true,
+                        image: "product/offer/offer_kids_cards_599.webp",
+                        images: [
+                            "product/offer/offer_kids_cards_599.webp",
+                            "product/kids/kids_cover.webp"
+                        ],
+                        includes: ["Illustrated Waterproof Kids Dua Cards", "Pocket Foldable Travel Janamaz with Bag", "Kids Neck Lanyard (Ribbon)", "Tawaf Tasbih Counter Beads", "Protective Umrah Mubarak Velvet Pouch"]
                     }
                 ]
             },
@@ -5733,6 +5825,12 @@
                     sub: 'Offer No.5 • Save ₹99 | 100% Free Prepaid Delivery',
                     ctaText: 'Order Cards (₹599)',
                     ctaLink: 'product.html?id=2'
+                },
+                {
+                    price: '₹599 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹698</span>',
+                    sub: 'Kids Edition • Save ₹99 | Umrah Card Set for Kids',
+                    ctaText: 'Order Kids Cards (₹599)',
+                    ctaLink: 'product.html?id=18'
                 },
                 {
                     price: '₹898 ONLY <span class="line-through text-gray-400 text-[9.5px] font-normal">₹1106</span>',

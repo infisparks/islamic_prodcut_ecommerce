@@ -783,6 +783,18 @@
                 freeShipping: true
             },
             {
+                id: 18,
+                name: "Umrah Dua & Guide Cards for Kids (Kids Edition)",
+                category: "card",
+                language: "Kids Edition",
+                image: "product/offer/offer_kids_cards_599.webp",
+                badge: "KIDS SPECIAL",
+                variants: [
+                    { sku: "fati_kids_001", name: "Kids Full Companion Kit (Cards + Tasbih + Lanyard + Velvet Pouch)", shortName: "Kids Cards + Tasbih + Lanyard + Pouch", price: 599, oldPrice: 698, weightKg: 0.15, weight: "150gm", image: "product/offer/offer_kids_cards_599.webp", hasJanamaz: false, freeShipping: false },
+                    { sku: "fati_kids_002", name: "Kids Mega Combo Kit (Kids Cards + Travel Janamaz + Pouch + Lanyard)", shortName: "Kids Cards + Travel Janamaz + Pouch", price: 899, oldPrice: 1598, weightKg: 0.26, weight: "260gm", image: "product/offer/offer_kids_cards_599.webp", hasJanamaz: true, freeShipping: true }
+                ]
+            },
+            {
                 id: 15,
                 name: "Siwak Natural Miswak Toothbrush Starter Kit (1 Handle + 5 Refills)",
                 category: "essentials",
@@ -1823,9 +1835,9 @@
                         totalMrp += 2156 * q;
                     } else if (item.id === 17 || item.sku === 'fati_combo_mega_2198') {
                         totalMrp += 2606 * q;
-                    } else if (item.sku === 'fati_003' || item.sku === 'fati_006' || item.sku === 'fati_009' || item.sku === 'fati_012') {
+                    } else if (item.sku === 'fati_003' || item.sku === 'fati_006' || item.sku === 'fati_009' || item.sku === 'fati_012' || item.sku === 'fati_kids_002') {
                         totalMrp += 1106 * q;
-                    } else if (item.sku === 'fati_002' || item.sku === 'fati_005' || item.sku === 'fati_008' || item.sku === 'fati_011') {
+                    } else if (item.sku === 'fati_002' || item.sku === 'fati_005' || item.sku === 'fati_008' || item.sku === 'fati_011' || item.sku === 'fati_kids_001') {
                         totalMrp += 698 * q;
                     } else if (item.id === 8 || (item.sku && String(item.sku).startsWith('fati_jnm'))) {
                         totalMrp += 699 * q;
