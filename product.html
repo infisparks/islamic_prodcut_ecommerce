@@ -1101,52 +1101,55 @@
 
     
     <!-- LANGUAGE & QUANTITY CONFIRMATION MODAL WITH 3D DIGITAL DUA CARD PREVIEW -->
-    <div id="language-confirm-modal" onclick="if(event.target === this) closeLanguageConfirmModal()" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
-        <div class="bg-[#0d121c] rounded-3xl max-w-[420px] w-full border-2 border-amber-500/75 shadow-[0_0_50px_rgba(217,119,6,0.3)] overflow-hidden flex flex-col relative animate-in fade-in zoom-in duration-150" onclick="event.stopPropagation()">
+    <div id="language-confirm-modal" onclick="if(event.target === this) closeLanguageConfirmModal()" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-2.5 sm:p-4 overflow-y-auto">
+        <div class="bg-gradient-to-b from-[#111724] via-[#0b0e17] to-[#07090e] rounded-3xl max-w-[440px] w-full border-2 border-amber-400/80 shadow-[0_0_60px_rgba(217,119,6,0.35)] ring-1 ring-gold-400/40 overflow-hidden flex flex-col relative animate-in fade-in zoom-in duration-150" onclick="event.stopPropagation()">
             
-            <!-- Compact Luxury Header -->
-            <div class="px-4 py-2.5 bg-gradient-to-r from-black via-slate-950 to-black border-b border-amber-500/30 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs border border-amber-500/40 shrink-0">
+            <!-- Luxury Header with Gold Gradient Accent -->
+            <div class="px-4 py-3 bg-gradient-to-r from-black via-[#161d2d] to-black border-b border-amber-400/40 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center text-sm font-black shadow-gold-glow shrink-0">
                         <i class="fa-solid fa-kaaba"></i>
                     </div>
                     <div>
-                        <h3 class="font-cinzel text-xs sm:text-sm font-bold text-amber-300 leading-tight">Confirm Card Language</h3>
-                        <p class="text-[9.5px] text-gray-300">Apni zuban chun kar sample card check karein</p>
+                        <h3 class="font-cinzel text-xs sm:text-sm font-bold text-amber-300 leading-tight flex items-center gap-1.5">
+                            <span>Confirm Card Language</span>
+                            <span class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Verified</span>
+                        </h3>
+                        <p class="text-[9.5px] text-gray-300">Apni zuban chun kar physical sample card check karein</p>
                     </div>
                 </div>
-                <button onclick="closeLanguageConfirmModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-amber-500 hover:text-black text-gray-300 flex items-center justify-center text-xs cursor-pointer transition-colors" title="Close">
+                <button onclick="closeLanguageConfirmModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-amber-400 hover:text-slate-950 text-gray-300 flex items-center justify-center text-sm cursor-pointer transition-all border border-white/10 active:scale-90" title="Close">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Body (Ultra-compact, zero-overflow design) -->
-            <div class="p-3 sm:p-3.5 space-y-2.5 text-xs">
+            <!-- Body -->
+            <div class="p-3 sm:p-4 space-y-3 text-xs">
                 
                 <!-- 3D Realistic Umrah Dua Card Preview (Authentic Physical Card Layout) -->
-                <div class="relative w-full bg-white rounded-2xl border-4 border-amber-400 p-2.5 sm:p-3 shadow-2xl text-slate-900 select-none transition-all duration-200">
+                <div class="relative w-full bg-white rounded-2xl border-[3px] border-amber-400 p-3 sm:p-3.5 shadow-2xl text-slate-900 select-none transition-all duration-200 ring-1 ring-gold-200">
                     <!-- Top Badge -->
-                    <div class="text-center mb-1">
-                        <span id="modal-card-top-badge" class="bg-slate-100 border border-slate-200 text-slate-800 text-[10px] font-black px-2.5 py-0.5 rounded-full inline-block">
+                    <div class="text-center mb-1.5">
+                        <span id="modal-card-top-badge" class="bg-gradient-to-r from-amber-500 to-gold-400 text-slate-950 text-[10px] font-black px-3 py-0.5 rounded-full inline-block shadow-2xs">
                             Talbiyah (#11)
                         </span>
                     </div>
 
                     <!-- Arabic Dua -->
-                    <div class="font-arabic text-[13px] sm:text-[14px] font-extrabold text-gray-950 text-center leading-relaxed my-1" dir="rtl" id="modal-card-arabic">
+                    <div class="font-arabic text-[14px] sm:text-[15px] font-extrabold text-gray-950 text-center leading-relaxed my-1" dir="rtl" id="modal-card-arabic">
                         لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ.
                     </div>
 
                     <!-- Pronunciation / Transliteration Box -->
                     <div class="bg-sky-50 border border-sky-200 p-1.5 rounded-xl text-center my-1 shadow-2xs">
-                        <div id="modal-card-transliteration" class="text-[9.5px] sm:text-[10px] font-bold text-blue-900 leading-tight">
+                        <div id="modal-card-transliteration" class="text-[10px] font-bold text-blue-900 leading-tight">
                             Labbaika Allahumma Labbaik, Labbaika laa shareeka laka Labbaik, innal-hamda wan-ni'mata laka wal-mulk, laa shareeka lak.
                         </div>
                     </div>
 
                     <!-- Translation Box (Dynamically switches to chosen language) -->
-                    <div class="bg-amber-50/60 border border-amber-200 p-1.5 rounded-xl text-center my-1 shadow-2xs">
-                        <div id="modal-card-translation" class="text-[9.5px] sm:text-[10px] font-medium text-gray-800 leading-tight">
+                    <div class="bg-amber-50/70 border border-amber-200 p-1.5 rounded-xl text-center my-1 shadow-2xs">
+                        <div id="modal-card-translation" class="text-[10px] font-medium text-gray-800 leading-tight">
                             حاضر ہوں! اے اللہ میں حاضر ہوں، حاضر ہوں، تیرا کوئی شریک نہیں۔ بیشک تمام حمد و ثنا اور نعمتیں تیری ہیں اور بادشاہی بھی تیری ہے، تیرا کوئی شریک نہیں۔
                         </div>
                         <div id="modal-card-reference" class="text-[8.5px] font-bold text-gray-500 mt-0.5">
@@ -1160,9 +1163,9 @@
                     </div>
 
                     <!-- Card Bottom (Lanyard Hole Punch + Card Number) -->
-                    <div class="flex items-center justify-between pt-1 border-t border-gray-100 mt-1 flex-shrink-0">
-                        <div class="text-[9px] font-bold text-emerald-700 flex items-center gap-1">
-                            <i class="fa-solid fa-shield-halved text-[9px]"></i> 100% Waterproof
+                    <div class="flex items-center justify-between pt-1.5 border-t border-gray-100 mt-1.5 flex-shrink-0">
+                        <div class="text-[9.5px] font-black text-emerald-700 flex items-center gap-1">
+                            <i class="fa-solid fa-shield-halved text-[9.5px]"></i> 100% Waterproof Laminated
                         </div>
                         <!-- Realistic Lanyard Hole Punch -->
                         <div class="w-4 h-4 rounded-full border-2 border-gray-400 bg-gray-200 flex items-center justify-center shadow-inner" title="Lanyard Hole Punch">
@@ -1175,44 +1178,64 @@
                     </div>
                 </div>
 
-                <!-- Language Selection Grid (4 Compact Luxury Buttons) -->
+                <!-- Language Selection Grid (5 Luxury Tiles including Kids Edition) -->
                 <div>
                     <div class="flex items-center justify-between text-[11px] font-bold text-gray-300 mb-1.5">
-                        <span class="text-amber-300">Choose Language:</span>
-                        <span class="text-[9.5px] text-gray-400 font-normal">Click to see card preview</span>
+                        <span class="text-amber-300 flex items-center gap-1">
+                            <i class="fa-solid fa-book-open text-xs"></i> 1. Choose Dua Cards Language:
+                        </span>
+                        <span class="text-[9.5px] text-gray-400 font-normal">Click to see sample preview</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-1.5" id="lang-modal-tiles">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="lang-modal-tiles">
                         <!-- Urdu -->
-                        <button type="button" onclick="setModalLanguage('Urdu')" id="modal-lang-tile-Urdu" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                        <button type="button" onclick="setModalLanguage('Urdu')" id="modal-lang-tile-Urdu" class="lang-modal-tile px-2.5 py-2 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
                             <span class="font-extrabold text-[11px]">🇵🇰 Urdu (اردو)</span>
                             <i class="fa-solid fa-circle-check text-xs tile-check"></i>
                         </button>
-                        <!-- Hindi -->
-                        <button type="button" onclick="setModalLanguage('Hindi')" id="modal-lang-tile-Hindi" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
-                            <span class="font-extrabold text-[11px]">🇮🇳 Hindi (हिंदी)</span>
-                            <i class="fa-solid fa-circle-check text-xs tile-check"></i>
-                        </button>
                         <!-- English -->
-                        <button type="button" onclick="setModalLanguage('English')" id="modal-lang-tile-English" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                        <button type="button" onclick="setModalLanguage('English')" id="modal-lang-tile-English" class="lang-modal-tile px-2.5 py-2 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
                             <span class="font-extrabold text-[11px]">🇬🇧 English</span>
                             <i class="fa-solid fa-circle-check text-xs tile-check"></i>
                         </button>
+                        <!-- Hindi -->
+                        <button type="button" onclick="setModalLanguage('Hindi')" id="modal-lang-tile-Hindi" class="lang-modal-tile px-2.5 py-2 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                            <span class="font-extrabold text-[11px]">🇮🇳 Hindi (हिंदी)</span>
+                            <i class="fa-solid fa-circle-check text-xs tile-check"></i>
+                        </button>
                         <!-- Roman -->
-                        <button type="button" onclick="setModalLanguage('Roman')" id="modal-lang-tile-Roman" class="lang-modal-tile px-2.5 py-1.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
+                        <button type="button" onclick="setModalLanguage('Roman')" id="modal-lang-tile-Roman" class="lang-modal-tile px-2.5 py-2 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between">
                             <span class="font-extrabold text-[11px]">🔤 Roman Urdu</span>
+                            <i class="fa-solid fa-circle-check text-xs tile-check"></i>
+                        </button>
+                        <!-- Kids -->
+                        <button type="button" onclick="setModalLanguage('Kids')" id="modal-lang-tile-Kids" class="lang-modal-tile px-2.5 py-2 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between col-span-2 sm:col-span-1">
+                            <span class="font-extrabold text-[11px]">🌟 Kids Edition</span>
                             <i class="fa-solid fa-circle-check text-xs tile-check"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Quantity & Price Row (1 Compact Row) -->
-                <div class="p-2 bg-white/5 rounded-xl border border-amber-500/30 flex items-center justify-between gap-2">
+                <!-- Janamaz Color Selection Section (Visible for Mega Combo ₹2198 or Janamaz Kits) -->
+                <div id="modal-janamaz-color-section" class="hidden pt-1 border-t border-white/10">
+                    <div class="flex items-center justify-between text-[11px] font-bold text-gray-300 mb-1.5">
+                        <span class="text-emerald-300 flex items-center gap-1">
+                            <i class="fa-solid fa-gift text-xs"></i> 2. Choose Travel Janamaz Color:
+                        </span>
+                        <span id="modal-selected-janamaz-label" class="text-[10px] text-emerald-200 font-extrabold bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40">Royal Gold</span>
+                    </div>
+                    <div class="grid grid-cols-5 gap-1.5" id="modal-janamaz-tiles">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Quantity & Price Row -->
+                <div class="p-2.5 bg-white/5 rounded-2xl border border-amber-500/30 flex items-center justify-between gap-2">
                     <div class="flex items-center gap-1.5">
                         <span class="text-[10.5px] font-bold text-gray-300">Qty:</span>
                         <div class="flex items-center bg-black/60 rounded-lg border border-amber-500/40 p-0.5">
-                            <button type="button" onclick="changeModalQty(-1)" class="w-5 h-5 rounded bg-white/10 hover:bg-amber-500 hover:text-black text-white font-bold text-xs flex items-center justify-center cursor-pointer active:scale-95 transition-all">-</button>
+                            <button type="button" onclick="changeModalQty(-1)" class="w-5 h-5 rounded bg-white/10 hover:bg-amber-400 hover:text-black text-white font-bold text-xs flex items-center justify-center cursor-pointer active:scale-95 transition-all">-</button>
                             <span id="modal-qty-display" class="w-6 text-center font-bold text-xs text-amber-300 font-mono">1</span>
-                            <button type="button" onclick="changeModalQty(1)" class="w-5 h-5 rounded bg-white/10 hover:bg-amber-500 hover:text-black text-white font-bold text-xs flex items-center justify-center cursor-pointer active:scale-95 transition-all">+</button>
+                            <button type="button" onclick="changeModalQty(1)" class="w-5 h-5 rounded bg-white/10 hover:bg-amber-400 hover:text-black text-white font-bold text-xs flex items-center justify-center cursor-pointer active:scale-95 transition-all">+</button>
                         </div>
                     </div>
                     <div class="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
@@ -1226,7 +1249,7 @@
                 </div>
 
                 <!-- Confirm CTA Button -->
-                <button type="button" onclick="confirmLanguageAndProceed()" id="modal-confirm-btn" class="w-full gold-bg-gradient hover:opacity-95 text-slate-950 font-black py-2.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs transition-all cursor-pointer active:scale-98">
+                <button type="button" onclick="confirmLanguageAndProceed()" id="modal-confirm-btn" class="w-full gold-bg-gradient hover:opacity-95 text-slate-950 font-black py-3 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-xs sm:text-sm transition-all cursor-pointer active:scale-98">
                     <i class="fa-solid fa-circle-check text-sm"></i>
                     <span id="modal-confirm-btn-text">Confirm Urdu & Proceed to Checkout</span>
                 </button>
@@ -3951,8 +3974,8 @@
         function addPdpProductToCart() {
             const p = currentProduct;
 
-            // If product has language options, validate & confirm language + quantity first!
-            if ((p.category === 'card' || p.category === 'sticker') && !isDirectAddingFromModal) {
+            // If product has language options or is Combo, validate & confirm language + quantity first!
+            if ((p.category === 'card' || p.category === 'sticker' || p.id === 16 || p.id === 17) && !isDirectAddingFromModal) {
                 openLanguageConfirmModal('cart');
                 return;
             }
@@ -4093,8 +4116,8 @@
         function buyPdpProductNow() {
             const p = currentProduct;
 
-            // If product has language options, validate & confirm language + quantity first!
-            if (p.category === 'card' || p.category === 'sticker') {
+            // If product has language options or is Combo, validate & confirm language + quantity first!
+            if (p.category === 'card' || p.category === 'sticker' || p.id === 16 || p.id === 17) {
                 openLanguageConfirmModal('buy');
                 return;
             }
@@ -4231,14 +4254,32 @@
                 translation: 'Hazir hun! Aie Allah main hazir hun, hazir hun, tera koi shareek nahi, hazir hun. Beshak tamam tar hamd o sana, aur tamam tar rehmatien teri hain aur mulk bhi tera hi hai tera koi shareek nahi hai.',
                 reference: '(Sahih al-Bukhari 1549)',
                 note: 'Talbiyah ke baad apni duaien krna masnoon hai.'
+            },
+            'Kids': {
+                name: 'Kids Edition',
+                label: 'Kids Edition',
+                badge: 'Talbiyah (Kids Edition - #11)',
+                arabic: 'لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لاَ شَرِيكَ لَكَ.',
+                transliteration: 'Labbaika Allahumma Labbaik... (Easy Child Transliteration)',
+                translation: 'O Allah! I am here answering Your call. All praises, blessings, and kingdom belong to You alone ❤️',
+                reference: '(Sahih al-Bukhari • Kids Special)',
+                note: '🌟 Illustrated Cards + Tawaf Counter Tasbih + Official Umrah Certificate'
             }
         };
+
+        let modalSelectedJanamaz = 'Royal Gold';
+
+        function setModalJanamazColor(color) {
+            modalSelectedJanamaz = color;
+            updateLanguageModalUI();
+        }
 
         function openLanguageConfirmModal(action = 'buy') {
             modalTargetAction = action;
             modalSelectedQty = 1;
-            modalSelectedLang = currentProduct.language || 'English';
+            modalSelectedLang = (currentProduct.language === 'Kids Edition' || currentProduct.id === 18) ? 'Kids' : (currentProduct.language || 'Urdu');
             if (modalSelectedLang === 'Roman English') modalSelectedLang = 'Roman';
+            modalSelectedJanamaz = 'Royal Gold';
 
             updateLanguageModalUI();
             const modalEl = document.getElementById('language-confirm-modal');
@@ -4278,19 +4319,59 @@
             if (cardRef) cardRef.textContent = data.reference;
             if (cardNote) cardNote.textContent = data.note;
 
-            // Update tiles active classes (matching website dark luxury gold aesthetic)
-            ['Urdu', 'Hindi', 'English', 'Roman'].forEach(l => {
+            // Update 5 tiles active classes (Urdu, English, Hindi, Roman, Kids)
+            ['Urdu', 'Hindi', 'English', 'Roman', 'Kids'].forEach(l => {
                 const tile = document.getElementById(`modal-lang-tile-${l}`);
                 if (!tile) return;
                 const check = tile.querySelector('.tile-check');
                 if (l === modalSelectedLang) {
-                    tile.className = 'lang-modal-tile px-2.5 py-1.5 rounded-xl border-2 border-amber-400 bg-gradient-to-r from-amber-500/25 to-amber-600/35 text-amber-300 shadow-sm text-left transition-all cursor-pointer flex items-center justify-between font-extrabold';
+                    tile.className = 'lang-modal-tile px-2.5 py-2 rounded-xl border-2 border-amber-400 bg-gradient-to-r from-amber-500/35 to-amber-600/45 text-amber-300 shadow-md text-left transition-all cursor-pointer flex items-center justify-between font-black scale-[1.02] ring-1 ring-gold-400/50';
                     if (check) check.className = 'fa-solid fa-circle-check text-xs text-amber-300 tile-check';
                 } else {
-                    tile.className = 'lang-modal-tile px-2.5 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-amber-400/40 text-gray-300 text-left transition-all cursor-pointer flex items-center justify-between font-semibold';
+                    tile.className = 'lang-modal-tile px-2.5 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-amber-400/40 text-gray-300 text-left transition-all cursor-pointer flex items-center justify-between font-semibold';
                     if (check) check.className = 'fa-solid fa-circle text-xs text-white/20 tile-check';
                 }
             });
+
+            // Handle Janamaz section for Mega Combo or Janamaz kits
+            const janamazSec = document.getElementById('modal-janamaz-color-section');
+            const janamazTiles = document.getElementById('modal-janamaz-tiles');
+            const janamazLabel = document.getElementById('modal-selected-janamaz-label');
+            const hasJanamazInProd = (currentProduct.id === 17) || Boolean(currentProduct.hasJanamaz) || (currentProduct.variants && currentProduct.variants[currentVariantIndex]?.hasJanamaz);
+
+            if (janamazSec && janamazTiles) {
+                if (hasJanamazInProd) {
+                    janamazSec.classList.remove('hidden');
+                    if (janamazLabel) janamazLabel.textContent = modalSelectedJanamaz;
+
+                    const colorsList = [
+                        { name: 'Royal Gold', image: 'product/janamaz/gold.webp' },
+                        { name: 'Emerald Green', image: 'product/janamaz/green.webp' },
+                        { name: 'Jet Black', image: 'product/janamaz/black.webp' },
+                        { name: 'Royal Blue', image: 'product/janamaz/blue.webp' },
+                        { name: 'Rose Wine', image: 'product/janamaz/rose.webp' }
+                    ];
+
+                    janamazTiles.innerHTML = colorsList.map(c => {
+                        const isSel = (modalSelectedJanamaz === c.name);
+                        return `
+                            <button type="button" onclick="setModalJanamazColor('${c.name}')"
+                                    class="p-1 rounded-xl border-2 transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                                        isSel 
+                                            ? 'bg-emerald-500/20 border-emerald-400 shadow-md ring-1 ring-emerald-400 text-emerald-300 scale-[1.04]' 
+                                            : 'bg-white/5 border-white/10 hover:border-emerald-400/40 text-gray-400'
+                                    }">
+                                <div class="w-full aspect-square rounded-lg overflow-hidden bg-pearl/90 p-0.5 border border-white/20 flex items-center justify-center">
+                                    <img src="${c.image}" alt="${c.name}" class="w-full h-full object-contain pointer-events-none">
+                                </div>
+                                <span class="text-[8.5px] font-bold truncate max-w-full">${c.name}</span>
+                            </button>
+                        `;
+                    }).join('');
+                } else {
+                    janamazSec.classList.add('hidden');
+                }
+            }
 
             // Update Qty display & price
             const qtyDisplay = document.getElementById('modal-qty-display');
@@ -4298,35 +4379,106 @@
 
             const hasVariants = currentProduct.variants && currentProduct.variants.length > 0;
             const variant = hasVariants ? currentProduct.variants[currentVariantIndex] : null;
-            const unitPrice = variant ? variant.price : (currentProduct.price || 599);
-            const unitMrp = variant ? (variant.oldPrice || unitPrice * 2) : 1198;
+            
+            let unitPrice = 599;
+            let unitMrp = 1198;
+            if (currentProduct.id === 16) {
+                unitPrice = 1848;
+                unitMrp = 2156;
+            } else if (currentProduct.id === 17) {
+                unitPrice = 2198;
+                unitMrp = 2606;
+            } else if (variant) {
+                unitPrice = variant.price;
+                unitMrp = variant.oldPrice || (unitPrice * 2);
+            } else {
+                unitPrice = currentProduct.price || 599;
+                unitMrp = currentProduct.oldPrice || (unitPrice * 2);
+            }
+
             const totalPrice = unitPrice * modalSelectedQty;
             const totalMrp = unitMrp * modalSelectedQty;
 
             const totalEl = document.getElementById('modal-total-price');
             const mrpEl = document.getElementById('modal-mrp-price');
-            const subTitleEl = document.getElementById('modal-package-subtitle');
             const btnTextEl = document.getElementById('modal-confirm-btn-text');
 
-            if (totalEl) totalEl.textContent = `Rs. ${totalPrice.toFixed(2)}`;
-            if (mrpEl) mrpEl.textContent = `MRP Rs. ${totalMrp.toFixed(2)}`;
-            if (subTitleEl) subTitleEl.textContent = `${variant ? variant.shortName : currentProduct.name} (${modalSelectedQty} ${modalSelectedQty === 1 ? 'Kit' : 'Kits'})`;
+            if (totalEl) totalEl.textContent = `Rs. ${totalPrice.toFixed(0)}`;
+            if (mrpEl) mrpEl.textContent = `MRP Rs. ${totalMrp.toFixed(0)}`;
 
             if (btnTextEl) {
                 if (modalTargetAction === 'buy') {
-                    btnTextEl.textContent = `Confirm ${data.name} & Proceed (Rs. ${totalPrice.toFixed(0)})`;
+                    btnTextEl.innerHTML = `<span>Confirm ${data.name} & Proceed</span> <span class="opacity-90 font-mono">(Rs. ${totalPrice.toFixed(0)})</span>`;
                 } else {
-                    btnTextEl.textContent = `Confirm ${data.name} & Add (${modalSelectedQty}x) to Cart`;
+                    btnTextEl.innerHTML = `<span>Confirm ${data.name} & Add to Cart</span> <span class="opacity-90 font-mono">(${modalSelectedQty}x)</span>`;
                 }
             }
         }
 
         function confirmLanguageAndProceed() {
-            // 1. Switch product language
+            const p = currentProduct;
+
+            // Handle Combos (ID 16 & ID 17) inside confirmation modal
+            if (p.id === 16 || p.id === 17) {
+                const itemLang = (modalSelectedLang === 'Kids') ? 'Kids Edition' : (modalSelectedLang === 'Roman' ? 'Roman English' : modalSelectedLang);
+                const itemJnm = (p.id === 17) ? modalSelectedJanamaz : undefined;
+                const vName = (p.id === 17)
+                    ? `Cards (${itemLang}) + Janamaz (${itemJnm}) + Complete Ihram Kit`
+                    : `Cards (${itemLang}) + Complete Ihram Kit`;
+                const cartKey = `${p.id}_${p.sku}_${itemLang}_${itemJnm || 'none'}`;
+
+                if (modalTargetAction === 'buy') {
+                    cart = [{
+                        cartKey,
+                        id: p.id,
+                        name: p.name,
+                        sku: p.sku,
+                        variantName: vName,
+                        cardLanguage: itemLang,
+                        janamazColor: itemJnm,
+                        price: p.price,
+                        image: p.image,
+                        weightKg: p.weightKg || 0.80,
+                        qty: modalSelectedQty,
+                        hasJanamaz: !!p.hasJanamaz,
+                        freeShipping: true
+                    }];
+                    saveCartToStorage();
+                    closeLanguageConfirmModal();
+                    window.location.href = 'checkout.html';
+                } else {
+                    const existing = cart.find(i => i.cartKey === cartKey);
+                    if (existing) {
+                        existing.qty += modalSelectedQty;
+                    } else {
+                        cart.push({
+                            cartKey,
+                            id: p.id,
+                            name: p.name,
+                            sku: p.sku,
+                            variantName: vName,
+                            cardLanguage: itemLang,
+                            janamazColor: itemJnm,
+                            price: p.price,
+                            image: p.image,
+                            weightKg: p.weightKg || 0.80,
+                            qty: modalSelectedQty,
+                            hasJanamaz: !!p.hasJanamaz,
+                            freeShipping: true
+                        });
+                    }
+                    saveCartToStorage();
+                    updateCartUI(true);
+                    closeLanguageConfirmModal();
+                    showToast(`${vName} added to Cart!`);
+                }
+                return;
+            }
+
+            // 1. Switch product language for regular cards
             switchProductLanguage(modalSelectedLang);
 
             // 2. Add with confirmed quantity
-            const p = currentProduct;
             const hasVariants = p.variants && p.variants.length > 0;
             const variant = hasVariants ? p.variants[currentVariantIndex] : null;
             const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
