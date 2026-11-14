@@ -41,11 +41,36 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
       cleanJanamazColor = 'Royal Gold'; // default color if not specified
     }
 
+    // Card Language resolution (for Cards, Combos, or Custom Kit containing cards)
+    let cleanCardLanguage = null;
+    if (rawItem.cardLanguage && typeof rawItem.cardLanguage === 'string') {
+      cleanCardLanguage = rawItem.cardLanguage.trim().slice(0, 50);
+    } else if (rawItem.selectedLanguage && typeof rawItem.selectedLanguage === 'string') {
+      cleanCardLanguage = rawItem.selectedLanguage.trim().slice(0, 50);
+    } else if (rawItem.language && typeof rawItem.language === 'string') {
+      cleanCardLanguage = rawItem.language.trim().slice(0, 50);
+    } else if (catalogItem.category === 'combo' && (catalogItem.sku === 'fati_combo_cards_ihram' || catalogItem.sku === 'fati_combo_mega_2198')) {
+      cleanCardLanguage = 'Urdu'; // Standard default for combos if not chosen
+    } else if (catalogItem.category === 'card') {
+      if (catalogItem.productName.includes('Urdu')) cleanCardLanguage = 'Urdu';
+      else if (catalogItem.productName.includes('English') && !catalogItem.productName.includes('Roman')) cleanCardLanguage = 'English';
+      else if (catalogItem.productName.includes('Hindi')) cleanCardLanguage = 'Hindi';
+      else if (catalogItem.productName.includes('Roman')) cleanCardLanguage = 'Roman English';
+      else if (catalogItem.productName.includes('Kids')) cleanCardLanguage = 'Kids Edition';
+    }
+
+    // Build clear variant name with language & Janamaz color for packing & invoices
+    let finalVariantName = catalogItem.variantName;
+    if (cleanCardLanguage && (catalogItem.category === 'combo' || catalogItem.sku.includes('combo'))) {
+      finalVariantName = `Cards (${cleanCardLanguage})` + (cleanJanamazColor ? ` + Janamaz (${cleanJanamazColor})` : '') + ' + Complete Ihram Kit';
+    }
+
     items.push({
       productId: catalogItem.productId,
       sku: catalogItem.sku,
       name: catalogItem.productName,
-      variantName: catalogItem.variantName,
+      variantName: finalVariantName,
+      cardLanguage: cleanCardLanguage,
       hasJanamaz: isCombo,
       janamazColor: cleanJanamazColor,
       freeShipping: !!catalogItem.freeShipping,

@@ -1378,12 +1378,16 @@
             } else if (sku.includes('cards_ihram') || sku.includes('offer_2') || nameLower.includes('cards + complete ihram') || nameLower.includes('cards + ihram')) {
                 baseName = 'Cards + Ihram Kit';
                 icon = '🎁';
-                tag = 'Offer 2 (₹1848)';
+                const lang = item.cardLanguage || (item.variantName && item.variantName.match(/Cards \((.*?)\)/) ? item.variantName.match(/Cards \((.*?)\)/)[1] : (item.variantName && item.variantName.match(/\((.*?)\)/) ? item.variantName.match(/\((.*?)\)/)[1] : ''));
+                tag = lang ? ('₹1848 • ' + lang) : 'Offer 2 (₹1848)';
                 tagClass = 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
             } else if (sku.includes('combo_mega') || sku.includes('offer_3') || nameLower.includes('mega combo')) {
                 baseName = 'Mega Umrah Combo';
                 icon = '👑';
-                tag = 'Offer 3 (₹2198)';
+                const lang = item.cardLanguage || (item.variantName && item.variantName.match(/Cards \((.*?)\)/) ? item.variantName.match(/Cards \((.*?)\)/)[1] : '');
+                const jnm = item.janamazColor || (item.variantName && item.variantName.match(/Janamaz \((.*?)\)/) ? item.variantName.match(/Janamaz \((.*?)\)/)[1] : '');
+                const sub = [lang, jnm].filter(Boolean).join(' • ');
+                tag = sub ? ('₹2198 • ' + sub) : 'Offer 3 (₹2198)';
                 tagClass = 'bg-gold-100 text-amber-950 border-gold-400 font-black';
             } else if (sku === 'fati_ess_combo' || nameLower.includes('family combo') || nameLower.includes('ihram essentials kit')) {
                 baseName = 'Umrah Ihram Kit';
@@ -2046,6 +2050,8 @@
             const paymentStatus = ((order.payment && order.payment.status) || (isCod ? (isDelivered ? 'CAPTURED' : 'COD_PENDING') : 'PENDING')).toUpperCase();
             const awb = order.shipping && order.shipping.awb;
             const courierName = order.shipping && order.shipping.courierName;
+            const courierProvider = (order.shipping?.provider || (order.shipping?.shiprocketOrderId ? 'shiprocket' : (order.shipping?.waybill ? 'delhivery' : ''))).toLowerCase();
+            const isShipmentBooked = Boolean(awb || order.shipping?.shiprocketOrderId || order.shipping?.waybill);
             const shippingStatus = ((order.shipping && order.shipping.status) || (isCod && !awb ? 'OTP_NOT_VERIFIED' : 'NOT_BOOKED')).toUpperCase();
             const status = (order.status || 'PENDING').toUpperCase();
             const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || (order.payment && order.payment.razorpayPaymentId));
@@ -2119,6 +2125,8 @@
                                 <div class="font-bold text-slate-900 text-xs sm:text-sm flex items-center gap-1.5 flex-wrap">
                                     <span>${meta.baseName}</span>
                                     ${meta.tag ? `<span class="text-[9.5px] px-2 py-0.5 rounded border ${meta.tagClass}">${meta.tag}</span>` : ''}
+                                    ${i.cardLanguage ? `<span class="text-[9.5px] px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-200 font-black">📖 ${i.cardLanguage} Cards</span>` : ''}
+                                    ${i.janamazColor ? `<span class="text-[9.5px] px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200 font-black">🕋 Janamaz: ${i.janamazColor}</span>` : ''}
                                     ${itemQty > 1 ? `<span class="bg-indigo-100 text-indigo-800 text-[10px] font-black px-1.5 py-0.2 rounded font-mono">Qty: ${itemQty}</span>` : ''}
                                 </div>
                                 <div class="text-[10.5px] text-slate-400 font-mono mt-0.5">SKU: ${i.sku || 'N/A'} • Unit Price: Rs. ${itemPrice.toFixed(2)}</div>

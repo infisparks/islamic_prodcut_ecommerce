@@ -2223,6 +2223,20 @@
         let isDragging = false;
         let startX = 0, startY = 0, currentPanX = 0, currentPanY = 0;
 
+        // Active personalization state for Combo packages (Offer 2 ₹1848 & Offer 3 ₹2198)
+        let selectedComboCardLanguage = 'Urdu';
+        let selectedComboJanamazColor = 'Royal Gold';
+
+        function selectComboCardLanguage(lang) {
+            selectedComboCardLanguage = lang;
+            renderPdpView();
+        }
+
+        function selectComboJanamazColor(color) {
+            selectedComboJanamazColor = color;
+            renderPdpView();
+        }
+
         let cart = [];
 
         function saveCartToStorage() {
@@ -3093,9 +3107,11 @@
             document.getElementById('sticky-pdp-old-price').textContent = `Rs. ${activeOldPrice}`;
             const stickyKitLabel = isComboPack
                 ? (currentComboMode === 'custom' ? `Custom Kit (${customComboItems.filter(i => i.checked).length} Items)` : 'Family Kit (7 Items)')
-                : (isJanamazProd 
-                    ? `Color: ${curJanamazObj.name}` 
-                    : (activeVariant ? (activeVariant.hasJanamaz ? `${activeVariant.shortName} (${curJanamazObj.name.split(' ')[1] || curJanamazObj.name})` : activeVariant.shortName) : (p.badge)));
+                : ((p.id === 16 || p.id === 17)
+                    ? (p.id === 17 ? `Cards (${selectedComboCardLanguage}) + Janamaz (${selectedComboJanamazColor})` : `Cards (${selectedComboCardLanguage}) + Ihram Kit`)
+                    : (isJanamazProd 
+                        ? `Color: ${curJanamazObj.name}` 
+                        : (activeVariant ? (activeVariant.hasJanamaz ? `${activeVariant.shortName} (${curJanamazObj.name.split(' ')[1] || curJanamazObj.name})` : activeVariant.shortName) : (p.badge))));
             document.getElementById('sticky-pdp-kit').textContent = stickyKitLabel;
 
             // WhatsApp link
@@ -3158,7 +3174,124 @@
                 if (comboContainer) comboContainer.classList.add('hidden');
             }
 
-            if (hasVariants) {
+            const isCardsCombo = (p.id === 16 || p.id === 17);
+
+            if (isCardsCombo) {
+                variantsContainer.classList.remove('hidden');
+                if (optionsBadge) {
+                    optionsBadge.textContent = p.id === 17 ? 'Select Language & Janamaz Color' : 'Select Card Language';
+                }
+
+                const variantHeaderLabel = document.querySelector('#pdp-variants-container label span');
+                if (variantHeaderLabel) {
+                    variantHeaderLabel.textContent = 'Personalize Your Combo:';
+                }
+
+                const comboLangList = [
+                    { id: 'Urdu', label: 'Urdu (اردو)', flag: '🇵🇰' },
+                    { id: 'English', label: 'English', flag: '🇬🇧' },
+                    { id: 'Hindi', label: 'Hindi (हिंदी)', flag: '🇮🇳' },
+                    { id: 'Roman', label: 'Roman English', flag: '🔤' },
+                    { id: 'Kids Edition', label: 'Kids Edition', flag: '🌟' }
+                ];
+
+                variantsSlider.className = 'flex flex-col gap-3 w-full';
+                variantsSlider.innerHTML = `
+                    <!-- 1. Card Language Selector -->
+                    <div class="bg-gradient-to-r from-amber-50/70 via-gold-50/50 to-amber-50/70 p-3 sm:p-3.5 rounded-2xl border-2 border-gold-300 shadow-2xs">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs sm:text-sm font-black text-onyx flex items-center gap-1.5">
+                                <i class="fa-solid fa-book-open text-gold-600 text-sm"></i>
+                                <span>1. Select Dua Cards Language:</span>
+                            </span>
+                            <span class="text-[10px] sm:text-xs font-black text-gold-900 bg-gold-200/90 px-2.5 py-0.5 rounded-full border border-gold-400">
+                                Active: ${selectedComboCardLanguage}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 sm:gap-2">
+                            ${comboLangList.map(l => {
+                                const isSel = (selectedComboCardLanguage === l.id);
+                                return `
+                                    <button type="button" onclick="selectComboCardLanguage('${l.id}')"
+                                            class="py-2.5 px-2 rounded-xl text-xs font-bold text-center border-2 transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                                                isSel 
+                                                    ? 'bg-onyx text-gold-400 border-gold-500 shadow-md ring-2 ring-gold-400/40 scale-[1.02]' 
+                                                    : 'bg-white text-gray-800 border-gray-200 hover:border-gold-300 hover:bg-gold-50/30'
+                                            }">
+                                        <span>${l.flag}</span>
+                                        <span class="truncate">${l.label}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- 2. Janamaz Color Selector (For Offer 3 ₹2198 Mega Combo) -->
+                    ${p.id === 17 ? `
+                        <div class="bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 p-3 sm:p-3.5 rounded-2xl border-2 border-emerald-300 shadow-2xs">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs sm:text-sm font-black text-onyx flex items-center gap-1.5">
+                                    <i class="fa-solid fa-gift text-emerald-600 text-sm"></i>
+                                    <span>2. Select Pocket Janamaz Color:</span>
+                                </span>
+                                <span class="text-[10px] sm:text-xs font-black text-emerald-900 bg-emerald-200/90 px-2.5 py-0.5 rounded-full border border-emerald-400">
+                                    Active: ${selectedComboJanamazColor}
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-5 gap-1.5 sm:gap-2.5">
+                                ${janamazColors.map(c => {
+                                    const isSel = (selectedComboJanamazColor === c.name);
+                                    return `
+                                        <button type="button" onclick="selectComboJanamazColor('${c.name}')"
+                                                class="p-1 sm:p-1.5 rounded-xl border-2 transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                                                    isSel 
+                                                        ? 'bg-emerald-50/90 border-emerald-500 shadow-md ring-2 ring-emerald-400/40 scale-[1.03]' 
+                                                        : 'bg-white border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/20'
+                                                }">
+                                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-pearl p-0.5 border border-gray-100 flex items-center justify-center">
+                                                <img src="${c.image}" alt="${c.name}" class="w-full h-full object-contain pointer-events-none">
+                                            </div>
+                                            <span class="text-[9px] sm:text-[10px] font-bold text-onyx truncate max-w-full">${c.name.replace('Pocket Travel Janamaz - ', '')}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+
+                if (inclusionsBox) {
+                    inclusionsBox.innerHTML = `
+                        <div class="font-bold text-xs text-onyx mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-box-open text-emerald-600"></i> Included in Selected ${p.name}:
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-gray-700">
+                            <div class="flex items-center gap-2 bg-sand/80 px-2.5 py-1.5 rounded-xl border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-sm flex-shrink-0"></i>
+                                <span class="font-semibold truncate">Dua Cards Set (<b>${selectedComboCardLanguage}</b>)</span>
+                            </div>
+                            ${p.id === 17 ? `
+                                <div class="flex items-center gap-2 bg-sand/80 px-2.5 py-1.5 rounded-xl border border-gray-200">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 text-sm flex-shrink-0"></i>
+                                    <span class="font-semibold truncate">Pocket Janamaz (<b>${selectedComboJanamazColor}</b>)</span>
+                                </div>
+                            ` : ''}
+                            <div class="flex items-center gap-2 bg-sand/80 px-2.5 py-1.5 rounded-xl border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-sm flex-shrink-0"></i>
+                                <span class="font-medium truncate">5 Fragrance-Free Ihram Care Essentials</span>
+                            </div>
+                            <div class="flex items-center gap-2 bg-emerald-50 px-2.5 py-1.5 rounded-xl border border-emerald-200 text-emerald-900 font-bold">
+                                <i class="fa-solid fa-gift text-emerald-600 text-sm flex-shrink-0"></i>
+                                <span class="truncate">FREE Siwak Miswak Starter Kit (₹199)</span>
+                            </div>
+                            <div class="flex items-center gap-2 bg-emerald-50 px-2.5 py-1.5 rounded-xl border border-emerald-200 text-emerald-900 font-bold">
+                                <i class="fa-solid fa-gift text-emerald-600 text-sm flex-shrink-0"></i>
+                                <span class="truncate">FREE Natural Loofah Scrubber (₹100)</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else if (hasVariants) {
                 variantsContainer.classList.remove('hidden');
                 if (optionsBadge) {
                     optionsBadge.textContent = isJanamazProd ? '5 Colors Available' : `${p.variants.length} Package Options`;
@@ -3873,19 +4006,28 @@
 
             // 2. Handle Combos (ID 14: Ihram Kit Only ₹1299, ID 16: Cards+Ihram ₹1848, ID 17: Mega Combo ₹2198)
             if (p.id === 14 || p.id === 16 || p.id === 17) {
-                const existing = cart.find(i => i.id === p.id);
+                const itemLang = (p.id === 16 || p.id === 17) ? selectedComboCardLanguage : undefined;
+                const itemJnm = (p.id === 17) ? selectedComboJanamazColor : undefined;
+                const vName = (p.id === 17)
+                    ? `Cards (${itemLang}) + Janamaz (${itemJnm}) + Complete Ihram Kit`
+                    : (p.id === 16 ? `Cards (${itemLang}) + Complete Ihram Kit` : 'Complete Family Ihram Kit');
+                const cartKey = `${p.id}_${p.sku}_${itemLang || 'std'}_${itemJnm || 'none'}`;
+
+                const existing = cart.find(i => i.cartKey === cartKey);
                 if (existing) {
                     existing.qty += 1;
                 } else {
                     cart.push({
-                        cartKey: `${p.id}_${p.sku}`,
+                        cartKey: cartKey,
                         id: p.id,
                         name: p.name,
                         sku: p.sku,
-                        variantName: p.size || 'Complete Combo Pack',
+                        variantName: vName,
+                        cardLanguage: itemLang,
+                        janamazColor: itemJnm,
                         price: p.price,
                         image: p.image,
-                        weightKg: p.weightKg || 0.65,
+                        weightKg: p.weightKg || 0.80,
                         qty: 1,
                         hasJanamaz: !!p.hasJanamaz,
                         freeShipping: true
@@ -3893,7 +4035,7 @@
                 }
                 saveCartToStorage();
                 updateCartUI(true);
-                showToast(`${p.name} added to Cart (₹${p.price})!`);
+                showToast(`${vName} added to Cart (₹${p.price})!`);
                 return;
             }
 
@@ -4005,16 +4147,25 @@
 
             // 2. If Combos (ID 14: Ihram Kit Only ₹1299, ID 16: Cards+Ihram ₹1848, ID 17: Mega Combo ₹2198)
             if (p.id === 14 || p.id === 16 || p.id === 17) {
+                const itemLang = (p.id === 16 || p.id === 17) ? selectedComboCardLanguage : undefined;
+                const itemJnm = (p.id === 17) ? selectedComboJanamazColor : undefined;
+                const vName = (p.id === 17)
+                    ? `Cards (${itemLang}) + Janamaz (${itemJnm}) + Complete Ihram Kit`
+                    : (p.id === 16 ? `Cards (${itemLang}) + Complete Ihram Kit` : 'Complete Family Ihram Kit');
+                const cartKey = `${p.id}_${p.sku}_${itemLang || 'std'}_${itemJnm || 'none'}`;
+
                 cart = [
                     {
-                        cartKey: `${p.id}_${p.sku}`,
+                        cartKey: cartKey,
                         id: p.id,
                         name: p.name,
                         sku: p.sku,
-                        variantName: p.size || 'Complete Combo Pack',
+                        variantName: vName,
+                        cardLanguage: itemLang,
+                        janamazColor: itemJnm,
                         price: p.price,
                         image: p.image,
-                        weightKg: p.weightKg || 0.65,
+                        weightKg: p.weightKg || 0.80,
                         qty: 1,
                         hasJanamaz: !!p.hasJanamaz,
                         freeShipping: true

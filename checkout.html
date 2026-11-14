@@ -1286,6 +1286,7 @@
                             <div class="min-w-0">
                                 <h4 class="font-bold text-xs text-onyx truncate">${item.name}</h4>
                                 ${item.variantName ? `<div class="text-[10px] text-gold-700 font-semibold truncate">${item.variantName}</div>` : ''}
+                                ${item.cardLanguage ? `<div class="mt-0.5"><span class="text-[9px] font-extrabold text-indigo-900 bg-indigo-100/90 px-1.5 py-0.5 rounded border border-indigo-300 inline-flex items-center gap-1"><i class="fa-solid fa-book-open text-[7px] text-indigo-600"></i> Cards: ${item.cardLanguage}</span></div>` : ''}
                                 ${item.janamazColor ? `<div class="mt-0.5"><span class="text-[9px] font-extrabold text-amber-900 bg-amber-100/90 px-1.5 py-0.5 rounded border border-amber-300 inline-flex items-center gap-1"><i class="fa-solid fa-gift text-[7px] text-amber-600"></i> Janamaz: ${item.janamazColor}</span></div>` : ''}
                                 <div class="flex items-center gap-2 mt-0.5">
                                     <span class="text-xs text-onyx font-extrabold">Rs. ${item.price}</span>
@@ -1538,6 +1539,7 @@
                 productId: i.id,
                 sku: i.sku,
                 quantity: i.qty,
+                cardLanguage: i.cardLanguage || undefined,
                 janamazColor: i.janamazColor || undefined
             }));
 

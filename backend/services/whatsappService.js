@@ -201,9 +201,24 @@ async function sendOrderConfirmationWhatsApp(order) {
   const customerName = order.customer.name || 'Valued Customer';
   const itemsList = (order.items || [])
     .map(i => {
-      const variantDetail = i.variantName || i.variant || 'Standard';
-      const janamazDetail = i.janamazColor ? ` • Janamaz Color: ${i.janamazColor}` : '';
-      return `• *${i.name || i.title || i.sku || 'Item'}* (${variantDetail}${janamazDetail}) x${i.quantity || 1}`;
+      const baseTitle = i.name || i.title || i.sku || 'Item';
+      const variantDetail = (i.variantName || i.variant || '').trim();
+      const langDetail = i.cardLanguage ? `Card Language: ${i.cardLanguage}` : '';
+      const janamazDetail = i.janamazColor ? `Janamaz: ${i.janamazColor}` : '';
+
+      const extraTags = [];
+      if (variantDetail && variantDetail !== baseTitle && !variantDetail.includes(baseTitle)) {
+        extraTags.push(variantDetail);
+      }
+      if (langDetail && !variantDetail.includes(i.cardLanguage)) {
+        extraTags.push(langDetail);
+      }
+      if (janamazDetail && !variantDetail.includes(i.janamazColor)) {
+        extraTags.push(janamazDetail);
+      }
+
+      const spec = extraTags.length > 0 ? ` (${extraTags.join(' • ')})` : '';
+      return `• *${baseTitle}*${spec} x${i.quantity || 1}`;
     })
     .join('\n') || '• Authentic Umrah Duas Flashcard Collection';
 

@@ -435,8 +435,8 @@ function findItemBySku(sku) {
         unitPrice: product.price,
         weightKg: product.weightKg,
         weightLabel: product.weightLabel,
-        hasJanamaz: false,
-        freeShipping: false,
+        hasJanamaz: Boolean(product.hasJanamaz),
+        freeShipping: Boolean(product.freeShipping),
         image: product.image
       };
     }

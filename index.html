@@ -1667,6 +1667,25 @@
         </div>
     </div>
 
+    <!-- COMBO CUSTOMIZER MODAL (Card Language & Janamaz Color Selector) -->
+    <div id="combo-customizer-modal" onclick="if(event.target === this) closeComboCustomizerModal()" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-end sm:items-center justify-center p-0 sm:p-4 pt-10 sm:pt-6 transition-all">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full relative border border-gold-400/80 shadow-2xl max-h-[90vh] flex flex-col overflow-hidden" onclick="event.stopPropagation()">
+            <!-- Mobile Grab Handle -->
+            <div class="w-10 h-1 rounded-full bg-gray-300 mx-auto mt-2 sm:hidden flex-shrink-0"></div>
+
+            <!-- Close Button -->
+            <button onclick="closeComboCustomizerModal()" class="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-50 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/85 hover:bg-gold-500 text-gold-400 hover:text-onyx flex items-center justify-center transition-all border border-gold-500/50 backdrop-blur-md shadow-2xl cursor-pointer" title="Close" aria-label="Close">
+                <i class="fa-solid fa-xmark text-sm font-extrabold"></i>
+            </button>
+
+            <!-- Scrollable Content Body -->
+            <div id="combo-customizer-body" class="p-4 sm:p-5 overflow-y-auto flex-1 space-y-4"></div>
+
+            <!-- Sticky Bottom Action Footer -->
+            <div id="combo-customizer-footer" class="p-3 sm:p-4 bg-white border-t border-gold-300 flex items-center justify-between gap-2.5 shadow-lg flex-shrink-0"></div>
+        </div>
+    </div>
+
     <!-- CART / CHECKOUT DRAWER -->
     <div id="cart-drawer" onclick="if(event.target === this) toggleCartDrawer(false)" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity flex items-end sm:items-stretch justify-center sm:justify-end">
         <div class="w-full sm:max-w-md bg-white shadow-2xl flex flex-col justify-between rounded-t-2xl sm:rounded-none max-h-[96dvh] sm:max-h-full h-full border-t border-gold-400 sm:border-t-0 overflow-hidden" onclick="event.stopPropagation()">
@@ -3532,7 +3551,241 @@
             }
         }
 
+        // COMBO CUSTOMIZER LOGIC (Offer 2 ₹1848 & Offer 3 ₹2198)
+        let activeComboCustomizerProductId = 16;
+        let activeComboCustomizerLang = 'Urdu';
+        let activeComboCustomizerColor = 'Pocket Travel Janamaz - Royal Gold';
+        let activeComboCustomizerIsBuyNow = true;
+
+        const COMBO_LANG_OPTIONS = [
+            { id: 'Urdu', label: 'Urdu (اردو)', flag: '🇵🇰' },
+            { id: 'English', label: 'English', flag: '🇬🇧' },
+            { id: 'Hindi', label: 'Hindi (हिंदी)', flag: '🇮🇳' },
+            { id: 'Roman', label: 'Roman English', flag: '🔤' },
+            { id: 'Kids Edition', label: 'Kids Edition', flag: '🌟' }
+        ];
+
+        const COMBO_JANAMAZ_OPTIONS = [
+            { name: 'Pocket Travel Janamaz - Royal Gold', shortName: 'Royal Gold', image: 'product/janamaz/gold.webp', hex: '#D4AF37' },
+            { name: 'Pocket Travel Janamaz - Emerald Green', shortName: 'Emerald Green', image: 'product/janamaz/green.webp', hex: '#1B4D3E' },
+            { name: 'Pocket Travel Janamaz - Jet Black', shortName: 'Jet Black', image: 'product/janamaz/black.webp', hex: '#1C1D21' },
+            { name: 'Pocket Travel Janamaz - Royal Blue', shortName: 'Royal Blue', image: 'product/janamaz/blue.webp', hex: '#1E3A8A' },
+            { name: 'Pocket Travel Janamaz - Rose Wine', shortName: 'Rose Wine', image: 'product/janamaz/rose.webp', hex: '#881337' }
+        ];
+
+        function openComboCustomizerModal(productId, isBuyNow = true) {
+            const prod = products.find(p => p.id === productId);
+            if (!prod) return;
+            activeComboCustomizerProductId = productId;
+            activeComboCustomizerIsBuyNow = isBuyNow;
+            if (!activeComboCustomizerLang) activeComboCustomizerLang = 'Urdu';
+            if (!activeComboCustomizerColor) activeComboCustomizerColor = 'Pocket Travel Janamaz - Royal Gold';
+
+            renderComboCustomizerModal();
+            const modal = document.getElementById('combo-customizer-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeComboCustomizerModal() {
+            const modal = document.getElementById('combo-customizer-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function selectCustomizerLang(lang) {
+            activeComboCustomizerLang = lang;
+            renderComboCustomizerModal();
+        }
+
+        function selectCustomizerColor(colorName) {
+            activeComboCustomizerColor = colorName;
+            renderComboCustomizerModal();
+        }
+
+        function renderComboCustomizerModal() {
+            const prod = products.find(p => p.id === activeComboCustomizerProductId);
+            if (!prod) return;
+
+            const bodyEl = document.getElementById('combo-customizer-body');
+            const footerEl = document.getElementById('combo-customizer-footer');
+            if (!bodyEl || !footerEl) return;
+
+            const isMega = (prod.id === 17);
+
+            bodyEl.innerHTML = `
+                <!-- Header Product Card -->
+                <div class="flex items-center gap-3 p-3 bg-sand/40 rounded-2xl border border-gold-300/80">
+                    <img src="${prod.image}" alt="${prod.name}" class="w-16 h-16 object-contain rounded-xl bg-white border border-gray-200 p-1 flex-shrink-0 shadow-2xs">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-2xs">Free Shipping</span>
+                            <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">+2 Free Gifts</span>
+                        </div>
+                        <h3 class="font-bold text-xs sm:text-sm text-onyx mt-1 leading-snug truncate">${prod.name}</h3>
+                        <div class="flex items-baseline gap-2 mt-0.5">
+                            <span class="text-base font-black text-onyx">Rs. ${prod.price}</span>
+                            <span class="text-xs text-gray-400 line-through">Rs. ${prod.oldPrice || (prod.price * 2)}</span>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">Save Rs. ${(prod.oldPrice || (prod.price * 2)) - prod.price}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1. Card Language Selector -->
+                <div class="bg-gradient-to-r from-amber-50/80 via-gold-50/60 to-amber-50/80 p-3 sm:p-3.5 rounded-2xl border-2 border-gold-300 shadow-2xs">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-black text-onyx flex items-center gap-1.5">
+                            <i class="fa-solid fa-book-open text-gold-600"></i>
+                            <span>1. Select Dua Cards Language:</span>
+                        </span>
+                        <span class="text-[10px] font-black text-gold-900 bg-gold-200/90 px-2 py-0.5 rounded-full border border-gold-400">
+                            Selected: ${activeComboCustomizerLang}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                        ${COMBO_LANG_OPTIONS.map(l => {
+                            const isSel = (activeComboCustomizerLang === l.id);
+                            return `
+                                <button type="button" onclick="selectCustomizerLang('${l.id}')"
+                                        class="py-2 px-1.5 rounded-xl text-xs font-bold text-center border-2 transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                                            isSel 
+                                                ? 'bg-onyx text-gold-400 border-gold-500 shadow-md ring-2 ring-gold-400/40 scale-[1.02]' 
+                                                : 'bg-white text-gray-800 border-gray-200 hover:border-gold-300 hover:bg-gold-50/30'
+                                        }">
+                                    <span>${l.flag}</span>
+                                    <span class="truncate">${l.label}</span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- 2. Janamaz Color Selector (For Offer 3 ₹2198 Mega Combo) -->
+                ${isMega ? `
+                    <div class="bg-gradient-to-r from-emerald-50/60 via-teal-50/40 to-emerald-50/60 p-3 sm:p-3.5 rounded-2xl border-2 border-emerald-300 shadow-2xs">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-black text-onyx flex items-center gap-1.5">
+                                <i class="fa-solid fa-gift text-emerald-600"></i>
+                                <span>2. Select Travel Janamaz Color:</span>
+                            </span>
+                            <span class="text-[10px] font-black text-emerald-900 bg-emerald-200/90 px-2 py-0.5 rounded-full border border-emerald-400">
+                                Selected: ${activeComboCustomizerColor.replace('Pocket Travel Janamaz - ', '')}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-1.5">
+                            ${COMBO_JANAMAZ_OPTIONS.map(c => {
+                                const isSel = (activeComboCustomizerColor === c.name);
+                                return `
+                                    <button type="button" onclick="selectCustomizerColor('${c.name}')"
+                                            class="p-1 rounded-xl border-2 transition-all flex flex-col items-center gap-1 cursor-pointer ${
+                                                isSel 
+                                                    ? 'bg-emerald-50 border-emerald-500 shadow-md ring-2 ring-emerald-400/40 scale-[1.03]' 
+                                                    : 'bg-white border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/20'
+                                            }">
+                                        <div class="w-full aspect-square rounded-lg overflow-hidden bg-pearl p-0.5 border border-gray-100 flex items-center justify-center">
+                                            <img src="${c.image}" alt="${c.shortName}" class="w-full h-full object-contain pointer-events-none">
+                                        </div>
+                                        <span class="text-[9px] font-bold text-onyx truncate max-w-full">${c.shortName}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- Inclusions Recap -->
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs text-gray-700 space-y-1">
+                    <div class="font-bold text-onyx flex items-center gap-1 text-[11px]">
+                        <i class="fa-solid fa-check-circle text-emerald-600"></i> Included in your parcel:
+                    </div>
+                    <div>• 100% Waterproof Dua Cards in <b>${activeComboCustomizerLang}</b></div>
+                    ${isMega ? `<div>• Pocket Travel Janamaz in <b>${activeComboCustomizerColor.replace('Pocket Travel Janamaz - ', '')}</b></div>` : ''}
+                    <div>• 5 Fragrance-Free Ihram Care Essentials (Soap, Oil, Shampoo, Wash, Face Wash)</div>
+                    <div>• 2 FREE Gifts: Miswak Starter Kit + Loofah Scrubber (Worth ₹299)</div>
+                </div>
+            `;
+
+            footerEl.innerHTML = `
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-gray-500 uppercase font-bold">Total Payable</span>
+                    <span class="text-base sm:text-lg font-black text-onyx">Rs. ${prod.price}</span>
+                </div>
+                <div class="flex items-center gap-2 flex-1 justify-end">
+                    <button type="button" onclick="confirmComboCustomizer(false)" class="px-3 py-2.5 rounded-xl border-2 border-gold-400 text-onyx font-bold text-xs hover:bg-gold-50 cursor-pointer transition-all">
+                        Add to Cart
+                    </button>
+                    <button type="button" onclick="confirmComboCustomizer(true)" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-onyx font-black text-xs sm:text-sm shadow-md hover:shadow-lg active:scale-95 cursor-pointer flex items-center gap-1.5 transition-all">
+                        <span>BUY NOW ⚡</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function confirmComboCustomizer(isDirectBuy = true) {
+            const prod = products.find(p => p.id === activeComboCustomizerProductId);
+            if (!prod) return;
+
+            const itemLang = activeComboCustomizerLang;
+            const itemJnm = (prod.id === 17) ? (activeComboCustomizerColor.replace('Pocket Travel Janamaz - ', '')) : undefined;
+            const vName = (prod.id === 17)
+                ? `Cards (${itemLang}) + Janamaz (${itemJnm}) + Complete Ihram Kit`
+                : `Cards (${itemLang}) + Complete Ihram Kit`;
+            const cartKey = `${prod.id}_${prod.sku}_${itemLang}_${itemJnm || 'none'}`;
+
+            if (isDirectBuy) {
+                cart = [{
+                    cartKey: cartKey,
+                    id: prod.id,
+                    sku: prod.sku,
+                    name: prod.name,
+                    variantName: vName,
+                    cardLanguage: itemLang,
+                    janamazColor: itemJnm,
+                    price: prod.price,
+                    oldPrice: prod.oldPrice || (prod.price * 2),
+                    image: prod.image,
+                    weight: prod.weight || '0.80kg',
+                    qty: 1
+                }];
+                saveCartToStorage();
+                closeComboCustomizerModal();
+                window.location.href = 'checkout.html';
+            } else {
+                const existing = cart.find(i => i.cartKey === cartKey);
+                if (existing) {
+                    existing.qty += 1;
+                } else {
+                    cart.push({
+                        cartKey: cartKey,
+                        id: prod.id,
+                        sku: prod.sku,
+                        name: prod.name,
+                        variantName: vName,
+                        cardLanguage: itemLang,
+                        janamazColor: itemJnm,
+                        price: prod.price,
+                        oldPrice: prod.oldPrice || (prod.price * 2),
+                        image: prod.image,
+                        weight: prod.weight || '0.80kg',
+                        qty: 1
+                    });
+                }
+                saveCartToStorage();
+                updateCartUI();
+                closeComboCustomizerModal();
+                showToast(`${vName} added to Cart!`);
+            }
+        }
+
         function addToCart(productId, variantIndex = 0) {
+            if (productId === 16 || productId === 17) {
+                openComboCustomizerModal(productId, false);
+                return;
+            }
             const product = products.find(p => p.id === productId);
             if (!product) return;
 
@@ -3573,6 +3826,10 @@
         }
 
         function buyNow(productId, variantIndex = 0) {
+            if (productId === 16 || productId === 17) {
+                openComboCustomizerModal(productId, true);
+                return;
+            }
             addToCart(productId, variantIndex);
             window.location.href = 'checkout.html';
         }
