@@ -242,7 +242,7 @@
                     </button>
 
                     <!-- Refresh Button -->
-                    <button onclick="loadOrdersAndStats()" class="action-btn px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer" title="Refresh data">
+                    <button onclick="loadOrdersAndStats(true)" class="action-btn px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer" title="Refresh data">
                         <i class="fa-solid fa-arrows-rotate text-xs text-slate-300" id="refresh-icon"></i>
                         <span>Refresh</span>
                     </button>
@@ -1219,8 +1219,10 @@
             setDatePreset('today');
         }
 
-        // Fetch Orders and Metrics
-        async function loadOrdersAndStats() {
+        let hasLoadedWhatsAppTemplates = false;
+
+        // Fetch Orders and Metrics (High Speed with Concurrent Parallel Fetching)
+        async function loadOrdersAndStats(forceRefresh = false) {
             if (!currentAdminToken) return;
 
             const status = document.getElementById('filter-status').value;
@@ -1235,15 +1237,26 @@
             if (search) queryParams.set('search', search);
             if (startDate) queryParams.set('startDate', startDate);
             if (endDate) queryParams.set('endDate', endDate);
+            if (forceRefresh) queryParams.set('refresh', '1');
+
+            const statsQueryParams = new URLSearchParams();
+            if (startDate) statsQueryParams.set('startDate', startDate);
+            if (endDate) statsQueryParams.set('endDate', endDate);
+            if (forceRefresh) statsQueryParams.set('refresh', '1');
 
             const refreshIcon = document.getElementById('refresh-icon');
             if (refreshIcon) refreshIcon.classList.add('fa-spin');
 
             try {
-                // 1. Fetch Orders with active filters & summaries
-                const ordersRes = await fetch(`/api/admin/orders?${queryParams.toString()}`, {
-                    headers: { 'Authorization': `Bearer ${currentAdminToken}` }
-                });
+                // Fetch Orders and Stats in parallel (Promise.all)
+                const [ordersRes, statsRes] = await Promise.all([
+                    fetch(`/api/admin/orders?${queryParams.toString()}`, {
+                        headers: { 'Authorization': `Bearer ${currentAdminToken}` }
+                    }),
+                    fetch(`/api/admin/stats?${statsQueryParams.toString()}`, {
+                        headers: { 'Authorization': `Bearer ${currentAdminToken}` }
+                    })
+                ]);
 
                 if (ordersRes.status === 401 || ordersRes.status === 403) {
                     const errData = await ordersRes.json();
@@ -1258,14 +1271,6 @@
                     renderOrdersTable(currentOrdersList, ordersData.summary);
                 }
 
-                // 2. Fetch Filter-aware Aggregated Stats
-                const statsQueryParams = new URLSearchParams();
-                if (startDate) statsQueryParams.set('startDate', startDate);
-                if (endDate) statsQueryParams.set('endDate', endDate);
-
-                const statsRes = await fetch(`/api/admin/stats?${statsQueryParams.toString()}`, {
-                    headers: { 'Authorization': `Bearer ${currentAdminToken}` }
-                });
                 const statsData = await statsRes.json();
                 if (statsData.success && statsData.data) {
                     const s = statsData.data;
@@ -1284,8 +1289,11 @@
                     document.getElementById('stat-cancelled-orders').textContent = s.cancelledCount || 0;
                 }
 
-                // Load custom WhatsApp templates from Firebase
-                loadWhatsAppTemplatesFromFirebase();
+                // Load custom WhatsApp templates once
+                if (!hasLoadedWhatsAppTemplates) {
+                    loadWhatsAppTemplatesFromFirebase();
+                    hasLoadedWhatsAppTemplates = true;
+                }
             } catch (err) {
                 console.error("Failed to load admin data:", err);
             } finally {

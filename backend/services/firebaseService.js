@@ -68,8 +68,24 @@ function getDbUrl(path, queryParams = {}) {
   return url.toString();
 }
 
+const orderMutationListeners = [];
+function notifyOrderMutation(orderId, orderData) {
+  orderMutationListeners.forEach(listener => {
+    try {
+      listener(orderId, orderData);
+    } catch (e) {
+      logger.warn('ORDER_MUTATION_LISTENER_ERR', { error: e.message });
+    }
+  });
+}
+
 const firebaseService = {
   isMockMode: () => isMock,
+  onOrderMutation: (listener) => {
+    if (typeof listener === 'function') {
+      orderMutationListeners.push(listener);
+    }
+  },
 
   // Save new order
   saveOrder: async (orderId, orderData) => {
@@ -79,6 +95,7 @@ const firebaseService = {
     };
 
     mockStore.orders[orderId] = JSON.parse(JSON.stringify(dataWithTimestamp));
+    notifyOrderMutation(orderId, dataWithTimestamp);
 
     if (useDatabaseSecret) {
       try {
@@ -157,6 +174,7 @@ const firebaseService = {
       try {
         // Firebase RTDB REST API natively supports slash-delimited paths in the top-level PATCH body
         await axios.patch(getDbUrl(`orders/${orderId}`), timestampedUpdates, { timeout: 10000 });
+        notifyOrderMutation(orderId, timestampedUpdates);
         return mockStore.orders[orderId];
       } catch (err) {
         logger.warn('FIREBASE_REST_UPDATE_FALLBACK', { error: err.message });
@@ -166,10 +184,12 @@ const firebaseService = {
     if (db) {
       const ref = db.ref(`orders/${orderId}`);
       await ref.update(timestampedUpdates);
+      notifyOrderMutation(orderId, timestampedUpdates);
       const snap = await ref.once('value');
       return snap.val();
     }
 
+    notifyOrderMutation(orderId, timestampedUpdates);
     return mockStore.orders[orderId] ? JSON.parse(JSON.stringify(mockStore.orders[orderId])) : null;
   },
 

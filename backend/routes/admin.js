@@ -15,34 +15,68 @@ const logger = require('../utils/logger');
 // Protect all admin routes with Firebase Auth
 router.use(verifyAdminAuth);
 
+let cachedOrders = null;
+let lastOrdersFetchTime = 0;
+let inFlightFetchPromise = null;
+const CACHE_TTL_MS = 60000; // 60 seconds memory cache
+
+// Invalidate in-memory cache whenever an order is saved or updated
+if (typeof firebaseService.onOrderMutation === 'function') {
+  firebaseService.onOrderMutation(() => {
+    invalidateOrdersCache();
+  });
+}
+
+function invalidateOrdersCache() {
+  cachedOrders = null;
+  lastOrdersFetchTime = 0;
+}
+
 /**
- * Helper to fetch all orders from Firebase
+ * High-Speed Helper to fetch all orders from Firebase
+ * - 60s in-memory cache for instant sub-millisecond filtering/searches
+ * - Request deduplication so concurrent /orders and /stats trigger only ONE Firebase network call
+ * - Automatic cache invalidation on order mutations
  */
-async function fetchAllOrders() {
-  if (config.firebase.databaseSecret && config.firebase.databaseUrl) {
+async function fetchAllOrders(forceRefresh = false) {
+  const now = Date.now();
+  if (!forceRefresh && cachedOrders && (now - lastOrdersFetchTime < CACHE_TTL_MS)) {
+    return cachedOrders;
+  }
+
+  if (inFlightFetchPromise && !forceRefresh) {
+    return inFlightFetchPromise;
+  }
+
+  inFlightFetchPromise = (async () => {
     try {
-      const cleanBase = config.firebase.databaseUrl.replace(/\/$/, '');
-      const url = `${cleanBase}/orders.json?auth=${config.firebase.databaseSecret}`;
-      const res = await axios.get(url, { timeout: 10000 });
-      if (res.data && typeof res.data === 'object') {
-        return Object.values(res.data);
+      if (config.firebase.databaseSecret && config.firebase.databaseUrl) {
+        const cleanBase = config.firebase.databaseUrl.replace(/\/$/, '');
+        const url = `${cleanBase}/orders.json?auth=${config.firebase.databaseSecret}`;
+        const res = await axios.get(url, { timeout: 15000 });
+        if (res.data && typeof res.data === 'object') {
+          cachedOrders = Object.values(res.data);
+          lastOrdersFetchTime = Date.now();
+          return cachedOrders;
+        }
       }
     } catch (err) {
       logger.warn('ADMIN_FETCH_ORDERS_FALLBACK', { error: err.message });
+      if (cachedOrders) return cachedOrders;
+    } finally {
+      inFlightFetchPromise = null;
     }
-  }
 
-  // Fallback to cache / service store
-  const service = firebaseService;
-  return Object.values(service.getOrder ? await getAllFromLocalOrDb() : []);
+    return cachedOrders || [];
+  })();
+
+  return inFlightFetchPromise;
 }
 
-async function getAllFromLocalOrDb() {
-  // Try local cached orders
-  const orders = [];
-  const snapshot = await firebaseService.getOrder('__non_existent__'); // Trigger internal load if any
-  return orders;
-}
+// Background warm-up
+setTimeout(() => {
+  fetchAllOrders().catch(() => {});
+}, 1500);
 
 /**
  * Helper to parse date strings (YYYY-MM-DD) in Indian Standard Time (IST, UTC+5:30)
@@ -66,9 +100,9 @@ function parseISTTimestamp(dateStr, isEndOfDay = false) {
  */
 router.get('/orders', async (req, res, next) => {
   try {
-    const { status, search, paymentProvider, startDate, endDate, minAmount, maxAmount } = req.query;
+    const { status, search, paymentProvider, startDate, endDate, minAmount, maxAmount, refresh } = req.query;
 
-    let orders = await fetchAllOrders();
+    let orders = await fetchAllOrders(refresh === '1' || refresh === 'true');
     if (orders.length === 0) {
       // If REST returned empty or mock, fetch from firebaseService mockStore
       orders = Object.values(firebaseService._getMockStore ? firebaseService._getMockStore().orders : {});
@@ -213,8 +247,8 @@ router.get('/orders', async (req, res, next) => {
  */
 router.get('/stats', async (req, res, next) => {
   try {
-    const { startDate, endDate } = req.query;
-    let orders = await fetchAllOrders();
+    const { startDate, endDate, refresh } = req.query;
+    let orders = await fetchAllOrders(refresh === '1' || refresh === 'true');
     if (orders.length === 0) {
       orders = Object.values(firebaseService._getMockStore ? firebaseService._getMockStore().orders : {});
     }
