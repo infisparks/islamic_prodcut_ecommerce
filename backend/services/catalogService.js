@@ -86,26 +86,34 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   // Round weight to 3 decimal places, min 0.05kg
   const finalWeightKg = Math.max(0.05, Math.round(totalWeightKg * 1000) / 1000);
   
-  // Shipping Rule:
-  // - ALL Prepaid (Online) orders get 100% FREE SHIPPING (Rs. 0)!
-  // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY on all orders (Prepaid & COD)!
-  // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-  // - COD orders below ₹999 pay standard ₹100 delivery charge.
+  // Shipping Rule (3-Tier Structure):
+  // 1. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
+  // 2. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
+  // 3. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+  // Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY on all orders!
   const LOCAL_FREE_PINCODES = ['421305', '421302', '421308'];
   const cleanPincode = String(deliveryPincode || '').trim();
   const isLocalFreeShipping = LOCAL_FREE_PINCODES.includes(cleanPincode);
 
   const isOnlinePayment = (paymentMethod !== 'cod');
-  let hasFreeShipping = false;
   let shipping = 100;
 
-  if (isLocalFreeShipping || subtotal >= 999 || isOnlinePayment) {
-    hasFreeShipping = true;
+  if (isLocalFreeShipping) {
     shipping = 0;
-  } else {
-    hasFreeShipping = false;
+  } else if (subtotal < 299) {
+    shipping = isOnlinePayment ? 50 : 100;
+  } else if (subtotal < 599) {
     shipping = 100;
+  } else {
+    // subtotal >= 599
+    if (subtotal >= 999 || isOnlinePayment) {
+      shipping = 0;
+    } else {
+      shipping = 100;
+    }
   }
+
+  const hasFreeShipping = (shipping === 0);
 
   let discount = 0;
   let appliedCoupon = null;

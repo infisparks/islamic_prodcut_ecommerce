@@ -4200,14 +4200,24 @@ function addToCart(productId, variantIndex = 0) {
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            // Shipping Rule:
-            // - Prepaid orders of ₹598+ get FREE SHIPPING!
-            // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-            // - Prepaid orders below ₹598 pay standard delivery: ₹100
-            // - COD orders below ₹999 pay standard delivery: ₹100
-            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 100;
-            const hasFreeShipping = (subtotalPrice >= 999) || (isOnline && subtotalPrice >= 598);
-            const effectiveFee = hasFreeShipping ? 0 : courierFee;
+
+            // Shipping Rule (3-Tier Structure):
+            // 1. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
+            // 2. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
+            // 3. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+            let effectiveFee = 100;
+            if (subtotalPrice < 299) {
+                effectiveFee = isOnline ? 50 : 100;
+            } else if (subtotalPrice < 599) {
+                effectiveFee = 100;
+            } else {
+                // subtotalPrice >= 599
+                if (subtotalPrice >= 999 || isOnline) {
+                    effectiveFee = 0;
+                } else {
+                    effectiveFee = 100;
+                }
+            }
             
             // Remove old auto 12% offer
             let discountAmount = 0;
@@ -4239,16 +4249,17 @@ function addToCart(productId, variantIndex = 0) {
             if (cartCountEl) cartCountEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                if (hasFreeShipping) {
+                if (effectiveFee === 0) {
                     shippingFeeEl.className = "font-bold text-emerald-700";
-                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(Prepaid Free Shipping)";
+                    const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(100% Free Prepaid Shipping)";
                     shippingFeeEl.innerHTML = `FREE <span class="text-[9px] text-emerald-600 font-semibold block">${tagText}</span>`;
-                } else if (!isOnline) {
+                } else if (effectiveFee === 50) {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free on Prepaid ₹598+)</span>`;
+                    shippingFeeEl.innerHTML = `Rs. 50.00 <span class="text-[9px] text-emerald-700 font-semibold block">(Prepaid Discounted Delivery • Save ₹50 vs COD)</span>`;
                 } else {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Free Delivery on ₹598+)</span>`;
+                    const promoText = (subtotalPrice >= 599) ? "(Pay Online for 100% FREE Delivery)" : "(Standard Delivery ₹100)";
+                    shippingFeeEl.innerHTML = `Rs. 100.00 <span class="text-[9px] text-amber-600 font-normal block">${promoText}</span>`;
                 }
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
@@ -4258,8 +4269,10 @@ function addToCart(productId, variantIndex = 0) {
                 if (isOnline) {
                     if (prepaidDiscountPercent > 0) {
                         checkoutBtnText.textContent = `PAY ONLINE & SAVE ${prepaidDiscountPercent}% (Rs. ${totalWithShipping.toFixed(0)})`;
-                    } else if (hasFreeShipping) {
+                    } else if (effectiveFee === 0) {
                         checkoutBtnText.textContent = `PAY ONLINE (FREE DELIVERY • Rs. ${totalWithShipping.toFixed(0)})`;
+                    } else if (effectiveFee === 50) {
+                        checkoutBtnText.textContent = `PAY ONLINE (SAVE ₹50 ON DELIVERY • Rs. ${totalWithShipping.toFixed(0)})`;
                     } else {
                         checkoutBtnText.textContent = `PAY ONLINE (Rs. ${totalWithShipping.toFixed(0)})`;
                     }

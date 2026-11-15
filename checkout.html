@@ -1074,34 +1074,50 @@
             if (countEl) countEl.textContent = totalQty;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
-            // Shipping Rule:
-            // - ALL Prepaid / Online orders get 100% FREE SHIPPING (₹0)!
-            // - Orders above ₹999 get FREE SHIPPING on BOTH COD and Online/Prepaid!
-            // - Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY!
-            // - COD orders below ₹999 pay standard delivery: ₹100
+            // Shipping Rule (3-Tier Structure):
+            // 1. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
+            // 2. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
+            // 3. ₹599 and Above (subtotal >= 599): Prepaid FREE (₹0), COD ₹100 (Free if >= 999)
+            // Nearby local pincodes (421305, 421302, 421308) get 100% FREE DELIVERY!
             const LOCAL_PINCODES = ['421305', '421302', '421308'];
             const currentPincode = (document.getElementById('cust-pincode')?.value || '').trim();
             const isLocalDelivery = LOCAL_PINCODES.includes(currentPincode);
 
             const isOnline = (selectedPaymentMethod !== 'cod');
-            const hasFreeShipping = isLocalDelivery || (subtotal >= 999);
-            const codShipping = (isLocalDelivery || hasFreeShipping) ? 0 : 100;
-            const onlineShipping = 0; // 100% Free Shipping on ALL Prepaid Orders
+            let codShipping = 100;
+            let onlineShipping = 0;
+
+            if (isLocalDelivery) {
+                codShipping = 0;
+                onlineShipping = 0;
+            } else if (subtotal < 299) {
+                onlineShipping = 50;
+                codShipping = 100;
+            } else if (subtotal < 599) {
+                onlineShipping = 100;
+                codShipping = 100;
+            } else {
+                // subtotal >= 599
+                onlineShipping = 0;
+                codShipping = (subtotal >= 999) ? 0 : 100;
+            }
             const effectiveShipping = isOnline ? onlineShipping : codShipping;
 
             if (shippingEl) {
                 if (isLocalDelivery) {
                     shippingEl.className = "font-bold text-emerald-700";
                     shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Nearby Local Area: Free Delivery)</span>`;
-                } else if (isOnline) {
+                } else if (effectiveShipping === 0) {
                     shippingEl.className = "font-bold text-emerald-700";
-                    shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(100% Free Prepaid Shipping)</span>`;
-                } else if (hasFreeShipping) {
-                    shippingEl.className = "font-bold text-emerald-700";
-                    shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">(Above ₹999 Free Delivery)</span>`;
+                    const freeLabel = (subtotal >= 999) ? "(Above ₹999 Free Delivery)" : "(100% Free Prepaid Shipping)";
+                    shippingEl.innerHTML = `FREE <span class="text-[10px] text-emerald-600 block sm:inline font-semibold">${freeLabel}</span>`;
+                } else if (effectiveShipping === 50) {
+                    shippingEl.className = "font-bold text-onyx";
+                    shippingEl.innerHTML = `Rs. 50.00 <span class="text-[10px] text-emerald-700 block sm:inline font-semibold">(Prepaid Discounted Delivery • Save ₹50 vs COD)</span>`;
                 } else {
                     shippingEl.className = "font-bold text-onyx";
-                    shippingEl.innerHTML = `Rs. 100.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">(Pay Online for 100% FREE Delivery)</span>`;
+                    const codPromo = (subtotal >= 599) ? `(Pay Online for 100% FREE Delivery)` : `(Standard Delivery ₹100)`;
+                    shippingEl.innerHTML = `Rs. 100.00 <span class="text-[10px] text-amber-600 block sm:inline font-normal">${codPromo}</span>`;
                 }
             }
 
@@ -1136,7 +1152,7 @@
             // COD Total: Subtotal - discount + COD Delivery (Free if subtotal >= 999, else ₹100)
             const codTotal = Math.max(0, subtotal - discountAmount + codShipping);
 
-            // Online Total: Subtotal - discount - prepaid item discount + Online Delivery (FREE ₹0 on ₹598+)
+            // Online Total: Subtotal - discount - prepaid item discount + Online Delivery
             const onlineTotal = Math.max(0, subtotal - discountAmount - basePrepaidItemDiscount + onlineShipping);
 
             // Savings calculation: (COD Total - Online Total)
@@ -1151,10 +1167,15 @@
             const savingsAmountEl = document.getElementById('summary-savings-amount');
 
             if (onlineBadgePrice) {
-                const saveBadge = totalPrepaidSavings > 0
-                    ? `<span class="font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded text-[11px] ml-1">(Save Rs. ${totalPrepaidSavings.toFixed(0)} vs COD)</span>`
-                    : '';
-                onlineBadgePrice.innerHTML = `Pay Rs. ${onlineTotal.toFixed(2)} ${saveBadge}`;
+                let note = '';
+                if (totalPrepaidSavings > 0) {
+                    note = `<span class="font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded text-[11px] ml-1">(Save Rs. ${totalPrepaidSavings.toFixed(0)} vs COD)</span>`;
+                } else if (onlineShipping > 0) {
+                    note = `<span class="font-normal text-gray-500 text-[11px] ml-1">(Delivery: Rs. ${onlineShipping})</span>`;
+                } else {
+                    note = `<span class="font-normal text-emerald-700 text-[11px] ml-1">(FREE Delivery)</span>`;
+                }
+                onlineBadgePrice.innerHTML = `Pay Rs. ${onlineTotal.toFixed(2)} ${note}`;
             }
             if (codBadgePrice) {
                 const codNote = codShipping > 0
@@ -1165,8 +1186,10 @@
             if (onlineOfferPill) {
                 if (shippingSavings > 0 && prepaidDiscountPercent > 0) {
                     onlineOfferPill.innerHTML = `⚡ FREE DELIVERY + ${prepaidDiscountPercent}% OFF`;
-                } else if (shippingSavings > 0) {
+                } else if (shippingSavings > 0 && onlineShipping === 0) {
                     onlineOfferPill.innerHTML = `⚡ FREE DELIVERY`;
+                } else if (shippingSavings > 0) {
+                    onlineOfferPill.innerHTML = `⚡ SAVE ₹${shippingSavings} ON SHIPPING`;
                 } else if (prepaidDiscountPercent > 0) {
                     onlineOfferPill.innerHTML = `⚡ ${prepaidDiscountPercent}% OFF`;
                 } else {
@@ -1180,9 +1203,9 @@
             if (savingsAmountEl) {
                 let bannerDetail = `Rs. ${totalPrepaidSavings.toFixed(2)}`;
                 if (shippingSavings > 0 && prepaidDiscountPercent > 0) {
-                    bannerDetail += ` (FREE Delivery + ${prepaidDiscountPercent}% OFF)`;
+                    bannerDetail += ` (${onlineShipping === 0 ? 'FREE' : 'Discounted'} Delivery + ${prepaidDiscountPercent}% OFF)`;
                 } else if (shippingSavings > 0) {
-                    bannerDetail += ` (FREE Delivery)`;
+                    bannerDetail += ` (${onlineShipping === 0 ? 'FREE Delivery' : `Save ₹${shippingSavings} on Delivery`})`;
                 } else if (prepaidDiscountPercent > 0) {
                     bannerDetail += ` (${prepaidDiscountPercent}% OFF)`;
                 }
@@ -1217,9 +1240,9 @@
             const btnSubmitSub = document.getElementById('btn-submit-sub');
             let offBreakdown = '';
             if (shippingSavings > 0 && prepaidDiscountPercent > 0) {
-                offBreakdown = `FREE Delivery + ${prepaidDiscountPercent}% OFF`;
+                offBreakdown = `${onlineShipping === 0 ? 'FREE Delivery' : 'Discounted Delivery'} + ${prepaidDiscountPercent}% OFF`;
             } else if (shippingSavings > 0) {
-                offBreakdown = `FREE Delivery`;
+                offBreakdown = onlineShipping === 0 ? `FREE Delivery` : `Save ₹${shippingSavings} on Delivery`;
             } else if (prepaidDiscountPercent > 0) {
                 offBreakdown = `${prepaidDiscountPercent}% OFF`;
             } else {
@@ -1253,8 +1276,10 @@
             if (mobileOnlineSavingsTag) {
                 if (shippingSavings > 0 && prepaidDiscountPercent > 0) {
                     mobileOnlineSavingsTag.textContent = `⚡ FREE DELIVERY + ${prepaidDiscountPercent}%`;
-                } else if (shippingSavings > 0) {
+                } else if (shippingSavings > 0 && onlineShipping === 0) {
                     mobileOnlineSavingsTag.textContent = `⚡ FREE DELIVERY`;
+                } else if (shippingSavings > 0) {
+                    mobileOnlineSavingsTag.textContent = `⚡ SAVE ₹${shippingSavings}`;
                 } else if (prepaidDiscountPercent > 0) {
                     mobileOnlineSavingsTag.textContent = `⚡ ${prepaidDiscountPercent}% OFF`;
                 } else {
@@ -1262,7 +1287,7 @@
                 }
             }
             if (mobileOnlineSub) {
-                mobileOnlineSub.textContent = `Save Rs. ${totalPrepaidSavings.toFixed(0)} vs COD`;
+                mobileOnlineSub.textContent = totalPrepaidSavings > 0 ? `Save Rs. ${totalPrepaidSavings.toFixed(0)} vs COD` : `Instant Dispatch`;
             }
 
             if (checkoutCart.length === 0) {
@@ -1411,8 +1436,19 @@
                     const courierName = info.deliveryType || (info.couriers && info.couriers[0]) || 'Express Courier Partner';
                     const etd = info.estimatedDays || '3-4 Business Days';
 
-                    const onlineShipTag = 'FREE Online / ₹100 COD';
-                    const courierSubTag = `${courierName} • Pay Online & Get 100% FREE Delivery (Save ₹100)`;
+                    const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+                    let onlineShipTag = '';
+                    let courierSubTag = '';
+                    if (subtotal < 299) {
+                        onlineShipTag = '₹50 Online / ₹100 COD';
+                        courierSubTag = `${courierName} • Pay Online & Save ₹50 on Delivery`;
+                    } else if (subtotal < 599) {
+                        onlineShipTag = '₹100 Delivery (Online & COD)';
+                        courierSubTag = `${courierName} • Fast Express Delivery`;
+                    } else {
+                        onlineShipTag = (subtotal >= 999) ? '100% FREE Delivery' : 'FREE Online / ₹100 COD';
+                        courierSubTag = `${courierName} • Pay Online & Get 100% FREE Delivery (Save ₹100)`;
+                    }
 
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
@@ -1427,14 +1463,27 @@
                     `;
                 } else {
                     currentShippingFee = 100;
-                    const onlineShipTag = 'FREE Online / ₹100 COD';
+                    const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+                    let onlineShipTag = '';
+                    let courierSubTag = '';
+                    if (subtotal < 299) {
+                        onlineShipTag = '₹50 Online / ₹100 COD';
+                        courierSubTag = 'Pay Online & Save ₹50 on Delivery';
+                    } else if (subtotal < 599) {
+                        onlineShipTag = '₹100 Delivery';
+                        courierSubTag = 'Fast Express Delivery';
+                    } else {
+                        onlineShipTag = (subtotal >= 999) ? '100% FREE Delivery' : 'FREE Online / ₹100 COD';
+                        courierSubTag = 'Pay Online & Get 100% FREE Delivery (Save ₹100)';
+                    }
+
                     feedback.className = 'mt-1 text-[11px] font-medium p-2 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-300';
                     feedback.innerHTML = `
                         <div class="flex items-center justify-between">
                             <span><i class="fa-solid fa-truck-fast text-emerald-600 mr-1"></i> Pan-India Express Delivery</span>
                             <span class="font-bold text-emerald-800">${onlineShipTag}</span>
                         </div>
-                        <div class="text-[10px] text-emerald-700 mt-0.5">Pay Online & Get 100% FREE Delivery (Save ₹100)</div>
+                        <div class="text-[10px] text-emerald-700 mt-0.5">${courierSubTag}</div>
                     `;
                 }
             } catch (err) {

@@ -5112,10 +5112,24 @@
             const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
             const isOnline = (selectedPaymentMethod === 'razorpay');
-            const courierFee = (currentShippingFee !== null && currentShippingFee !== undefined) ? currentShippingFee : 100;
-            const hasFreeShipping = (subtotalPrice >= 999);
-            const isPrepaidFreeShipping = isOnline; // 100% Free Shipping on All Prepaid Orders
-            const effectiveFee = (hasFreeShipping || isPrepaidFreeShipping) ? 0 : courierFee;
+
+            // Shipping Rule (3-Tier Structure):
+            // 1. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
+            // 2. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
+            // 3. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+            let effectiveFee = 100;
+            if (subtotalPrice < 299) {
+                effectiveFee = isOnline ? 50 : 100;
+            } else if (subtotalPrice < 599) {
+                effectiveFee = 100;
+            } else {
+                // subtotalPrice >= 599
+                if (subtotalPrice >= 999 || isOnline) {
+                    effectiveFee = 0;
+                } else {
+                    effectiveFee = 100;
+                }
+            }
 
             // Remove old auto 12% offer
             const discountRowEl = document.getElementById('cart-auto-discount-row');
@@ -5151,13 +5165,17 @@
             if (floatingCartEl) floatingCartEl.textContent = totalItems;
             if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotalPrice.toFixed(2)}`;
             if (shippingFeeEl) {
-                if (hasFreeShipping || isPrepaidFreeShipping) {
+                if (effectiveFee === 0) {
                     shippingFeeEl.className = "font-bold text-emerald-700";
                     const tagText = (subtotalPrice >= 999) ? "(Above ₹999 Offer)" : "(100% Free Prepaid Shipping)";
                     shippingFeeEl.innerHTML = `FREE <span class="text-[9px] text-emerald-600 font-semibold block">${tagText}</span>`;
+                } else if (effectiveFee === 50) {
+                    shippingFeeEl.className = "font-bold text-onyx";
+                    shippingFeeEl.innerHTML = `Rs. 50.00 <span class="text-[9px] text-emerald-700 font-semibold block">(Prepaid Discounted Delivery • Save ₹50 vs COD)</span>`;
                 } else {
                     shippingFeeEl.className = "font-bold text-onyx";
-                    shippingFeeEl.innerHTML = `Rs. ${activeFee.toFixed(2)} <span class="text-[9px] text-amber-600 font-normal block">(Pay Online for 100% FREE Delivery)</span>`;
+                    const promoText = (subtotalPrice >= 599) ? "(Pay Online for 100% FREE Delivery)" : "(Standard Delivery ₹100)";
+                    shippingFeeEl.innerHTML = `Rs. 100.00 <span class="text-[9px] text-amber-600 font-normal block">${promoText}</span>`;
                 }
             }
             if (totalEl) totalEl.textContent = `Rs. ${totalWithShipping.toFixed(2)}`;
@@ -5165,9 +5183,15 @@
             const checkoutBtnText = document.getElementById('checkout-btn-text');
             if (checkoutBtnText && !isProcessingOrder) {
                 if (isOnline) {
-                    checkoutBtnText.textContent = (prepaidDiscountPercent > 0)
-                        ? `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF + FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`
-                        : `PAY ONLINE (FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`;
+                    if (prepaidDiscountPercent > 0) {
+                        checkoutBtnText.textContent = `PAY ONLINE (EXTRA ${prepaidDiscountPercent}% OFF + FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`;
+                    } else if (effectiveFee === 0) {
+                        checkoutBtnText.textContent = `PAY ONLINE (FREE DELIVERY • RS. ${totalWithShipping.toFixed(0)})`;
+                    } else if (effectiveFee === 50) {
+                        checkoutBtnText.textContent = `PAY ONLINE (SAVE ₹50 ON DELIVERY • RS. ${totalWithShipping.toFixed(0)})`;
+                    } else {
+                        checkoutBtnText.textContent = `PAY ONLINE (RS. ${totalWithShipping.toFixed(0)})`;
+                    }
                 } else {
                     checkoutBtnText.textContent = `CONFIRM & PLACE ORDER (COD • RS. ${totalWithShipping.toFixed(0)})`;
                 }
@@ -5341,12 +5365,21 @@
                         updateCartUI(false);
 
                         const estDateStr = getFormattedEstimatedDelivery(4);
+                        const subtotalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                        let deliveryNote = 'Delivery: <b>Rs. 100</b>';
+                        if (subtotalPrice < 299) {
+                            deliveryNote = 'Delivery: <b>₹50 Online / ₹100 COD</b>';
+                        } else if (subtotalPrice < 599) {
+                            deliveryNote = 'Delivery: <b>₹100</b> (Online & COD)';
+                        } else {
+                            deliveryNote = 'Delivery: <b>FREE on Online / ₹100 COD</b>';
+                        }
                         badge.className = 'text-[11px] p-2.5 rounded-lg border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2';
                         badge.innerHTML = `
                             <i class="fa-solid fa-circle-check text-emerald-600 text-sm mt-0.5 flex-shrink-0"></i>
                             <div>
                                 <div class="font-bold">✓ Delivery Available to ${data.data.city || ''} ${data.data.state ? '(' + data.data.state + ')' : ''}</div>
-                                <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> • Delivery Charge: <b>Rs. 100</b> (COD Available)</div>
+                                <div class="text-[10px] text-emerald-700 mt-0.5">Est. Delivery by <b>${estDateStr}</b> • ${deliveryNote}</div>
                             </div>
                         `;
                         const cityInput = document.getElementById('ship-city');
