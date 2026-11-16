@@ -1853,7 +1853,7 @@
                 sku: "fati_ess_combo",
                 soldCount: "2,410 sold",
                 price: 1299,
-                oldPrice: 1548,
+                oldPrice: 2300,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/offer/offer_6_ihram_kit_1299.webp",
@@ -1871,7 +1871,7 @@
                               "product/essentials/fragrance-free-ihram.webp",
                               "product/essentials/certified-trusted.webp"
                     ],
-                badge: "OFFER NO.6 • SAVE ₹249",
+                badge: "OFFER NO.6 • SAVE ₹1001 (44% OFF)",
                 rating: "(620)",
                 desc: "Complete Umrah Family Care Combo for all family members in Ihram. Includes 5 full-size fragrance-free essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Toothbrush Starter Kit + Natural Loofah Scrubber). 100% Halal, SLS-Free & Lab Certified.",
                 features: ["5 Full-Size Ihram Essentials + 2 Free Gifts", "Siwak Miswak Starter Kit + Loofah FREE (₹299 Value)", "100% Fragrance Free & Halal Certified", "Govt. Authorised Academy Lab Certified"],
@@ -3476,7 +3476,7 @@
                 ? (currentComboMode === 'custom' ? getCustomComboTotal() : (p.price || 1299)) 
                 : (activeVariant ? activeVariant.price : p.price);
             const activeOldPrice = isComboPack 
-                ? (currentComboMode === 'custom' ? getCustomComboMrp() : (p.oldPrice || 1548)) 
+                ? (currentComboMode === 'custom' ? getCustomComboMrp() : (p.oldPrice || 2300)) 
                 : (activeVariant ? (activeVariant.oldPrice || (activeVariant.price * 2)) : (p.oldPrice || (p.price * 2)));
             const activeSku = isComboPack 
                 ? 'fati_ess_combo' 
