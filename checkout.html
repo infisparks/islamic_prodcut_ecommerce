@@ -1637,6 +1637,10 @@
                         contact: customer.phone,
                         email: customer.email || `${customer.phone}@fatimacalligrapher.com`
                     },
+                    retry: {
+                        enabled: true,
+                        max_count: 4
+                    },
                     theme: { color: '#D4AF37' },
                     handler: async function (response) {
                         try {

@@ -197,7 +197,7 @@
     </noscript>
 
     <!-- Razorpay Standard Checkout SDK -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-[#F5F6F8]">
 
@@ -5735,7 +5735,12 @@
                     order_id: orderData.razorpayOrderId,
                     prefill: {
                         name,
-                        contact: cleanPhone
+                        contact: cleanPhone,
+                        email: `${cleanPhone}@fatimacalligrapher.com`
+                    },
+                    retry: {
+                        enabled: true,
+                        max_count: 4
                     },
                     theme: { color: "#C59A3F" },
                     handler: async function (razorpayResponse) {

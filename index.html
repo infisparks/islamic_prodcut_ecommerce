@@ -38,7 +38,7 @@
     <!-- FontAwesome, Tailwind & Razorpay Checkout CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <!-- Ultra-Fast Preload for Critical WebP Assets -->
     <link rel="preload" as="image" href="product/hero.webp" fetchpriority="high">
@@ -5180,7 +5180,12 @@ function addToCart(productId, variantIndex = 0) {
                     order_id: orderData.razorpayOrderId,
                     prefill: {
                         name: name,
-                        contact: cleanPhone
+                        contact: cleanPhone,
+                        email: `${cleanPhone}@fatimacalligrapher.com`
+                    },
+                    retry: {
+                        enabled: true,
+                        max_count: 4
                     },
                     theme: {
                         color: "#D4AF37"
