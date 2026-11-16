@@ -267,6 +267,17 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
     const { customer, items, paymentMethod = 'razorpay', couponCode, verificationToken: reqVerificationToken, draftOrderId: reqDraftOrderId } = req.body;
     const cleanPhone = customer.phone.replace(/\D/g, '');
 
+    // Temporary 1-Day COD Pause due to Courier Technical Maintenance
+    if (paymentMethod === 'cod') {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'COD_TEMPORARILY_UNAVAILABLE',
+          message: 'Cash on Delivery (COD) is temporarily unavailable today due to courier technical maintenance. Please choose Online Payment (UPI / GPay / PhonePe / Cards) to enjoy 100% Free Priority Delivery & Extra Discounts!'
+        }
+      });
+    }
+
     // For COD: Enforce verified WhatsApp OTP and check 24-hour rate limit
     let record = null;
     if (paymentMethod === 'cod') {
