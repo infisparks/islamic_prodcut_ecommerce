@@ -39,8 +39,29 @@
                     17: "product/offer/offer_3_mega_combo_2198.webp",
                     18: "product/offer/offer_kids_cards_599.webp"
                 };
+                var prodMeta = {
+                    1: { title: "Umrah Dua & Guide Cards (Urdu / اردو)", price: "Rs. 599", oldPrice: "MRP Rs. 1198", discount: "-50% OFF" },
+                    2: { title: "Umrah Dua & Guide Cards (English)", price: "Rs. 599", oldPrice: "MRP Rs. 1198", discount: "-50% OFF" },
+                    3: { title: "Umrah Dua & Guide Cards (Hindi / हिंदी)", price: "Rs. 599", oldPrice: "MRP Rs. 1198", discount: "-50% OFF" },
+                    4: { title: "Umrah Dua & Guide Cards (Roman English)", price: "Rs. 599", oldPrice: "MRP Rs. 1198", discount: "-50% OFF" },
+                    5: { title: "Umrah Dua Waterproof Stickers (English)", price: "Rs. 349", oldPrice: "MRP Rs. 699", discount: "-50% OFF" },
+                    6: { title: "Umrah Dua Waterproof Stickers (Hindi)", price: "Rs. 349", oldPrice: "MRP Rs. 699", discount: "-50% OFF" },
+                    7: { title: "Umrah Dua Waterproof Stickers (Urdu)", price: "Rs. 349", oldPrice: "MRP Rs. 699", discount: "-50% OFF" },
+                    8: { title: "Pocket Travel Janamaz with Zipper Pouch", price: "Rs. 349", oldPrice: "MRP Rs. 698", discount: "-50% OFF" },
+                    9: { title: "Herbal Ihram Friendly Soap (Fragrance Free)", price: "Rs. 199", oldPrice: "MRP Rs. 399", discount: "-50% OFF" },
+                    10: { title: "Pure Coconut Oil (Fragrance Free & Ihram Safe)", price: "Rs. 249", oldPrice: "MRP Rs. 499", discount: "-50% OFF" },
+                    11: { title: "Herbal Ihram Friendly Shampoo (Fragrance Free)", price: "Rs. 299", oldPrice: "MRP Rs. 599", discount: "-50% OFF" },
+                    12: { title: "Herbal Ihram Hand & Body Wash (Fragrance Free)", price: "Rs. 299", oldPrice: "MRP Rs. 599", discount: "-50% OFF" },
+                    13: { title: "Herbal Ihram Friendly Face Wash (Fragrance Free)", price: "Rs. 249", oldPrice: "MRP Rs. 499", discount: "-50% OFF" },
+                    14: { title: "Umrah Family Combo - Complete Ihram Essentials Kit", price: "Rs. 1299", oldPrice: "MRP Rs. 2300", discount: "-44% OFF" },
+                    15: { title: "Authentic Siwak Miswak Toothbrush Starter Kit", price: "Rs. 299", oldPrice: "MRP Rs. 599", discount: "-50% OFF" },
+                    16: { title: "All-in-One Hajj & Umrah Protection Kit (Dua Cards + Ihram Care)", price: "Rs. 1848", oldPrice: "MRP Rs. 3499", discount: "-47% OFF" },
+                    17: { title: "Mega Umrah Super Combo (Cards + Janamaz + Essentials)", price: "Rs. 2198", oldPrice: "MRP Rs. 4198", discount: "-48% OFF" },
+                    18: { title: "Umrah Dua Cards - Special Kids Edition", price: "Rs. 599", oldPrice: "MRP Rs. 1198", discount: "-50% OFF" }
+                };
                 var targetImg = prodImages[pid] || "product/umrah_card_english.webp";
                 window.__INITIAL_PDP_IMAGE__ = targetImg;
+                window.__INITIAL_PDP_META__ = prodMeta[pid] || null;
                 var link = document.createElement('link');
                 link.rel = 'preload';
                 link.as = 'image';
@@ -227,7 +248,13 @@
             <i class="fa-solid fa-chevron-right text-[8px] text-gray-400"></i>
             <a href="index.html#products-grid" class="hover:text-gold-600">Products</a>
             <i class="fa-solid fa-chevron-right text-[8px] text-gray-400"></i>
-            <span id="breadcrumb-product-name" class="font-bold text-onyx truncate max-w-[200px] sm:max-w-md">Product Details</span>
+            <span id="breadcrumb-product-name" class="font-bold text-onyx truncate max-w-[200px] sm:max-w-md">
+                <script>
+                    if (window.__INITIAL_PDP_META__) document.write(window.__INITIAL_PDP_META__.title);
+                    else document.write('Product Details');
+                </script>
+                <noscript>Product Details</noscript>
+            </span>
         </div>
     </div>
 
@@ -357,16 +384,46 @@
                         </span>
                     </div>
 
-                    <h1 id="pdp-title" class="font-cinzel text-base xs:text-lg sm:text-2xl lg:text-3xl font-extrabold text-onyx leading-tight mb-1">
-                        Umrah Dua & Guide Cards (English)
+                    <h1 id="pdp-title" class="font-cinzel text-base xs:text-lg sm:text-2xl lg:text-3xl font-extrabold text-onyx leading-tight mb-1 min-h-[1.5em]">
+                        <script>
+                            if (window.__INITIAL_PDP_META__) {
+                                document.write(window.__INITIAL_PDP_META__.title);
+                            } else {
+                                document.write('<span class="inline-block w-4/5 h-7 bg-amber-100/70 animate-pulse rounded-lg"></span>');
+                            }
+                        </script>
+                        <noscript>Umrah Dua & Guide Cards</noscript>
                     </h1>
 
                     <!-- Dynamic Price Display -->
                     <div class="flex items-baseline gap-2 mb-1.5 flex-wrap">
-                        <span id="pdp-price" class="text-xl sm:text-3xl font-black text-onyx">Rs. 599</span>
-                        <span id="pdp-old-price" class="text-xs sm:text-base text-gray-400 line-through">MRP Rs. 1198</span>
+                        <span id="pdp-price" class="text-xl sm:text-3xl font-black text-onyx">
+                            <script>
+                                if (window.__INITIAL_PDP_META__) {
+                                    document.write(window.__INITIAL_PDP_META__.price);
+                                } else {
+                                    document.write('<span class="inline-block w-24 h-7 bg-amber-100/70 animate-pulse rounded-lg"></span>');
+                                }
+                            </script>
+                            <noscript>Rs. 599</noscript>
+                        </span>
+                        <span id="pdp-old-price" class="text-xs sm:text-base text-gray-400 line-through">
+                            <script>
+                                if (window.__INITIAL_PDP_META__) {
+                                    document.write(window.__INITIAL_PDP_META__.oldPrice);
+                                } else {
+                                    document.write('<span class="inline-block w-16 h-4 bg-gray-200 animate-pulse rounded"></span>');
+                                }
+                            </script>
+                        </span>
                         <span id="pdp-discount-badge" class="text-[10px] sm:text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-md border border-red-200">
-                            -50% OFF
+                            <script>
+                                if (window.__INITIAL_PDP_META__) {
+                                    document.write(window.__INITIAL_PDP_META__.discount);
+                                } else {
+                                    document.write('<span class="inline-block w-12 h-4 bg-red-100 animate-pulse rounded"></span>');
+                                }
+                            </script>
                         </span>
                     </div>
 
@@ -376,8 +433,8 @@
                         <span>Estimated Delivery: <b id="pdp-est-delivery-badge" class="font-extrabold text-emerald-950 underline decoration-emerald-500">--</b> (within 5 days)</span>
                     </div>
 
-                    <!-- ULTRA-COMPACT 4-COLUMN LANGUAGE SELECTOR (Slim Bar with Zero Mobile Clutter) -->
-                    <div id="pdp-language-selector-section" class="flex flex-col gap-1 mb-2.5 bg-sand/60 p-1.5 sm:p-2 rounded-xl border border-gold-300/50 shadow-xs">
+                    <!-- ULTRA-COMPACT 4-COLUMN LANGUAGE SELECTOR (Hidden by default; unhidden dynamically for cards/stickers) -->
+                    <div id="pdp-language-selector-section" class="hidden flex-col gap-1 mb-2.5 bg-sand/60 p-1.5 sm:p-2 rounded-xl border border-gold-300/50 shadow-xs">
                         <div class="flex items-center justify-between px-1">
                             <span class="text-[10.5px] font-bold text-onyx flex items-center gap-1">
                                 <i class="fa-solid fa-language text-gold-600 text-xs"></i> Select Language:
@@ -403,10 +460,8 @@
                         </div>
                     </div>
 
-
-
-                    <p id="pdp-desc" class="hidden sm:block text-xs sm:text-sm text-gray-600 leading-relaxed mb-3">
-                        Authentic Umrah Dua cards with clear translation, Arabic text, Tawaf tasbih counter, and step-by-step ritual guide.
+                    <p id="pdp-desc" class="hidden sm:block text-xs sm:text-sm text-gray-600 leading-relaxed mb-3 min-h-[2em]">
+                        <span class="inline-block w-full h-4 bg-gray-100 animate-pulse rounded"></span>
                     </p>
 
                     <!-- UMRAH COMBO BUILDER CONTAINER (Visible only when product ID is 14) -->
@@ -4866,7 +4921,7 @@
                     if (janamazLabel) janamazLabel.textContent = modalSelectedJanamaz;
 
                     const colorsList = [
-                        { name: 'Royal Gold', image: 'product/janamaz/gold.webp' },
+                        { name: 'Royal Gold', image: 'product/janamaz/golden.webp' },
                         { name: 'Emerald Green', image: 'product/janamaz/green.webp' },
                         { name: 'Jet Black', image: 'product/janamaz/black.webp' },
                         { name: 'Royal Blue', image: 'product/janamaz/blue.webp' },
@@ -5247,7 +5302,7 @@
         }
 
         function showCodDisabledNotice() {
-            alert("⚠️ Cash on Delivery (COD) is temporarily paused today due to courier network maintenance.\n\nPlease choose 'Pay Online' (UPI / GPay / PhonePe / Cards) to enjoy 100% FREE Delivery and Priority Dispatch!");
+            alert("⚠️ COD PAUSED FOR TODAY!\n\n🎁 SPECIAL ONLINE OFFER TODAY:\n⚡ Pay Online (UPI / GPay / PhonePe / Cards) & Get 100% FREE Delivery + Instant Priority Dispatch!\n\n👉 Pay Online & Save More Today! 🚀");
         }
 
         function handlePaymentMethodSelect(method) {
