@@ -352,7 +352,10 @@ const catalog = [
     hsn: "9603",
     sku: "fati_siwak_01",
     dimensions: { length: 18, breadth: 6, height: 2.5 },
-    price: 99,
+    price: 199,
+    codPrice: 299,
+    isBackorder: true,
+    backorderNotice: "Currently Out of Stock. Fresh stock arrives in 5 to 7 days and will be dispatched immediately.",
     weightKg: 0.06,
     weightLabel: "Starter Kit (1 Handle + 5 Refills)",
     image: "product/miswak/box.webp"

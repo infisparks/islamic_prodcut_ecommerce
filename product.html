@@ -54,7 +54,7 @@
                     12: { title: "Herbal Ihram Hand & Body Wash (Fragrance Free)", price: "Rs. 299", oldPrice: "MRP Rs. 599", discount: "-50% OFF" },
                     13: { title: "Herbal Ihram Friendly Face Wash (Fragrance Free)", price: "Rs. 249", oldPrice: "MRP Rs. 499", discount: "-50% OFF" },
                     14: { title: "Umrah Family Combo - Complete Ihram Essentials Kit", price: "Rs. 1299", oldPrice: "MRP Rs. 2300", discount: "-44% OFF" },
-                    15: { title: "Authentic Siwak Miswak Toothbrush Starter Kit", price: "Rs. 299", oldPrice: "MRP Rs. 599", discount: "-50% OFF" },
+                    15: { title: "Authentic Siwak Miswak Toothbrush Starter Kit", price: "Rs. 199", oldPrice: "MRP Rs. 599", discount: "Prepaid ₹199 / COD ₹299" },
                     16: { title: "All-in-One Hajj & Umrah Protection Kit (Dua Cards + Ihram Care)", price: "Rs. 1848", oldPrice: "MRP Rs. 3499", discount: "-47% OFF" },
                     17: { title: "Mega Umrah Super Combo (Cards + Janamaz + Essentials)", price: "Rs. 2198", oldPrice: "MRP Rs. 4198", discount: "-48% OFF" },
                     18: { title: "Umrah Dua Cards - Special Kids Edition", price: "Rs. 599", oldPrice: "MRP Rs. 1198", discount: "-50% OFF" }
@@ -379,7 +379,7 @@
                             <i class="fa-solid fa-fire text-amber-500"></i>
                             <span id="pdp-sold-text">1,820 sold</span>
                         </span>
-                        <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200 text-[9px] sm:text-[10px]">
+                        <span id="pdp-stock-badge" class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200 text-[9px] sm:text-[10px]">
                             In Stock
                         </span>
                     </div>
@@ -427,7 +427,30 @@
                         </span>
                     </div>
 
-                    <!-- Dynamic Estimated Delivery Date Callout (+5 Days) -->
+                    <!-- Pre-Order / Out of Stock Banner (Dynamically shown for Product 15 or isBackorder) -->
+                    <div id="pdp-preorder-notice" class="hidden p-3 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-400/90 rounded-2xl shadow-xs my-2.5">
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 text-sm font-bold shadow-xs">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-black text-xs sm:text-sm text-amber-950 flex items-center gap-1.5 flex-wrap">
+                                    <span>⏳ Out of Stock • Pre-Order Available</span>
+                                </div>
+                                <p class="text-[11px] text-amber-900 mt-0.5 leading-snug">
+                                    Fresh stock <b>5 se 7 din baad</b> aayegi aur parcel uske turant baad deliver hoga Insha Allah.
+                                </p>
+                                <div class="mt-2 flex items-center gap-2 flex-wrap">
+                                    <span class="text-[11px] font-black text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-300">
+                                        💳 Pay Now Online: <b>₹199 Only</b> (Prepaid Free Delivery)
+                                    </span>
+                                    <span class="text-[11px] font-bold text-gray-800 bg-white px-2.5 py-1 rounded-lg border border-gray-300">
+                                        💵 Cash on Delivery: <b>₹299</b>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex items-center gap-1.5 text-[11px] sm:text-xs text-emerald-900 font-semibold mb-2.5 bg-emerald-50/90 px-2.5 py-1 rounded-xl border border-emerald-200/80 w-fit">
                         <i class="fa-solid fa-truck-fast text-emerald-600 text-xs"></i>
                         <span>Estimated Delivery: <b id="pdp-est-delivery-badge" class="font-extrabold text-emerald-950 underline decoration-emerald-500">--</b> (within 5 days)</span>
@@ -2045,8 +2068,11 @@
                 weight: "60gm",
                 sku: "fati_siwak_01",
                 soldCount: "1,840 sold",
-                price: 99,
-                oldPrice: 199,
+                price: 199,
+                codPrice: 299,
+                oldPrice: 599,
+                isBackorder: true,
+                backorderNotice: "Currently Out of Stock. Fresh stock arrives in 5 to 7 days and will be dispatched immediately.",
                 freeShipping: false,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/miswak/box.webp",
@@ -2056,19 +2082,22 @@
                     "product/miswak/comparison.webp",
                     "product/miswak/how_to_use.webp"
                 ],
-                badge: "SUNNAH ORAL CARE • 50% OFF",
+                badge: "PRE-ORDER • ₹199 PREPAID / ₹299 COD",
                 rating: "(485)",
                 desc: "Siwak Natural Miswak Oral Care Toothbrush Starter Kit with 1 Handle and 5 Replaceable Miswak Tips. Revive the prophetic Sunnah with 100% natural miswak bristles — no nylon, no plastic fibers, zero chemical bleaches. Perfect for daily oral hygiene, travel, and Ihram.",
                 features: [
+                    "⏳ Pre-Order Special: Fresh stock arrives in 5 to 7 days",
+                    "💳 Pay Now Online: ₹199 Only (Prepaid Free Delivery)",
+                    "💵 Cash on Delivery: ₹299",
                     "Sunnah Revival: 100% Natural Miswak Fibers",
                     "Includes 1 Reusable Handle + 5 Biodegradable Refills",
                     "Chemical Free, Alcohol Free & Ihram Friendly",
                     "Promotes Healthy Gums & Naturally Freshens Breath"
                 ],
                 theme: {
-                    accent: "emerald",
-                    bgGradient: "from-emerald-950/20 via-sand to-emerald-50/30",
-                    border: "border-emerald-500/40"
+                    accent: "amber",
+                    bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
+                    border: "border-amber-500/40"
                 }
             }
         ];
@@ -3700,6 +3729,27 @@
             document.getElementById('pdp-old-price').textContent = `MRP Rs. ${activeOldPrice}`;
             document.getElementById('pdp-discount-badge').textContent = `-${discountPercent}% OFF`;
             document.getElementById('btn-price-display').textContent = activePrice;
+
+            // Stock & Pre-Order Display (For Product 15 or Backorders)
+            const preOrderBox = document.getElementById('pdp-preorder-notice');
+            const stockBadge = document.getElementById('pdp-stock-badge');
+            if (p.id === 15 || p.isBackorder) {
+                if (preOrderBox) preOrderBox.classList.remove('hidden');
+                if (stockBadge) {
+                    stockBadge.className = "text-amber-800 font-extrabold bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300 text-[9px] sm:text-[10px] flex items-center gap-1";
+                    stockBadge.innerHTML = '<i class="fa-solid fa-clock-rotate-left text-amber-600"></i> Out of Stock • Pre-Order';
+                }
+                const btnPriceEl = document.getElementById('btn-price-display');
+                if (btnPriceEl && btnPriceEl.parentElement) {
+                    btnPriceEl.parentElement.innerHTML = 'PRE-ORDER NOW (PAY ₹199 ONLINE / ₹299 COD)';
+                }
+            } else {
+                if (preOrderBox) preOrderBox.classList.add('hidden');
+                if (stockBadge) {
+                    stockBadge.className = "text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200 text-[9px] sm:text-[10px]";
+                    stockBadge.textContent = "In Stock";
+                }
+            }
 
             // Sticky Bottom (Mobile)
             document.getElementById('sticky-pdp-price').textContent = `Rs. ${activePrice}`;

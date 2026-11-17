@@ -793,10 +793,13 @@
                 name: "Siwak Natural Miswak Toothbrush Starter Kit (1 Handle + 5 Refills)",
                 category: "essentials",
                 image: "product/miswak/box.webp",
-                badge: "SUNNAH ORAL CARE",
+                badge: "PRE-ORDER • OUT OF STOCK",
                 sku: "fati_siwak_01",
-                price: 99,
-                oldPrice: 199,
+                price: 199,
+                codPrice: 299,
+                oldPrice: 599,
+                isBackorder: true,
+                backorderNotice: "Currently Out of Stock. Fresh stock arrives in 5 to 7 days and will be dispatched immediately.",
                 weightKg: 0.06
             },
             {
@@ -1081,9 +1084,15 @@
             let codShipping = 100;
             let onlineShipping = 0;
 
+            const hasMiswak = checkoutCart.some(i => i.sku === 'fati_siwak_01' || i.id === 15);
+
             if (isLocalDelivery) {
                 codShipping = 0;
                 onlineShipping = 0;
+            } else if (hasMiswak && checkoutCart.length === 1) {
+                // Miswak Pre-Order special: ₹199 Prepaid (Free Delivery), ₹299 COD (₹100 COD Delivery)
+                onlineShipping = 0;
+                codShipping = 100;
             } else if (subtotal < 299) {
                 onlineShipping = 50;
                 codShipping = 100;
@@ -1307,6 +1316,7 @@
                                 ${item.variantName ? `<div class="text-[10px] text-gold-700 font-semibold truncate">${item.variantName}</div>` : ''}
                                 ${item.cardLanguage ? `<div class="mt-0.5"><span class="text-[9px] font-extrabold text-indigo-900 bg-indigo-100/90 px-1.5 py-0.5 rounded border border-indigo-300 inline-flex items-center gap-1"><i class="fa-solid fa-book-open text-[7px] text-indigo-600"></i> Cards: ${item.cardLanguage}</span></div>` : ''}
                                 ${item.janamazColor ? `<div class="mt-0.5"><span class="text-[9px] font-extrabold text-amber-900 bg-amber-100/90 px-1.5 py-0.5 rounded border border-amber-300 inline-flex items-center gap-1"><i class="fa-solid fa-gift text-[7px] text-amber-600"></i> Janamaz: ${item.janamazColor}</span></div>` : ''}
+                                ${(item.sku === 'fati_siwak_01' || item.id === 15) ? `<div class="mt-0.5"><span class="text-[9px] font-extrabold text-amber-900 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300 inline-flex items-center gap-1"><i class="fa-solid fa-clock-rotate-left text-[7px] text-amber-600"></i> Pre-Order: Stock arrives in 5-7 days</span></div>` : ''}
                                 <div class="flex items-center gap-2 mt-0.5">
                                     <span class="text-xs text-onyx font-extrabold">Rs. ${item.price}</span>
                                     <span class="text-[10px] text-gray-400 line-through">Rs. ${item.price * 2}</span>

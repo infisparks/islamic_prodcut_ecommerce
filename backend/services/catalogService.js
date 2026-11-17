@@ -98,8 +98,13 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   const isOnlinePayment = (paymentMethod !== 'cod');
   let shipping = 100;
 
+  const hasMiswak = items.some(i => i.sku === 'fati_siwak_01' || i.id === 15);
+
   if (isLocalFreeShipping) {
     shipping = 0;
+  } else if (hasMiswak && items.length === 1) {
+    // Miswak Pre-Order special: ₹199 Prepaid (Free Delivery), ₹299 COD (₹100 COD Delivery)
+    shipping = isOnlinePayment ? 0 : 100;
   } else if (subtotal < 299) {
     shipping = isOnlinePayment ? 50 : 100;
   } else if (subtotal < 599) {
