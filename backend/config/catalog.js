@@ -28,7 +28,7 @@ const catalog = [
         price: 898,
         weightKg: 0.26,
         weightLabel: "260gm",
-        image: "product/offer/offer_1_cards_janamaz_898.webp",
+        image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
         hasJanamaz: true,
         freeShipping: true
       }
@@ -47,7 +47,7 @@ const catalog = [
         price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/offer/offer_5_cards_only_599.webp",
+        image: "product/offer/offer_5_cards_only_599.webp?v=2",
         hasJanamaz: false,
         freeShipping: false
       },
@@ -57,7 +57,7 @@ const catalog = [
         price: 898,
         weightKg: 0.26,
         weightLabel: "260gm",
-        image: "product/offer/offer_1_cards_janamaz_898.webp",
+        image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
         hasJanamaz: true,
         freeShipping: true
       }
@@ -76,7 +76,7 @@ const catalog = [
         price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/offer/offer_5_cards_only_599.webp",
+        image: "product/offer/offer_5_cards_only_599.webp?v=2",
         hasJanamaz: false,
         freeShipping: false
       },
@@ -86,7 +86,7 @@ const catalog = [
         price: 898,
         weightKg: 0.26,
         weightLabel: "260gm",
-        image: "product/offer/offer_1_cards_janamaz_898.webp",
+        image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
         hasJanamaz: true,
         freeShipping: true
       }
@@ -105,7 +105,7 @@ const catalog = [
         price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/offer/offer_5_cards_only_599.webp",
+        image: "product/offer/offer_5_cards_only_599.webp?v=2",
         hasJanamaz: false,
         freeShipping: false
       },
@@ -115,7 +115,7 @@ const catalog = [
         price: 898,
         weightKg: 0.26,
         weightLabel: "260gm",
-        image: "product/offer/offer_1_cards_janamaz_898.webp",
+        image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
         hasJanamaz: true,
         freeShipping: true
       }
@@ -315,7 +315,7 @@ const catalog = [
     price: 1299,
     weightKg: 0.65,
     weightLabel: "Family Box (7 Items)",
-    image: "product/offer/offer_6_ihram_kit_1299.webp",
+    image: "product/offer/offer_6_ihram_kit_1299.webp?v=2",
     freeShipping: true
   },
   {
@@ -328,7 +328,7 @@ const catalog = [
     price: 1848,
     weightKg: 0.80,
     weightLabel: "Combo Box (8 Items)",
-    image: "product/offer/offer_2_cards_ihram_1848.webp",
+    image: "product/offer/offer_2_cards_ihram_1848.webp?v=2",
     freeShipping: true
   },
   {
@@ -341,7 +341,7 @@ const catalog = [
     price: 2198,
     weightKg: 0.95,
     weightLabel: "Mega Luxury Combo (9 Items)",
-    image: "product/offer/offer_3_mega_combo_2198.webp",
+    image: "product/offer/offer_3_mega_combo_2198.webp?v=2",
     hasJanamaz: true,
     freeShipping: true
   },
@@ -373,7 +373,7 @@ const catalog = [
         price: 599,
         weightKg: 0.15,
         weightLabel: "150gm",
-        image: "product/offer/offer_kids_cards_599.webp",
+        image: "product/offer/offer_kids_cards_599.webp?v=2",
         hasJanamaz: false,
         freeShipping: false
       },
@@ -383,7 +383,7 @@ const catalog = [
         price: 898,
         weightKg: 0.26,
         weightLabel: "260gm",
-        image: "product/offer/offer_kids_cards_599.webp",
+        image: "product/offer/offer_kids_cards_599.webp?v=2",
         hasJanamaz: true,
         freeShipping: true
       }
