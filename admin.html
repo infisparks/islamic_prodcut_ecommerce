@@ -705,6 +705,25 @@
         </div>
     </div>
 
+    <!-- ACTION SUCCESS NOTIFICATION MODAL -->
+    <div id="action-success-modal" onclick="if(event.target === this) closeActionSuccessModal()" class="hidden fixed inset-0 z-[10000] bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border-2 border-emerald-500 text-center space-y-4" onclick="event.stopPropagation()">
+            <div class="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center text-3xl mx-auto shadow-sm">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+                <h3 id="action-success-title" class="font-black text-slate-900 text-lg leading-tight">Action Successful!</h3>
+                <div id="action-success-message" class="text-xs text-slate-600 font-semibold mt-2 leading-relaxed"></div>
+            </div>
+            <button type="button" onclick="closeActionSuccessModal()" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer">
+                Awesome, Continue ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- FLOATING HIGH-VISIBILITY TOAST CONTAINER -->
+    <div id="admin-toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-[10001] flex flex-col gap-2 pointer-events-none w-full max-w-md px-4"></div>
+
     <!-- WHATSAPP MESSAGE SENDER MODAL WITH MULTIPLE TEMPLATES -->
     <div id="whatsapp-modal" onclick="if(event.target === this) closeWhatsAppModal()" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 border border-emerald-200 shadow-2xl space-y-4" onclick="event.stopPropagation()">
@@ -1228,6 +1247,74 @@
             }
         });
 
+        // ==========================================
+        // HIGH-VISIBILITY TOAST & ACTION SUCCESS NOTIFICATIONS
+        // ==========================================
+        function showToast(type, title, message) {
+            const container = document.getElementById('admin-toast-container');
+            if (!container) return;
+
+            const isSuccess = (type === 'success');
+            const isError = (type === 'error');
+            const isWarning = (type === 'warning');
+
+            const bgClass = isSuccess ? 'bg-slate-900 text-white border-emerald-500' : (isError ? 'bg-slate-900 text-white border-rose-500' : 'bg-slate-900 text-white border-amber-500');
+            const iconBg = isSuccess ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' : (isError ? 'bg-rose-500/20 text-rose-400 border-rose-500/40' : 'bg-amber-500/20 text-amber-400 border-amber-500/40');
+            const iconClass = isSuccess ? 'fa-solid fa-circle-check' : (isError ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-triangle-exclamation');
+
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto flex items-start gap-3 p-4 border-2 rounded-2xl shadow-2xl backdrop-blur-md transition-all duration-300 transform -translate-y-2 opacity-0 ${bgClass}`;
+            toast.innerHTML = `
+                <div class="w-9 h-9 rounded-xl ${iconBg} border flex items-center justify-center text-lg shrink-0">
+                    <i class="${iconClass}"></i>
+                </div>
+                <div class="flex-grow min-w-0 pr-1">
+                    <div class="font-extrabold text-sm ${isSuccess ? 'text-emerald-400' : (isError ? 'text-rose-400' : 'text-amber-400')}">${title}</div>
+                    <div class="text-xs text-slate-200 mt-0.5 leading-relaxed font-medium">${message}</div>
+                </div>
+                <button type="button" class="text-slate-400 hover:text-white p-1 cursor-pointer shrink-0" onclick="this.parentElement.remove()">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.remove('-translate-y-2', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+            });
+
+            setTimeout(() => {
+                if (toast && toast.parentElement) {
+                    toast.classList.add('opacity-0', '-translate-y-2');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 6000);
+        }
+
+        function showSuccessNotice(title, message, showModal = true) {
+            showToast('success', title, message);
+            if (showModal) {
+                const modal = document.getElementById('action-success-modal');
+                const titleEl = document.getElementById('action-success-title');
+                const msgEl = document.getElementById('action-success-message');
+                if (modal && titleEl && msgEl) {
+                    titleEl.textContent = title;
+                    msgEl.innerHTML = message;
+                    modal.classList.remove('hidden');
+                }
+            }
+        }
+
+        function showErrorNotice(title, message) {
+            showToast('error', title, message);
+            alert(`❌ ${title}\n\n${message}`);
+        }
+
+        function closeActionSuccessModal() {
+            const modal = document.getElementById('action-success-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
         // Admin Login Form Submit
         async function handleAdminLogin(e) {
             e.preventDefault();
@@ -1491,9 +1578,14 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
+                    showSuccessNotice(
+                        markDelivered ? '🎉 Order Marked as Delivered' : '🔄 Delivery Status Reverted',
+                        `Order #${orderId} delivery status was successfully updated in database.`,
+                        false // Toast is clean and sufficient for toggle
+                    );
                     loadOrdersAndStats();
                 } else {
-                    alert(result.error?.message || "Failed to update order status.");
+                    showErrorNotice("Failed to update status", result.error?.message || "Server error.");
                 }
             } catch (err) {
                 alert("Network error: " + err.message);
@@ -4019,15 +4111,19 @@
                 const result = await response.json();
                 if (response.ok && result.success) {
                     const awb = result.data?.shipping?.awb || result.data?.shipping?.waybill || 'Assigned';
-                    alert(`✅ Order #${orderId} successfully moved to ${carrierLabel}!\nAWB / Tracking: ${awb}`);
                     closeOrderDetailModal();
-                    loadOrdersAndStats();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        `🚀 Moved to ${carrierLabel} Successfully!`,
+                        `Order #${orderId} (${customerName}) is booked on ${carrierLabel}.<br><b>AWB / Waybill:</b> <span class="font-mono font-bold text-indigo-600">${awb}</span><br>Live tracking details have been saved.`
+                    );
+                    await loadOrdersAndStats();
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || `Failed to book shipment on ${carrierLabel}.`);
                 }
             } catch (err) {
                 console.error(`Move to ${carrierLabel} Error:`, err);
-                alert(`❌ Failed to move order to ${carrierLabel}:\n${err.message}`);
+                showErrorNotice(`Move to ${carrierLabel} Failed`, err.message);
             }
         }
 
@@ -4086,15 +4182,19 @@
                 if (response.ok && result.success) {
                     const ekartId = result.data?.shipping?.ekartOrderId || result.data?.shipping?.awb || 'Created';
                     const subStatus = result.data?.shipping?.subOrderStatus || 'Ready to Ship';
-                    alert(`✅ Order #${orderId} successfully moved to Ekart Logistics!\n\n📦 Ekart ID: ${ekartId}\n📋 Status: ${subStatus}\n\nThe order is now marked as Moved to Ekart and visible in your Ekart dashboard.`);
                     closeOrderDetailModal();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '🚚 Moved to Ekart Logistics Successfully!',
+                        `Order #${orderId} (${customerName}) is registered on Ekart Elite.<br><b>Ekart Order ID:</b> <span class="font-mono font-bold text-amber-700">${ekartId}</span><br><b>Status:</b> ${subStatus}`
+                    );
                     await loadOrdersAndStats();
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to move order to Ekart.');
                 }
             } catch (err) {
                 console.error('Move to Ekart Error:', err);
-                alert(`❌ Failed to move order to Ekart:\n${err.message}`);
+                showErrorNotice('Move to Ekart Failed', err.message);
                 if (tableBtn) {
                     tableBtn.disabled = false;
                     tableBtn.innerHTML = originalTableHtml;
@@ -4127,16 +4227,20 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    const newTotal = result.data?.pricing?.total || result.data?.payment?.amountPaise ? (result.data.payment.amountPaise / 100) : 'Updated';
-                    alert(`✅ Order #${orderId} shifted to Cash on Delivery (COD)!\n\n💰 Recalculated COD Total: Rs. ${newTotal}\n\nYou can now ship it directly via Shiprocket, Delhivery, or Ekart.`);
+                    const newTotal = result.data?.pricing?.total || (result.data?.payment?.amountPaise ? (result.data.payment.amountPaise / 100) : 'Updated');
                     closeOrderDetailModal();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '💵 Shifted to Cash on Delivery (COD)',
+                        `Order #${orderId} (${customerName}) converted to COD.<br><b>Recalculated COD Total:</b> <span class="font-bold text-emerald-600">Rs. ${newTotal}</span><br>Ready for courier shipping!`
+                    );
                     await loadOrdersAndStats();
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to convert order to COD.');
                 }
             } catch (err) {
                 console.error('Convert to COD Error:', err);
-                alert(`❌ Failed to convert order to COD:\n${err.message}`);
+                showErrorNotice('Failed to convert to COD', err.message);
             }
         }
 
@@ -4162,15 +4266,19 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    alert(`✅ Order #${orderId} COD confirmed successfully!\n\nYou can now ship it directly via Shiprocket, Delhivery, or Ekart.`);
                     closeOrderDetailModal();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '✅ COD Order Confirmed',
+                        `Order #${orderId} (${customerName}) confirmed.<br>Status is now <b>COD Confirmed</b> and ready for dispatch.`
+                    );
                     await loadOrdersAndStats();
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to confirm COD.');
                 }
             } catch (err) {
                 console.error('Confirm COD Error:', err);
-                alert(`❌ Failed to confirm COD order:\n${err.message}`);
+                showErrorNotice('Failed to confirm COD', err.message);
             }
         }
 
@@ -4199,16 +4307,20 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    const newTotal = result.data?.pricing?.total || result.data?.payment?.amountPaise ? (result.data.payment.amountPaise / 100) : 'Updated';
-                    alert(`✅ Order #${orderId} marked as PAID ONLINE (Prepaid)!\n\n💰 Recalculated Prepaid Total: Rs. ${newTotal}\n\nThis order is now verified and ready for dispatch.`);
+                    const newTotal = result.data?.pricing?.total || (result.data?.payment?.amountPaise ? (result.data.payment.amountPaise / 100) : 'Updated');
                     closeOrderDetailModal();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '⚡ Marked as Paid Online (Prepaid)',
+                        `Order #${orderId} (${customerName}) verified as Paid.<br><b>Recalculated Prepaid Total:</b> <span class="font-bold text-emerald-600">Rs. ${newTotal}</span><br>Ready for immediate dispatch!`
+                    );
                     await loadOrdersAndStats();
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to convert order to Prepaid.');
                 }
             } catch (err) {
                 console.error('Convert to Prepaid Error:', err);
-                alert(`❌ Failed to mark order as Prepaid:\n${err.message}`);
+                showErrorNotice('Failed to mark order as Prepaid', err.message);
             }
         }
 
@@ -4298,16 +4410,20 @@
                 const result = await response.json();
                 if (response.ok && result.success) {
                     const awb = result.data?.shipping?.awb || result.data?.shipping?.waybill || 'Assigned';
-                    alert(`✅ Order #${orderId} successfully moved to Delhivery (${mode})!\nAWB / Waybill: ${awb}`);
                     closeDelhiveryDispatchModal();
                     closeOrderDetailModal();
-                    loadOrdersAndStats();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '📦 Moved to Delhivery Successfully!',
+                        `Order #${orderId} manifested on Delhivery (${mode}).<br><b>AWB / Waybill:</b> <span class="font-mono font-bold text-purple-600">${awb}</span>`
+                    );
+                    await loadOrdersAndStats();
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to manifest order with Delhivery.');
                 }
             } catch (err) {
                 console.error('Delhivery dispatch error:', err);
-                alert(`❌ Delhivery Manifestation Failed:\n${err.message}`);
+                showErrorNotice('Delhivery Manifestation Failed', err.message);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
@@ -4511,13 +4627,18 @@
                 const result = await response.json();
                 if (response.ok && result.success) {
                     closeCancelModal();
-                    loadOrdersAndStats();
-                    alert(`Order ${orderId} has been successfully cancelled.`);
+                    closeOrderDetailModal();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '🚫 Order Cancelled',
+                        `Order #${orderId} has been successfully marked as Cancelled.`
+                    );
+                    await loadOrdersAndStats();
                 } else {
-                    alert(result.error?.message || "Failed to cancel order.");
+                    showErrorNotice("Failed to cancel order", result.error?.message || "Server error.");
                 }
             } catch (err) {
-                alert("Network error while cancelling order.");
+                showErrorNotice("Network Error", "Network error while cancelling order: " + err.message);
             } finally {
                 btn.disabled = false;
                 btn.textContent = "Yes, Cancel Order";
@@ -4543,15 +4664,18 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    loadOrdersAndStats();
-                    if (confirm(`Order #${orderId} moved to Follow-up Funnel!\n\nWould you like to send Follow-up 1 (Free Gift & Express Delivery Reminder) via WhatsApp now?`)) {
-                        openFunnelWhatsAppModal(orderId, 1);
-                    }
+                    closeOrderDetailModal();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '🎯 Moved to Follow-up Funnel',
+                        `Order #${orderId} is now safely saved in WhatsApp Retargeting Funnel.<br>Click Follow-up 1 or 2 anytime to send WhatsApp offers.`
+                    );
+                    await loadOrdersAndStats();
                 } else {
-                    alert(result.error?.message || "Failed to move order to funnel.");
+                    showErrorNotice("Failed to move order", result.error?.message || "Server error.");
                 }
             } catch (err) {
-                alert("Network error: " + err.message);
+                showErrorNotice("Network Error", "Network error: " + err.message);
             }
         }
 
@@ -4583,20 +4707,48 @@
         }
 
         // ==========================================
-        // PERMANENT DELETE ORDER (RESTORED AS BEFORE)
+        // PERMANENT DELETE ORDER (1-CLICK CONFIRM + MODAL)
         // ==========================================
         function promptPermanentDeleteOrder(orderId) {
-            pendingDeleteOrderId = orderId;
-            const idElem = document.getElementById('delete-modal-order-id');
-            if (idElem) idElem.textContent = '#' + orderId;
-            const input = document.getElementById('delete-confirm-input');
-            if (input) input.value = '';
-            const btn = document.getElementById('delete-confirm-btn');
-            if (btn) btn.disabled = true;
-            const hint = document.getElementById('delete-match-hint');
-            if (hint) hint.classList.add('hidden');
-            const modal = document.getElementById('delete-confirm-modal');
-            if (modal) modal.classList.remove('hidden');
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            const customerName = order?.customer?.name || 'Customer';
+            const total = Math.round(order?.pricing?.total || 0);
+
+            const confirmed = confirm(`🗑️ PERMANENT DELETE CONFIRMATION\n\nOrder: #${orderId}\nCustomer: ${customerName}\nAmount: Rs. ${total}\n\n⚠️ Are you sure you want to PERMANENTLY DELETE this order?\nIt will be completely removed from the Firebase database.`);
+            if (!confirmed) return;
+
+            executeDirectPermanentDelete(orderId);
+        }
+
+        async function executeDirectPermanentDelete(orderId) {
+            if (!orderId || !currentAdminToken) return;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({ confirmText: 'DELETE' })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    closeDeleteModal();
+                    closeOrderDetailModal();
+                    closeCustomerHistoryModal();
+                    showSuccessNotice(
+                        '🗑️ Order Permanently Deleted',
+                        `Order #${orderId} has been completely removed from database and any active courier booking cancelled.`
+                    );
+                    await loadOrdersAndStats();
+                } else {
+                    showErrorNotice('Failed to Delete Order', result.error?.message || result.error || 'Server error.');
+                }
+            } catch (err) {
+                showErrorNotice('Delete Error', 'Network error while deleting order: ' + err.message);
+            }
         }
 
         function closeDeleteModal() {
@@ -4623,50 +4775,8 @@
         }
 
         async function executePermanentDeleteOrder() {
-            if (!pendingDeleteOrderId || !currentAdminToken) return;
-
-            const input = document.getElementById('delete-confirm-input');
-            if (!input || input.value.trim().toUpperCase() !== 'DELETE') {
-                alert("Please type DELETE in capital letters to confirm permanent deletion.");
-                return;
-            }
-
-            const orderId = pendingDeleteOrderId;
-            const btn = document.getElementById('delete-confirm-btn');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Deleting...</span>`;
-            }
-
-            try {
-                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${currentAdminToken}`
-                    },
-                    body: JSON.stringify({ confirmText: 'DELETE' })
-                });
-
-                const result = await response.json();
-                if (response.ok && result.success) {
-                    closeDeleteModal();
-                    alert(`✅ Order #${orderId} has been permanently deleted from database.`);
-                    await loadOrdersAndStats();
-                } else {
-                    alert(result.error?.message || result.error || result.message || "Failed to delete order.");
-                    if (btn) {
-                        btn.disabled = false;
-                        btn.innerHTML = `<i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>`;
-                    }
-                }
-            } catch (err) {
-                alert("Network error while deleting order: " + err.message);
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = `<i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>`;
-                }
-            }
+            if (!pendingDeleteOrderId) return;
+            executeDirectPermanentDelete(pendingDeleteOrderId);
         }
 
         // Retry Shipping
@@ -4684,14 +4794,17 @@
                 });
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    alert("Shipment successfully created!");
+                    showSuccessNotice(
+                        '🚀 Shipment Retry Success',
+                        `Shipment was successfully created on Shiprocket for Order #${orderId}.`
+                    );
                     closeOrderDetailModal();
-                    loadOrdersAndStats();
+                    await loadOrdersAndStats();
                 } else {
-                    alert(result.error?.message || "Failed to create shipment on retry.");
+                    showErrorNotice("Shipment Retry Failed", result.error?.message || "Failed to create shipment on retry.");
                 }
             } catch (err) {
-                alert("Network error while retrying shipment.");
+                showErrorNotice("Network Error", "Network error while retrying shipment: " + err.message);
             }
         }
 
@@ -4701,6 +4814,7 @@
                 closeOrderDetailModal();
                 closeCancelModal();
                 closeDeleteModal();
+                closeActionSuccessModal();
             }
         });
     </script>
