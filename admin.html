@@ -665,7 +665,45 @@
         </div>
     </div>
 
-    <!-- DELETE MODAL REMOVED: E-commerce order preservation policy (Orders can only be Cancelled or Moved to Funnel) -->
+    <!-- PERMANENT DELETE ORDER CONFIRMATION MODAL -->
+    <div id="delete-confirm-modal" onclick="if(event.target === this) closeDeleteModal()" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-rose-200">
+            <div class="flex items-center gap-3 text-rose-600 mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-rose-100 flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-base text-slate-900 leading-tight">Delete Order Permanently?</h3>
+                    <p class="text-xs text-rose-600 font-semibold mt-0.5">This action CANNOT be undone!</p>
+                </div>
+            </div>
+
+            <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-3.5 mb-4 text-xs text-slate-700 space-y-2">
+                <p>You are about to permanently delete order <span id="delete-modal-order-id" class="font-mono font-bold text-rose-700"></span>.</p>
+                <p class="text-[11px] text-slate-500">This will completely remove the order from the Firebase database and cancel any associated active shipments if possible.</p>
+            </div>
+
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                    Type <span class="font-mono text-rose-600 font-black">DELETE</span> below to confirm:
+                </label>
+                <input type="text" id="delete-confirm-input" oninput="validateDeleteInput()" placeholder="Type DELETE" class="w-full px-3.5 py-2.5 text-xs font-mono font-bold rounded-xl border border-slate-300 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-100 uppercase tracking-widest text-slate-900">
+                <p id="delete-match-hint" class="text-[11px] text-rose-600 mt-1 hidden font-semibold">
+                    <i class="fa-solid fa-circle-exclamation text-[10px]"></i> Please type exact word DELETE in capital letters.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
+                <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer">
+                    Cancel
+                </button>
+                <button type="button" id="delete-confirm-btn" onclick="executePermanentDeleteOrder()" disabled class="px-4 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-slate-200 disabled:text-slate-400 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed shadow-xs">
+                    <i class="fa-solid fa-trash-can text-xs"></i>
+                    <span>Delete Forever</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- WHATSAPP MESSAGE SENDER MODAL WITH MULTIPLE TEMPLATES -->
     <div id="whatsapp-modal" onclick="if(event.target === this) closeWhatsAppModal()" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
@@ -2016,11 +2054,20 @@
                                     ` : ''}
 
                                     ${!c.isCancelled && !isShipmentBooked ? `
-                                        <button onclick="closeCustomerHistoryModal(); promptCancelOrder('${orderId}');" class="action-btn px-2.5 py-1.5 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1" title="Cancel this duplicate / unwanted order">
-                                            <i class="fa-solid fa-trash-can text-[11px]"></i>
-                                            <span>Cancel / Delete Order</span>
+                                        <button onclick="closeCustomerHistoryModal(); promptCancelOrder('${orderId}');" class="action-btn px-2.5 py-1.5 bg-amber-50 hover:bg-amber-600 text-amber-800 hover:text-white border border-amber-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1" title="Cancel this duplicate / unwanted order">
+                                            <i class="fa-solid fa-ban text-[11px]"></i>
+                                            <span>Cancel</span>
                                         </button>
-                                    ` : ''}
+                                        <button onclick="closeCustomerHistoryModal(); promptPermanentDeleteOrder('${orderId}');" class="action-btn px-2.5 py-1.5 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1" title="Permanently delete this order from database">
+                                            <i class="fa-solid fa-trash-can text-[11px]"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    ` : `
+                                        <button onclick="closeCustomerHistoryModal(); promptPermanentDeleteOrder('${orderId}');" class="action-btn px-2.5 py-1.5 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1" title="Permanently delete this order from database">
+                                            <i class="fa-solid fa-trash-can text-[11px]"></i>
+                                            <span>Delete</span>
+                                        </button>
+                                    `}
 
                                     <button onclick="closeCustomerHistoryModal(); openOrderDetail('${orderId}');" class="action-btn px-2.5 py-1.5 bg-slate-100 hover:bg-slate-900 text-slate-700 hover:text-white border border-slate-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1">
                                         <i class="fa-solid fa-eye text-[11px]"></i>
@@ -2428,6 +2475,9 @@
                                     <button onclick="openOrderDetail('${orderId}')" class="action-btn px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="View Full Order Details">
                                         <span>View</span>
                                     </button>
+                                    <button onclick="promptPermanentDeleteOrder('${orderId}')" class="action-btn px-2 py-1.5 bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="Delete Order Permanently">
+                                        <i class="fa-solid fa-trash-can text-[10px]"></i>
+                                    </button>
                                 </div>
 
                                 <!-- ROW 2: Courier Dispatch 3 Buttons (Side-by-Side) OR Moved Status Pill -->
@@ -2701,6 +2751,9 @@
                                     <div class="flex items-center gap-1">
                                         <button onclick="openOrderDetail('${orderId}')" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-lg text-xs font-bold shadow-2xs">
                                             Details
+                                        </button>
+                                        <button onclick="promptPermanentDeleteOrder('${orderId}')" class="px-2 py-1 bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 rounded-lg text-xs font-bold shadow-2xs" title="Delete Order">
+                                            <i class="fa-solid fa-trash-can text-[10px]"></i>
                                         </button>
                                         ${!c.isCancelled ? `
                                             <button onclick="toggleDeliveredStatus('${orderId}', ${!c.isDelivered})" class="px-2.5 py-1 ${c.isDelivered ? 'bg-emerald-600 text-white' : 'bg-white text-slate-700 border border-slate-300'} rounded-lg text-xs font-bold shadow-2xs">
@@ -3300,8 +3353,11 @@
                 ` : ''}
 
                 ${!isCancelled ? `
-                    <button onclick="closeOrderDetailModal(); promptCancelOrder('${order.orderId}');" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all">
+                    <button onclick="closeOrderDetailModal(); promptCancelOrder('${order.orderId}');" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all">
                         <i class="fa-solid fa-ban text-xs"></i> <span>Cancel Order</span>
+                    </button>
+                    <button onclick="closeOrderDetailModal(); promptPermanentDeleteOrder('${order.orderId}');" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all" title="Permanently delete this order from database">
+                        <i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Order</span>
                     </button>
                     ${!isInFunnel ? `
                         <button onclick="closeOrderDetailModal(); moveOrderToFunnel('${order.orderId}');" class="px-3.5 py-2 bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-300 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all" title="Move order to Follow-up Funnel for automated WhatsApp retargeting">
@@ -3313,7 +3369,12 @@
                             <span>In Funnel (${order.funnelFollowupCount || 0} Follow-ups Sent)</span>
                         </div>
                     `}
-                ` : '<span class="text-xs text-rose-700 font-semibold bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">Order is Cancelled</span>'}
+                ` : `
+                    <button onclick="closeOrderDetailModal(); promptPermanentDeleteOrder('${order.orderId}');" class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all shadow-xs" title="Permanently delete this cancelled order from database">
+                        <i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>
+                    </button>
+                    <span class="text-xs text-rose-700 font-semibold bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">Order is Cancelled</span>
+                `}
             `;
 
             document.getElementById('order-detail-modal').classList.remove('hidden');
@@ -4521,10 +4582,90 @@
             }
         }
 
-        // Safe Fallback: In e-commerce, delete is replaced by Cancel / Move to Funnel
+        // ==========================================
+        // PERMANENT DELETE ORDER (RESTORED AS BEFORE)
+        // ==========================================
         function promptPermanentDeleteOrder(orderId) {
-            if (confirm(`Order #${orderId} cannot be deleted to protect historical sales records & phone contacts.\n\nWould you like to CANCEL this order instead?`)) {
-                promptCancelOrder(orderId);
+            pendingDeleteOrderId = orderId;
+            const idElem = document.getElementById('delete-modal-order-id');
+            if (idElem) idElem.textContent = '#' + orderId;
+            const input = document.getElementById('delete-confirm-input');
+            if (input) input.value = '';
+            const btn = document.getElementById('delete-confirm-btn');
+            if (btn) btn.disabled = true;
+            const hint = document.getElementById('delete-match-hint');
+            if (hint) hint.classList.add('hidden');
+            const modal = document.getElementById('delete-confirm-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            pendingDeleteOrderId = null;
+            const modal = document.getElementById('delete-confirm-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function validateDeleteInput() {
+            const input = document.getElementById('delete-confirm-input');
+            const btn = document.getElementById('delete-confirm-btn');
+            const hint = document.getElementById('delete-match-hint');
+            if (!input || !btn) return;
+            const value = input.value.trim().toUpperCase();
+            const isMatch = (value === 'DELETE');
+            btn.disabled = !isMatch;
+            if (hint) {
+                if ((value || '').trim().length > 0 && !isMatch) {
+                    hint.classList.remove('hidden');
+                } else {
+                    hint.classList.add('hidden');
+                }
+            }
+        }
+
+        async function executePermanentDeleteOrder() {
+            if (!pendingDeleteOrderId || !currentAdminToken) return;
+
+            const input = document.getElementById('delete-confirm-input');
+            if (!input || input.value.trim().toUpperCase() !== 'DELETE') {
+                alert("Please type DELETE in capital letters to confirm permanent deletion.");
+                return;
+            }
+
+            const orderId = pendingDeleteOrderId;
+            const btn = document.getElementById('delete-confirm-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Deleting...</span>`;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({ confirmText: 'DELETE' })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    closeDeleteModal();
+                    alert(`✅ Order #${orderId} has been permanently deleted from database.`);
+                    await loadOrdersAndStats();
+                } else {
+                    alert(result.error?.message || result.error || result.message || "Failed to delete order.");
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = `<i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>`;
+                    }
+                }
+            } catch (err) {
+                alert("Network error while deleting order: " + err.message);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>`;
+                }
             }
         }
 
