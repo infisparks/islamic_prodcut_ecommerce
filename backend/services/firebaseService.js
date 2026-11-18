@@ -401,18 +401,21 @@ const firebaseService = {
     if (useDatabaseSecret) {
       try {
         await axios.delete(getDbUrl(`orders/${orderId}`), { timeout: 10000 });
-        return true;
       } catch (err) {
         logger.error('FIREBASE_REST_DELETE_ERROR', { error: err.message, orderId });
       }
     }
 
     if (db) {
-      const ref = db.ref(`orders/${orderId}`);
-      await ref.remove();
-      return true;
+      try {
+        const ref = db.ref(`orders/${orderId}`);
+        await ref.remove();
+      } catch (err) {
+        logger.error('FIREBASE_ADMIN_DELETE_ERROR', { error: err.message, orderId });
+      }
     }
 
+    notifyOrderMutation(orderId, null);
     return true;
   },
 

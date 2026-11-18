@@ -4079,7 +4079,7 @@
                 closeChangeProductModal();
 
                 // Refresh orders
-                await loadOrdersAndStats();
+                await loadOrdersAndStats(true);
 
                 // If order detail modal was open, refresh it with updated order
                 const updatedOrder = result.data;
@@ -4132,7 +4132,7 @@
                         `🚀 Moved to ${carrierLabel} Successfully!`,
                         `Order #${orderId} (${customerName}) is booked on ${carrierLabel}.<br><b>AWB / Waybill:</b> <span class="font-mono font-bold text-indigo-600">${awb}</span><br>Live tracking details have been saved.`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || `Failed to book shipment on ${carrierLabel}.`);
                 }
@@ -4203,7 +4203,7 @@
                         '🚚 Moved to Ekart Logistics Successfully!',
                         `Order #${orderId} (${customerName}) is registered on Ekart Elite.<br><b>Ekart Order ID:</b> <span class="font-mono font-bold text-amber-700">${ekartId}</span><br><b>Status:</b> ${subStatus}`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to move order to Ekart.');
                 }
@@ -4249,7 +4249,7 @@
                         '💵 Shifted to Cash on Delivery (COD)',
                         `Order #${orderId} (${customerName}) converted to COD.<br><b>Recalculated COD Total:</b> <span class="font-bold text-emerald-600">Rs. ${newTotal}</span><br>Ready for courier shipping!`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to convert order to COD.');
                 }
@@ -4287,7 +4287,7 @@
                         '✅ COD Order Confirmed',
                         `Order #${orderId} (${customerName}) confirmed.<br>Status is now <b>COD Confirmed</b> and ready for dispatch.`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to confirm COD.');
                 }
@@ -4329,7 +4329,7 @@
                         '⚡ Marked as Paid Online (Prepaid)',
                         `Order #${orderId} (${customerName}) verified as Paid.<br><b>Recalculated Prepaid Total:</b> <span class="font-bold text-emerald-600">Rs. ${newTotal}</span><br>Ready for immediate dispatch!`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to convert order to Prepaid.');
                 }
@@ -4432,7 +4432,7 @@
                         '📦 Moved to Delhivery Successfully!',
                         `Order #${orderId} manifested on Delhivery (${mode}).<br><b>AWB / Waybill:</b> <span class="font-mono font-bold text-purple-600">${awb}</span>`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to manifest order with Delhivery.');
                 }
@@ -4535,7 +4535,7 @@
                 if (response.ok && result.success) {
                     alert(`✅ Delhivery Delivery Details Updated Successfully!\n\n${result.message || 'Updated on Delhivery system.'}`);
                     closeDelhiveryUpdateModal();
-                    loadOrdersAndStats();
+                    loadOrdersAndStats(true);
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Failed to update Delhivery shipment.');
                 }
@@ -4562,7 +4562,7 @@
                 if (response.ok && result.success) {
                     const status = result.data?.syncResult?.rawStatus || 'Updated';
                     alert(`✅ Delhivery Status Synced: ${status}`);
-                    loadOrdersAndStats();
+                    loadOrdersAndStats(true);
                     return status;
                 } else {
                     throw new Error(result.error?.message || result.error || result.message || 'Status sync failed.');
@@ -4648,7 +4648,7 @@
                         '🚫 Order Cancelled',
                         `Order #${orderId} has been successfully marked as Cancelled.`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     showErrorNotice("Failed to cancel order", result.error?.message || "Server error.");
                 }
@@ -4685,7 +4685,7 @@
                         '🎯 Moved to Follow-up Funnel',
                         `Order #${orderId} is now safely saved in WhatsApp Retargeting Funnel.<br>Click Follow-up 1 or 2 anytime to send WhatsApp offers.`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     showErrorNotice("Failed to move order", result.error?.message || "Server error.");
                 }
@@ -4738,6 +4738,16 @@
         async function executeDirectPermanentDelete(orderId) {
             if (!orderId || !currentAdminToken) return;
 
+            // 1. INSTANT OPTIMISTIC UI REMOVAL: Remove from local memory and DOM in 0.001s
+            currentOrdersList = (currentOrdersList || []).filter(o => o && o.orderId !== orderId);
+            buildCustomerHistoryMap(currentOrdersList);
+            renderOrdersTable(currentOrdersList);
+            updateTabCounts(currentOrdersList);
+
+            closeDeleteModal();
+            closeOrderDetailModal();
+            closeCustomerHistoryModal();
+
             try {
                 const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/delete`, {
                     method: 'POST',
@@ -4750,18 +4760,17 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    closeDeleteModal();
-                    closeOrderDetailModal();
-                    closeCustomerHistoryModal();
                     showSuccessNotice(
                         '🗑️ Order Permanently Deleted',
                         `Order #${orderId} has been completely removed from database and any active courier booking cancelled.`
                     );
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
+                    await loadOrdersAndStats(true);
                     showErrorNotice('Failed to Delete Order', result.error?.message || result.error || 'Server error.');
                 }
             } catch (err) {
+                await loadOrdersAndStats(true);
                 showErrorNotice('Delete Error', 'Network error while deleting order: ' + err.message);
             }
         }
@@ -4814,7 +4823,7 @@
                         `Shipment was successfully created on Shiprocket for Order #${orderId}.`
                     );
                     closeOrderDetailModal();
-                    await loadOrdersAndStats();
+                    await loadOrdersAndStats(true);
                 } else {
                     showErrorNotice("Shipment Retry Failed", result.error?.message || "Failed to create shipment on retry.");
                 }

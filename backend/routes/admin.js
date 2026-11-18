@@ -569,12 +569,13 @@ const handlePermanentDeleteOrder = async (req, res, next) => {
 
     const order = await firebaseService.getOrder(orderId);
     if (!order) {
-      return res.status(404).json({
-        success: false,
-        error: {
-          code: 'ORDER_NOT_FOUND',
-          message: 'Order was not found.'
-        }
+      invalidateOrdersCache();
+      if (Array.isArray(cachedOrders)) {
+        cachedOrders = cachedOrders.filter(o => o && o.orderId !== orderId);
+      }
+      return res.json({
+        success: true,
+        message: `Order #${orderId} has already been removed.`
       });
     }
 
@@ -588,6 +589,13 @@ const handlePermanentDeleteOrder = async (req, res, next) => {
     }
 
     await firebaseService.deleteOrder(orderId);
+    
+    // Instantly invalidate in-memory cached orders
+    invalidateOrdersCache();
+    if (Array.isArray(cachedOrders)) {
+      cachedOrders = cachedOrders.filter(o => o && o.orderId !== orderId);
+    }
+
     const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
     logger.info('ORDER_PERMANENTLY_DELETED_BY_ADMIN', { orderId, adminEmail });
 
