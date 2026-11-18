@@ -9,6 +9,7 @@ const delhiveryService = require('../services/delhiveryService');
 const shippingService = require('../services/shippingService');
 const whatsappService = require('../services/whatsappService');
 const { catalog, findItemBySku } = require('../config/catalog');
+const { buildTrustedOrderItems } = require('../services/catalogService');
 const config = require('../config/env');
 const logger = require('../utils/logger');
 
@@ -723,7 +724,7 @@ router.post('/orders/:orderId/retry-shipping', handleMoveOrderToCourier);
 
 /**
  * POST /api/admin/orders/:orderId/convert-to-cod
- * Convert pending online payment / lead to COD while retaining the exact prepaid offer price!
+ * Convert pending online payment / lead to COD, recalculating authoritative pricing
  */
 router.post('/orders/:orderId/convert-to-cod', async (req, res, next) => {
   try {
@@ -739,18 +740,47 @@ router.post('/orders/:orderId/convert-to-cod', async (req, res, next) => {
     const now = new Date().toISOString();
     const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
 
-    // Strictly preserve the prepaid discounted price as requested by user
-    const prepaidTotal = Math.round(
-      order.pricing?.total ||
-      (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) ||
-      599
-    );
+    // Authoritatively recalculate pricing for COD (remove online discount, apply COD shipping rules)
+    let recalculatedPricing = null;
+    try {
+      const items = (order.items && order.items.length > 0) ? order.items : [];
+      const pincode = order.customer?.pincode || order.shippingAddress?.pincode || '423203';
+      const couponCode = order.pricing?.couponCode || null;
+      if (items.length > 0) {
+        const trusted = await buildTrustedOrderItems(items, pincode, couponCode, 'cod');
+        recalculatedPricing = trusted.pricing;
+      }
+    } catch (calcErr) {
+      logger.warn('RECALC_PRICING_COD_CATALOG_FAILED_FALLBACK', { orderId, error: calcErr.message });
+    }
+
+    if (!recalculatedPricing) {
+      const subtotal = Math.round(order.pricing?.subtotal || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+      const pincode = String(order.customer?.pincode || order.shippingAddress?.pincode || '').trim();
+      const isLocal = ['421305', '421302', '421308'].includes(pincode);
+      const codShipping = (isLocal || subtotal >= 999) ? 0 : 100;
+      const discount = Math.round(order.pricing?.discount || 0);
+      const total = Math.max(0, subtotal - discount + codShipping);
+      recalculatedPricing = {
+        subtotal,
+        discount,
+        couponCode: order.pricing?.couponCode || null,
+        onlineDiscount: 0,
+        codCharge: 0,
+        shipping: codShipping,
+        isLocalDelivery: isLocal,
+        total,
+        currency: 'INR'
+      };
+    }
+
+    const codTotal = Math.round(recalculatedPricing.total);
 
     const events = order.events || [];
     events.push({
-      event: 'ORDER_CONVERTED_TO_COD_PREPAID_RATE',
+      event: 'ORDER_CONVERTED_TO_COD',
       timestamp: now,
-      details: `Shifted from Pending Online Payment to Cash on Delivery (COD) by ${adminEmail}. Prepaid offer rate of Rs. ${prepaidTotal} strictly retained with Rs. 0 COD fee.`
+      details: `Shifted to Cash on Delivery (COD) by ${adminEmail}. Pricing recalculated to Rs. ${codTotal} (Subtotal: Rs. ${recalculatedPricing.subtotal}, Shipping: Rs. ${recalculatedPricing.shipping}, Online Discount: Rs. 0).`
     });
 
     const updatedOrder = await firebaseService.updateOrder(orderId, {
@@ -759,28 +789,28 @@ router.post('/orders/:orderId/convert-to-cod', async (req, res, next) => {
         ...(order.payment || {}),
         provider: 'COD',
         status: 'COD_CONFIRMED',
-        amountPaise: prepaidTotal * 100,
+        amountPaise: codTotal * 100,
         currency: 'INR',
         paidAt: null
       },
       pricing: {
         ...(order.pricing || {}),
-        codCharge: 0,
-        total: prepaidTotal
+        ...recalculatedPricing,
+        total: codTotal
       },
       status: 'PAYMENT_CAPTURED', // Marks as ready for courier booking
       events
     });
 
-    logger.info('ORDER_CONVERTED_TO_COD_PREPAID_PRICE_SUCCESS', {
+    logger.info('ORDER_CONVERTED_TO_COD_SUCCESS', {
       orderId,
-      prepaidTotal,
+      codTotal,
       adminEmail
     });
 
     res.json({
       success: true,
-      message: `Order #${orderId} shifted to COD at Prepaid Price (Rs. ${prepaidTotal})!`,
+      message: `Order #${orderId} shifted to COD! Updated total: Rs. ${codTotal}`,
       data: updatedOrder
     });
   } catch (err) {
@@ -840,7 +870,7 @@ router.post('/orders/:orderId/confirm-cod', async (req, res, next) => {
 
 /**
  * POST /api/admin/orders/:orderId/convert-to-prepaid
- * Convert COD or Pending order to Paid Online (Prepaid via UPI / Direct transfer)
+ * Convert COD or Pending order to Paid Online (Prepaid via UPI / Direct transfer), recalculating authoritative pricing
  */
 router.post('/orders/:orderId/convert-to-prepaid', async (req, res, next) => {
   try {
@@ -856,17 +886,50 @@ router.post('/orders/:orderId/convert-to-prepaid', async (req, res, next) => {
 
     const now = new Date().toISOString();
     const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
-    const totalAmount = Math.round(
-      order.pricing?.total ||
-      (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) ||
-      599
-    );
+
+    // Authoritatively recalculate pricing for Online/Prepaid (apply 10% online discount on combos/898+, free shipping on 599+)
+    let recalculatedPricing = null;
+    try {
+      const items = (order.items && order.items.length > 0) ? order.items : [];
+      const pincode = order.customer?.pincode || order.shippingAddress?.pincode || '423203';
+      const couponCode = order.pricing?.couponCode || null;
+      if (items.length > 0) {
+        const trusted = await buildTrustedOrderItems(items, pincode, couponCode, 'razorpay');
+        recalculatedPricing = trusted.pricing;
+      }
+    } catch (calcErr) {
+      logger.warn('RECALC_PRICING_PREPAID_CATALOG_FAILED_FALLBACK', { orderId, error: calcErr.message });
+    }
+
+    if (!recalculatedPricing) {
+      const subtotal = Math.round(order.pricing?.subtotal || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+      const pincode = String(order.customer?.pincode || order.shippingAddress?.pincode || '').trim();
+      const isLocal = ['421305', '421302', '421308'].includes(pincode);
+      const hasCombo = (order.items || []).some(i => i.hasJanamaz || i.sku?.includes('combo') || false) || subtotal >= 898;
+      const onlineDiscount = hasCombo ? Math.round(subtotal * 0.10) : 0;
+      const prepaidShipping = (isLocal || subtotal >= 599) ? 0 : (subtotal < 299 ? 50 : 100);
+      const discount = Math.round(order.pricing?.discount || 0);
+      const total = Math.max(0, subtotal - discount - onlineDiscount + prepaidShipping);
+      recalculatedPricing = {
+        subtotal,
+        discount,
+        couponCode: order.pricing?.couponCode || null,
+        onlineDiscount,
+        codCharge: 0,
+        shipping: prepaidShipping,
+        isLocalDelivery: isLocal,
+        total,
+        currency: 'INR'
+      };
+    }
+
+    const prepaidTotal = Math.round(recalculatedPricing.total);
 
     const events = order.events || [];
     events.push({
       event: 'ORDER_MARKED_PREPAID_PAID_BY_ADMIN',
       timestamp: now,
-      details: `Payment received & verified as Prepaid by ${adminEmail}.${utr ? ` UTR/Ref: ${utr}.` : ''} ${notes || ''}`
+      details: `Payment received & verified as Prepaid by ${adminEmail}. Pricing recalculated to Rs. ${prepaidTotal} (Online Discount: Rs. ${recalculatedPricing.onlineDiscount}, Shipping: Rs. ${recalculatedPricing.shipping}).${utr ? ` UTR/Ref: ${utr}.` : ''} ${notes || ''}`
     });
 
     const updatedOrder = await firebaseService.updateOrder(orderId, {
@@ -875,7 +938,7 @@ router.post('/orders/:orderId/convert-to-prepaid', async (req, res, next) => {
         ...(order.payment || {}),
         provider: 'PREPAID_VERIFIED',
         status: 'CAPTURED',
-        amountPaise: totalAmount * 100,
+        amountPaise: prepaidTotal * 100,
         currency: 'INR',
         paidAt: now,
         utr: utr || null,
@@ -883,17 +946,18 @@ router.post('/orders/:orderId/convert-to-prepaid', async (req, res, next) => {
       },
       pricing: {
         ...(order.pricing || {}),
-        codCharge: 0
+        ...recalculatedPricing,
+        total: prepaidTotal
       },
       status: 'PAYMENT_CAPTURED', // Ready for courier booking
       events
     });
 
-    logger.info('ORDER_CONVERTED_TO_PREPAID_SUCCESS', { orderId, utr, adminEmail });
+    logger.info('ORDER_CONVERTED_TO_PREPAID_SUCCESS', { orderId, prepaidTotal, utr, adminEmail });
 
     res.json({
       success: true,
-      message: `Order #${orderId} marked as Paid (Prepaid)!`,
+      message: `Order #${orderId} marked as PAID (Prepaid)! Updated total: Rs. ${prepaidTotal}`,
       data: updatedOrder
     });
   } catch (err) {
