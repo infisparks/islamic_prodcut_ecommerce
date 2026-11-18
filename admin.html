@@ -101,6 +101,23 @@
         .action-btn:active {
             transform: scale(0.97);
         }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .order-tab-btn {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .order-tab-btn.active {
+            border-color: #4F46E5 !important;
+            color: #4338CA !important;
+            background-color: #EEF2FF !important;
+        }
         @media print {
             .no-print { display: none !important; }
         }
@@ -380,9 +397,66 @@
                     </div>
                 </div>
 
-                <!-- ORDERS TABLE CARD -->
+                <!-- ORDERS TABLE & MOBILE CARDS -->
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
                     
+                    <!-- BIG-COMPANY QUICK STATUS TABS (Light-to-Dark Color Identity) -->
+                    <div class="px-3 sm:px-4 py-2 bg-slate-50/60 border-b border-slate-200 overflow-x-auto custom-scrollbar flex items-center gap-1.5 sm:gap-2 select-none no-scrollbar">
+                        <button type="button" onclick="setOrderTab('all')" id="tab-btn-all" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-slate-900 bg-slate-900 text-white shadow-2xs transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-layer-group text-[11px]"></i>
+                            <span>All Orders</span>
+                            <span id="tab-count-all" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-white text-slate-900 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('prepaid')" id="tab-btn-prepaid" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-bolt text-emerald-600 text-[11px]"></i>
+                            <span>Prepaid (Paid)</span>
+                            <span id="tab-count-prepaid" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-emerald-200 text-emerald-950 border border-emerald-300 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('pending')" id="tab-btn-pending" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-hourglass-half text-amber-600 text-[11px]"></i>
+                            <span>Payment Pending (Leads)</span>
+                            <span id="tab-count-pending" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-amber-200 text-amber-950 border border-amber-300 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('cod_unconfirmed')" id="tab-btn-cod_unconfirmed" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-orange-300 bg-orange-50 text-orange-900 hover:bg-orange-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-clock-rotate-left text-orange-600 text-[11px]"></i>
+                            <span>COD (To Confirm)</span>
+                            <span id="tab-count-cod_unconfirmed" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-orange-200 text-orange-950 border border-orange-300 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('cod_confirmed')" id="tab-btn-cod_confirmed" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-blue-300 bg-blue-50 text-blue-900 hover:bg-blue-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-circle-check text-blue-600 text-[11px]"></i>
+                            <span>COD Confirmed</span>
+                            <span id="tab-count-cod_confirmed" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-blue-200 text-blue-950 border border-blue-300 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('shipped')" id="tab-btn-shipped" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-purple-300 bg-purple-50 text-purple-900 hover:bg-purple-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-truck-fast text-purple-600 text-[11px]"></i>
+                            <span>Shipped / In Transit</span>
+                            <span id="tab-count-shipped" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-purple-200 text-purple-950 border border-purple-300 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('delivered')" id="tab-btn-delivered" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-teal-300 bg-teal-50 text-teal-900 hover:bg-teal-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-house-chimney-check text-teal-600 text-[11px]"></i>
+                            <span>Delivered</span>
+                            <span id="tab-count-delivered" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-teal-200 text-teal-950 border border-teal-300 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('funnel')" id="tab-btn-funnel" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-pink-300 bg-pink-50 text-pink-900 hover:bg-pink-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-filter-circle-dollar text-pink-600 text-[11px]"></i>
+                            <span>Follow-up Funnel</span>
+                            <span id="tab-count-funnel" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-pink-200 text-pink-950 border border-pink-300 shadow-2xs">0</span>
+                        </button>
+
+                        <button type="button" onclick="setOrderTab('cancelled')" id="tab-btn-cancelled" class="order-tab-btn px-3 py-1.5 text-xs font-bold rounded-xl border border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <i class="fa-solid fa-ban text-rose-600 text-[11px]"></i>
+                            <span>Cancelled</span>
+                            <span id="tab-count-cancelled" class="ml-1.5 min-w-[22px] h-[22px] px-1.5 inline-flex items-center justify-center rounded-full text-xs font-black bg-rose-200 text-rose-950 border border-rose-300 shadow-2xs">0</span>
+                        </button>
+                    </div>
+
                     <!-- TOOLBAR & FILTERS -->
                     <div class="p-4 border-b border-slate-200/90 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-50/70">
                         
@@ -419,14 +493,14 @@
                         </div>
                     </div>
 
-                    <!-- DATA TABLE -->
-                    <div class="overflow-x-auto custom-scrollbar">
+                    <!-- DESKTOP DATA TABLE (Visible on Tablets & Desktops >= 768px) -->
+                    <div class="hidden md:block overflow-x-auto custom-scrollbar">
                         <table class="w-full text-left text-xs text-slate-800" id="admin-orders-table">
                             <thead class="bg-slate-50/90 text-slate-600 font-extrabold uppercase tracking-wider text-[11px] border-b border-slate-200/90 select-none">
                                 <tr>
                                     <th class="py-3.5 px-4">Order ID & Date</th>
                                     <th class="py-3.5 px-4">Customer Details</th>
-                                    <th class="py-3.5 px-4 min-w-[250px]">Items & Selected Products</th>
+                                    <th class="py-3.5 px-4 min-w-[220px]">Items & Selected Products</th>
                                     <th class="py-3.5 px-4">Total Amount</th>
                                     <th class="py-3.5 px-4">Payment Method</th>
                                     <th class="py-3.5 px-4">Shipping / AWB</th>
@@ -443,6 +517,14 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- MOBILE ORDERS CARDS (Visible on Smartphones < 768px) -->
+                    <div id="orders-mobile-container" class="md:hidden divide-y divide-slate-200 bg-slate-50/50 p-2 sm:p-3 space-y-3">
+                        <div class="text-center py-12 text-slate-400">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2 text-indigo-600"></i>
+                            <div class="font-medium text-xs text-slate-500">Loading orders...</div>
+                        </div>
                     </div>
 
                     <!-- FOOTER FINANCIAL SUMMARY & COUNT -->
@@ -491,6 +573,73 @@
         </div>
     </div>
 
+    <!-- CUSTOMER MULTI-ORDER HISTORY & TIMELINE MODAL -->
+    <div id="customer-history-modal" onclick="if(event.target === this) closeCustomerHistoryModal()" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col border border-slate-200 shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-gradient-to-r from-indigo-50/90 via-slate-50 to-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-xs shrink-0">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-sm text-slate-900 flex items-center gap-2 flex-wrap">
+                            <span id="cust-modal-name">Customer History</span>
+                            <span id="cust-modal-phone" class="font-mono text-xs text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full font-bold"></span>
+                        </h3>
+                        <p class="text-[11px] text-slate-500 font-medium mt-0.5" id="cust-modal-subtitle">Full purchase journey and order sequence</p>
+                    </div>
+                </div>
+                <button onclick="closeCustomerHistoryModal()" class="w-8 h-8 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Stats Bar / LTV -->
+            <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 grid grid-cols-4 gap-2 text-center text-xs">
+                <div class="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
+                    <div class="text-[10px] text-slate-500 font-bold uppercase">Total Orders</div>
+                    <div class="text-sm font-black text-slate-900 mt-0.5" id="cust-stat-total">0</div>
+                </div>
+                <div class="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
+                    <div class="text-[10px] text-emerald-700 font-bold uppercase">Paid Online</div>
+                    <div class="text-sm font-black text-emerald-600 mt-0.5" id="cust-stat-paid">0</div>
+                </div>
+                <div class="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
+                    <div class="text-[10px] text-blue-700 font-bold uppercase">COD Orders</div>
+                    <div class="text-sm font-black text-blue-600 mt-0.5" id="cust-stat-cod">0</div>
+                </div>
+                <div class="p-2 bg-white rounded-xl border border-slate-200 shadow-2xs">
+                    <div class="text-[10px] text-indigo-700 font-bold uppercase">Total Value (LTV)</div>
+                    <div class="text-sm font-black text-indigo-700 mt-0.5" id="cust-stat-ltv">Rs. 0</div>
+                </div>
+            </div>
+
+            <!-- Pattern / Alert Insight Box -->
+            <div id="cust-modal-pattern-box" class="mx-4 mt-3 p-3 rounded-xl border text-xs"></div>
+
+            <!-- Timeline List -->
+            <div class="p-4 overflow-y-auto space-y-3 custom-scrollbar flex-1 text-xs" id="cust-modal-timeline"></div>
+
+            <!-- Footer -->
+            <div class="p-3.5 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                    <a id="cust-modal-call-btn" href="#" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs">
+                        <i class="fa-solid fa-phone text-[11px] text-indigo-600"></i>
+                        <span>Call Customer</span>
+                    </a>
+                    <a id="cust-modal-wa-btn" href="#" target="_blank" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-2xs">
+                        <i class="fa-brands fa-whatsapp text-xs"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+                <button onclick="closeCustomerHistoryModal()" class="px-4 py-1.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all cursor-pointer shadow-2xs">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- CANCEL ORDER CONFIRMATION MODAL -->
     <div id="cancel-confirm-modal" onclick="if(event.target === this) closeCancelModal()" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 border border-slate-200 shadow-2xl" onclick="event.stopPropagation()">
@@ -518,38 +667,7 @@
         </div>
     </div>
 
-    <!-- PERMANENT DELETE CONFIRMATION MODAL -->
-    <div id="delete-confirm-modal" onclick="if(event.target === this) closeDeleteModal()" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 border border-rose-200 shadow-2xl" onclick="event.stopPropagation()">
-            <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3 border border-rose-200 shadow-xs">
-                <i class="fa-solid fa-trash-can"></i>
-            </div>
-            <h3 class="font-bold text-base text-[#111827] text-center mb-1">Permanently Delete Order?</h3>
-            <p class="text-xs text-[#6B7280] text-center mb-4 leading-relaxed">
-                This action <b class="text-rose-600 font-semibold">CANNOT be undone</b>. Order <b id="delete-modal-order-id" class="text-rose-700 font-mono"></b> will be permanently wiped from Firebase Database and revenue statistics.
-            </p>
-
-            <div class="mb-4 bg-rose-50/70 p-3.5 rounded-xl border border-rose-200/80">
-                <label class="block text-xs font-bold text-rose-900 mb-1.5">
-                    Type <span class="font-mono bg-rose-200/80 text-rose-950 px-1.5 py-0.5 rounded font-black border border-rose-300">DELETE</span> to confirm:
-                </label>
-                <input type="text" id="delete-confirm-input" oninput="handleDeleteInputChange(this.value)" onkeydown="if(event.key === 'Enter' && this.value.trim().toUpperCase() === 'DELETE') executePermanentDeleteOrder()" placeholder="Type DELETE" class="w-full px-3 py-2 text-xs rounded-lg border border-rose-300 focus:outline-none focus:border-rose-600 focus:ring-1 focus:ring-rose-600 bg-white font-mono font-bold uppercase tracking-wider placeholder:normal-case placeholder:font-normal">
-                <p id="delete-input-hint" class="text-[10px] text-rose-600 mt-1 font-medium hidden">
-                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Text must match "DELETE" in capital letters
-                </p>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2">
-                <button onclick="closeDeleteModal()" class="w-full py-2.5 bg-white border border-[#E5E7EB] text-[#111827] rounded-xl text-xs font-medium hover:bg-gray-50 transition-colors cursor-pointer">
-                    Cancel
-                </button>
-                <button onclick="executePermanentDeleteOrder()" id="delete-confirm-btn" disabled class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 cursor-pointer">
-                    <i class="fa-solid fa-trash-can text-xs"></i>
-                    <span>Delete Forever</span>
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- DELETE MODAL REMOVED: E-commerce order preservation policy (Orders can only be Cancelled or Moved to Funnel) -->
 
     <!-- WHATSAPP MESSAGE SENDER MODAL WITH MULTIPLE TEMPLATES -->
     <div id="whatsapp-modal" onclick="if(event.target === this) closeWhatsAppModal()" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
@@ -588,6 +706,12 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="wa-template-pills">
                     <button type="button" onclick="selectWhatsAppTemplate('order_accepted')" id="wa-tpl-btn-order_accepted" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-bold text-left transition-all cursor-pointer bg-emerald-600 text-white border-emerald-600 shadow-xs">
                         ✨ Order Accepted (Default)
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('funnel_followup_1')" id="wa-tpl-btn-funnel_followup_1" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-pink-50 text-pink-900 border-pink-200 hover:bg-pink-100">
+                        🎁 Funnel 1 (Gift/Discount)
+                    </button>
+                    <button type="button" onclick="selectWhatsAppTemplate('funnel_followup_2')" id="wa-tpl-btn-funnel_followup_2" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-pink-50 text-pink-900 border-pink-200 hover:bg-pink-100">
+                        ⚡ Funnel 2 (Last Call)
                     </button>
                     <button type="button" onclick="selectWhatsAppTemplate('payment_pending_cod')" id="wa-tpl-btn-payment_pending_cod" class="wa-tpl-btn p-2 rounded-lg border text-[11px] font-medium text-left transition-all cursor-pointer bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
                         🔄 Shift to COD (Unpaid)
@@ -1528,9 +1652,536 @@
             `;
         }
 
-        // Render Table Rows
+        // ==========================================
+        // ORDER STATUS CLASSIFICATION & BIG-COMPANY TABS
+        // ==========================================
+        let activeOrderTab = 'all';
+
+        function classifyOrder(order) {
+            const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
+            const hasCodCharge = (order.pricing?.codCharge || 0) > 0;
+            const hasCodEvent = (order.events || []).some(e => (e.event || '').includes('COD'));
+            const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
+
+            const paymentStatus = ((order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING')).toUpperCase();
+            const status = (order.status || 'PENDING').toUpperCase();
+            const awb = order.shipping && (order.shipping.awb || order.shipping.waybill);
+            const ekartId = order.shipping && order.shipping.ekartOrderId;
+            const isShipmentBooked = Boolean(awb || ekartId || order.shipping?.shiprocketOrderId || order.shipping?.waybill);
+
+            const isDelivered = status === 'DELIVERED';
+            const isCancelled = status === 'CANCELLED';
+            const isInFunnel = !isCancelled && (
+                status === 'IN_FOLLOWUP_FUNNEL' || 
+                status === 'FUNNEL' || 
+                Boolean(order.inFollowupFunnel)
+            );
+            const isShipped = ['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(status) || isShipmentBooked;
+
+            // Online Paid: ONLY when payment is ACTUALLY captured or has genuine razorpayPaymentId or manual admin verification
+            const hasRazorpayPaymentId = Boolean(order.payment?.razorpayPaymentId);
+            const isCaptured = paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || Boolean(order.payment?.paidAt);
+            const isManualPrepaidVerified = prov === 'prepaid_verified';
+
+            // An online order is ONLY paid if the money was actually captured.
+            // Orders with status PENDING_PAYMENT or paymentStatus CREATED / PENDING are dropped-off LEADS, NEVER Online Paid!
+            const isOnlinePaid = !isCod && !isCancelled && !isInFunnel && (
+                (isCaptured || hasRazorpayPaymentId || isManualPrepaidVerified) &&
+                status !== 'PENDING_PAYMENT' &&
+                paymentStatus !== 'CREATED' &&
+                paymentStatus !== 'PENDING'
+            );
+
+            // Online Payment Pending (Lead who initiated checkout but dropped off / payment not completed)
+            const isPendingPayment = !isCod && !isOnlinePaid && !isCancelled && !isInFunnel;
+
+            // COD Unconfirmed (needs verification / OTP pending)
+            const isCodUnconfirmed = isCod && !isCancelled && !isDelivered && !isInFunnel && (
+                status === 'OTP_NOT_VERIFIED' || 
+                paymentStatus === 'OTP_NOT_VERIFIED' || 
+                paymentStatus === 'COD_PENDING' || 
+                status === 'PENDING'
+            ) && !isShipmentBooked;
+
+            // COD Confirmed (customer confirmed, ready for dispatch)
+            const isCodConfirmed = isCod && !isCancelled && !isCodUnconfirmed && !isDelivered && !isShipped && !isInFunnel;
+
+            return {
+                isCod,
+                isOnlinePaid,
+                isPendingPayment,
+                isCodUnconfirmed,
+                isCodConfirmed,
+                isShipped,
+                isDelivered,
+                isCancelled,
+                isInFunnel,
+                isShipmentBooked,
+                paymentStatus,
+                status,
+                awb,
+                ekartId
+            };
+        }
+
+        // ==========================================
+        // CUSTOMER ORDER HISTORY & MULTI-ORDER DETECTION
+        // ==========================================
+        let customerHistoryMap = {};
+
+        function buildCustomerHistoryMap(orders) {
+            customerHistoryMap = {};
+            (orders || []).forEach(o => {
+                const phone = ((o.customer && o.customer.phone) || (o.shippingAddress && o.shippingAddress.phone) || o.phone || '').replace(/\D/g, '').slice(-10);
+                if (!phone || phone.length < 10) return;
+                if (!customerHistoryMap[phone]) customerHistoryMap[phone] = [];
+                customerHistoryMap[phone].push(o);
+            });
+        }
+
+        function analyzeCustomerHistory(phone, allOrders) {
+            const cleanPhone = (phone || '').replace(/\D/g, '').slice(-10);
+            if (!cleanPhone || cleanPhone.length < 10) return null;
+            let list = customerHistoryMap[cleanPhone];
+            if (!list && allOrders) {
+                list = allOrders.filter(o => {
+                    const p = ((o.customer && o.customer.phone) || (o.shippingAddress && o.shippingAddress.phone) || o.phone || '').replace(/\D/g, '').slice(-10);
+                    return p === cleanPhone;
+                });
+            }
+            if (!list || list.length <= 1) return null;
+
+            // Sort chronologically ascending (earliest to newest)
+            const sorted = [...list].sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+
+            let paid = 0, cod = 0, pending = 0, cancelled = 0, delivered = 0, totalLtv = 0;
+            sorted.forEach(o => {
+                const c = classifyOrder(o);
+                const amt = Math.round(o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0) || 0);
+                if (c.isCancelled) {
+                    cancelled++;
+                } else {
+                    totalLtv += amt;
+                    if (c.isDelivered) delivered++;
+                    if (c.isOnlinePaid) paid++;
+                    else if (c.isCod) cod++;
+                    else if (c.isPendingPayment) pending++;
+                }
+            });
+
+            let badgeType = 'info';
+            let badgeLabel = '';
+            let patternDescription = '';
+            let badgeClass = '';
+
+            const hasPaidAndPending = (paid > 0 && pending > 0);
+            const hasFailedThenCod = (pending > 0 && cod > 0);
+            const hasMultipleCod = (cod > 1);
+            const hasMultiplePaid = (paid > 1);
+
+            if (hasPaidAndPending) {
+                badgeType = 'warning';
+                badgeLabel = `⚡ MUST CHECK: ${sorted.length} Orders (${paid} Paid, ${pending} Lead)`;
+                badgeClass = 'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white border-2 border-amber-300 shadow-md ring-2 ring-amber-200 hover:from-amber-600 hover:to-orange-700 animate-pulse';
+                patternDescription = 'Customer has already paid for 1 order, and also has an unpaid pending checkout attempt. Verify before shipping or calling customer!';
+            } else if (hasFailedThenCod) {
+                badgeType = 'warning';
+                badgeLabel = `⚠️ CHECK: ${sorted.length} Orders (Online Failed ➔ Switched to COD)`;
+                badgeClass = 'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white border-2 border-amber-300 shadow-md ring-2 ring-amber-200 hover:from-amber-600 hover:to-orange-700 animate-pulse';
+                patternDescription = 'Customer attempted online checkout first (failed/abandoned), then placed a Cash on Delivery order. Check before shipping to avoid double dispatch!';
+            } else if (hasMultipleCod) {
+                badgeType = 'alert';
+                badgeLabel = `🚨 DUPLICATE ALERT: ${cod} COD Orders (Check Before Dispatch)`;
+                badgeClass = 'bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 text-white border-2 border-rose-300 shadow-md ring-2 ring-rose-200 hover:from-rose-700 hover:to-red-800 animate-pulse';
+                patternDescription = 'Customer placed multiple COD orders. Please call/WhatsApp to confirm items before dispatch to avoid duplicate delivery and RTO!';
+            } else if (hasMultiplePaid) {
+                badgeType = 'success';
+                badgeLabel = `⭐ VIP BUYER: ${paid} Confirmed Paid Orders`;
+                badgeClass = 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white border-2 border-emerald-300 shadow-md ring-2 ring-emerald-200 hover:from-emerald-700 hover:to-teal-800';
+                patternDescription = 'Valued VIP customer with multiple confirmed prepaid orders!';
+            } else {
+                const parts = [];
+                if (paid) parts.push(`${paid} Paid`);
+                if (cod) parts.push(`${cod} COD`);
+                if (pending) parts.push(`${pending} Lead`);
+                if (cancelled) parts.push(`${cancelled} Cancelled`);
+                badgeLabel = `⚡ MUST CHECK: ${sorted.length} Orders (${parts.join(', ')})`;
+                badgeClass = 'bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white border-2 border-indigo-300 shadow-md ring-2 ring-indigo-200 hover:from-indigo-700 hover:to-purple-800';
+                patternDescription = `Customer has placed a total of ${sorted.length} orders in the system. Click to review all orders together.`;
+            }
+
+            return {
+                total: sorted.length,
+                paid,
+                cod,
+                pending,
+                cancelled,
+                delivered,
+                totalLtv,
+                orders: sorted,
+                badgeType,
+                badgeLabel,
+                badgeClass,
+                patternDescription
+            };
+        }
+
+        function showCustomerHistoryModal(phone) {
+            const cleanPhone = (phone || '').replace(/\D/g, '').slice(-10);
+            if (!cleanPhone) return;
+
+            const history = analyzeCustomerHistory(cleanPhone, currentOrdersList);
+            if (!history || history.orders.length === 0) {
+                alert("No multi-order history found for this phone number.");
+                return;
+            }
+
+            const primaryOrder = history.orders[history.orders.length - 1];
+            const custName = (primaryOrder.customer && primaryOrder.customer.name) || (primaryOrder.shippingAddress && primaryOrder.shippingAddress.fullName) || 'Customer';
+
+            document.getElementById('cust-modal-name').textContent = custName;
+            document.getElementById('cust-modal-phone').textContent = `+91 ${cleanPhone}`;
+            document.getElementById('cust-modal-subtitle').textContent = `Purchase history across ${history.total} orders`;
+
+            document.getElementById('cust-stat-total').textContent = history.total;
+            document.getElementById('cust-stat-paid').textContent = history.paid;
+            document.getElementById('cust-stat-cod').textContent = history.cod;
+            document.getElementById('cust-stat-ltv').textContent = `Rs. ${history.totalLtv.toLocaleString('en-IN')}`;
+
+            // Quick links
+            const callBtn = document.getElementById('cust-modal-call-btn');
+            if (callBtn) callBtn.href = `tel:${cleanPhone}`;
+            const waBtn = document.getElementById('cust-modal-wa-btn');
+            if (waBtn) waBtn.href = `https://wa.me/91${cleanPhone}?text=Assalamu%20Alaikum%20${encodeURIComponent(custName)}%2C%20this%20is%20Fatima%20Calligraphy%20regarding%20your%20orders.`;
+
+            // Pattern Alert Box
+            const patternBox = document.getElementById('cust-modal-pattern-box');
+            if (patternBox) {
+                let boxClass = 'bg-indigo-50 border-indigo-200 text-indigo-950';
+                let iconClass = 'fa-solid fa-circle-info text-indigo-600';
+                if (history.badgeType === 'warning') {
+                    boxClass = 'bg-amber-50 border-amber-300 text-amber-950';
+                    iconClass = 'fa-solid fa-triangle-exclamation text-amber-600';
+                } else if (history.badgeType === 'alert') {
+                    boxClass = 'bg-rose-50 border-rose-300 text-rose-950';
+                    iconClass = 'fa-solid fa-radiation text-rose-600';
+                } else if (history.badgeType === 'success') {
+                    boxClass = 'bg-emerald-50 border-emerald-300 text-emerald-950';
+                    iconClass = 'fa-solid fa-crown text-emerald-600';
+                }
+                patternBox.className = `mx-4 mt-3 p-3.5 rounded-xl border flex items-start gap-2.5 shadow-2xs ${boxClass}`;
+                patternBox.innerHTML = `
+                    <i class="${iconClass} text-base mt-0.5 shrink-0"></i>
+                    <div>
+                        <div class="font-black text-sm">${history.badgeLabel}</div>
+                        <div class="text-xs opacity-90 mt-1 leading-relaxed">${history.patternDescription}</div>
+                    </div>
+                `;
+            }
+
+            // Timeline items with FULL OPERATIONAL CONTROLS
+            const timelineContainer = document.getElementById('cust-modal-timeline');
+            if (timelineContainer) {
+                timelineContainer.innerHTML = history.orders.map((o, idx) => {
+                    const c = classifyOrder(o);
+                    const orderId = o.orderId || 'N/A';
+                    const dt = o.createdAt ? new Date(o.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+                    const totalAmount = Math.round(o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0) || 599);
+                    const isShipmentBooked = c.isShipmentBooked;
+                    const awb = c.awb || o.shipping?.ekartOrderId || '';
+                    const courierProvider = (o.shipping?.provider || (o.shipping?.ekartOrderId ? 'ekart' : (o.shipping?.shiprocketOrderId ? 'shiprocket' : (o.shipping?.waybill ? 'delhivery' : '')))).toLowerCase();
+
+                    // Status pill
+                    let statusPill = '';
+                    if (c.isCancelled) {
+                        statusPill = `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-900 border border-rose-300">🚫 Cancelled</span>`;
+                    } else if (c.isOnlinePaid) {
+                        const payId = o.payment?.razorpayPaymentId ? ` • ${o.payment.razorpayPaymentId}` : '';
+                        statusPill = `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-950 border border-emerald-300">⚡ Online Paid${payId}</span>`;
+                    } else if (c.isPendingPayment) {
+                        statusPill = `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-950 border border-amber-300">⌛ Payment Failed / Lead</span>`;
+                    } else if (c.isCod) {
+                        statusPill = c.isCodUnconfirmed ?
+                            `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-100 text-orange-950 border border-orange-300">📦 COD (To Confirm)</span>` :
+                            `<span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-100 text-blue-950 border border-blue-300">✔ COD Confirmed</span>`;
+                    }
+
+                    // Items display
+                    const itemsDesc = (o.items || []).map(i => {
+                        const q = i.quantity || 1;
+                        return `<span class="inline-flex items-center gap-1 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md text-xs font-bold text-slate-800">${i.name || i.variantName} ${q > 1 ? `<b class="text-indigo-600">x${q}</b>` : ''}</span>`;
+                    }).join(' ') || '1 Item';
+
+                    return `
+                        <div class="p-4 bg-white rounded-2xl border-2 ${c.isOnlinePaid ? 'border-emerald-300/80 bg-emerald-50/15' : (c.isPendingPayment ? 'border-amber-300/80 bg-amber-50/15' : 'border-slate-200')} shadow-xs hover:border-indigo-400 transition-all space-y-3">
+                            <!-- Order Header -->
+                            <div class="flex items-center justify-between gap-2 flex-wrap border-b border-slate-200/80 pb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-7 h-7 rounded-full bg-slate-900 text-white font-mono font-black text-xs flex items-center justify-center shrink-0 shadow-2xs">#${idx + 1}</span>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <button onclick="closeCustomerHistoryModal(); openOrderDetail('${orderId}');" class="font-mono font-black text-sm text-indigo-600 hover:text-indigo-800 hover:underline flex items-center gap-1 cursor-pointer">
+                                                <span>#${orderId}</span>
+                                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                            </button>
+                                            <span class="text-slate-300">•</span>
+                                            <span class="text-xs text-slate-500 font-medium">${dt}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2.5">
+                                    ${statusPill}
+                                    <span class="font-mono font-black text-sm sm:text-base text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">Rs. ${totalAmount.toLocaleString('en-IN')}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Items & Shipping Summary -->
+                            <div class="flex items-center justify-between gap-3 text-xs flex-wrap">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="text-slate-500 font-bold">Items:</span>
+                                    ${itemsDesc}
+                                </div>
+                                <div>
+                                    ${isShipmentBooked ? `
+                                        <div class="flex items-center gap-2">
+                                            <span class="px-2.5 py-1 bg-purple-50 text-purple-900 border border-purple-200 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                                                <i class="fa-solid fa-truck text-purple-600"></i>
+                                                <span>${courierProvider === 'delhivery' ? 'Delhivery' : (courierProvider === 'ekart' ? 'Ekart' : 'Shiprocket')}</span>
+                                                <span class="font-mono text-[11px] bg-white px-1.5 py-0.2 rounded border border-purple-200">${awb || 'Booked'}</span>
+                                            </span>
+                                            ${courierProvider !== 'ekart' ? `
+                                                <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="px-2 py-1 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1" title="Download Shipping Label">
+                                                    <i class="fa-solid fa-tag text-[10px]"></i>
+                                                    <span>Label</span>
+                                                </a>
+                                            ` : ''}
+                                            <a href="${o.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/orders' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1" title="Live Tracking">
+                                                <i class="fa-solid fa-location-arrow text-[10px]"></i>
+                                                <span>Track</span>
+                                            </a>
+                                        </div>
+                                    ` : `
+                                        <span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">Not Dispatched</span>
+                                    `}
+                                </div>
+                            </div>
+
+                            <!-- COMPLETE OPERATIONAL ACTIONS (Ship, Confirm, Convert, Cancel, WhatsApp) -->
+                            <div class="pt-3 border-t border-slate-200/80 flex items-center justify-between gap-2 flex-wrap">
+                                <!-- Left side: Courier dispatch buttons (if not dispatched & not cancelled) -->
+                                <div>
+                                    ${!isShipmentBooked && !c.isCancelled ? `
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Dispatch:</span>
+                                            <button onclick="closeCustomerHistoryModal(); moveOrderToCourier('${orderId}', 'shiprocket');" class="action-btn px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+                                                <i class="fa-solid fa-truck-fast text-[11px]"></i>
+                                                <span>Shiprocket</span>
+                                            </button>
+                                            <button onclick="closeCustomerHistoryModal(); openDelhiveryDispatchModal('${orderId}');" class="action-btn px-2.5 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+                                                <i class="fa-solid fa-box text-[11px]"></i>
+                                                <span>Delhivery</span>
+                                            </button>
+                                            <button onclick="closeCustomerHistoryModal(); moveOrderToCourier('${orderId}', 'ekart');" class="action-btn px-2.5 py-1.5 bg-amber-50 hover:bg-amber-600 text-amber-800 hover:text-white border border-amber-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+                                                <i class="fa-solid fa-truck-ramp-box text-[11px]"></i>
+                                                <span>Ekart</span>
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+
+                                <!-- Right side: Order Management Actions -->
+                                <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                                    <button onclick="closeCustomerHistoryModal(); openWhatsAppModal('${orderId}');" class="action-btn px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Open WhatsApp modal for this order">
+                                        <i class="fa-brands fa-whatsapp text-xs"></i>
+                                        <span>WhatsApp</span>
+                                    </button>
+
+                                    ${!isShipmentBooked && !c.isCancelled && c.isPendingPayment ? `
+                                        <button onclick="closeCustomerHistoryModal(); convertToCodPrepaidPrice('${orderId}');" class="action-btn px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+                                            <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+                                            <span>Shift to COD (₹${totalAmount})</span>
+                                        </button>
+                                    ` : ''}
+
+                                    ${!isShipmentBooked && !c.isCancelled && c.isCodUnconfirmed ? `
+                                        <button onclick="closeCustomerHistoryModal(); confirmCodOrder('${orderId}');" class="action-btn px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+                                            <i class="fa-solid fa-check text-[10px]"></i>
+                                            <span>Confirm COD</span>
+                                        </button>
+                                    ` : ''}
+
+                                    ${!isShipmentBooked && !c.isCancelled && c.isCod && !c.isOnlinePaid ? `
+                                        <button onclick="closeCustomerHistoryModal(); convertToPrepaidPaid('${orderId}');" class="action-btn px-2.5 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+                                            <i class="fa-solid fa-bolt text-[10px]"></i>
+                                            <span>Mark Paid</span>
+                                        </button>
+                                    ` : ''}
+
+                                    ${!c.isCancelled && !isShipmentBooked ? `
+                                        <button onclick="closeCustomerHistoryModal(); promptCancelOrder('${orderId}');" class="action-btn px-2.5 py-1.5 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1" title="Cancel this duplicate / unwanted order">
+                                            <i class="fa-solid fa-trash-can text-[11px]"></i>
+                                            <span>Cancel / Delete Order</span>
+                                        </button>
+                                    ` : ''}
+
+                                    <button onclick="closeCustomerHistoryModal(); openOrderDetail('${orderId}');" class="action-btn px-2.5 py-1.5 bg-slate-100 hover:bg-slate-900 text-slate-700 hover:text-white border border-slate-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1">
+                                        <i class="fa-solid fa-eye text-[11px]"></i>
+                                        <span>Full Details</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('customer-history-modal').classList.remove('hidden');
+        }
+
+        function closeCustomerHistoryModal() {
+            const m = document.getElementById('customer-history-modal');
+            if (m) m.classList.add('hidden');
+        }
+
+        const TAB_COLOR_CONFIG = {
+            all: {
+                inactive: ['border-slate-300', 'bg-slate-100', 'text-slate-800'],
+                active: ['border-slate-900', 'bg-slate-900', 'text-white'],
+                badgeInactive: ['bg-slate-200', 'text-slate-950', 'border', 'border-slate-300'],
+                badgeActive: ['bg-white', 'text-slate-900', 'shadow-xs', 'font-black']
+            },
+            prepaid: {
+                inactive: ['border-emerald-300', 'bg-emerald-50', 'text-emerald-800'],
+                active: ['border-emerald-600', 'bg-emerald-600', 'text-white'],
+                badgeInactive: ['bg-emerald-200', 'text-emerald-950', 'border', 'border-emerald-300'],
+                badgeActive: ['bg-white', 'text-emerald-800', 'shadow-xs', 'font-black']
+            },
+            pending: {
+                inactive: ['border-amber-300', 'bg-amber-50', 'text-amber-900'],
+                active: ['border-amber-500', 'bg-amber-500', 'text-white'],
+                badgeInactive: ['bg-amber-200', 'text-amber-950', 'border', 'border-amber-300'],
+                badgeActive: ['bg-white', 'text-amber-900', 'shadow-xs', 'font-black']
+            },
+            cod_unconfirmed: {
+                inactive: ['border-orange-300', 'bg-orange-50', 'text-orange-900'],
+                active: ['border-orange-500', 'bg-orange-500', 'text-white'],
+                badgeInactive: ['bg-orange-200', 'text-orange-950', 'border', 'border-orange-300'],
+                badgeActive: ['bg-white', 'text-orange-900', 'shadow-xs', 'font-black']
+            },
+            cod_confirmed: {
+                inactive: ['border-blue-300', 'bg-blue-50', 'text-blue-900'],
+                active: ['border-blue-600', 'bg-blue-600', 'text-white'],
+                badgeInactive: ['bg-blue-200', 'text-blue-950', 'border', 'border-blue-300'],
+                badgeActive: ['bg-white', 'text-blue-800', 'shadow-xs', 'font-black']
+            },
+            shipped: {
+                inactive: ['border-purple-300', 'bg-purple-50', 'text-purple-900'],
+                active: ['border-purple-600', 'bg-purple-600', 'text-white'],
+                badgeInactive: ['bg-purple-200', 'text-purple-950', 'border', 'border-purple-300'],
+                badgeActive: ['bg-white', 'text-purple-800', 'shadow-xs', 'font-black']
+            },
+            delivered: {
+                inactive: ['border-teal-300', 'bg-teal-50', 'text-teal-900'],
+                active: ['border-teal-700', 'bg-teal-700', 'text-white'],
+                badgeInactive: ['bg-teal-200', 'text-teal-950', 'border', 'border-teal-300'],
+                badgeActive: ['bg-white', 'text-teal-800', 'shadow-xs', 'font-black']
+            },
+            funnel: {
+                inactive: ['border-pink-300', 'bg-pink-50', 'text-pink-900'],
+                active: ['border-pink-600', 'bg-pink-600', 'text-white'],
+                badgeInactive: ['bg-pink-200', 'text-pink-950', 'border', 'border-pink-300'],
+                badgeActive: ['bg-white', 'text-pink-800', 'shadow-xs', 'font-black']
+            },
+            cancelled: {
+                inactive: ['border-rose-300', 'bg-rose-50', 'text-rose-900'],
+                active: ['border-rose-600', 'bg-rose-600', 'text-white'],
+                badgeInactive: ['bg-rose-200', 'text-rose-950', 'border', 'border-rose-300'],
+                badgeActive: ['bg-white', 'text-rose-800', 'shadow-xs', 'font-black']
+            }
+        };
+
+        function setOrderTab(tabName) {
+            activeOrderTab = tabName;
+            
+            Object.keys(TAB_COLOR_CONFIG).forEach(key => {
+                const btn = document.getElementById(`tab-btn-${key}`);
+                const badge = document.getElementById(`tab-count-${key}`);
+                if (!btn) return;
+                const cfg = TAB_COLOR_CONFIG[key];
+
+                if (key === tabName) {
+                    btn.classList.remove(...cfg.inactive);
+                    btn.classList.add(...cfg.active);
+                    if (badge) {
+                        badge.classList.remove(...cfg.badgeInactive);
+                        badge.classList.add(...cfg.badgeActive);
+                    }
+                } else {
+                    btn.classList.remove(...cfg.active);
+                    btn.classList.add(...cfg.inactive);
+                    if (badge) {
+                        badge.classList.remove(...cfg.badgeActive);
+                        badge.classList.add(...cfg.badgeInactive);
+                    }
+                }
+            });
+
+            renderOrdersTable(currentOrdersList);
+        }
+
+        function updateTabCounts(allOrders) {
+            const counts = {
+                all: allOrders.length,
+                prepaid: 0,
+                pending: 0,
+                cod_unconfirmed: 0,
+                cod_confirmed: 0,
+                shipped: 0,
+                delivered: 0,
+                funnel: 0,
+                cancelled: 0
+            };
+
+            for (const o of allOrders) {
+                const c = classifyOrder(o);
+                if (c.isCancelled) {
+                    counts.cancelled++;
+                } else {
+                    if (c.isOnlinePaid) counts.prepaid++;
+                    if (c.isPendingPayment) counts.pending++;
+                    if (c.isCodUnconfirmed) counts.cod_unconfirmed++;
+                    if (c.isCodConfirmed) counts.cod_confirmed++;
+                    if (c.isShipped && !c.isDelivered) counts.shipped++;
+                    if (c.isDelivered) counts.delivered++;
+                    if (c.isInFunnel) counts.funnel++;
+                }
+            }
+
+            const elAll = document.getElementById('tab-count-all');
+            const elPrepaid = document.getElementById('tab-count-prepaid');
+            const elPending = document.getElementById('tab-count-pending');
+            const elCodUn = document.getElementById('tab-count-cod_unconfirmed');
+            const elCodConf = document.getElementById('tab-count-cod_confirmed');
+            const elShipped = document.getElementById('tab-count-shipped');
+            const elDelivered = document.getElementById('tab-count-delivered');
+            const elFunnel = document.getElementById('tab-count-funnel');
+            const elCancelled = document.getElementById('tab-count-cancelled');
+
+            if (elAll) elAll.textContent = counts.all;
+            if (elPrepaid) elPrepaid.textContent = counts.prepaid;
+            if (elPending) elPending.textContent = counts.pending;
+            if (elCodUn) elCodUn.textContent = counts.cod_unconfirmed;
+            if (elCodConf) elCodConf.textContent = counts.cod_confirmed;
+            if (elShipped) elShipped.textContent = counts.shipped;
+            if (elDelivered) elDelivered.textContent = counts.delivered;
+            if (elFunnel) elFunnel.textContent = counts.funnel;
+            if (elCancelled) elCancelled.textContent = counts.cancelled;
+        }
+
+        // Render Table Rows (Desktop) & Cards (Mobile)
         function renderOrdersTable(orders, summary) {
             const tbody = document.getElementById('orders-table-body');
+            const mobileContainer = document.getElementById('orders-mobile-container');
             const countSummary = document.getElementById('table-count-summary');
             const revSummary = document.getElementById('table-revenue-summary');
             const deliveredSummary = document.getElementById('table-delivered-summary');
@@ -1538,13 +2189,36 @@
 
             if (!tbody) return;
 
+            // 1. Update tab counts from complete current list
+            updateTabCounts(currentOrdersList || orders);
+
+            // 1b. Build customer multi-order history map
+            buildCustomerHistoryMap(currentOrdersList || orders);
+
+            // 2. Filter orders by active tab
+            let displayOrders = orders || [];
+            if (activeOrderTab !== 'all') {
+                displayOrders = displayOrders.filter(o => {
+                    const c = classifyOrder(o);
+                    if (activeOrderTab === 'prepaid') return c.isOnlinePaid && !c.isCancelled;
+                    if (activeOrderTab === 'pending') return c.isPendingPayment;
+                    if (activeOrderTab === 'cod_unconfirmed') return c.isCodUnconfirmed;
+                    if (activeOrderTab === 'cod_confirmed') return c.isCodConfirmed;
+                    if (activeOrderTab === 'shipped') return c.isShipped && !c.isDelivered && !c.isCancelled;
+                    if (activeOrderTab === 'delivered') return c.isDelivered;
+                    if (activeOrderTab === 'funnel') return c.isInFunnel;
+                    if (activeOrderTab === 'cancelled') return c.isCancelled;
+                    return true;
+                });
+            }
+
             // Calculate live totals from list
             let totalRev = 0;
             let deliveredRev = 0;
             let totalUnits = 0;
-            for (const o of orders) {
+            for (const o of displayOrders) {
                 const isCancelled = (o.status || '').toUpperCase() === 'CANCELLED';
-                const total = o.pricing?.total || 0;
+                const total = o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0) || 0;
                 if (!isCancelled) {
                     totalRev += total;
                     if ((o.status || '').toUpperCase() === 'DELIVERED') {
@@ -1556,141 +2230,104 @@
                 }
             }
 
-            if (summary && summary.filteredRevenue !== undefined) {
+            if (summary && summary.filteredRevenue !== undefined && activeOrderTab === 'all') {
                 totalRev = summary.filteredRevenue;
                 deliveredRev = summary.filteredDeliveredRevenue || deliveredRev;
                 totalUnits = summary.filteredItemsCount;
             }
 
-            if (countSummary) countSummary.textContent = `Showing ${orders.length} ${orders.length === 1 ? 'order' : 'orders'}`;
+            if (countSummary) countSummary.textContent = `Showing ${displayOrders.length} ${displayOrders.length === 1 ? 'order' : 'orders'}`;
             if (revSummary) revSummary.textContent = `Filtered Booked: Rs. ${totalRev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
             if (deliveredSummary) deliveredSummary.textContent = `Delivered: Rs. ${deliveredRev.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
             if (itemsSummary) itemsSummary.textContent = `${totalUnits} Total Units`;
 
-            if (orders.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="text-center py-16 text-slate-400">
-                            <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-xl mx-auto mb-2 border border-slate-200">
-                                <i class="fa-solid fa-box-open"></i>
-                            </div>
-                            <div class="text-xs font-bold text-slate-600">No matching orders found</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">Try clearing your filters or selecting a wider date range</div>
-                        </td>
-                    </tr>
+            if (displayOrders.length === 0) {
+                const emptyHtml = `
+                    <div class="text-center py-12 text-slate-400">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-xl mx-auto mb-2 border border-slate-200">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <div class="text-xs font-bold text-slate-600">No matching orders found in this tab</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Try choosing "All Orders" or selecting a wider date range</div>
+                    </div>
                 `;
+                tbody.innerHTML = `<tr><td colspan="8">${emptyHtml}</td></tr>`;
+                if (mobileContainer) mobileContainer.innerHTML = emptyHtml;
                 return;
             }
 
-            tbody.innerHTML = orders.map(order => {
+            // 3. Render Desktop Rows
+            tbody.innerHTML = displayOrders.map(order => {
+                const c = classifyOrder(order);
                 const orderId = order.orderId || 'N/A';
                 const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
                 const customerName = (order.customer && order.customer.name) || 'Customer';
                 const customerPhone = (order.customer && order.customer.phone) || '-';
                 const customerCity = (order.customer && order.customer.city) || '';
                 const customerPincode = (order.customer && order.customer.pincode) || '';
-                const itemsCount = (order.items || []).reduce((s, i) => s + (i.quantity || 1), 0);
-                const total = order.pricing ? `Rs. ${parseFloat(order.pricing.total).toFixed(2)}` : 'Rs. 0.00';
+                const totalAmount = Math.round(order.pricing?.total || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+                const total = `Rs. ${totalAmount.toFixed(2)}`;
                 
                 const LOCAL_PINCODES = ['421305', '421302', '421308'];
                 const isNearbyLocation = LOCAL_PINCODES.includes(String(customerPincode).trim()) || Boolean(order.isLocalDelivery);
 
-                // Robust Payment Method & COD Detection
-                const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
-                const hasCodCharge = (order.pricing?.codCharge || 0) > 0;
-                const hasCodEvent = (order.events || []).some(e => (e.event || '').includes('COD'));
-                const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
+                const customerPhoneClean = (customerPhone || '').replace(/\D/g, '').slice(-10);
+                const historyInfo = analyzeCustomerHistory(customerPhoneClean, currentOrdersList || orders);
 
-                const paymentStatus = ((order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING')).toUpperCase();
-                const shippingStatus = ((order.shipping && order.shipping.status) || 'NOT_BOOKED').toUpperCase();
-                const awb = order.shipping && order.shipping.awb;
-                const courierName = order.shipping && order.shipping.courierName;
-                const status = (order.status || 'PENDING').toUpperCase();
-                const isDelivered = status === 'DELIVERED';
-                const isCodOtpPending = isCod && (status === 'OTP_NOT_VERIFIED' || paymentStatus === 'OTP_NOT_VERIFIED' || shippingStatus === 'OTP_NOT_VERIFIED');
-                const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || status === 'SHIPMENT_BOOKED' || status === 'SHIPPED' || status === 'DELIVERED' || status === 'IN_TRANSIT' || status === 'OUT_FOR_DELIVERY' || Boolean(order.payment && (order.payment.razorpayPaymentId || order.payment.status === 'CAPTURED')));
+                const courierProvider = (order.shipping?.provider || (order.shipping?.ekartOrderId ? 'ekart' : (order.shipping?.shiprocketOrderId ? 'shiprocket' : (order.shipping?.waybill ? 'delhivery' : '')))).toLowerCase();
+                const isShipmentBooked = c.isShipmentBooked;
+                const awb = c.awb || order.shipping?.ekartOrderId || '';
 
+                // Payment Badge
                 let paymentBadge = '';
-                let shippingDisplay = '';
-
-                const courierProvider = (order.shipping?.provider || (order.shipping?.shiprocketOrderId ? 'shiprocket' : (order.shipping?.waybill ? 'delhivery' : ''))).toLowerCase();
-                const isShipmentBooked = Boolean(awb || order.shipping?.shiprocketOrderId || order.shipping?.waybill);
-
-                if (isCod) {
-                    if (isCodOtpPending) {
-                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-900 border border-amber-300 flex items-center gap-1.5 shadow-2xs"><i class="fa-solid fa-clock text-amber-600 text-[10px]"></i> COD (OTP Pending)</span>`;
-                        shippingDisplay = `<div class="text-[10.5px] font-bold text-amber-700 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation text-amber-600"></i> OTP Not Entered</div>`;
-                    } else if (isDelivered) {
+                if (c.isCancelled) {
+                    paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600">Cancelled</span>`;
+                } else if (c.isInFunnel) {
+                    const foCount = order.funnelFollowupCount || 0;
+                    paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-pink-50 text-pink-900 border border-pink-300 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-filter-circle-dollar text-pink-600 text-[10px]"></i> Funnel (${foCount === 0 ? 'New' : (foCount === 1 ? '1st Followup' : '2nd Followup')})</span>`;
+                } else if (c.isCod) {
+                    if (c.isCodUnconfirmed) {
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-orange-50 text-orange-900 border border-orange-300 flex items-center gap-1.5 shadow-2xs"><i class="fa-solid fa-clock-rotate-left text-orange-600 text-[10px]"></i> COD (To Confirm)</span>`;
+                    } else if (c.isDelivered) {
                         paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hand-holding-dollar text-emerald-600 text-[10px]"></i> COD Settled</span>`;
-                        shippingDisplay = `
-                            <div class="font-mono text-xs font-bold text-emerald-800">${awb || 'Delivered'}</div>
-                            <div class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check text-[9.5px]"></i> Settled</div>
-                        `;
-                    } else if (isShipmentBooked || ['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT'].includes(status)) {
-                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-900 border border-amber-200/90 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hand-holding-dollar text-amber-600 text-[10px]"></i> COD</span>`;
-                        const cLabel = courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket';
-                        const cColor = courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-700';
-                        const cIcon = courierProvider === 'delhivery' ? 'fa-box text-rose-600' : 'fa-truck-fast text-indigo-600';
-                        shippingDisplay = `
-                            <div class="font-mono text-xs font-bold ${cColor}">${awb || 'Booked'}</div>
-                            <div class="text-[10.5px] text-slate-600 font-semibold flex items-center gap-1 mt-0.5"><i class="fa-solid ${cIcon} text-[9.5px]"></i> ${cLabel}</div>
-                        `;
-                    } else if (status === 'CANCELLED') {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600">COD (Cancelled)</span>`;
-                        shippingDisplay = `<span class="text-[10.5px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
-                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-900 border border-amber-200 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hand-holding-dollar text-amber-600 text-[10px]"></i> COD</span>`;
-                        if (isNearbyLocation) {
-                            shippingDisplay = `
-                                <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 flex items-center gap-1 w-max">
-                                    <i class="fa-solid fa-location-dot text-[9px] text-purple-600"></i> Nearby • Hand-Deliver
-                                </div>
-                                <div class="text-[9.5px] text-purple-600 font-medium mt-0.5">Free Delivery (PIN: ${customerPincode})</div>
-                            `;
-                        } else {
-                            shippingDisplay = `<span class="text-[10.5px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
-                        }
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-blue-50 text-blue-900 border border-blue-200 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-blue-600 text-[10px]"></i> COD Confirmed</span>`;
                     }
                 } else {
-                    // Online (Razorpay)
-                    if (isOnlinePaid || isDelivered) {
+                    if (c.isOnlinePaid) {
                         paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-bolt text-emerald-600 text-[10px]"></i> Online Paid</span>`;
-                        if (isShipmentBooked) {
-                            const cLabel = courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket';
-                            const cColor = courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-700';
-                            const cIcon = courierProvider === 'delhivery' ? 'fa-box text-rose-600' : 'fa-truck-fast text-indigo-600';
-                            shippingDisplay = `
-                                <div class="font-mono text-xs font-bold ${cColor}">${awb || 'Booked'}</div>
-                                <div class="text-[10.5px] text-slate-600 font-semibold flex items-center gap-1 mt-0.5"><i class="fa-solid ${cIcon} text-[9.5px]"></i> ${cLabel}</div>
-                            `;
-                        } else {
-                            if (isNearbyLocation) {
-                                shippingDisplay = `
-                                    <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 flex items-center gap-1 w-max">
-                                        <i class="fa-solid fa-location-dot text-[9px] text-purple-600"></i> Nearby • Hand-Deliver
-                                    </div>
-                                    <div class="text-[9.5px] text-purple-600 font-medium mt-0.5">Free Delivery (PIN: ${customerPincode})</div>
-                                `;
-                            } else {
-                                shippingDisplay = `<span class="text-[10.5px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 flex items-center gap-1 w-max"><i class="fa-solid fa-clock text-[9px]"></i> Ready for Courier</span>`;
-                            }
-                        }
-                    } else if (status === 'CANCELLED') {
-                        paymentBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600">Online (Cancelled)</span>`;
-                        shippingDisplay = `<span class="text-[10.5px] text-rose-700 font-semibold">Cancelled</span>`;
                     } else {
-                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hourglass-half text-amber-600 text-[10px]"></i> Payment Pending</span>`;
-                        shippingDisplay = `<span class="text-[10.5px] font-semibold text-slate-400">Awaiting Online Payment</span>`;
+                        paymentBadge = `<span class="px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-50 text-amber-900 border border-amber-300 shadow-2xs flex items-center gap-1.5"><i class="fa-solid fa-hourglass-half text-amber-600 text-[10px]"></i> Payment Pending</span>`;
                     }
                 }
 
-                // 1-Click Delivered Toggle Button Cell
+                // Shipping Display
+                let shippingDisplay = '';
+                if (c.isCancelled) {
+                    shippingDisplay = `<span class="text-[10.5px] text-rose-700 font-semibold">Cancelled</span>`;
+                } else if (isShipmentBooked) {
+                    const cLabel = courierProvider === 'delhivery' ? 'Delhivery' : (courierProvider === 'ekart' ? 'Ekart Logistics' : 'Shiprocket');
+                    const cColor = courierProvider === 'delhivery' ? 'text-purple-700' : (courierProvider === 'ekart' ? 'text-amber-800' : 'text-indigo-700');
+                    const cIcon = courierProvider === 'delhivery' ? 'fa-box text-purple-600' : (courierProvider === 'ekart' ? 'fa-truck-ramp-box text-amber-600' : 'fa-truck-fast text-indigo-600');
+                    shippingDisplay = `
+                        <div class="font-mono text-xs font-bold ${cColor}">${awb || 'Booked'}</div>
+                        <div class="text-[10.5px] text-slate-600 font-semibold flex items-center gap-1 mt-0.5"><i class="fa-solid ${cIcon} text-[9.5px]"></i> ${cLabel}</div>
+                    `;
+                } else if (isNearbyLocation) {
+                    shippingDisplay = `
+                        <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200 flex items-center gap-1 w-max">
+                            <i class="fa-solid fa-location-dot text-[9px] text-purple-600"></i> Nearby • Hand-Deliver
+                        </div>
+                    `;
+                } else {
+                    shippingDisplay = `<span class="text-[10.5px] font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200 flex items-center gap-1 w-max"><i class="fa-solid fa-box text-[9px]"></i> Ready for Dispatch</span>`;
+                }
+
+                // Delivered Action Cell
                 let deliveredActionCell = '';
-                if (status === 'CANCELLED') {
+                if (c.isCancelled) {
                     deliveredActionCell = `<span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">CANCELLED</span>`;
-                } else if (isCodOtpPending) {
-                    deliveredActionCell = `<span class="text-[10.5px] text-amber-800 font-bold bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">OTP Pending</span>`;
-                } else if (isDelivered) {
+                } else if (c.isDelivered) {
                     deliveredActionCell = `
                         <button onclick="toggleDeliveredStatus('${orderId}', false)" class="action-btn px-3 py-1.5 bg-emerald-600 hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer group" title="Click to Uncheck / Revert Delivery status">
                             <i class="fa-solid fa-circle-check text-xs group-hover:hidden"></i>
@@ -1709,10 +2346,10 @@
                 }
 
                 return `
-                    <tr class="border-b border-slate-200 hover:bg-slate-50/80 transition-colors ${isDelivered ? 'bg-emerald-50/15' : (isCodOtpPending ? 'bg-amber-50/15' : (isNearbyLocation ? 'bg-purple-50/15' : ''))}">
-                        <td class="py-3.5 px-4 font-mono font-bold text-indigo-600">
+                    <tr class="border-b border-slate-200 hover:bg-slate-50/80 transition-colors ${c.isDelivered ? 'bg-emerald-50/15' : (c.isCodUnconfirmed ? 'bg-orange-50/20' : (isNearbyLocation ? 'bg-purple-50/15' : ''))}">
+                        <td class="py-3 px-4 font-mono font-bold text-indigo-600">
                             <button onclick="openOrderDetail('${orderId}')" class="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-800 hover:underline font-mono font-black text-xs cursor-pointer group">
-                                <span>${orderId}</span>
+                                <span>#${orderId}</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
                             </button>
                             <div class="text-[10px] font-medium text-slate-400 font-sans mt-0.5 flex items-center gap-1">
@@ -1720,7 +2357,7 @@
                                 <span>${dateStr}</span>
                             </div>
                         </td>
-                        <td class="py-3.5 px-4">
+                        <td class="py-3 px-4">
                             <div class="flex items-start gap-2.5">
                                 <div class="w-8 h-8 rounded-xl ${isNearbyLocation ? 'bg-purple-100 text-purple-700 ring-1 ring-purple-200' : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200'} font-black text-xs flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                                     ${(customerName[0] || 'C').toUpperCase()}
@@ -1731,82 +2368,343 @@
                                         ${isNearbyLocation ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-100 text-purple-800 border border-purple-200 shadow-2xs">📍 Nearby</span>` : ''}
                                     </div>
                                     <div class="text-[11px] text-slate-500 font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
-                                        <span class="font-mono text-slate-600 font-semibold">${customerPhone}</span>
+                                        <a href="tel:${customerPhone}" class="font-mono text-indigo-600 hover:underline font-semibold flex items-center gap-1" title="Click to Call">
+                                            <i class="fa-solid fa-phone text-[9px]"></i> ${customerPhone}
+                                        </a>
                                         <span class="text-slate-300">•</span>
                                         <span>${customerCity}</span>
                                         <b class="text-slate-800">${customerPincode}</b>
                                     </div>
-                                    ${isNearbyLocation ? `<div class="text-[10px] font-bold text-purple-700 flex items-center gap-1 mt-1 bg-purple-50/80 px-2 py-0.5 rounded-md border border-purple-200/60 w-max"><i class="fa-solid fa-person-walking text-[9px]"></i> Free delivery • Hand-deliver order</div>` : ''}
+                                    ${historyInfo && historyInfo.total > 1 ? `
+                                        <div class="mt-1.5">
+                                            <button type="button" onclick="showCustomerHistoryModal('${customerPhoneClean}')" class="whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black ${historyInfo.badgeClass} shadow-sm transition-all cursor-pointer hover:scale-105 active:scale-95" title="Click to check and manage all ${historyInfo.total} orders from this customer">
+                                                <i class="fa-solid fa-triangle-exclamation text-[10px]"></i>
+                                                <span>${historyInfo.badgeLabel}</span>
+                                                <span class="ml-1 px-1.5 py-0.2 rounded bg-black/30 text-[9px] uppercase font-black tracking-wider">Click to Check ➔</span>
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                    ${isNearbyLocation ? `<div class="text-[10px] font-bold text-purple-700 flex items-center gap-1 mt-1 bg-purple-50/80 px-2 py-0.5 rounded-md border border-purple-200/60 w-max"><i class="fa-solid fa-person-walking text-[9px]"></i> Hand-deliver order</div>` : ''}
                                 </div>
                             </div>
                         </td>
-                        <td class="py-3.5 px-4">
+                        <td class="py-3 px-4">
                             ${renderAdminItemsCell(order)}
                         </td>
-                        <td class="py-3.5 px-4 font-black text-slate-900 text-xs sm:text-sm tracking-tight whitespace-nowrap">${total}</td>
-                        <td class="py-3.5 px-4">${paymentBadge}</td>
-                        <td class="py-3.5 px-4">
+                        <td class="py-3 px-4 font-black text-slate-900 text-xs sm:text-sm tracking-tight whitespace-nowrap">${total}</td>
+                        <td class="py-3 px-4">${paymentBadge}</td>
+                        <td class="py-3 px-4">
                             ${shippingDisplay}
                         </td>
-                        <td class="py-3.5 px-4">
+                        <td class="py-3 px-4">
                             ${deliveredActionCell}
                         </td>
-                        <td class="py-3.5 px-4 text-right">
-                            <div class="flex items-center justify-end gap-1.5 flex-wrap">
-                                <button onclick="openWhatsAppModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Send WhatsApp Message">
-                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i>
-                                    <span>WhatsApp</span>
-                                </button>
-                                ${!isShipmentBooked && status !== 'CANCELLED' ? `
-                                    <button onclick="moveOrderToCourier('${orderId}', 'shiprocket')" class="action-btn px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200/90 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Ship with Shiprocket">
-                                        <i class="fa-solid fa-truck-fast text-xs"></i>
-                                        <span>Shiprocket</span>
+                        <td class="py-3 px-4 text-right">
+                            <div class="flex flex-col items-end gap-1.5">
+                                
+                                <!-- ROW 1: Communication & View -->
+                                <div class="flex items-center gap-1 flex-wrap justify-end">
+                                    <button onclick="openWhatsAppModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Send WhatsApp Message">
+                                        <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i>
+                                        <span>WhatsApp</span>
                                     </button>
-                                    <button onclick="openDelhiveryDispatchModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200/90 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Ship with Delhivery">
-                                        <i class="fa-solid fa-box text-xs"></i>
-                                        <span>Delhivery</span>
-                                    </button>
-                                ` : ''}
-                                ${isShipmentBooked ? `
-                                    <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="action-btn px-2.5 py-1.5 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Download Shipping Label">
-                                        <i class="fa-solid fa-tag text-xs"></i>
-                                        <span>Label</span>
+                                    <a href="tel:${customerPhone}" class="action-btn px-2 py-1.5 bg-slate-50 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Call Customer">
+                                        <i class="fa-solid fa-phone text-slate-500 text-[10px]"></i>
                                     </a>
-                                    ${order.shipping?.trackingUrl ? `
-                                        <a href="${order.shipping.trackingUrl}" target="_blank" class="action-btn px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Track Shipment">
-                                            <i class="fa-solid fa-location-arrow text-xs"></i>
-                                            <span>Track</span>
-                                        </a>
-                                    ` : ''}
-                                    ${courierProvider === 'delhivery' ? `
-                                        <button onclick="openDelhiveryUpdateModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Update Delhivery shipment">
-                                            <i class="fa-solid fa-pen-to-square text-xs"></i>
-                                            <span>Update</span>
+                                    ${!c.isCancelled ? `
+                                        <button onclick="openChangeProductModal('${orderId}')" class="action-btn px-2 py-1.5 bg-indigo-50/60 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Change Customer Product / Language Kit">
+                                            <i class="fa-solid fa-repeat text-[10px]"></i>
                                         </button>
                                     ` : ''}
-                                ` : ''}
-                                ${status !== 'CANCELLED' ? `
-                                    <button onclick="openChangeProductModal('${orderId}')" class="action-btn px-2.5 py-1.5 bg-indigo-50/60 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Change Customer Product">
-                                        <i class="fa-solid fa-repeat text-xs"></i>
-                                        <span>Change</span>
+                                    <button onclick="openOrderDetail('${orderId}')" class="action-btn px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="View Full Order Details">
+                                        <span>View</span>
                                     </button>
-                                ` : ''}
-                                <button onclick="openOrderDetail('${orderId}')" class="action-btn px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-200/90 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="View Order Details">
-                                    <span>View</span>
-                                </button>
-                                ${status !== 'CANCELLED' ? `
-                                    <button onclick="promptCancelOrder('${orderId}')" class="action-btn px-2.5 py-1.5 bg-white hover:bg-amber-50 text-amber-700 hover:text-amber-900 border border-amber-200 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="Cancel this order">
-                                        <span>Cancel</span>
-                                    </button>
-                                ` : ''}
-                                <button onclick="promptPermanentDeleteOrder('${orderId}')" class="action-btn p-1.5 px-2 bg-white hover:bg-rose-50 text-rose-600 hover:text-rose-700 border border-rose-200/90 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs" title="Permanently delete order">
-                                    <i class="fa-solid fa-trash-can text-xs"></i>
-                                </button>
+                                </div>
+
+                                <!-- ROW 2: Courier Dispatch 3 Buttons (Side-by-Side) OR Moved Status Pill -->
+                                <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                                    ${!isShipmentBooked && !c.isCancelled ? `
+                                        <div class="inline-flex items-center gap-1 p-1 bg-slate-100/90 rounded-xl border border-slate-200 shadow-2xs">
+                                            <button onclick="moveOrderToCourier('${orderId}', 'shiprocket')" class="action-btn px-2 py-1 bg-white hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Ship with Shiprocket">
+                                                <i class="fa-solid fa-truck-fast text-[10px]"></i>
+                                                <span>Shiprocket</span>
+                                            </button>
+                                            <button onclick="openDelhiveryDispatchModal('${orderId}')" class="action-btn px-2 py-1 bg-white hover:bg-purple-600 text-purple-700 hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Ship with Delhivery">
+                                                <i class="fa-solid fa-box text-[10px]"></i>
+                                                <span>Delhivery</span>
+                                            </button>
+                                            <button onclick="moveOrderToEkart('${orderId}')" id="btn-ship-ekart-${orderId}" class="action-btn px-2 py-1 bg-white hover:bg-amber-600 text-amber-900 hover:text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Ship with Ekart Logistics">
+                                                <i class="fa-solid fa-truck-ramp-box text-[10px]"></i>
+                                                <span>Ekart</span>
+                                            </button>
+                                        </div>
+                                    ` : ''}
+
+                                    ${isShipmentBooked ? `
+                                        <div class="inline-flex items-center gap-1 flex-wrap justify-end">
+                                            ${courierProvider === 'ekart' ? `
+                                                <div class="px-2.5 py-1 bg-amber-50 border border-amber-300 text-amber-950 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[11px]"></i>
+                                                    <span>Moved to Ekart</span>
+                                                    <span class="text-[10px] text-amber-800 bg-amber-100 px-1.5 py-0.2 rounded font-semibold">Ready to Ship</span>
+                                                </div>
+                                            ` : (courierProvider === 'delhivery' ? `
+                                                <div class="px-2.5 py-1 bg-purple-50 border border-purple-300 text-purple-950 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[11px]"></i>
+                                                    <span>Moved to Delhivery</span>
+                                                    <span class="font-mono text-[10px] text-purple-800 bg-purple-100 px-1.5 py-0.2 rounded">${awb}</span>
+                                                </div>
+                                            ` : `
+                                                <div class="px-2.5 py-1 bg-indigo-50 border border-indigo-300 text-indigo-950 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                                                    <i class="fa-solid fa-circle-check text-emerald-600 text-[11px]"></i>
+                                                    <span>Moved to Shiprocket</span>
+                                                    <span class="font-mono text-[10px] text-indigo-800 bg-indigo-100 px-1.5 py-0.2 rounded">${awb || 'Booked'}</span>
+                                                </div>
+                                            `)}
+
+                                            ${courierProvider !== 'ekart' ? `
+                                                <a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="action-btn px-2 py-1 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs" title="Download Shipping Label">
+                                                    <i class="fa-solid fa-tag text-[10px]"></i>
+                                                    <span>Label</span>
+                                                </a>
+                                            ` : ''}
+
+                                            <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/orders' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="action-btn px-2 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs" title="Live Tracking">
+                                                <i class="fa-solid fa-location-arrow text-[10px]"></i>
+                                            </a>
+                                        </div>
+                                    ` : ''}
+                                </div>
+
+                                <!-- ROW 3: Quick Status & Workflow Conversions -->
+                                <div class="flex items-center gap-1 flex-wrap justify-end">
+                                    ${c.isInFunnel ? `
+                                        <button onclick="openFunnelWhatsAppModal('${orderId}', 1)" class="action-btn px-2.5 py-1 bg-pink-50 hover:bg-pink-600 text-pink-800 hover:text-white border border-pink-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs cursor-pointer" title="Send Follow-up 1 (Discount / Free Gift Offer)">
+                                            <i class="fa-solid fa-gift text-pink-600 text-[10px]"></i>
+                                            <span>Follow-up 1</span>
+                                        </button>
+                                        <button onclick="openFunnelWhatsAppModal('${orderId}', 2)" class="action-btn px-2.5 py-1 bg-pink-100 hover:bg-pink-700 text-pink-900 hover:text-white border border-pink-400 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs cursor-pointer" title="Send Follow-up 2 (Final Call Before Cancellation)">
+                                            <i class="fa-solid fa-bell text-pink-700 text-[10px]"></i>
+                                            <span>Follow-up 2</span>
+                                        </button>
+                                        <button onclick="convertToCodPrepaidPrice('${orderId}')" class="action-btn px-2 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs cursor-pointer" title="Shift to Cash on Delivery (COD)">
+                                            <i class="fa-solid fa-truck text-[10px]"></i>
+                                            <span>To COD</span>
+                                        </button>
+                                    ` : ''}
+
+                                    ${!isShipmentBooked && !c.isCancelled && !c.isInFunnel && c.isPendingPayment ? `
+                                        <button onclick="convertToCodPrepaidPrice('${orderId}')" class="action-btn px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs cursor-pointer" title="Shift lead to COD retaining exact prepaid offer price">
+                                            <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+                                            <span>Shift to COD (₹${totalAmount})</span>
+                                        </button>
+                                        <button onclick="moveOrderToFunnel('${orderId}')" class="action-btn px-2 py-1 bg-pink-50 hover:bg-pink-600 text-pink-800 hover:text-white border border-pink-300 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Move to WhatsApp Follow-up Funnel">
+                                            <i class="fa-solid fa-filter-circle-dollar text-pink-600 text-[10px]"></i>
+                                            <span>Funnel</span>
+                                        </button>
+                                    ` : ''}
+
+                                    ${!isShipmentBooked && !c.isCancelled && !c.isInFunnel && c.isCodUnconfirmed ? `
+                                        <button onclick="confirmCodOrder('${orderId}')" class="action-btn px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs cursor-pointer" title="Customer verified on Phone/WhatsApp - Mark as COD Confirmed">
+                                            <i class="fa-solid fa-check text-[10px]"></i>
+                                            <span>Confirm COD</span>
+                                        </button>
+                                        <button onclick="moveOrderToFunnel('${orderId}')" class="action-btn px-2 py-1 bg-pink-50 hover:bg-pink-600 text-pink-800 hover:text-white border border-pink-300 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Move to WhatsApp Follow-up Funnel">
+                                            <i class="fa-solid fa-filter-circle-dollar text-pink-600 text-[10px]"></i>
+                                            <span>Funnel</span>
+                                        </button>
+                                    ` : ''}
+
+                                    ${!isShipmentBooked && !c.isCancelled && c.isCod && !c.isOnlinePaid ? `
+                                        <button onclick="convertToPrepaidPaid('${orderId}')" class="action-btn px-2 py-1 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-200 rounded-xl text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs" title="Customer paid via UPI/QR - Mark as Paid Online">
+                                            <i class="fa-solid fa-bolt text-[10px]"></i>
+                                            <span>Mark Paid</span>
+                                        </button>
+                                    ` : ''}
+                                </div>
+
                             </div>
                         </td>
                     </tr>
                 `;
             }).join('');
+
+            // 4. Render Mobile Cards (for Smartphones < 768px)
+            if (mobileContainer) {
+                mobileContainer.innerHTML = displayOrders.map(order => {
+                    const c = classifyOrder(order);
+                    const orderId = order.orderId || 'N/A';
+                    const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '-';
+                    const customerName = (order.customer && order.customer.name) || 'Customer';
+                    const customerPhone = (order.customer && order.customer.phone) || '-';
+                    const customerCity = (order.customer && order.customer.city) || '';
+                    const customerPincode = (order.customer && order.customer.pincode) || '';
+                    const totalAmount = Math.round(order.pricing?.total || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+                    const total = `Rs. ${totalAmount}`;
+                    const itemsCount = (order.items || []).reduce((s, i) => s + (i.quantity || 1), 0);
+                    const itemsPreview = (order.items || []).map(i => `${i.name || i.title || 'Product'} (x${i.quantity || 1})`).join(', ');
+
+                    const LOCAL_PINCODES = ['421305', '421302', '421308'];
+                    const isNearbyLocation = LOCAL_PINCODES.includes(String(customerPincode).trim()) || Boolean(order.isLocalDelivery);
+                    const courierProvider = (order.shipping?.provider || (order.shipping?.ekartOrderId ? 'ekart' : (order.shipping?.shiprocketOrderId ? 'shiprocket' : (order.shipping?.waybill ? 'delhivery' : '')))).toLowerCase();
+                    const isShipmentBooked = c.isShipmentBooked;
+                    const awb = c.awb || order.shipping?.ekartOrderId || '';
+
+                    // Payment Badge for Mobile
+                    let paymentBadgeMobile = '';
+                    if (c.isCancelled) {
+                        paymentBadgeMobile = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700">Cancelled</span>`;
+                    } else if (c.isInFunnel) {
+                        const foCount = order.funnelFollowupCount || 0;
+                        paymentBadgeMobile = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-pink-100 text-pink-900 border border-pink-300">Funnel (${foCount === 0 ? 'New' : (foCount === 1 ? '1st FO' : '2nd FO')})</span>`;
+                    } else if (c.isCod) {
+                        paymentBadgeMobile = c.isCodUnconfirmed ? 
+                            `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-900">COD (To Confirm)</span>` : 
+                            `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-900">COD Confirmed</span>`;
+                    } else {
+                        paymentBadgeMobile = c.isOnlinePaid ? 
+                            `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Prepaid (Paid)</span>` : 
+                            `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">Payment Pending</span>`;
+                    }
+
+                    const customerPhoneCleanMobile = (customerPhone || '').replace(/\D/g, '').slice(-10);
+                    const historyInfoMobile = analyzeCustomerHistory(customerPhoneCleanMobile, currentOrdersList || orders);
+
+                    return `
+                        <div class="bg-white rounded-2xl border border-slate-200/90 p-3.5 shadow-xs space-y-3">
+                            <!-- Card Header: Order ID & Badges -->
+                            <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                                <div>
+                                    <button onclick="openOrderDetail('${orderId}')" class="font-mono font-black text-xs text-indigo-600 hover:underline flex items-center gap-1">
+                                        <span>#${orderId}</span>
+                                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                                    </button>
+                                    <div class="text-[10px] text-slate-400 mt-0.5">${dateStr}</div>
+                                </div>
+                                <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                                    ${paymentBadgeMobile}
+                                </div>
+                            </div>
+
+                            <!-- Customer Info & Quick Contact Buttons -->
+                            <div class="flex flex-col gap-2 bg-slate-50/80 p-2.5 rounded-xl border border-slate-200/80">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div>
+                                        <div class="font-bold text-slate-900 text-xs">${customerName}</div>
+                                        <div class="text-[11px] text-slate-500 mt-0.5">${customerCity} • <b>${customerPincode}</b></div>
+                                        ${isNearbyLocation ? '<div class="text-[9.5px] font-bold text-purple-700 mt-0.5">📍 Nearby • Hand Delivery</div>' : ''}
+                                    </div>
+                                    <div class="flex items-center gap-1.5 shrink-0">
+                                        <a href="tel:${customerPhone}" class="w-8 h-8 rounded-xl bg-slate-200/90 hover:bg-slate-300 text-slate-700 flex items-center justify-center text-xs shadow-2xs" title="Call Customer">
+                                            <i class="fa-solid fa-phone"></i>
+                                        </a>
+                                        <button onclick="openWhatsAppModal('${orderId}')" class="w-8 h-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center text-sm shadow-2xs cursor-pointer" title="WhatsApp Customer">
+                                            <i class="fa-brands fa-whatsapp"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                ${historyInfoMobile && historyInfoMobile.total > 1 ? `
+                                    <div class="pt-2 border-t border-slate-200/80">
+                                        <button type="button" onclick="showCustomerHistoryModal('${customerPhoneCleanMobile}')" class="w-full text-left inline-flex items-center justify-between gap-1.5 px-3 py-2 rounded-xl text-xs font-black ${historyInfoMobile.badgeClass} shadow-md cursor-pointer transition-all hover:scale-102 active:scale-98">
+                                            <span class="flex items-center gap-1.5">
+                                                <i class="fa-solid fa-triangle-exclamation text-[11px]"></i>
+                                                <span>${historyInfoMobile.badgeLabel}</span>
+                                            </span>
+                                            <span class="px-2 py-0.5 rounded bg-black/30 text-[10px] font-black tracking-wider uppercase">Check ➔</span>
+                                        </button>
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <!-- Items Summary & Total Amount -->
+                            <div class="flex items-center justify-between text-xs pt-0.5">
+                                <div class="text-slate-600 text-[11px] truncate max-w-[65%]">
+                                    <b class="text-slate-900">${itemsCount} Items:</b> ${itemsPreview}
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-black text-slate-900">${total}</div>
+                                </div>
+                            </div>
+
+                            <!-- Courier Dispatch Bar: 3 buttons side-by-side OR Moved status -->
+                            <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
+                                ${!isShipmentBooked && !c.isCancelled ? `
+                                    <div class="grid grid-cols-3 gap-1.5 p-1 bg-slate-100/90 rounded-xl border border-slate-200 shadow-2xs">
+                                        <button onclick="moveOrderToCourier('${orderId}', 'shiprocket')" class="py-1.5 px-1 bg-white hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-lg text-xs font-bold text-center flex items-center justify-center gap-1 shadow-2xs">
+                                            <i class="fa-solid fa-truck-fast text-[10px]"></i>
+                                            <span>Shiprocket</span>
+                                        </button>
+                                        <button onclick="openDelhiveryDispatchModal('${orderId}')" class="py-1.5 px-1 bg-white hover:bg-purple-600 text-purple-700 hover:text-white rounded-lg text-xs font-bold text-center flex items-center justify-center gap-1 shadow-2xs">
+                                            <i class="fa-solid fa-box text-[10px]"></i>
+                                            <span>Delhivery</span>
+                                        </button>
+                                        <button onclick="moveOrderToEkart('${orderId}')" id="mobile-btn-ship-ekart-${orderId}" class="py-1.5 px-1 bg-white hover:bg-amber-600 text-amber-900 hover:text-white rounded-lg text-xs font-bold text-center flex items-center justify-center gap-1 shadow-2xs">
+                                            <i class="fa-solid fa-truck-ramp-box text-[10px]"></i>
+                                            <span>Ekart</span>
+                                        </button>
+                                    </div>
+                                ` : ''}
+
+                                ${isShipmentBooked ? `
+                                    <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200">
+                                        <div class="flex items-center gap-1.5 text-xs font-bold ${courierProvider === 'ekart' ? 'text-amber-900' : (courierProvider === 'delhivery' ? 'text-purple-900' : 'text-indigo-900')}">
+                                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                                            <span>Moved to ${courierProvider === 'ekart' ? 'Ekart' : (courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket')}</span>
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            ${courierProvider !== 'ekart' ? `<a href="/api/shipments/${orderId}/label?redirect=1" target="_blank" class="px-2 py-1 bg-blue-50 text-blue-700 rounded-lg text-[11px] font-bold border border-blue-200">Label</a>` : ''}
+                                            <a href="${order.shipping?.trackingUrl || '#'}" target="_blank" class="px-2 py-1 bg-emerald-50 text-emerald-800 rounded-lg text-[11px] font-bold border border-emerald-300">Track</a>
+                                        </div>
+                                    </div>
+                                ` : ''}
+
+                                <!-- Quick Workflow Conversions & Details -->
+                                <div class="flex items-center justify-between gap-1.5 pt-1 flex-wrap">
+                                    <div class="flex items-center gap-1 flex-wrap">
+                                        ${c.isInFunnel ? `
+                                            <button onclick="openFunnelWhatsAppModal('${orderId}', 1)" class="px-2.5 py-1 bg-pink-50 text-pink-900 border border-pink-300 rounded-lg text-xs font-bold shadow-2xs">
+                                                🎁 Follow-up 1
+                                            </button>
+                                            <button onclick="openFunnelWhatsAppModal('${orderId}', 2)" class="px-2.5 py-1 bg-pink-100 text-pink-950 border border-pink-400 rounded-lg text-xs font-bold shadow-2xs">
+                                                ⚡ Follow-up 2
+                                            </button>
+                                            <button onclick="convertToCodPrepaidPrice('${orderId}')" class="px-2 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold shadow-2xs">
+                                                To COD
+                                            </button>
+                                        ` : ''}
+                                        ${!isShipmentBooked && !c.isCancelled && !c.isInFunnel && c.isPendingPayment ? `
+                                            <button onclick="convertToCodPrepaidPrice('${orderId}')" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold shadow-2xs">
+                                                Shift to COD (₹${totalAmount})
+                                            </button>
+                                            <button onclick="moveOrderToFunnel('${orderId}')" class="px-2 py-1 bg-pink-50 text-pink-900 border border-pink-300 rounded-lg text-xs font-bold shadow-2xs">
+                                                Funnel
+                                            </button>
+                                        ` : ''}
+                                        ${!isShipmentBooked && !c.isCancelled && !c.isInFunnel && c.isCodUnconfirmed ? `
+                                            <button onclick="confirmCodOrder('${orderId}')" class="px-2.5 py-1 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-2xs">
+                                                Confirm COD
+                                            </button>
+                                            <button onclick="moveOrderToFunnel('${orderId}')" class="px-2 py-1 bg-pink-50 text-pink-900 border border-pink-300 rounded-lg text-xs font-bold shadow-2xs">
+                                                Funnel
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <button onclick="openOrderDetail('${orderId}')" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-lg text-xs font-bold shadow-2xs">
+                                            Details
+                                        </button>
+                                        ${!c.isCancelled ? `
+                                            <button onclick="toggleDeliveredStatus('${orderId}', ${!c.isDelivered})" class="px-2.5 py-1 ${c.isDelivered ? 'bg-emerald-600 text-white' : 'bg-white text-slate-700 border border-slate-300'} rounded-lg text-xs font-bold shadow-2xs">
+                                                ${c.isDelivered ? '✓ Delivered' : 'Mark Delivered'}
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
         }
 
         // EXPORT TO EXCEL (.XLSX)
@@ -2050,6 +2948,7 @@
             
             const isCancelled = order.status === 'CANCELLED';
             const isDelivered = order.status === 'DELIVERED';
+            const isInFunnel = !isCancelled && (order.status === 'IN_FOLLOWUP_FUNNEL' || order.status === 'FUNNEL' || Boolean(order.inFollowupFunnel));
             const prov = (order.payment?.provider || order.paymentMethod || order.payment_method || '').toLowerCase();
             const hasCodCharge = (order.pricing?.codCharge || 0) > 0;
             const hasCodEvent = (order.events || []).some(e => (e.event || '').includes('COD'));
@@ -2058,27 +2957,62 @@
             const paymentStatus = ((order.payment && order.payment.status) || (isCod ? (isDelivered ? 'CAPTURED' : 'COD_PENDING') : 'PENDING')).toUpperCase();
             const awb = order.shipping && order.shipping.awb;
             const courierName = order.shipping && order.shipping.courierName;
-            const courierProvider = (order.shipping?.provider || (order.shipping?.shiprocketOrderId ? 'shiprocket' : (order.shipping?.waybill ? 'delhivery' : ''))).toLowerCase();
-            const isShipmentBooked = Boolean(awb || order.shipping?.shiprocketOrderId || order.shipping?.waybill);
+            const courierProvider = (order.shipping?.provider || (order.shipping?.ekartOrderId ? 'ekart' : (order.shipping?.shiprocketOrderId ? 'shiprocket' : (order.shipping?.waybill ? 'delhivery' : '')))).toLowerCase();
+            const isShipmentBooked = Boolean(awb || order.shipping?.shiprocketOrderId || order.shipping?.waybill || order.shipping?.ekartOrderId);
             const shippingStatus = ((order.shipping && order.shipping.status) || (isCod && !awb ? 'OTP_NOT_VERIFIED' : 'NOT_BOOKED')).toUpperCase();
             const status = (order.status || 'PENDING').toUpperCase();
-            const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || (order.payment && order.payment.razorpayPaymentId));
-            const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED';
+            const hasRazorpayPaymentId = Boolean(order.payment?.razorpayPaymentId);
+            const isCaptured = paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || Boolean(order.payment?.paidAt);
+            const isManualPrepaidVerified = prov === 'prepaid_verified';
+            const isOnlinePaid = !isCod && !isCancelled && !isInFunnel && (
+                (isCaptured || hasRazorpayPaymentId || isManualPrepaidVerified) &&
+                status !== 'PENDING_PAYMENT' &&
+                paymentStatus !== 'CREATED' &&
+                paymentStatus !== 'PENDING'
+            );
+            const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED' && !isInFunnel;
 
             // Set badge in header
             const badgeEl = document.getElementById('modal-order-badge');
             if (badgeEl) {
                 let badgeClass = 'bg-gray-100 text-gray-700';
                 if (status === 'CANCELLED') badgeClass = 'bg-rose-50 text-rose-700 border border-rose-200';
+                else if (isInFunnel) badgeClass = 'bg-pink-100 text-pink-900 border border-pink-300 font-black';
                 else if (isDelivered) badgeClass = 'bg-emerald-600 text-white font-black';
                 else if (['SHIPMENT_BOOKED', 'SHIPPED'].includes(status)) badgeClass = 'bg-blue-50 text-blue-700 border border-blue-200';
                 else if (status === 'PAYMENT_CAPTURED') badgeClass = 'bg-indigo-50 text-indigo-700 border border-indigo-200';
                 badgeEl.className = `px-2 py-0.5 rounded text-[10px] font-bold ${badgeClass}`;
-                badgeEl.textContent = status;
+                badgeEl.textContent = isInFunnel ? `FUNNEL (${order.funnelFollowupCount || 0} FO)` : status;
             }
 
             const isStandardFamilyBox = (order.items || []).length === 1 && ((order.items[0].sku === 'fati_ess_combo') || (order.items[0].id === 14));
             const isCustomKitOrder = (order.items || []).length > 1;
+
+            const customerPhoneCleanDetail = ((order.customer && order.customer.phone) || (order.shippingAddress && order.shippingAddress.phone) || order.phone || '').replace(/\D/g, '').slice(-10);
+            const historyInfoDetail = analyzeCustomerHistory(customerPhoneCleanDetail, currentOrdersList);
+
+            let customerHistoryBanner = '';
+            if (historyInfoDetail && historyInfoDetail.total > 1) {
+                customerHistoryBanner = `
+                    <div class="p-3 bg-gradient-to-r from-indigo-50 to-slate-50 border-2 border-indigo-300 rounded-xl mb-3 shadow-xs flex items-center justify-between gap-3 flex-wrap">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-sm shrink-0">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <div>
+                                <div class="font-black text-indigo-950 text-xs flex items-center gap-1.5 flex-wrap">
+                                    <span>🔁 REPEAT CUSTOMER (${historyInfoDetail.total} Orders Found)</span>
+                                    <span class="px-2 py-0.2 rounded-full text-[10px] font-bold ${historyInfoDetail.badgeClass}">${historyInfoDetail.badgeLabel}</span>
+                                </div>
+                                <div class="text-[11px] text-indigo-900/90 font-medium mt-0.5">${historyInfoDetail.patternDescription}</div>
+                            </div>
+                        </div>
+                        <button onclick="showCustomerHistoryModal('${customerPhoneCleanDetail}')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-all shadow-2xs whitespace-nowrap cursor-pointer">
+                            View Customer Journey
+                        </button>
+                    </div>
+                `;
+            }
 
             let kitHeaderBanner = '';
             if (isCustomKitOrder) {
@@ -2161,6 +3095,7 @@
 
             const modalBody = document.getElementById('modal-order-body');
             modalBody.innerHTML = `
+                ${customerHistoryBanner}
                 ${isNearbyLocation ? `
                     <div class="p-3 bg-purple-50 border border-purple-200 rounded-xl flex items-center justify-between gap-3">
                         <div class="flex items-center gap-2.5">
@@ -2238,18 +3173,18 @@
                 <div class="bg-slate-50/80 p-4 rounded-xl border border-slate-200/90 space-y-2.5 shadow-2xs">
                     <div class="font-bold text-[#111827] text-xs flex items-center justify-between">
                         <span class="flex items-center gap-1.5"><i class="fa-solid fa-truck text-indigo-600"></i> Shipment & Courier Details</span>
-                        ${isShipmentBooked ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${courierProvider === 'delhivery' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200'}">${courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket'} Booked</span>` : (isNearbyLocation ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">Nearby Location • Manual Delivery</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">Pending Courier Assignment</span>`)}
+                        ${isShipmentBooked ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${courierProvider === 'delhivery' ? 'bg-rose-50 text-rose-700 border border-rose-200' : (courierProvider === 'ekart' ? 'bg-amber-50 text-amber-900 border border-amber-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200')}">${courierProvider === 'delhivery' ? 'Delhivery' : (courierProvider === 'ekart' ? 'Ekart' : 'Shiprocket')} Booked</span>` : (isNearbyLocation ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200">Nearby Location • Manual Delivery</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">Pending Courier Assignment</span>`)}
                     </div>
                     <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div><b>Courier Provider:</b> ${courierProvider === 'delhivery' ? 'Delhivery Express' : (courierProvider === 'shiprocket' ? 'Shiprocket Partner' : (courierName || 'Unassigned'))}</div>
-                        <div><b>AWB / Waybill:</b> <span class="font-mono font-bold ${courierProvider === 'delhivery' ? 'text-rose-700' : 'text-indigo-600'}">${awb || 'Not Generated Yet'}</span></div>
-                        <div><b>Delivery Status:</b> <span class="font-bold ${isDelivered ? 'text-emerald-700' : 'text-gray-700'}">${status}</span></div>
-                        <div><b>Courier Reference:</b> #${order.shipping?.shiprocketOrderId || order.shipping?.waybill || 'None'}</div>
+                        <div><b>Courier Provider:</b> ${courierProvider === 'delhivery' ? 'Delhivery Express' : (courierProvider === 'ekart' ? 'Ekart Logistics' : (courierProvider === 'shiprocket' ? 'Shiprocket Partner' : (courierName || 'Unassigned')))}</div>
+                        <div><b>AWB / Reference:</b> <span class="font-mono font-bold ${courierProvider === 'delhivery' ? 'text-rose-700' : (courierProvider === 'ekart' ? 'text-amber-800' : 'text-indigo-600')}">${awb || order.shipping?.ekartOrderId || 'Not Generated Yet'}</span></div>
+                        <div><b>Delivery Status:</b> <span class="font-bold ${isDelivered ? 'text-emerald-700' : 'text-gray-700'}">${order.shipping?.subOrderStatus || status}</span></div>
+                        <div><b>Courier Reference:</b> #${order.shipping?.ekartOrderId || order.shipping?.shiprocketOrderId || order.shipping?.waybill || 'None'}</div>
                     </div>
                     ${isShipmentBooked && (order.shipping?.trackingUrl || awb) ? `
                         <div class="pt-1.5 border-t border-gray-200 text-xs flex items-center justify-between">
-                            <span><b>Live Tracking:</b> <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : `https://shiprocket.co/tracking/${awb}`)}" target="_blank" class="text-indigo-600 underline font-semibold ml-1"><i class="fa-solid fa-location-arrow text-[10px]"></i> View Live Tracking</a></span>
-                            <a href="/api/shipments/${order.orderId}/label?redirect=1" target="_blank" class="text-blue-600 underline font-semibold"><i class="fa-solid fa-tag text-[10px]"></i> Download Shipping Label</a>
+                            <span><b>Live Tracking:</b> <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/orders' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="text-indigo-600 underline font-semibold ml-1"><i class="fa-solid fa-location-arrow text-[10px]"></i> View Live Tracking</a></span>
+                            ${courierProvider !== 'ekart' ? `<a href="/api/shipments/${order.orderId}/label?redirect=1" target="_blank" class="text-blue-600 underline font-semibold"><i class="fa-solid fa-tag text-[10px]"></i> Download Shipping Label</a>` : ''}
                         </div>
                     ` : ''}
                 </div>
@@ -2279,16 +3214,55 @@
                     </button>
                 ` : ''}
 
-                <!-- Move to Courier buttons (Shiprocket or Delhivery) -->
+                <!-- Status Workflow Conversions (Shift to COD / Confirm COD / Mark Paid) -->
                 ${!isShipmentBooked && status !== 'CANCELLED' ? `
-                    <button onclick="moveOrderToCourier('${order.orderId}', 'shiprocket')" class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Shiprocket upon phone confirmation">
-                        <i class="fa-solid fa-truck-fast text-xs"></i>
-                        <span>Move to Shiprocket</span>
-                    </button>
-                    <button onclick="openDelhiveryDispatchModal('${order.orderId}')" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Move order to Delhivery (Select Surface or Express)">
-                        <i class="fa-solid fa-box text-xs"></i>
-                        <span>Move to Delhivery</span>
-                    </button>
+                    ${isOnlinePendingPayment ? `
+                        <button onclick="convertToCodPrepaidPrice('${order.orderId}')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Convert pending online payment to COD keeping exact prepaid offer rate">
+                            <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                            <span>Shift to COD (Keep Rs. ${Math.round(order.pricing?.total || 0)})</span>
+                        </button>
+                    ` : ''}
+
+                    ${isCod && (status === 'OTP_NOT_VERIFIED' || paymentStatus === 'OTP_NOT_VERIFIED' || paymentStatus === 'COD_PENDING') ? `
+                        <button onclick="confirmCodOrder('${order.orderId}')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs" title="Customer confirmed order on WhatsApp/Phone - Mark as COD Confirmed">
+                            <i class="fa-solid fa-check text-xs"></i>
+                            <span>Confirm COD Order</span>
+                        </button>
+                    ` : ''}
+
+                    ${isCod && !isOnlinePaid ? `
+                        <button onclick="convertToPrepaidPaid('${order.orderId}')" class="px-3.5 py-2 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border border-purple-300 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs" title="Customer transferred money via UPI / GPay - Mark as Paid Online">
+                            <i class="fa-solid fa-bolt text-xs"></i>
+                            <span>Mark Paid (Prepaid)</span>
+                        </button>
+                    ` : ''}
+                ` : ''}
+
+                <!-- Grouped Side-by-Side Courier Dispatch Buttons -->
+                ${!isShipmentBooked && status !== 'CANCELLED' ? `
+                    <div class="inline-flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="moveOrderToCourier('${order.orderId}', 'shiprocket')" class="px-3 py-1.5 bg-white hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all" title="Move order to Shiprocket upon phone confirmation">
+                            <i class="fa-solid fa-truck-fast text-xs"></i>
+                            <span>Shiprocket</span>
+                        </button>
+                        <button onclick="openDelhiveryDispatchModal('${order.orderId}')" class="px-3 py-1.5 bg-white hover:bg-purple-600 text-purple-700 hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all" title="Move order to Delhivery (Select Surface or Express)">
+                            <i class="fa-solid fa-box text-xs"></i>
+                            <span>Delhivery</span>
+                        </button>
+                        <button onclick="moveOrderToEkart('${order.orderId}')" id="modal-btn-ship-ekart" class="px-3 py-1.5 bg-white hover:bg-amber-600 text-amber-900 hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs transition-all" title="Move order to Ekart Logistics">
+                            <i class="fa-solid fa-truck-ramp-box text-xs"></i>
+                            <span>Ekart</span>
+                        </button>
+                    </div>
+                ` : ''}
+
+                <!-- Prominent Moved Status Pill when Shipment is Booked -->
+                ${isShipmentBooked ? `
+                    <div class="px-3.5 py-2 ${courierProvider === 'ekart' ? 'bg-amber-50 border-amber-300 text-amber-950' : (courierProvider === 'delhivery' ? 'bg-purple-50 border-purple-300 text-purple-950' : 'bg-indigo-50 border-indigo-300 text-indigo-950')} border rounded-lg text-xs font-bold flex items-center gap-2 shadow-2xs">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                        <span>Moved to ${courierProvider === 'ekart' ? 'Ekart Logistics' : (courierProvider === 'delhivery' ? 'Delhivery' : 'Shiprocket')}</span>
+                        <span class="font-mono text-[11px] ${courierProvider === 'ekart' ? 'text-amber-800' : (courierProvider === 'delhivery' ? 'text-purple-800' : 'text-indigo-800')} font-semibold">(${courierProvider === 'ekart' ? (order.shipping?.subOrderStatus || 'Ready to Ship') : awb})</span>
+                    </div>
                 ` : ''}
 
                 ${isShipmentBooked ? `
@@ -2317,14 +3291,20 @@
                 ` : ''}
 
                 ${!isCancelled ? `
-                    <button onclick="closeOrderDetailModal(); promptCancelOrder('${order.orderId}');" class="px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-lg text-xs font-semibold cursor-pointer">
-                        <i class="fa-solid fa-ban mr-1"></i> Cancel Order
+                    <button onclick="closeOrderDetailModal(); promptCancelOrder('${order.orderId}');" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-ban text-xs"></i> <span>Cancel Order</span>
                     </button>
-                ` : '<span class="text-xs text-amber-700 font-semibold bg-amber-50 px-2 py-1 rounded border border-amber-200">Order is Cancelled</span>'}
-
-                <button onclick="closeOrderDetailModal(); promptPermanentDeleteOrder('${order.orderId}');" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-lg text-xs font-semibold cursor-pointer flex items-center gap-1" title="Permanently delete from database">
-                    <i class="fa-solid fa-trash-can text-xs"></i> Permanent Delete
-                </button>
+                    ${!isInFunnel ? `
+                        <button onclick="closeOrderDetailModal(); moveOrderToFunnel('${order.orderId}');" class="px-3.5 py-2 bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-300 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all" title="Move order to Follow-up Funnel for automated WhatsApp retargeting">
+                            <i class="fa-solid fa-filter-circle-dollar text-xs text-pink-600"></i> <span>Move to Funnel</span>
+                        </button>
+                    ` : `
+                        <div class="inline-flex items-center gap-1.5 bg-pink-50 border border-pink-300 text-pink-900 px-3 py-1.5 rounded-xl text-xs font-bold">
+                            <i class="fa-solid fa-filter-circle-dollar text-pink-600"></i>
+                            <span>In Funnel (${order.funnelFollowupCount || 0} Follow-ups Sent)</span>
+                        </div>
+                    `}
+                ` : '<span class="text-xs text-rose-700 font-semibold bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">Order is Cancelled</span>'}
             `;
 
             document.getElementById('order-detail-modal').classList.remove('hidden');
@@ -2339,6 +3319,10 @@
 
         const DEFAULT_WHATSAPP_TEMPLATES = {
             order_accepted: `Assalamu Alaikum! your order from fatimacalligrapher27, {itemsText} has been accepted, your estimated delivery date is {estDeliveryDate}, Insha Allah! Jazakallah ✨\n\nkindly confirm your order and language of cards ✨\n\n*Order Summary:*\n📋 *Order ID:* #{orderId}\n💰 *Total Amount:* *{totalAmount}* ({paymentMethodText})\n📍 *Delivery Address:* {deliveryAddress}\n📞 *Helpline / Call to confirm:* +91 99703 47703`,
+
+            funnel_followup_1: `Assalamu Alaikum *{customerName}*! 🌸\n\nWe noticed you were interested in the *{itemsText}* (Order *#{orderId}*) at *Fatima Calligrapher*, but didn't complete your order.\n\n🎁 *Special Reminder:* Your package is reserved with us! If you confirm today, we will include a complimentary surprise gift & priority express dispatch for you ✨\n\n💰 *Total Amount:* *{totalAmount}*\n📍 *Delivery Address:* {deliveryAddress}\n\n👉 Reply *YES* to confirm and dispatch your parcel immediately 🚚\n👉 Or complete payment online: {orderUrl}\n📞 *Direct Helpline:* +91 99703 47703\n\nJazakallahu Khair,\n*Fatima Calligrapher Team* ✨`,
+
+            funnel_followup_2: `Assalamu Alaikum *{customerName}*! 🌸\n\nThis is a final reminder regarding your reserved order *#{orderId}* (*{itemsText}* - Total: *{totalAmount}*) at *Fatima Calligrapher*.\n\n⚠️ As our stock of Umrah Dua Kits is strictly limited, we can only hold your parcel for the next few hours before releasing it to the next waiting sister.\n\n💡 Would you like us to dispatch this to your address via Cash on Delivery (Pay when it arrives)?\n\n👉 Reply *CONFIRM* to dispatch right away!\n👉 Or reply *CANCEL* if you would like us to release the reservation.\n📞 *Helpline / Call:* +91 99703 47703\n\nJazakallahu Khair,\n*Fatima Calligrapher Team* 🌸`,
 
             payment_link: `Assalamu Alaikum *{customerName}*! 🌸\n\nYour order (*#{orderId}*) for *{itemsText}* (Total: *{totalAmount}*) at *Fatima Calligrapher* is reserved.\n\nPlease complete payment below to start immediate dispatch:\n👉 {orderUrl}\n\n📞 *Call / WhatsApp to confirm:* +91 99703 47703\n(Or call on this number to confirm your order)\n\nJazakallahu Khair,\n*Fatima Calligrapher Team* 🌸`,
 
@@ -2533,7 +3517,15 @@
                 const isCod = prov === 'cod' || prov === 'cash_on_delivery' || (order.pricing?.codCharge || 0) > 0;
                 const paymentStatus = ((order.payment && order.payment.status) || (isCod ? 'COD_PENDING' : 'PENDING')).toUpperCase();
                 const status = (order.status || 'PENDING').toUpperCase();
-                const isOnlinePaid = !isCod && (paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || (order.payment && order.payment.razorpayPaymentId));
+                const hasRazorpayPaymentId = Boolean(order.payment?.razorpayPaymentId);
+                const isCaptured = paymentStatus === 'CAPTURED' || status === 'PAYMENT_CAPTURED' || Boolean(order.payment?.paidAt);
+                const isManualPrepaidVerified = prov === 'prepaid_verified';
+                const isOnlinePaid = !isCod && (
+                    (isCaptured || hasRazorpayPaymentId || isManualPrepaidVerified) &&
+                    status !== 'PENDING_PAYMENT' &&
+                    paymentStatus !== 'CREATED' &&
+                    paymentStatus !== 'PENDING'
+                );
                 const isOnlinePendingPayment = !isCod && !isOnlinePaid && status !== 'CANCELLED';
 
                 if (isOnlinePendingPayment) {
@@ -2660,6 +3652,11 @@
 
                 const result = await response.json();
                 if (response.ok && result.success) {
+                    if (currentWhatsAppTemplate === 'funnel_followup_1') {
+                        recordFunnelFollowup(currentWhatsAppOrderId, 1);
+                    } else if (currentWhatsAppTemplate === 'funnel_followup_2') {
+                        recordFunnelFollowup(currentWhatsAppOrderId, 2);
+                    }
                     if (btn) {
                         btn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Message Sent!</span>`;
                         btn.className = 'px-4 py-2 bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md cursor-default';
@@ -2689,6 +3686,11 @@
             const cleanPhone = phoneRaw.replace(/\D/g, '');
             const message = document.getElementById('wa-message-textarea').value.trim();
             if (cleanPhone) {
+                if (currentWhatsAppTemplate === 'funnel_followup_1') {
+                    recordFunnelFollowup(currentWhatsAppOrderId, 1);
+                } else if (currentWhatsAppTemplate === 'funnel_followup_2') {
+                    recordFunnelFollowup(currentWhatsAppOrderId, 2);
+                }
                 window.open(`https://wa.me/91${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
             }
         }
@@ -2966,6 +3968,178 @@
 
         function moveOrderToDelhivery(orderId) {
             return openDelhiveryDispatchModal(orderId);
+        }
+
+        // ==========================================
+        // EKART LOGISTICS DISPATCH SYSTEM
+        // ==========================================
+        async function moveOrderToEkart(orderId) {
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            const customerName = order?.customer?.name || 'Customer';
+            const prov = (order?.payment?.provider || order?.paymentMethod || '').toLowerCase();
+            const isAlreadyPaid = prov === 'razorpay' && order?.payment?.status === 'CAPTURED';
+            const total = Math.round(order?.pricing?.total || (order?.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+            const payTypeInfo = isAlreadyPaid ? 'Prepaid (Paid Online)' : `Cash on Delivery (COD: Rs. ${total} - Prepaid Discount Retained)`;
+
+            const confirmed = confirm(`📦 Move Order #${orderId} (${customerName}) to Ekart Logistics?\n\n💰 Collection Amount: Rs. ${total}\n💳 Payment Mode: ${payTypeInfo}\n\nThis will send the order to your Ekart Elite account as 'Ready to Ship'.`);
+            if (!confirmed) return;
+
+            // Target buttons for loading state
+            const tableBtn = document.getElementById(`btn-ship-ekart-${orderId}`);
+            const modalBtn = document.getElementById('modal-btn-ship-ekart');
+            const originalTableHtml = tableBtn ? tableBtn.innerHTML : '';
+            const originalModalHtml = modalBtn ? modalBtn.innerHTML : '';
+
+            if (tableBtn) {
+                tableBtn.disabled = true;
+                tableBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Moving...</span>`;
+            }
+            if (modalBtn) {
+                modalBtn.disabled = true;
+                modalBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Moving to Ekart...</span>`;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/move-to-ekart`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({
+                        courier: 'ekart',
+                        convertToCod: !isAlreadyPaid
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    const ekartId = result.data?.shipping?.ekartOrderId || result.data?.shipping?.awb || 'Created';
+                    const subStatus = result.data?.shipping?.subOrderStatus || 'Ready to Ship';
+                    alert(`✅ Order #${orderId} successfully moved to Ekart Logistics!\n\n📦 Ekart ID: ${ekartId}\n📋 Status: ${subStatus}\n\nThe order is now marked as Moved to Ekart and visible in your Ekart dashboard.`);
+                    closeOrderDetailModal();
+                    await loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Failed to move order to Ekart.');
+                }
+            } catch (err) {
+                console.error('Move to Ekart Error:', err);
+                alert(`❌ Failed to move order to Ekart:\n${err.message}`);
+                if (tableBtn) {
+                    tableBtn.disabled = false;
+                    tableBtn.innerHTML = originalTableHtml;
+                }
+                if (modalBtn) {
+                    modalBtn.disabled = false;
+                    modalBtn.innerHTML = originalModalHtml;
+                }
+            }
+        }
+
+        // ==========================================
+        // CONVERT PENDING PAYMENT LEAD TO COD (KEEP PREPAID OFFER PRICE)
+        // ==========================================
+        async function convertToCodPrepaidPrice(orderId) {
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            const customerName = order?.customer?.name || 'Customer';
+            const total = Math.round(order?.pricing?.total || (order?.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+
+            const confirmed = confirm(`🔄 Convert Order #${orderId} (${customerName}) to Cash on Delivery (COD)?\n\n💰 Customer will pay the exact Prepaid Offer Price: Rs. ${total}\n(COD handling fee is set to Rs. 0 so customer keeps their discount!)\n\nThis will mark the order ready for courier shipping.`);
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/convert-to-cod`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert(`✅ Order #${orderId} shifted to COD at Prepaid Price Rs. ${total}!\n\nYou can now ship it directly via Ekart, Delhivery, or Shiprocket.`);
+                    closeOrderDetailModal();
+                    await loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Failed to convert order to COD.');
+                }
+            } catch (err) {
+                console.error('Convert to COD Error:', err);
+                alert(`❌ Failed to convert order to COD:\n${err.message}`);
+            }
+        }
+
+        // ==========================================
+        // CONFIRM COD ORDER (UPON PHONE/WHATSAPP VERIFICATION)
+        // ==========================================
+        async function confirmCodOrder(orderId) {
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            const customerName = order?.customer?.name || 'Customer';
+            const total = Math.round(order?.pricing?.total || (order?.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+
+            const confirmed = confirm(`✓ Confirm COD Order #${orderId} (${customerName})?\n\n💰 Collection Amount: Rs. ${total}\n\nThis marks the order as 'COD Confirmed' and ready for courier shipping.`);
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/confirm-cod`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    }
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert(`✅ Order #${orderId} COD confirmed successfully!\n\nYou can now ship it directly via Shiprocket, Delhivery, or Ekart.`);
+                    closeOrderDetailModal();
+                    await loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Failed to confirm COD.');
+                }
+            } catch (err) {
+                console.error('Confirm COD Error:', err);
+                alert(`❌ Failed to confirm COD order:\n${err.message}`);
+            }
+        }
+
+        // ==========================================
+        // CONVERT ORDER TO PREPAID / PAID ONLINE (UPI / DIRECT)
+        // ==========================================
+        async function convertToPrepaidPaid(orderId) {
+            const order = currentOrdersList.find(o => o.orderId === orderId);
+            const customerName = order?.customer?.name || 'Customer';
+            const total = Math.round(order?.pricing?.total || (order?.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
+
+            const utr = prompt(`⚡ Mark Order #${orderId} (${customerName}) as PAID ONLINE (Prepaid)?\n\nAmount: Rs. ${total}\n\nEnter UPI / Bank Reference / UTR Number (or leave blank if verified):`, '');
+            if (utr === null) return; // User cancelled prompt
+
+            try {
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/convert-to-prepaid`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({
+                        utr: utr.trim(),
+                        notes: 'Payment verified and shifted to Prepaid by Admin'
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert(`✅ Order #${orderId} marked as PAID (Prepaid)!\n\nThis order is now verified online payment and ready for dispatch.`);
+                    closeOrderDetailModal();
+                    await loadOrdersAndStats();
+                } else {
+                    throw new Error(result.error?.message || result.error || result.message || 'Failed to convert order to Prepaid.');
+                }
+            } catch (err) {
+                console.error('Convert to Prepaid Error:', err);
+                alert(`❌ Failed to mark order as Prepaid:\n${err.message}`);
+            }
         }
 
         // ==========================================
@@ -3280,92 +4454,68 @@
             }
         }
 
-        // Permanent Delete Order Flow
-        function promptPermanentDeleteOrder(orderId) {
-            pendingDeleteOrderId = orderId;
-            const modalOrderId = document.getElementById('delete-modal-order-id');
-            const input = document.getElementById('delete-confirm-input');
-            const btn = document.getElementById('delete-confirm-btn');
-            const hint = document.getElementById('delete-input-hint');
-
-            if (modalOrderId) modalOrderId.textContent = orderId;
-            if (input) {
-                input.value = '';
-                setTimeout(() => input.focus(), 150);
-            }
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>`;
-            }
-            if (hint) hint.classList.add('hidden');
-
-            document.getElementById('delete-confirm-modal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            pendingDeleteOrderId = null;
-            document.getElementById('delete-confirm-modal').classList.add('hidden');
-        }
-
-        function handleDeleteInputChange(value) {
-            const btn = document.getElementById('delete-confirm-btn');
-            const hint = document.getElementById('delete-input-hint');
-            const isMatch = (value || '').trim().toUpperCase() === 'DELETE';
-
-            if (btn) btn.disabled = !isMatch;
-            if (hint) {
-                if ((value || '').trim().length > 0 && !isMatch) {
-                    hint.classList.remove('hidden');
-                } else {
-                    hint.classList.add('hidden');
-                }
-            }
-        }
-
-        async function executePermanentDeleteOrder() {
-            if (!pendingDeleteOrderId || !currentAdminToken) return;
-
-            const input = document.getElementById('delete-confirm-input');
-            if (!input || input.value.trim().toUpperCase() !== 'DELETE') {
-                alert("Please type DELETE in capital letters to confirm permanent deletion.");
+        // Move Order to Follow-up Funnel (1-2 Automated WhatsApp Followups)
+        async function moveOrderToFunnel(orderId) {
+            if (!currentAdminToken) return;
+            if (!confirm(`Move Order #${orderId} to the Follow-up Funnel?\n\nThis will keep the order safe in your database and allow sending 1-2 targeted WhatsApp follow-ups with special offers & reminders.`)) {
                 return;
             }
 
-            const orderId = pendingDeleteOrderId;
-            const btn = document.getElementById('delete-confirm-btn');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i> <span>Deleting...</span>`;
-            }
-
             try {
-                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}`, {
-                    method: 'DELETE',
+                const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/move-to-funnel`, {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${currentAdminToken}`
                     },
-                    body: JSON.stringify({ confirmText: 'DELETE' })
+                    body: JSON.stringify({ notes: 'Moved from Admin Dashboard' })
                 });
 
                 const result = await response.json();
                 if (response.ok && result.success) {
-                    closeDeleteModal();
                     loadOrdersAndStats();
-                    alert(`Order #${orderId} has been permanently deleted.`);
-                } else {
-                    alert(result.error?.message || "Failed to delete order.");
-                    if (btn) {
-                        btn.disabled = false;
-                        btn.innerHTML = `<i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>`;
+                    if (confirm(`Order #${orderId} moved to Follow-up Funnel!\n\nWould you like to send Follow-up 1 (Free Gift & Express Delivery Reminder) via WhatsApp now?`)) {
+                        openFunnelWhatsAppModal(orderId, 1);
                     }
+                } else {
+                    alert(result.error?.message || "Failed to move order to funnel.");
                 }
             } catch (err) {
-                alert("Network error while deleting order: " + err.message);
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = `<i class="fa-solid fa-trash-can text-xs"></i> <span>Delete Forever</span>`;
-                }
+                alert("Network error: " + err.message);
+            }
+        }
+
+        // Send Funnel Follow-up (1 or 2)
+        function openFunnelWhatsAppModal(orderId, step) {
+            const templateKey = step === 2 ? 'funnel_followup_2' : 'funnel_followup_1';
+            openWhatsAppModal(orderId);
+            setTimeout(() => {
+                selectWhatsAppTemplate(templateKey);
+            }, 100);
+        }
+
+        // Record Funnel Follow-up Sent
+        async function recordFunnelFollowup(orderId, step) {
+            if (!currentAdminToken) return;
+            try {
+                await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/record-funnel-followup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentAdminToken}`
+                    },
+                    body: JSON.stringify({ followupStep: step })
+                });
+                loadOrdersAndStats();
+            } catch (err) {
+                console.warn("Could not record funnel follow-up:", err);
+            }
+        }
+
+        // Safe Fallback: In e-commerce, delete is replaced by Cancel / Move to Funnel
+        function promptPermanentDeleteOrder(orderId) {
+            if (confirm(`Order #${orderId} cannot be deleted to protect historical sales records & phone contacts.\n\nWould you like to CANCEL this order instead?`)) {
+                promptCancelOrder(orderId);
             }
         }
 

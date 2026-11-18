@@ -1,5 +1,6 @@
 const shiprocketService = require('./shiprocketService');
 const delhiveryService = require('./delhiveryService');
+const ekartService = require('./ekartService');
 const logger = require('../utils/logger');
 
 /**
@@ -16,6 +17,11 @@ const carriers = {
     id: 'delhivery',
     name: 'Delhivery',
     service: delhiveryService
+  },
+  ekart: {
+    id: 'ekart',
+    name: 'Ekart Logistics',
+    service: ekartService
   }
 };
 

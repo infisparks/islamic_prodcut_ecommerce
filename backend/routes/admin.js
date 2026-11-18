@@ -18,7 +18,7 @@ router.use(verifyAdminAuth);
 let cachedOrders = null;
 let lastOrdersFetchTime = 0;
 let inFlightFetchPromise = null;
-const CACHE_TTL_MS = 60000; // 60 seconds memory cache
+const CACHE_TTL_MS = 180000; // 3 minutes in-memory cache (invalidated instantly on order mutation or refresh=1)
 
 // Invalidate in-memory cache whenever an order is saved or updated
 if (typeof firebaseService.onOrderMutation === 'function') {
@@ -198,7 +198,16 @@ router.get('/orders', async (req, res, next) => {
       const hasCodCharge = (o.pricing?.codCharge || 0) > 0;
       const hasCodEvent = (o.events || []).some(e => (e.event || '').includes('COD'));
       const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
-      const isPaid = (o.payment?.status || '').toUpperCase() === 'CAPTURED' || Boolean(o.payment?.razorpayPaymentId) || (!isCod && ['PAYMENT_CAPTURED', 'SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED'].includes(orderStatus));
+      const paymentStatus = (o.payment?.status || '').toUpperCase();
+      const hasRazorpayPaymentId = Boolean(o.payment?.razorpayPaymentId);
+      const isCaptured = paymentStatus === 'CAPTURED' || orderStatus === 'PAYMENT_CAPTURED' || Boolean(o.payment?.paidAt);
+      const isManualPrepaidVerified = prov === 'prepaid_verified';
+      const isPaid = !isCod && !isCancelled && (
+        (isCaptured || hasRazorpayPaymentId || isManualPrepaidVerified) &&
+        orderStatus !== 'PENDING_PAYMENT' &&
+        paymentStatus !== 'CREATED' &&
+        paymentStatus !== 'PENDING'
+      );
 
       if (!isCancelled) {
         filteredRevenue += orderTotal;
@@ -287,9 +296,18 @@ router.get('/stats', async (req, res, next) => {
       const hasCodCharge = (o.pricing?.codCharge || 0) > 0;
       const hasCodEvent = (o.events || []).some(e => (e.event || '').includes('COD'));
       const isCod = prov === 'cod' || prov === 'cash_on_delivery' || hasCodCharge || hasCodEvent;
-      const isPaid = paymentStatus === 'CAPTURED' || Boolean(o.payment?.razorpayPaymentId) || (!isCod && ['PAYMENT_CAPTURED', 'SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 'DELIVERED'].includes(orderStatus));
-      const orderTotal = o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0);
       const isCancelled = orderStatus === 'CANCELLED';
+      const hasRazorpayPaymentId = Boolean(o.payment?.razorpayPaymentId);
+      const isCaptured = paymentStatus === 'CAPTURED' || orderStatus === 'PAYMENT_CAPTURED' || Boolean(o.payment?.paidAt);
+      const isManualPrepaidVerified = prov === 'prepaid_verified';
+      const isPaid = !isCod && !isCancelled && (
+        (isCaptured || hasRazorpayPaymentId || isManualPrepaidVerified) &&
+        orderStatus !== 'PENDING_PAYMENT' &&
+        paymentStatus !== 'CREATED' &&
+        paymentStatus !== 'PENDING'
+      );
+      const isPendingPayment = !isCod && !isPaid && !isCancelled;
+      const orderTotal = o.pricing?.total || (o.payment?.amountPaise ? o.payment.amountPaise / 100 : 0);
 
       if (!isCancelled) {
         totalRevenue += orderTotal;
@@ -307,8 +325,8 @@ router.get('/stats', async (req, res, next) => {
         }
       }
 
-      if (['PENDING_PAYMENT', 'CREATED'].includes(orderStatus)) pendingCount++;
-      if (['PAYMENT_CAPTURED', 'SHIPMENT_PENDING'].includes(orderStatus) || isPaid) paidCount++;
+      if (['PENDING_PAYMENT', 'CREATED'].includes(orderStatus) || isPendingPayment) pendingCount++;
+      if (isPaid) paidCount++;
       if (['SHIPMENT_BOOKED', 'SHIPPED', 'IN_TRANSIT', 'OUT_FOR_DELIVERY'].includes(orderStatus)) shippedCount++;
       if (orderStatus === 'DELIVERED') deliveredCount++;
       if (isCancelled) cancelledCount++;
@@ -601,6 +619,8 @@ const handleMoveOrderToCourier = async (req, res, next) => {
     if (!courier) {
       if (req.path.includes('move-to-delhivery')) {
         courier = 'delhivery';
+      } else if (req.path.includes('move-to-ekart')) {
+        courier = 'ekart';
       } else if (req.path.includes('move-to-shiprocket')) {
         courier = 'shiprocket';
       } else {
@@ -698,7 +718,282 @@ const handleMoveOrderToCourier = async (req, res, next) => {
 router.post('/orders/:orderId/ship', handleMoveOrderToCourier);
 router.post('/orders/:orderId/move-to-shiprocket', handleMoveOrderToCourier);
 router.post('/orders/:orderId/move-to-delhivery', handleMoveOrderToCourier);
+router.post('/orders/:orderId/move-to-ekart', handleMoveOrderToCourier);
 router.post('/orders/:orderId/retry-shipping', handleMoveOrderToCourier);
+
+/**
+ * POST /api/admin/orders/:orderId/convert-to-cod
+ * Convert pending online payment / lead to COD while retaining the exact prepaid offer price!
+ */
+router.post('/orders/:orderId/convert-to-cod', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+
+    // Strictly preserve the prepaid discounted price as requested by user
+    const prepaidTotal = Math.round(
+      order.pricing?.total ||
+      (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) ||
+      599
+    );
+
+    const events = order.events || [];
+    events.push({
+      event: 'ORDER_CONVERTED_TO_COD_PREPAID_RATE',
+      timestamp: now,
+      details: `Shifted from Pending Online Payment to Cash on Delivery (COD) by ${adminEmail}. Prepaid offer rate of Rs. ${prepaidTotal} strictly retained with Rs. 0 COD fee.`
+    });
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, {
+      paymentMethod: 'cod',
+      payment: {
+        ...(order.payment || {}),
+        provider: 'COD',
+        status: 'COD_CONFIRMED',
+        amountPaise: prepaidTotal * 100,
+        currency: 'INR',
+        paidAt: null
+      },
+      pricing: {
+        ...(order.pricing || {}),
+        codCharge: 0,
+        total: prepaidTotal
+      },
+      status: 'PAYMENT_CAPTURED', // Marks as ready for courier booking
+      events
+    });
+
+    logger.info('ORDER_CONVERTED_TO_COD_PREPAID_PRICE_SUCCESS', {
+      orderId,
+      prepaidTotal,
+      adminEmail
+    });
+
+    res.json({
+      success: true,
+      message: `Order #${orderId} shifted to COD at Prepaid Price (Rs. ${prepaidTotal})!`,
+      data: updatedOrder
+    });
+  } catch (err) {
+    logger.error('CONVERT_TO_COD_FAILED', { orderId: req.params.orderId, error: err.message });
+    next(err);
+  }
+});
+
+/**
+ * POST /api/admin/orders/:orderId/confirm-cod
+ * Mark unconfirmed COD order (or OTP pending) as Confirmed upon Phone / WhatsApp confirmation
+ */
+router.post('/orders/:orderId/confirm-cod', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+    const events = order.events || [];
+
+    events.push({
+      event: 'COD_ORDER_CONFIRMED_BY_ADMIN',
+      timestamp: now,
+      details: `COD Order confirmed upon customer WhatsApp/Phone verification by ${adminEmail}. Ready for courier dispatch.`
+    });
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, {
+      paymentMethod: 'cod',
+      payment: {
+        ...(order.payment || {}),
+        provider: 'COD',
+        status: 'COD_CONFIRMED'
+      },
+      status: 'PAYMENT_CAPTURED', // Ready for courier booking
+      events
+    });
+
+    logger.info('COD_ORDER_CONFIRMED_SUCCESS', { orderId, adminEmail });
+
+    res.json({
+      success: true,
+      message: `Order #${orderId} COD confirmed successfully! Ready for dispatch.`,
+      data: updatedOrder
+    });
+  } catch (err) {
+    logger.error('CONFIRM_COD_FAILED', { orderId: req.params.orderId, error: err.message });
+    next(err);
+  }
+});
+
+/**
+ * POST /api/admin/orders/:orderId/convert-to-prepaid
+ * Convert COD or Pending order to Paid Online (Prepaid via UPI / Direct transfer)
+ */
+router.post('/orders/:orderId/convert-to-prepaid', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { utr, notes } = req.body || {};
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+    const totalAmount = Math.round(
+      order.pricing?.total ||
+      (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) ||
+      599
+    );
+
+    const events = order.events || [];
+    events.push({
+      event: 'ORDER_MARKED_PREPAID_PAID_BY_ADMIN',
+      timestamp: now,
+      details: `Payment received & verified as Prepaid by ${adminEmail}.${utr ? ` UTR/Ref: ${utr}.` : ''} ${notes || ''}`
+    });
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, {
+      paymentMethod: 'razorpay',
+      payment: {
+        ...(order.payment || {}),
+        provider: 'PREPAID_VERIFIED',
+        status: 'CAPTURED',
+        amountPaise: totalAmount * 100,
+        currency: 'INR',
+        paidAt: now,
+        utr: utr || null,
+        adminVerificationNotes: notes || 'Verified by Admin'
+      },
+      pricing: {
+        ...(order.pricing || {}),
+        codCharge: 0
+      },
+      status: 'PAYMENT_CAPTURED', // Ready for courier booking
+      events
+    });
+
+    logger.info('ORDER_CONVERTED_TO_PREPAID_SUCCESS', { orderId, utr, adminEmail });
+
+    res.json({
+      success: true,
+      message: `Order #${orderId} marked as Paid (Prepaid)!`,
+      data: updatedOrder
+    });
+  } catch (err) {
+    logger.error('CONVERT_TO_PREPAID_FAILED', { orderId: req.params.orderId, error: err.message });
+    next(err);
+  }
+});
+
+/**
+ * POST /api/admin/orders/:orderId/move-to-funnel
+ * Move unconfirmed lead / abandoned order into WhatsApp Follow-up Funnel
+ */
+router.post('/orders/:orderId/move-to-funnel', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { notes } = req.body || {};
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+    const events = order.events || [];
+    events.push({
+      event: 'MOVED_TO_FOLLOWUP_FUNNEL',
+      timestamp: now,
+      details: `Moved to Follow-up Funnel by ${adminEmail}. ${notes || ''}`
+    });
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, {
+      status: 'IN_FOLLOWUP_FUNNEL',
+      inFollowupFunnel: true,
+      funnelMovedAt: now,
+      funnelFollowupCount: order.funnelFollowupCount || 0,
+      events
+    });
+
+    logger.info('ORDER_MOVED_TO_FUNNEL', { orderId, adminEmail });
+
+    res.json({
+      success: true,
+      message: `Order #${orderId} moved to Follow-up Funnel!`,
+      data: updatedOrder
+    });
+  } catch (err) {
+    logger.error('MOVE_TO_FUNNEL_FAILED', { orderId: req.params.orderId, error: err.message });
+    next(err);
+  }
+});
+
+/**
+ * POST /api/admin/orders/:orderId/record-funnel-followup
+ * Record that Follow-up 1 or Follow-up 2 was sent to customer
+ */
+router.post('/orders/:orderId/record-funnel-followup', async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { followupStep, notes } = req.body || {};
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Order was not found.' }
+      });
+    }
+
+    const now = new Date().toISOString();
+    const adminEmail = (req.adminUser && req.adminUser.email) || 'Administrator';
+    const currentCount = order.funnelFollowupCount || 0;
+    const newCount = followupStep ? Number(followupStep) : currentCount + 1;
+
+    const events = order.events || [];
+    events.push({
+      event: `FUNNEL_FOLLOWUP_${newCount}_SENT`,
+      timestamp: now,
+      details: `Follow-up ${newCount} sent by ${adminEmail}. ${notes || ''}`
+    });
+
+    const updatedOrder = await firebaseService.updateOrder(orderId, {
+      funnelFollowupCount: newCount,
+      lastFollowupSentAt: now,
+      events
+    });
+
+    logger.info('FUNNEL_FOLLOWUP_RECORDED', { orderId, newCount, adminEmail });
+
+    res.json({
+      success: true,
+      message: `Follow-up ${newCount} recorded for Order #${orderId}`,
+      data: updatedOrder
+    });
+  } catch (err) {
+    logger.error('RECORD_FUNNEL_FOLLOWUP_FAILED', { orderId: req.params.orderId, error: err.message });
+    next(err);
+  }
+});
 
 /**
  * POST /api/admin/orders/:orderId/delhivery/update

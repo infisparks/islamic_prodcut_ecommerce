@@ -38,6 +38,13 @@ const config = {
     baseUrl: 'https://track.delhivery.com'
   },
 
+  ekart: {
+    clientId: process.env.EKART_CLIENT_ID || 'EKART_6afc3182a8acd1b850f9897f',
+    username: process.env.EKART_USERNAME || 'fatmaansari027+api@gmail.com',
+    password: process.env.EKART_PASSWORD || '!9ZK%bujNT',
+    baseUrl: process.env.EKART_BASE_URL || 'https://app.elite.ekartlogistics.in'
+  },
+
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID || '',
     keySecret: process.env.RAZORPAY_KEY_SECRET || '',
