@@ -273,18 +273,18 @@
                     </div>
 
                     <!-- ATTRACTIVE ANNOUNCEMENT BANNER -->
-                    <div class="mb-3 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-emerald-50 border border-amber-300 shadow-2xs">
+                    <div class="mb-3 p-3 rounded-xl bg-gradient-to-r from-emerald-50 to-amber-50 border border-emerald-300 shadow-2xs">
                         <div class="flex items-start gap-2.5">
-                            <span class="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center shrink-0 text-xs">
+                            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs">
                                 <i class="fa-solid fa-bolt"></i>
                             </span>
                             <div class="text-xs">
                                 <div class="font-extrabold text-onyx flex items-center gap-1.5 flex-wrap">
-                                    <span>Special Offer: Pay Online & Save More!</span>
-                                    <span class="text-[9px] bg-emerald-600 text-white font-extrabold px-1.5 py-0.5 rounded uppercase">100% Free Delivery</span>
+                                    <span>Special Offer: Pay Online & Get 100% FREE Delivery!</span>
+                                    <span class="text-[9px] bg-emerald-600 text-white font-extrabold px-1.5 py-0.5 rounded uppercase">Save ₹100</span>
                                 </div>
                                 <p class="text-[11px] text-gray-700 mt-1 leading-snug">
-                                    Due to scheduled courier network updates, <b>Cash on Delivery (COD) is paused for today only</b>. Pay online securely with UPI / GPay / PhonePe / Cards to get <b>100% Free Shipping + Priority Express Dispatch!</b>
+                                    Pay online securely via UPI / GPay / PhonePe / Cards for <b>100% Free Shipping + Priority Dispatch</b>, or choose Cash on Delivery at your doorstep.
                                 </p>
                             </div>
                         </div>
@@ -328,24 +328,32 @@
                             </div>
                         </label>
 
-                        <!-- CASH ON DELIVERY (Temporarily Paused Today) -->
-                        <div onclick="showCodDisabledNotice()" 
-                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-gray-50/80 cursor-pointer opacity-70 hover:opacity-90 transition-all">
-                            <input type="radio" name="payment_method" value="cod" id="radio-cod" disabled class="mt-0.5 text-gray-400 accent-gray-400 w-4 h-4 cursor-not-allowed">
+                        <!-- CASH ON DELIVERY (Clean Secondary Option) -->
+                        <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" 
+                            class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all">
+                            <input type="radio" name="payment_method" value="cod" id="radio-cod" class="mt-0.5 text-onyx focus:ring-onyx accent-onyx w-4 h-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-1.5 flex-wrap">
-                                    <span class="font-bold text-xs sm:text-sm text-gray-500 line-through">
+                                    <span class="font-bold text-xs sm:text-sm text-onyx">
                                         Cash on Delivery (COD)
                                     </span>
-                                    <span class="text-[10px] font-extrabold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">
-                                        ⚠️ Temporarily Paused Today
+                                    <span class="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                                        Standard Dispatch
                                     </span>
                                 </div>
-                                <p class="text-[11px] text-amber-800 mt-1 font-medium">
-                                    COD unavailable for 24h due to courier network maintenance. Choose Online Payment above to order instantly & save on delivery!
+                                <p class="text-[11px] text-gray-500 mt-1">
+                                    Pay with cash upon delivery. Requires WhatsApp OTP verification.
                                 </p>
+                                <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
+                                    <span id="badge-cod-price" class="font-bold text-gray-700">
+                                        Pay Rs. 699.00 <span class="font-normal text-gray-500 text-[11px] ml-1">(Delivery: Rs. 100)</span>
+                                    </span>
+                                    <span class="text-[10px] font-medium text-gray-400 shrink-0">
+                                        Standard Delivery
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </label>
                     </div>
                 </div>
 
@@ -461,22 +469,38 @@
         </form>
     </main>
 
-    <!-- MOBILE STICKY BOTTOM CONFIRM BAR (100% Online Priority Bar) -->
-    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 p-2 px-3 z-40 shadow-[0_-6px_25px_rgba(0,0,0,0.08)]">
-        <div class="max-w-md mx-auto">
+    <!-- MOBILE STICKY BOTTOM DUAL CONFIRM BAR (High-Converting 60/40 Hero Online Bar) -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200 p-2 px-2.5 z-40 shadow-[0_-6px_25px_rgba(0,0,0,0.08)]">
+        <div class="grid grid-cols-5 gap-2 max-w-md mx-auto">
+            
+            <!-- Online Button (Left: 60% Width - Dominant Hero with Live Savings) -->
             <button type="button" onclick="submitWithPaymentMethod('razorpay')" 
-                class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer ring-2 ring-amber-400/30">
-                <div class="flex flex-col text-left leading-tight">
-                    <span class="font-black text-xs text-onyx tracking-tight flex items-center gap-1.5">
-                        <i class="fa-solid fa-bolt text-emerald-700 text-xs"></i> PAY ONLINE & CONFIRM
+                class="col-span-3 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30">
+                <div class="flex items-center justify-between w-full leading-none">
+                    <span class="font-black text-[11px] text-onyx tracking-tight flex items-center gap-1">
+                        <i class="fa-solid fa-bolt text-emerald-700 text-[10px]"></i> PAY ONLINE
                     </span>
-                    <span id="mobile-online-sub" class="text-[9.5px] text-onyx/80 font-bold mt-0.5">⚡ 100% Free Delivery • Instant Dispatch</span>
+                    <span id="mobile-online-savings-tag" class="bg-emerald-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase leading-none tracking-wide whitespace-nowrap">⚡ FREE DELIVERY</span>
                 </div>
-                <div class="flex flex-col items-end leading-tight">
-                    <span id="mobile-online-price" class="text-sm font-black text-onyx font-mono">Rs. 599.00</span>
-                    <span id="mobile-online-savings-tag" class="bg-emerald-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase leading-none tracking-wide whitespace-nowrap mt-0.5">⚡ FREE DELIVERY</span>
+                <div class="flex items-center justify-between w-full leading-none">
+                    <span id="mobile-online-sub" class="text-[8.5px] text-onyx/75 font-semibold">Save Rs. 100 vs COD</span>
+                    <span id="mobile-online-price" class="text-xs font-black text-onyx font-mono">Rs. 599.00</span>
                 </div>
             </button>
+
+            <!-- COD Button (Right: 40% Width - Clean Secondary Cash Option) -->
+            <button type="button" onclick="submitWithPaymentMethod('cod')" 
+                class="col-span-2 w-full flex flex-col justify-between px-2 py-1.5 rounded-xl bg-onyx hover:bg-black text-white shadow-2xs active:scale-[0.98] transition-all border border-gray-700/80 cursor-pointer h-[48px]">
+                <div class="flex items-center justify-between w-full leading-none">
+                    <span class="font-bold text-[10px] text-white tracking-tight">PAY COD</span>
+                    <span class="text-gray-400 text-[7.5px]">Doorstep</span>
+                </div>
+                <div class="flex items-center justify-between w-full leading-none">
+                    <span class="text-[8px] text-gray-400">Cash</span>
+                    <span id="mobile-cod-price" class="text-[10.5px] font-bold text-amber-300 font-mono">Rs. 699.00</span>
+                </div>
+            </button>
+
         </div>
     </div>
 
@@ -1262,7 +1286,7 @@
             }
             if (btnSubmitSub) {
                 if (selectedPaymentMethod === 'razorpay') {
-                    btnSubmitSub.innerHTML = `<span class="text-xs text-emerald-800 font-bold flex items-center justify-center gap-1.5"><i class="fa-solid fa-shield-halved text-emerald-600"></i> 100% Safe & Secure Encrypted UPI / Cards • Priority Express Dispatch</span>`;
+                    btnSubmitSub.innerHTML = `<span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">Or choose <b>Cash on Delivery</b>: Rs. ${codTotal.toFixed(2)} ${codShipping > 0 ? `(Delivery: Rs. ${codShipping})` : '(FREE Delivery)'}</span>`;
                 } else {
                     const savePart = totalPrepaidSavings > 0 ? ` & Save Rs. ${totalPrepaidSavings.toFixed(2)} (${offBreakdown})` : '';
                     btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online${savePart} • Pay Rs. ${onlineTotal.toFixed(2)}</span>`;
@@ -1501,34 +1525,33 @@
             renderCheckoutSummary();
         }
 
-        function showCodDisabledNotice() {
-            // Popup alert removed
-        }
-
-        // PAYMENT METHOD SELECTOR (ONLINE ONLY TODAY)
+        // PAYMENT METHOD SELECTOR
         function selectPaymentMethod(method) {
-            if (method === 'cod') {
-                showCodDisabledNotice();
-            }
-            selectedPaymentMethod = 'razorpay';
+            selectedPaymentMethod = (method === 'cod') ? 'cod' : 'razorpay';
             
             const radioCod = document.getElementById('radio-cod');
             const radioRzp = document.getElementById('radio-razorpay');
+            const labelCod = document.getElementById('payment-label-cod');
             const labelRzp = document.getElementById('payment-label-razorpay');
 
-            if (radioCod) radioCod.checked = false;
-            if (radioRzp) radioRzp.checked = true;
-            if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition-all shadow-2xs";
+            if (selectedPaymentMethod === 'cod') {
+                if (radioCod) radioCod.checked = true;
+                if (radioRzp) radioRzp.checked = false;
+                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-onyx bg-gray-50/80 cursor-pointer transition-all shadow-2xs";
+                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-emerald-50/20 cursor-pointer transition-all";
+            } else {
+                if (radioCod) radioCod.checked = false;
+                if (radioRzp) radioRzp.checked = true;
+                if (labelRzp) labelRzp.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition-all shadow-2xs";
+                if (labelCod) labelCod.className = "flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all";
+            }
 
             renderCheckoutSummary();
         }
 
         // QUICK SUBMIT WITH SPECIFIC PAYMENT METHOD
         function submitWithPaymentMethod(method) {
-            if (method === 'cod') {
-                showCodDisabledNotice();
-            }
-            selectPaymentMethod('razorpay');
+            selectPaymentMethod(method);
             const form = document.getElementById('checkout-form');
             if (form) form.requestSubmit();
         }
