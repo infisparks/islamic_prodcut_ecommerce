@@ -3,11 +3,16 @@ const admin = require('firebase-admin');
 const config = require('../config/env');
 const logger = require('../utils/logger');
 
-// Optional Admin email whitelist from environment (comma-separated)
-const adminEmails = (process.env.ADMIN_EMAILS || '')
-  .split(',')
-  .map(e => e.trim().toLowerCase())
-  .filter(Boolean);
+// Admin email whitelist from config / environment
+const getAdminEmails = () => {
+  if (Array.isArray(config.adminEmails) && config.adminEmails.length > 0) {
+    return config.adminEmails;
+  }
+  return (process.env.ADMIN_EMAILS || 'fatima@gmail.com,fatmaansari027@gmail.com,fatmaansari027+api@gmail.com,mkteams472@gmail.com,admin@fatimacalligrapher.com')
+    .split(',')
+    .map(e => e.trim().toLowerCase())
+    .filter(Boolean);
+};
 
 /**
  * Admin Authentication Middleware using Firebase Auth
@@ -80,8 +85,9 @@ async function verifyAdminAuth(req, res, next) {
       });
     }
 
-    // 3. If ADMIN_EMAILS whitelist is configured, enforce it
-    if (adminEmails.length > 0 && !adminEmails.includes(email)) {
+    // 3. Admin email whitelist enforcement
+    const allowedEmails = getAdminEmails();
+    if (allowedEmails.length > 0 && !allowedEmails.includes(email)) {
       logger.warn('ADMIN_ACCESS_DENIED_NON_WHITELISTED', { email });
       return res.status(403).json({
         success: false,

@@ -19,7 +19,7 @@ router.use(verifyAdminAuth);
 let cachedOrders = null;
 let lastOrdersFetchTime = 0;
 let inFlightFetchPromise = null;
-const CACHE_TTL_MS = 180000; // 3 minutes in-memory cache (invalidated instantly on order mutation or refresh=1)
+const CACHE_TTL_MS = 10000; // 10 seconds in-memory cache (fresh sync with Firebase for instant new orders)
 
 // Invalidate in-memory cache whenever an order is saved or updated
 if (typeof firebaseService.onOrderMutation === 'function') {
@@ -679,7 +679,7 @@ const handleMoveOrderToCourier = async (req, res, next) => {
     const shipmentDetails = await shippingService.bookShipment(order, courier, { shippingMode: mode });
     const now = new Date().toISOString();
     const events = order.events || [];
-    const carrierName = shipmentDetails.courierName || (courier === 'delhivery' ? `Delhivery ${mode}` : 'Shiprocket');
+    const carrierName = shipmentDetails.courierName || (courier === 'delhivery' ? `Delhivery ${mode}` : (courier === 'ekart' ? 'Ekart Logistics' : 'Shiprocket'));
 
     events.push({
       event: `SHIPMENT_MOVED_TO_${courier.toUpperCase()}_BY_ADMIN`,
@@ -697,6 +697,8 @@ const handleMoveOrderToCourier = async (req, res, next) => {
       status: 'SHIPMENT_BOOKED',
       events
     });
+
+    invalidateOrdersCache();
 
     // Send customer shipping confirmation WhatsApp message with tracking details
     whatsappService.sendShippingConfirmationWhatsApp(updatedOrder).catch(err => {

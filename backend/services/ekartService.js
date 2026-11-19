@@ -83,27 +83,30 @@ const ekartService = {
     const isAlreadyPaid = prov === 'razorpay' && order.payment?.status === 'CAPTURED';
     const isCod = options.convertToCod ? true : (!isAlreadyPaid || prov === 'cod');
 
-    // Customer info sanitization
-    const customer = order.customer || {};
-    const fullName = (customer.name || 'Customer').trim();
+    // Customer info sanitization (with multi-field fallbacks)
+    const customer = order.customer || order.shippingAddress || {};
+    const shippingAddr = order.shippingAddress || {};
+    const fullName = (customer.name || customer.fullName || shippingAddr.fullName || shippingAddr.name || 'Customer').trim();
     const nameParts = fullName.split(' ');
     const firstName = nameParts[0] || 'Customer';
     const lastName = nameParts.slice(1).join(' ') || '';
 
-    const cleanPhone = String(customer.phone || '').replace(/\D/g, '').slice(-10);
-    const rawPin = String(customer.pincode || '').replace(/\D/g, '').slice(0, 6);
+    const cleanPhone = String(customer.phone || customer.mobile || shippingAddr.phone || shippingAddr.mobile || '').replace(/\D/g, '').slice(-10);
+    const rawPin = String(customer.pincode || shippingAddr.pincode || '').replace(/\D/g, '').slice(0, 6);
     const intPincode = parseInt(rawPin, 10);
 
     if (!intPincode || rawPin.length !== 6) {
-      throw new Error(`Invalid 6-digit delivery pincode: ${customer.pincode}`);
+      throw new Error(`Invalid 6-digit delivery pincode: ${customer.pincode || shippingAddr.pincode}`);
     }
     if (!cleanPhone || cleanPhone.length !== 10) {
-      throw new Error(`Invalid 10-digit customer phone number: ${customer.phone}`);
+      throw new Error(`Invalid 10-digit customer phone number: ${customer.phone || shippingAddr.phone}`);
     }
 
-    const addressLine1 = customer.address1 || customer.addressLine1 || '';
-    const addressLine2 = customer.address2 || customer.addressLine2 || '';
+    const addressLine1 = customer.address1 || customer.address || customer.addressLine1 || shippingAddr.address1 || shippingAddr.address || shippingAddr.addressLine1 || '';
+    const addressLine2 = customer.address2 || customer.addressLine2 || shippingAddr.address2 || shippingAddr.addressLine2 || '';
     const fullAddress = [addressLine1, addressLine2].filter(Boolean).join(', ') || 'Address Provided on Checkout';
+    const city = customer.city || shippingAddr.city || 'City';
+    const state = customer.state || shippingAddr.state || 'State';
 
     // Pricing: Preserve the exact prepaid discounted price as requested!
     const totalAmount = Math.round(
@@ -129,8 +132,8 @@ const ekartService = {
         first_name: firstName,
         last_name: lastName,
         address_line: fullAddress,
-        city: customer.city || 'City',
-        state: customer.state || 'State',
+        city: city,
+        state: state,
         pincode: intPincode,
         mobile: cleanPhone
       },
@@ -186,7 +189,7 @@ const ekartService = {
         subOrderStatus: subOrderStatus,
         totalAmount: totalAmount,
         paymentMode: isCod ? 'COD' : 'Prepaid',
-        trackingUrl: 'https://app.elite.ekartlogistics.in/orders',
+        trackingUrl: subOrderId ? `https://app.elite.ekartlogistics.in/track/${encodeURIComponent(subOrderId)}` : 'https://app.elite.ekartlogistics.in/track',
         bookedAt: new Date().toISOString()
       };
     } catch (err) {

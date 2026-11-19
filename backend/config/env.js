@@ -13,6 +13,10 @@ const config = {
   paymentMode: process.env.PAYMENT_MODE || 'test',
   shiprocketMode: process.env.SHIPROCKET_MODE || 'test',
   corsOrigin: process.env.CORS_ORIGIN || '*',
+  adminEmails: (process.env.ADMIN_EMAILS || 'fatima@gmail.com,fatmaansari027@gmail.com,fatmaansari027+api@gmail.com,mkteams472@gmail.com,admin@fatimacalligrapher.com')
+    .split(',')
+    .map(e => e.trim().toLowerCase())
+    .filter(Boolean),
 
   firebase: {
     databaseUrl: process.env.FIREBASE_DATABASE_URL || 'https://mantasha-9b267-default-rtdb.firebaseio.com',

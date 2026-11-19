@@ -13,8 +13,38 @@ const { generateOrderId } = require('../utils/crypto');
 const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
 
-// In-memory COD OTP Store (Phone -> { otp, expiresAt, attempts, verified, verificationToken, draftOrderId })
-const codOtpStore = new Map();
+// In-memory Fast Cache + Firebase Persistent COD OTP Store
+const inMemoryOtpStore = new Map();
+
+async function getCodOtpRecord(phone) {
+  let record = inMemoryOtpStore.get(phone);
+  if (!record) {
+    try {
+      const persisted = await firebaseService.getSettings(`codOtps/${phone}`);
+      if (persisted && persisted.expiresAt && Date.now() <= persisted.expiresAt) {
+        record = persisted;
+        inMemoryOtpStore.set(phone, record);
+      }
+    } catch (_) {}
+  }
+  return record || null;
+}
+
+async function setCodOtpRecord(phone, record) {
+  inMemoryOtpStore.set(phone, record);
+  try {
+    await firebaseService.saveSettings(`codOtps/${phone}`, record);
+  } catch (err) {
+    logger.warn('FIREBASE_SAVE_OTP_FAILED', { phone, error: err.message });
+  }
+}
+
+async function deleteCodOtpRecord(phone) {
+  inMemoryOtpStore.delete(phone);
+  try {
+    await firebaseService.deleteSettings(`codOtps/${phone}`);
+  } catch (_) {}
+}
 
 /**
  * POST /api/orders/send-cod-otp
@@ -53,7 +83,7 @@ router.post('/send-cod-otp', async (req, res, next) => {
     const now = new Date().toISOString();
 
     // Check if an existing active draft order exists for this phone number
-    const existingRecord = codOtpStore.get(cleanPhone);
+    const existingRecord = await getCodOtpRecord(cleanPhone);
     let draftOrderId = (existingRecord && existingRecord.draftOrderId) || null;
     const isNewDraft = !draftOrderId;
 
@@ -119,7 +149,7 @@ router.post('/send-cod-otp', async (req, res, next) => {
       }
     }
 
-    codOtpStore.set(cleanPhone, {
+    await setCodOtpRecord(cleanPhone, {
       otp,
       expiresAt,
       attempts: 0,
@@ -158,7 +188,7 @@ router.post('/verify-cod-otp', async (req, res, next) => {
     const cleanPhone = String(phone || '').replace(/\D/g, '');
     const cleanOtp = String(otp || '').trim();
 
-    const record = codOtpStore.get(cleanPhone);
+    const record = await getCodOtpRecord(cleanPhone);
     if (!record) {
       return res.status(400).json({
         success: false,
@@ -170,7 +200,7 @@ router.post('/verify-cod-otp', async (req, res, next) => {
     }
 
     if (Date.now() > record.expiresAt) {
-      codOtpStore.delete(cleanPhone);
+      await deleteCodOtpRecord(cleanPhone);
       return res.status(400).json({
         success: false,
         error: {
@@ -192,6 +222,7 @@ router.post('/verify-cod-otp', async (req, res, next) => {
 
     if (record.otp !== cleanOtp) {
       record.attempts += 1;
+      await setCodOtpRecord(cleanPhone, record);
       const attemptsLeft = 10 - record.attempts;
       
       let message = 'Incorrect OTP code. Please check your WhatsApp.';
@@ -215,6 +246,7 @@ router.post('/verify-cod-otp', async (req, res, next) => {
     const verificationToken = `cod_verified_${cleanPhone}_${Date.now()}`;
     record.verified = true;
     record.verificationToken = verificationToken;
+    await setCodOtpRecord(cleanPhone, record);
 
     return res.json({
       success: true,
@@ -293,7 +325,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         });
       }
 
-      record = codOtpStore.get(cleanPhone);
+      record = await getCodOtpRecord(cleanPhone);
       const isValidToken = record && record.verified && (record.verificationToken === reqVerificationToken || process.env.NODE_ENV === 'development');
       if (!isValidToken && process.env.NODE_ENV !== 'test') {
         return res.status(400).json({
@@ -402,7 +434,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         logger.info('ORDER_CREATED_COD_INITIATED', { internalOrderId });
 
         // Clean up OTP store after use to prevent stale reuse
-        codOtpStore.delete(cleanPhone);
+        await deleteCodOtpRecord(cleanPhone);
 
         // Save COD confirmed order without auto-booking courier (Admin will manually move to Shiprocket or Delhivery)
         orderRecord.status = 'COD_CONFIRMED';

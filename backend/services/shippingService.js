@@ -59,6 +59,7 @@ const shippingService = {
     const shipmentDetails = await carrier.service.createShipment(order, options);
 
     return {
+      ...shipmentDetails,
       provider: carrier.id,
       courierName: shipmentDetails.courierName || `${carrier.name} Express`,
       shippingMode: shipmentDetails.shippingMode || options.shippingMode || null,

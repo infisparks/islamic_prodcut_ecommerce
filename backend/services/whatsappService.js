@@ -258,13 +258,25 @@ async function sendOrderConfirmationWhatsApp(order) {
 async function sendShippingConfirmationWhatsApp(order) {
   if (!order || !order.customer || !order.customer.phone) return false;
 
-  const isDelhivery = (order.shipping?.provider || '').toLowerCase() === 'delhivery';
-  const courier = order.shipping?.courierName || (isDelhivery ? 'Delhivery Express' : 'Shiprocket Express Partner');
-  const awb = order.shipping?.awb || order.shipping?.waybill || 'Processing';
-  const defaultTrackUrl = isDelhivery 
-    ? (awb ? `https://www.delhivery.com/track/package/${awb}` : 'https://www.delhivery.com')
-    : `https://shiprocket.co/tracking/${order.shipping?.shiprocketOrderId || awb || ''}`;
-  const trackingUrl = order.shipping?.trackingUrl || defaultTrackUrl;
+  const provider = (order.shipping?.provider || '').toLowerCase();
+  const isDelhivery = provider === 'delhivery';
+  const isEkart = provider === 'ekart';
+  const courier = order.shipping?.courierName || (isDelhivery ? 'Delhivery Express' : isEkart ? 'Ekart Logistics' : 'Shiprocket Express Partner');
+  const awb = order.shipping?.awb || order.shipping?.subOrderId || order.shipping?.waybill || 'Processing';
+  
+  let defaultTrackUrl = 'https://fatimacalligrapher.com';
+  if (isDelhivery) {
+    defaultTrackUrl = awb && awb !== 'Processing' ? `https://www.delhivery.com/track/package/${awb}` : 'https://www.delhivery.com';
+  } else if (isEkart) {
+    defaultTrackUrl = awb && awb !== 'Processing' ? `https://app.elite.ekartlogistics.in/track/${encodeURIComponent(awb)}` : 'https://app.elite.ekartlogistics.in/track';
+  } else {
+    defaultTrackUrl = `https://shiprocket.co/tracking/${order.shipping?.shiprocketOrderId || awb || ''}`;
+  }
+
+  let trackingUrl = order.shipping?.trackingUrl || defaultTrackUrl;
+  if (typeof trackingUrl === 'string' && trackingUrl.includes('app.elite.ekartlogistics.in/orders')) {
+    trackingUrl = awb && awb !== 'Processing' ? `https://app.elite.ekartlogistics.in/track/${encodeURIComponent(awb)}` : 'https://app.elite.ekartlogistics.in/track';
+  }
   const deliveryDate = formatEstimatedDeliveryDate(order.shipping?.bookedAt || order.createdAt);
 
   const message =

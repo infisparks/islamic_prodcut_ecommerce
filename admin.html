@@ -1225,6 +1225,17 @@
         let searchDebounceTimer = null;
         let activeDatePreset = 'today';
 
+        // XSS Sanitizer for rendering untrusted user strings safely in HTML
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         // Listen to Auth State
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -1426,7 +1437,7 @@
                 if (spec) spec.value = '';
             }
 
-            loadOrdersAndStats();
+            loadOrdersAndStats(true);
         }
 
         function onSpecificDateChange(val) {
@@ -1440,7 +1451,7 @@
                 btn.className = "date-preset-btn px-2.5 py-1 text-xs rounded-lg font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all cursor-pointer";
             });
             activeDatePreset = 'specific';
-            loadOrdersAndStats();
+            loadOrdersAndStats(true);
         }
 
         function onCustomDateChange() {
@@ -1450,7 +1461,7 @@
             const spec = document.getElementById('filter-specific-date');
             if (spec) spec.value = '';
             activeDatePreset = 'custom';
-            loadOrdersAndStats();
+            loadOrdersAndStats(true);
         }
 
         function resetAllDateFilters() {
@@ -1554,6 +1565,13 @@
                 loadOrdersAndStats();
             }, 300);
         }
+
+        // Live Auto-Refresh: Poll Firebase for new orders every 25 seconds while tab is active
+        setInterval(() => {
+            if (!document.hidden && currentAdminToken) {
+                loadOrdersAndStats(true);
+            }
+        }, 25000);
 
         // ==========================================
         // TOGGLE DELIVERED STATUS (1-CLICK SET/REVERT)
@@ -2098,7 +2116,7 @@
                                                     <span>Label</span>
                                                 </a>
                                             ` : ''}
-                                            <a href="${o.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/orders' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1" title="Live Tracking">
+                                            <a href="${o.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/track/${awb}' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1" title="Live Tracking">
                                                 <i class="fa-solid fa-location-arrow text-[10px]"></i>
                                                 <span>Track</span>
                                             </a>
@@ -2413,10 +2431,10 @@
                 const c = classifyOrder(order);
                 const orderId = order.orderId || 'N/A';
                 const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
-                const customerName = (order.customer && order.customer.name) || 'Customer';
-                const customerPhone = (order.customer && order.customer.phone) || '-';
-                const customerCity = (order.customer && order.customer.city) || '';
-                const customerPincode = (order.customer && order.customer.pincode) || '';
+                const customerName = escapeHtml((order.customer && order.customer.name) || 'Customer');
+                const customerPhone = escapeHtml((order.customer && order.customer.phone) || '-');
+                const customerCity = escapeHtml((order.customer && order.customer.city) || '');
+                const customerPincode = escapeHtml((order.customer && order.customer.pincode) || '');
                 const totalAmount = Math.round(order.pricing?.total || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
                 const total = `Rs. ${totalAmount.toFixed(2)}`;
                 
@@ -2635,7 +2653,7 @@
                                                 </a>
                                             ` : ''}
 
-                                            <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/orders' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="action-btn px-2 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs" title="Live Tracking">
+                                            <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/track/${awb}' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="action-btn px-2 py-1 bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white border border-emerald-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs" title="Live Tracking">
                                                 <i class="fa-solid fa-location-arrow text-[10px]"></i>
                                             </a>
                                         </div>
@@ -2701,10 +2719,10 @@
                     const c = classifyOrder(order);
                     const orderId = order.orderId || 'N/A';
                     const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '-';
-                    const customerName = (order.customer && order.customer.name) || 'Customer';
-                    const customerPhone = (order.customer && order.customer.phone) || '-';
-                    const customerCity = (order.customer && order.customer.city) || '';
-                    const customerPincode = (order.customer && order.customer.pincode) || '';
+                    const customerName = escapeHtml((order.customer && order.customer.name) || 'Customer');
+                    const customerPhone = escapeHtml((order.customer && order.customer.phone) || '-');
+                    const customerCity = escapeHtml((order.customer && order.customer.city) || '');
+                    const customerPincode = escapeHtml((order.customer && order.customer.pincode) || '');
                     const totalAmount = Math.round(order.pricing?.total || (order.payment?.amountPaise ? order.payment.amountPaise / 100 : 0) || 599);
                     const total = `Rs. ${totalAmount}`;
                     const itemsCount = (order.items || []).reduce((s, i) => s + (i.quantity || 1), 0);
@@ -3293,18 +3311,18 @@
                         <div class="font-bold text-[#111827] text-xs mb-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-user text-indigo-600"></i> Customer Info
                         </div>
-                        <div><b>Name:</b> ${order.customer?.name || '-'}</div>
-                        <div><b>Phone:</b> <a href="tel:${order.customer?.phone}" class="text-indigo-600 underline">${order.customer?.phone || '-'}</a></div>
-                        <div><b>Email:</b> ${order.customer?.email || '-'}</div>
+                        <div><b>Name:</b> ${escapeHtml(order.customer?.name || '-')}</div>
+                        <div><b>Phone:</b> <a href="tel:${escapeHtml(order.customer?.phone)}" class="text-indigo-600 underline">${escapeHtml(order.customer?.phone || '-')}</a></div>
+                        <div><b>Email:</b> ${escapeHtml(order.customer?.email || '-')}</div>
                     </div>
 
                     <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/90 space-y-1.5 shadow-2xs">
                         <div class="font-bold text-[#111827] text-xs mb-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-location-dot text-indigo-600"></i> Shipping Address
                         </div>
-                        <div>${order.customer?.addressLine1 || '-'}</div>
-                        <div>${order.customer?.addressLine2 ? order.customer.addressLine2 + ', ' : ''}${order.customer?.city || ''}</div>
-                        <div>${order.customer?.state || ''} - <b>${order.customer?.pincode || ''}</b> ${isNearbyLocation ? '<span class="text-[10px] font-bold text-purple-700 bg-purple-100 px-1.5 py-0.2 rounded ml-1">Nearby</span>' : ''}</div>
+                        <div>${escapeHtml(order.customer?.addressLine1 || '-')}</div>
+                        <div>${order.customer?.addressLine2 ? escapeHtml(order.customer.addressLine2) + ', ' : ''}${escapeHtml(order.customer?.city || '')}</div>
+                        <div>${escapeHtml(order.customer?.state || '')} - <b>${escapeHtml(order.customer?.pincode || '')}</b> ${isNearbyLocation ? '<span class="text-[10px] font-bold text-purple-700 bg-purple-100 px-1.5 py-0.2 rounded ml-1">Nearby</span>' : ''}</div>
                     </div>
                 </div>
 
@@ -3352,7 +3370,7 @@
                     </div>
                     ${isShipmentBooked && (order.shipping?.trackingUrl || awb) ? `
                         <div class="pt-1.5 border-t border-gray-200 text-xs flex items-center justify-between">
-                            <span><b>Live Tracking:</b> <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/orders' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="text-indigo-600 underline font-semibold ml-1"><i class="fa-solid fa-location-arrow text-[10px]"></i> View Live Tracking</a></span>
+                            <span><b>Live Tracking:</b> <a href="${order.shipping?.trackingUrl || (courierProvider === 'delhivery' ? `https://www.delhivery.com/track/package/${awb}` : (courierProvider === 'ekart' ? 'https://app.elite.ekartlogistics.in/track/${awb}' : `https://shiprocket.co/tracking/${awb}`))}" target="_blank" class="text-indigo-600 underline font-semibold ml-1"><i class="fa-solid fa-location-arrow text-[10px]"></i> View Live Tracking</a></span>
                             ${courierProvider !== 'ekart' ? `<a href="/api/shipments/${order.orderId}/label?redirect=1" target="_blank" class="text-blue-600 underline font-semibold"><i class="fa-solid fa-tag text-[10px]"></i> Download Shipping Label</a>` : ''}
                         </div>
                     ` : ''}

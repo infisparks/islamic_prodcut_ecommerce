@@ -466,6 +466,27 @@ const firebaseService = {
     return payload;
   },
 
+  // Delete generic settings / state data from Firebase
+  deleteSettings: async (settingPath) => {
+    if (useDatabaseSecret) {
+      try {
+        await axios.delete(getDbUrl(`settings/${settingPath}`), { timeout: 10000 });
+        return true;
+      } catch (err) {
+        logger.warn('FIREBASE_DELETE_SETTINGS_ERROR', { path: settingPath, error: err.message });
+      }
+    }
+    if (db) {
+      try {
+        await db.ref(`settings/${settingPath}`).remove();
+        return true;
+      } catch (err) {
+        logger.warn('FIREBASE_ADMIN_DELETE_SETTINGS_ERROR', { path: settingPath, error: err.message });
+      }
+    }
+    return true;
+  },
+
   // Clear mock data (for testing)
   _resetMockStore: () => {
     mockStore.orders = {};
