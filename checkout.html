@@ -203,7 +203,7 @@
                                     class="w-full pl-12 pr-3.5 py-2.5 bg-sand/30 border border-gray-300 rounded-xl text-xs sm:text-sm text-onyx font-mono focus:bg-white focus:outline-none focus:border-gold-500 transition-all placeholder-gray-400">
                             </div>
                             <p class="text-[10px] text-gray-500 mt-1 flex items-center gap-1">
-                                <i class="fa-brands fa-whatsapp text-emerald-600"></i> Delivery updates & verification OTP will be sent here
+                                <i class="fa-brands fa-whatsapp text-emerald-600"></i> Order confirmation & delivery updates will be sent here
                             </p>
                         </div>
 
@@ -342,7 +342,7 @@
                                     </span>
                                 </div>
                                 <p class="text-[11px] text-gray-500 mt-1">
-                                    Pay with cash upon delivery. Requires WhatsApp OTP verification.
+                                    Pay with cash upon delivery at your doorstep.
                                 </p>
                                 <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
                                     <span id="badge-cod-price" class="font-bold text-gray-700">
@@ -813,6 +813,20 @@
                 ]
             },
             {
+                id: 19,
+                name: "Crystal Beaded Digital Tasbih (Tally Counter)",
+                category: "tasbih",
+                image: "product/tasbih/hero.webp",
+                badge: "DIGITAL TASBIH",
+                variants: [
+                    { sku: "fati_tasbih_green", name: "Crystal Digital Tasbih (Emerald Green)", shortName: "Emerald Green", price: 249, oldPrice: 499, weightKg: 0.05, weight: "50gm", image: "product/tasbih/green.webp", hasJanamaz: false, freeShipping: true },
+                    { sku: "fati_tasbih_red", name: "Crystal Digital Tasbih (Ruby Red)", shortName: "Ruby Red", price: 249, oldPrice: 499, weightKg: 0.05, weight: "50gm", image: "product/tasbih/red.webp", hasJanamaz: false, freeShipping: true },
+                    { sku: "fati_tasbih_hotpink", name: "Crystal Digital Tasbih (Hot Pink)", shortName: "Hot Pink", price: 249, oldPrice: 499, weightKg: 0.05, weight: "50gm", image: "product/tasbih/hotpink.webp", hasJanamaz: false, freeShipping: true },
+                    { sku: "fati_tasbih_pearl", name: "Crystal Digital Tasbih (Pearl Baby Pink)", shortName: "Pearl Baby Pink", price: 249, oldPrice: 499, weightKg: 0.05, weight: "50gm", image: "product/tasbih/pearl.webp", hasJanamaz: false, freeShipping: true },
+                    { sku: "fati_tasbih_purple", name: "Crystal Digital Tasbih (Royal Purple)", shortName: "Royal Purple", price: 249, oldPrice: 499, weightKg: 0.05, weight: "50gm", image: "product/tasbih/purple.webp", hasJanamaz: false, freeShipping: true }
+                ]
+            },
+            {
                 id: 15,
                 name: "Siwak Natural Miswak Toothbrush Starter Kit (1 Handle + 5 Refills)",
                 category: "essentials",
@@ -1109,12 +1123,13 @@
             let onlineShipping = 0;
 
             const hasMiswak = checkoutCart.some(i => i.sku === 'fati_siwak_01' || i.id === 15);
+            const hasTasbih = checkoutCart.some(i => (i.sku && i.sku.startsWith('fati_tasbih_')) || i.id === 19);
 
             if (isLocalDelivery) {
                 codShipping = 0;
                 onlineShipping = 0;
-            } else if (hasMiswak && checkoutCart.length === 1) {
-                // Miswak Pre-Order special: ₹199 Prepaid (Free Delivery), ₹299 COD (₹100 COD Delivery)
+            } else if ((hasMiswak || hasTasbih) && checkoutCart.length === 1) {
+                // Single-item special promo: ₹249/₹199 Prepaid (Free Delivery), COD Delivery (+₹100)
                 onlineShipping = 0;
                 codShipping = 100;
             } else if (subtotal < 299) {
@@ -1620,20 +1635,43 @@
                 janamazColor: i.janamazColor || undefined
             }));
 
-            // COD FLOW: Trigger WhatsApp OTP First
+            // COD FLOW: Direct Order Booking (No OTP required)
             if (selectedPaymentMethod === 'cod') {
-                activeCodOrderPayload = {
-                    customer,
-                    items,
-                    paymentMethod: 'cod',
-                    couponCode: appliedCoupon ? appliedCoupon.code : null
-                };
-                triggerWhatsAppOtp(phone);
+                initiateDirectCodOrder(customer, items);
                 return;
             }
 
             // ONLINE RAZORPAY FLOW
             initiateOnlineRazorpayOrder(customer, items);
+        }
+
+        // DIRECT COD ORDER FLOW (NO OTP)
+        async function initiateDirectCodOrder(customer, items) {
+            setSubmitButtonLoading(true);
+            try {
+                const res = await fetch('/api/orders/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        customer,
+                        items,
+                        paymentMethod: 'cod',
+                        couponCode: appliedCoupon ? appliedCoupon.code : null
+                    })
+                });
+
+                const data = await res.json();
+                setSubmitButtonLoading(false);
+
+                if (data.success && data.data) {
+                    onOrderSuccess(data.data);
+                } else {
+                    showErrorModal("Order Booking Failed", data.error?.message || "Could not complete your Cash on Delivery order.");
+                }
+            } catch (err) {
+                setSubmitButtonLoading(false);
+                showErrorModal("Network Error", "Could not reach the server to book your order. Please check your internet connection.");
+            }
         }
 
         // RAZORPAY ORDER FLOW
@@ -1922,6 +1960,8 @@
                         totalMrp += 1106 * q;
                     } else if (item.sku === 'fati_002' || item.sku === 'fati_005' || item.sku === 'fati_008' || item.sku === 'fati_011' || item.sku === 'fati_kids_001') {
                         totalMrp += 698 * q;
+                    } else if (item.id === 19 || (item.sku && String(item.sku).startsWith('fati_tasbih'))) {
+                        totalMrp += 499 * q;
                     } else if (item.id === 8 || (item.sku && String(item.sku).startsWith('fati_jnm'))) {
                         totalMrp += 699 * q;
                     } else if (item.id === 9 || item.sku === 'fati_ess_soap') {
@@ -1968,15 +2008,22 @@
             d.setDate(d.getDate() + 5);
             const estDateStr = d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
+            const isCod = (orderData.payment?.provider === 'COD' || selectedPaymentMethod === 'cod');
+            const bookingStatusHtml = orderData.shipping?.awb 
+                ? `<div><b>Tracking AWB:</b> <span class="font-mono">${orderData.shipping.awb}</span></div>` 
+                : (isCod 
+                    ? `<div><b>Booking Status:</b> <span class="text-amber-700 font-semibold"><i class="fa-solid fa-phone-volume mr-1"></i>Order Placed • Our team will call you to confirm delivery</span></div>`
+                    : `<div><b>Booking Status:</b> <span class="text-indigo-700 font-semibold">Payment Received • Preparing Dispatch</span></div>`);
+
             const detailsEl = document.getElementById('success-order-details');
             detailsEl.innerHTML = `
                 <div><b>Order ID:</b> <span class="font-mono text-indigo-700 font-bold">${orderData.orderId}</span></div>
-                <div><b>Payment Method:</b> ${orderData.payment?.provider === 'COD' || selectedPaymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
+                <div><b>Payment Method:</b> ${isCod ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
                 <div><b>Total Amount:</b> <span class="font-bold text-onyx">Rs. ${orderData.pricing?.total || val}</span></div>
                 <div><b>Estimated Delivery:</b> <span class="font-bold text-emerald-700">${estDateStr} (Within 5 Days)</span></div>
-                ${orderData.shipping?.awb ? `<div><b>Tracking AWB:</b> <span class="font-mono">${orderData.shipping.awb}</span></div>` : '<div><b>Booking Status:</b> <span class="text-indigo-700 font-semibold">Booking Confirmed • Preparing Dispatch</span></div>'}
+                ${bookingStatusHtml}
                 <div class="text-[11px] text-gray-600 pt-1.5 border-t border-gold-200 flex items-center justify-between">
-                    <span>Confirmation WhatsApp dispatched.</span>
+                    <span>${isCod ? 'Our team will call you shortly.' : 'Order Booked Successfully.'}</span>
                     <a href="tel:+919970347703" class="text-indigo-600 font-bold hover:underline"><i class="fa-solid fa-phone text-[10px] mr-0.5"></i> Support: +91 99703 47703</a>
                 </div>
             `;

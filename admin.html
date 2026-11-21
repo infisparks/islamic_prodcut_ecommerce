@@ -906,6 +906,16 @@
                         <option value="fati_jnm_04" data-price="349">Pocket Travel Janamaz (Midnight Black) [Rs. 349]</option>
                         <option value="fati_jnm_05" data-price="349">Pocket Travel Janamaz (Slate Gray) [Rs. 349]</option>
                     </optgroup>
+                    <optgroup label="Crystal Beaded Digital Tasbih">
+                        <option value="fati_tasbih_green" data-price="249">Crystal Digital Tasbih (Emerald Green) [Rs. 249]</option>
+                        <option value="fati_tasbih_red" data-price="249">Crystal Digital Tasbih (Ruby Red) [Rs. 249]</option>
+                        <option value="fati_tasbih_hotpink" data-price="249">Crystal Digital Tasbih (Hot Pink) [Rs. 249]</option>
+                        <option value="fati_tasbih_pearl" data-price="249">Crystal Digital Tasbih (Pearl Baby Pink) [Rs. 249]</option>
+                        <option value="fati_tasbih_purple" data-price="249">Crystal Digital Tasbih (Royal Purple) [Rs. 249]</option>
+                    </optgroup>
+                    <optgroup label="Ihram Essentials">
+                        <option value="fati_siwak_01" data-price="199">Siwak Miswak Starter Kit [Rs. 199]</option>
+                    </optgroup>
                 </select>
             </div>
 
@@ -1841,11 +1851,12 @@
             // Online Payment Pending (Lead who initiated checkout but dropped off / payment not completed)
             const isPendingPayment = !isCod && !isOnlinePaid && !isCancelled && !isInFunnel;
 
-            // COD Unconfirmed (needs verification / OTP pending)
+            // COD Unconfirmed (needs phone verification / Call confirmation pending)
             const isCodUnconfirmed = isCod && !isCancelled && !isDelivered && !isInFunnel && (
                 status === 'OTP_NOT_VERIFIED' || 
                 paymentStatus === 'OTP_NOT_VERIFIED' || 
                 paymentStatus === 'COD_PENDING' || 
+                status === 'COD_PENDING' || 
                 status === 'PENDING'
             ) && !isShipmentBooked;
 
@@ -3928,7 +3939,13 @@
             fati_jnm_02: { name: 'Pocket Travel Janamaz (Emerald Green)', price: 349, weight: '150gm' },
             fati_jnm_03: { name: 'Pocket Travel Janamaz (Rose Pink)', price: 349, weight: '150gm' },
             fati_jnm_04: { name: 'Pocket Travel Janamaz (Midnight Black)', price: 349, weight: '150gm' },
-            fati_jnm_05: { name: 'Pocket Travel Janamaz (Slate Gray)', price: 349, weight: '150gm' }
+            fati_jnm_05: { name: 'Pocket Travel Janamaz (Slate Gray)', price: 349, weight: '150gm' },
+            fati_tasbih_green: { name: 'Crystal Digital Tasbih (Emerald Green)', price: 249, weight: '50gm' },
+            fati_tasbih_red: { name: 'Crystal Digital Tasbih (Ruby Red)', price: 249, weight: '50gm' },
+            fati_tasbih_hotpink: { name: 'Crystal Digital Tasbih (Hot Pink)', price: 249, weight: '50gm' },
+            fati_tasbih_pearl: { name: 'Crystal Digital Tasbih (Pearl Baby Pink)', price: 249, weight: '50gm' },
+            fati_tasbih_purple: { name: 'Crystal Digital Tasbih (Royal Purple)', price: 249, weight: '50gm' },
+            fati_siwak_01: { name: 'Siwak Natural Miswak Starter Kit', price: 199, weight: '60gm' }
         };
 
         function onProductDropdownChanged() {

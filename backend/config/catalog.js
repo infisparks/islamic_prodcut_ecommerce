@@ -390,6 +390,86 @@ const catalog = [
     ]
   },
   {
+    id: 19,
+    name: "Crystal Beaded Digital Tasbih (Tally Counter)",
+    category: "tasbih",
+    hsn: "9029",
+    dimensions: { length: 12, breadth: 6, height: 2.5 },
+    image: "product/tasbih/hero.webp",
+    variants: [
+      {
+        sku: "fati_tasbih_green",
+        name: "Crystal Digital Tasbih (Emerald Green)",
+        shortName: "Emerald Green",
+        color: "Emerald Green",
+        colorId: "green",
+        price: 249,
+        codPrice: 349,
+        weightKg: 0.05,
+        weightLabel: "50gm",
+        image: "product/tasbih/green.webp",
+        hasJanamaz: false,
+        freeShipping: true
+      },
+      {
+        sku: "fati_tasbih_red",
+        name: "Crystal Digital Tasbih (Ruby Red)",
+        shortName: "Ruby Red",
+        color: "Ruby Red",
+        colorId: "red",
+        price: 249,
+        codPrice: 349,
+        weightKg: 0.05,
+        weightLabel: "50gm",
+        image: "product/tasbih/red.webp",
+        hasJanamaz: false,
+        freeShipping: true
+      },
+      {
+        sku: "fati_tasbih_hotpink",
+        name: "Crystal Digital Tasbih (Hot Pink)",
+        shortName: "Hot Pink",
+        color: "Hot Pink",
+        colorId: "hotpink",
+        price: 249,
+        codPrice: 349,
+        weightKg: 0.05,
+        weightLabel: "50gm",
+        image: "product/tasbih/hotpink.webp",
+        hasJanamaz: false,
+        freeShipping: true
+      },
+      {
+        sku: "fati_tasbih_pearl",
+        name: "Crystal Digital Tasbih (Pearl Baby Pink)",
+        shortName: "Pearl Baby Pink",
+        color: "Pearl Baby Pink",
+        colorId: "pearl",
+        price: 249,
+        codPrice: 349,
+        weightKg: 0.05,
+        weightLabel: "50gm",
+        image: "product/tasbih/pearl.webp",
+        hasJanamaz: false,
+        freeShipping: true
+      },
+      {
+        sku: "fati_tasbih_purple",
+        name: "Crystal Digital Tasbih (Royal Purple)",
+        shortName: "Royal Purple",
+        color: "Royal Purple",
+        colorId: "purple",
+        price: 249,
+        codPrice: 349,
+        weightKg: 0.05,
+        weightLabel: "50gm",
+        image: "product/tasbih/purple.webp",
+        hasJanamaz: false,
+        freeShipping: true
+      }
+    ]
+  },
+  {
     id: 99,
     name: "FREE GIFT: Siwak Miswak Toothbrush + Natural Loofah Scrubber",
     category: "essentials",

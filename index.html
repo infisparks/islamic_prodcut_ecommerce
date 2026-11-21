@@ -866,7 +866,10 @@
         <!-- Filter Category Tabs -->
         <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-2 no-scrollbar" id="category-filter-bar">
             <button onclick="filterProducts('all')" id="filter-all" class="filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs">
-                All Products (12)
+                All Products (13)
+            </button>
+            <button onclick="filterProducts('tasbih')" id="filter-tasbih" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
+                📿 Digital Tasbih (1)
             </button>
             <button onclick="filterProducts('card')" id="filter-card" class="filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors">
                 💳 Umrah Cards (5)
@@ -2926,6 +2929,52 @@
                     "Chemical Free, Alcohol Free & Ihram Friendly",
                     "Promotes Healthy Gums & Naturally Freshens Breath"
                 ]
+            },
+            {
+                id: 19,
+                name: "Crystal Beaded Digital Tasbih (Tally Counter)",
+                category: "tasbih",
+                brand: "fatimacalligrapher27",
+                hsn: "9029",
+                color: "5 Crystal Colors Available",
+                size: "Compact Pocket Size (12 * 6 cm)",
+                dimensions: "12 * 6 * 2.5 cm",
+                material: "Crystal Glass Beads, Sparkling Rhinestones & Digital LCD Counter",
+                weight: "50gm",
+                sku: "fati_tasbih_green",
+                soldCount: "1,420 sold",
+                price: 249,
+                codPrice: 349,
+                oldPrice: 499,
+                freeShipping: true,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/tasbih/hero.webp",
+                images: [
+                    "product/tasbih/hero.webp",
+                    "product/tasbih/green.webp",
+                    "product/tasbih/red.webp",
+                    "product/tasbih/hotpink.webp",
+                    "product/tasbih/pearl.webp",
+                    "product/tasbih/purple.webp"
+                ],
+                badge: "DIGITAL TASBIH • ₹249 PREPAID FREE DELIVERY",
+                rating: "(524)",
+                desc: "Exquisite Crystal Beaded Digital Tasbih (Jaap/Dhikr Tally Counter). Decorated with sparkling crystal beads and rhinestone-accented digital display. Features silent responsive clicker button, quick reset, and comfortable grip loop for daily Dhikr, Umrah, Hajj & gifting.",
+                features: [
+                    "💳 Prepaid Special: ₹249 Only (100% Free Shipping)",
+                    "💵 Cash on Delivery (COD): ₹349 (+₹100 Delivery)",
+                    "✨ Crystal & Rhinestone Embellished Craftsmanship",
+                    "🔢 5-Digit Clear Digital LCD Display with Reset Button",
+                    "📿 Available in 5 Regal Colors (Green, Red, Hot Pink, Pearl Pink, Purple)",
+                    "🎁 Perfect for Umrah, Hajj, Ramadan & Islamic Gifting"
+                ],
+                variants: [
+                    { sku: "fati_tasbih_green", name: "Crystal Digital Tasbih (Emerald Green)", shortName: "Emerald Green", price: 249, oldPrice: 499, weight: "50gm", tag: "Emerald Green", image: "product/tasbih/green.webp" },
+                    { sku: "fati_tasbih_red", name: "Crystal Digital Tasbih (Ruby Red)", shortName: "Ruby Red", price: 249, oldPrice: 499, weight: "50gm", tag: "Ruby Red", image: "product/tasbih/red.webp" },
+                    { sku: "fati_tasbih_hotpink", name: "Crystal Digital Tasbih (Hot Pink)", shortName: "Hot Pink", price: 249, oldPrice: 499, weight: "50gm", tag: "Hot Pink", image: "product/tasbih/hotpink.webp" },
+                    { sku: "fati_tasbih_pearl", name: "Crystal Digital Tasbih (Pearl Baby Pink)", shortName: "Pearl Baby Pink", price: 249, oldPrice: 499, weight: "50gm", tag: "Pearl Baby Pink", image: "product/tasbih/pearl.webp" },
+                    { sku: "fati_tasbih_purple", name: "Crystal Digital Tasbih (Royal Purple)", shortName: "Royal Purple", price: 249, oldPrice: 499, weight: "50gm", tag: "Royal Purple", image: "product/tasbih/purple.webp" }
+                ]
             }
         ];
 
@@ -3104,7 +3153,7 @@
                                     <span>★★★★★ ${p.rating}</span>
                                     <span class="text-amber-800 font-bold bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-300 flex items-center gap-0.5"><i class="fa-solid fa-fire text-amber-500 text-[8px]"></i> ${p.soldCount || '250 sold'}</span>
                                 </div>
-                                <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200">${hasVariants ? `${p.variants.length} Kit Options` : 'In Stock'}</span>
+                                <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200">${hasVariants ? (p.category === 'tasbih' || p.category === 'janamaz' ? `${p.variants.length} Colors Available` : `${p.variants.length} Kit Options`) : 'In Stock'}</span>
                             </div>
                             <h3 class="font-bold text-xs sm:text-sm text-onyx line-clamp-2 min-h-[2.25rem] leading-snug group-hover:text-gold-600 transition-colors">
                                 ${p.name}
@@ -3117,10 +3166,13 @@
                         <div class="mt-2.5 pt-2 border-t border-gray-100">
                             <div class="flex items-center justify-between gap-1 mb-2 flex-wrap">
                                 <div class="flex items-baseline gap-1">
-                                    ${hasVariants ? `
+                                    ${hasVariants ? (minPrice === maxPrice ? `
+                                        <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${minPrice}</span>
+                                        <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${minOldPrice}</span>
+                                    ` : `
                                         <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${minPrice} – ${maxPrice}</span>
                                         <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${minOldPrice} – ${maxOldPrice}</span>
-                                    ` : `
+                                    `) : `
                                         <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${p.price}</span>
                                         <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${p.price * 2}</span>
                                     `}
@@ -3171,12 +3223,13 @@
             renderProducts(category);
 
             const btnAll = document.getElementById('filter-all');
+            const btnTasbih = document.getElementById('filter-tasbih');
             const btnCard = document.getElementById('filter-card');
             const btnSticker = document.getElementById('filter-sticker');
             const btnJanamaz = document.getElementById('filter-janamaz');
             const btnEssentials = document.getElementById('filter-essentials');
 
-            [btnAll, btnCard, btnSticker, btnJanamaz, btnEssentials].forEach(btn => {
+            [btnAll, btnTasbih, btnCard, btnSticker, btnJanamaz, btnEssentials].forEach(btn => {
                 if (btn) {
                     btn.className = "filter-btn bg-white text-gray-700 hover:bg-gold-50 border border-gray-300 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors";
                 }
@@ -3184,6 +3237,8 @@
 
             if (category === 'all' && btnAll) {
                 btnAll.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
+            } else if (category === 'tasbih' && btnTasbih) {
+                btnTasbih.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
             } else if (category === 'card' && btnCard) {
                 btnCard.className = "filter-btn bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap shadow-xs";
             } else if (category === 'sticker' && btnSticker) {
@@ -4204,11 +4259,17 @@ function addToCart(productId, variantIndex = 0) {
             const isOnline = (selectedPaymentMethod === 'razorpay');
 
             // Shipping Rule (3-Tier Structure):
-            // 1. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
-            // 2. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
-            // 3. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+            // 1. Single items promo: Miswak (₹199 prep / ₹299 COD) or Tasbih (₹249 prep / ₹349 COD)
+            // 2. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
+            // 3. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
+            // 4. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+            const hasMiswak = cart.some(i => i.sku === 'fati_siwak_01' || i.id === 15);
+            const hasTasbih = cart.some(i => (i.sku && String(i.sku).startsWith('fati_tasbih_')) || i.id === 19);
+
             let effectiveFee = 100;
-            if (subtotalPrice < 299) {
+            if ((hasMiswak || hasTasbih) && cart.length === 1) {
+                effectiveFee = isOnline ? 0 : 100;
+            } else if (subtotalPrice < 299) {
                 effectiveFee = isOnline ? 50 : 100;
             } else if (subtotalPrice < 599) {
                 effectiveFee = 100;

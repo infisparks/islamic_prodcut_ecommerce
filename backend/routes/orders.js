@@ -299,7 +299,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
     const { customer, items, paymentMethod = 'razorpay', couponCode, verificationToken: reqVerificationToken, draftOrderId: reqDraftOrderId } = req.body;
     const cleanPhone = customer.phone.replace(/\D/g, '');
 
-    // For COD: Enforce verified WhatsApp OTP and check 24-hour rate limit
+    // For COD: Direct order booking (OTP verification disabled per user request)
     let record = null;
     if (paymentMethod === 'cod') {
       const existingCodCount = await firebaseService.getCodOrderCountInLast24Hours(cleanPhone);
@@ -315,16 +315,6 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
       }
 
       record = await getCodOtpRecord(cleanPhone);
-      const isValidToken = record && record.verified && (record.verificationToken === reqVerificationToken || process.env.NODE_ENV === 'development');
-      if (!isValidToken && process.env.NODE_ENV !== 'test') {
-        return res.status(400).json({
-          success: false,
-          error: {
-            code: 'COD_OTP_REQUIRED',
-            message: 'WhatsApp OTP verification is required before confirming a Cash on Delivery order.'
-          }
-        });
-      }
     }
 
     // Acquire lock per customer phone to prevent rapid multiple clicks creating duplicate orders
@@ -425,11 +415,11 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         // Clean up OTP store after use to prevent stale reuse
         await deleteCodOtpRecord(cleanPhone);
 
-        // Save COD confirmed order without auto-booking courier (Admin will manually move to Shiprocket or Delhivery)
-        orderRecord.status = 'COD_CONFIRMED';
+        // Save COD order in COD_PENDING status so store team can call to confirm before dispatch
+        orderRecord.status = 'COD_PENDING';
         orderRecord.payment = {
           provider: 'COD',
-          status: 'COD_CONFIRMED',
+          status: 'COD_PENDING',
           amountPaise: trustedOrderData.pricing.total * 100,
           currency: 'INR',
           paidAt: null
@@ -447,9 +437,9 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         };
 
         orderRecord.events.push({
-          event: 'COD_CONFIRMED',
+          event: 'COD_PENDING_CONFIRMATION',
           timestamp: new Date().toISOString(),
-          details: 'Customer verified WhatsApp OTP. COD order confirmed. Ready for courier dispatch assignment by Admin.'
+          details: 'Direct COD order placed by customer without OTP. Phone confirmation pending by Admin.'
         });
 
         await firebaseService.saveOrder(internalOrderId, orderRecord);

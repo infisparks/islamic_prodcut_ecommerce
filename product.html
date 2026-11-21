@@ -2095,6 +2095,57 @@
                     bgGradient: "from-amber-950/20 via-sand to-amber-50/30",
                     border: "border-amber-500/40"
                 }
+            },
+            {
+                id: 19,
+                name: "Crystal Beaded Digital Tasbih (Tally Counter)",
+                category: "tasbih",
+                brand: "fatimacalligrapher27",
+                hsn: "9029",
+                color: "5 Crystal Colors Available",
+                size: "Compact Pocket Size (12 * 6 cm)",
+                dimensions: "12 * 6 * 2.5 cm",
+                material: "Crystal Glass Beads, Sparkling Rhinestones & Digital LCD Counter",
+                weight: "50gm",
+                sku: "fati_tasbih_green",
+                soldCount: "1,420 sold",
+                price: 249,
+                codPrice: 349,
+                oldPrice: 499,
+                freeShipping: true,
+                manufacturer: "fatimacalligrapher27",
+                image: "product/tasbih/hero.webp",
+                images: [
+                    "product/tasbih/hero.webp",
+                    "product/tasbih/green.webp",
+                    "product/tasbih/red.webp",
+                    "product/tasbih/hotpink.webp",
+                    "product/tasbih/pearl.webp",
+                    "product/tasbih/purple.webp"
+                ],
+                badge: "DIGITAL TASBIH • ₹249 PREPAID FREE DELIVERY",
+                rating: "(524)",
+                desc: "Exquisite Crystal Beaded Digital Tasbih (Jaap/Dhikr Tally Counter). Decorated with sparkling crystal beads and rhinestone-accented digital display. Features silent responsive clicker button, quick reset, and comfortable grip loop for daily Dhikr, Umrah, Hajj & gifting.",
+                features: [
+                    "💳 Prepaid Special: ₹249 Only (100% Free Shipping)",
+                    "💵 Cash on Delivery (COD): ₹349 (+₹100 Delivery)",
+                    "✨ Crystal & Rhinestone Embellished Craftsmanship",
+                    "🔢 5-Digit Clear Digital LCD Display with Reset Button",
+                    "📿 Available in 5 Regal Colors (Green, Red, Hot Pink, Pearl Pink, Purple)",
+                    "🎁 Perfect for Umrah, Hajj, Ramadan & Islamic Gifting"
+                ],
+                theme: {
+                    accent: "emerald",
+                    bgGradient: "from-emerald-950/20 via-sand to-emerald-50/30",
+                    border: "border-emerald-500/40"
+                },
+                variants: [
+                    { sku: "fati_tasbih_green", name: "Crystal Digital Tasbih (Emerald Green)", shortName: "Emerald Green", price: 249, oldPrice: 499, weight: "50gm", tag: "Emerald Green", image: "product/tasbih/green.webp" },
+                    { sku: "fati_tasbih_red", name: "Crystal Digital Tasbih (Ruby Red)", shortName: "Ruby Red", price: 249, oldPrice: 499, weight: "50gm", tag: "Ruby Red", image: "product/tasbih/red.webp" },
+                    { sku: "fati_tasbih_hotpink", name: "Crystal Digital Tasbih (Hot Pink)", shortName: "Hot Pink", price: 249, oldPrice: 499, weight: "50gm", tag: "Hot Pink", image: "product/tasbih/hotpink.webp" },
+                    { sku: "fati_tasbih_pearl", name: "Crystal Digital Tasbih (Pearl Baby Pink)", shortName: "Pearl Baby Pink", price: 249, oldPrice: 499, weight: "50gm", tag: "Pearl Baby Pink", image: "product/tasbih/pearl.webp" },
+                    { sku: "fati_tasbih_purple", name: "Crystal Digital Tasbih (Royal Purple)", shortName: "Royal Purple", price: 249, oldPrice: 499, weight: "50gm", tag: "Royal Purple", image: "product/tasbih/purple.webp" }
+                ]
             }
         ];
 
@@ -2323,6 +2374,28 @@
         function getPdpMediaList() {
             const items = [];
             const p = currentProduct;
+
+            if (p.category === 'tasbih' || p.id === 19) {
+                const activeVariant = (p.variants && p.variants[currentVariantIndex]) || (p.variants && p.variants[0]);
+                if (activeVariant && activeVariant.image) {
+                    items.push({
+                        type: 'image',
+                        url: activeVariant.image,
+                        title: `${activeVariant.name}`
+                    });
+                }
+                if (p.images && Array.isArray(p.images)) {
+                    p.images.forEach((imgUrl, index) => {
+                        if (activeVariant && imgUrl === activeVariant.image) return;
+                        items.push({
+                            type: 'image',
+                            url: imgUrl,
+                            title: `${p.name} - View ${index + 1}`
+                        });
+                    });
+                }
+                return items;
+            }
 
             if (p.category === 'janamaz' || p.id === 8) {
                 const curColorObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
@@ -3572,11 +3645,12 @@
                 : 50;
             const curJanamazObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
             const isJanamazProd = (p.category === 'janamaz' || p.id === 8);
+            const isTasbihProd = (p.category === 'tasbih' || p.id === 19);
 
             // Update Page Meta Title & Breadcrumb
             document.title = `${p.name} | Fatima Calligrapher`;
             document.getElementById('breadcrumb-product-name').textContent = p.name;
-            document.getElementById('pdp-title').textContent = isJanamazProd ? `Pocket Travel Janamaz (${curJanamazObj.name})` : p.name;
+            document.getElementById('pdp-title').textContent = isJanamazProd ? `Pocket Travel Janamaz (${curJanamazObj.name})` : (isTasbihProd ? `Crystal Beaded Digital Tasbih (${activeVariant ? activeVariant.shortName : '5 Colors'})` : p.name);
             document.getElementById('pdp-rating').textContent = `${p.rating} Verified Reviews`;
             document.getElementById('pdp-desc').textContent = p.desc;
 
@@ -3939,15 +4013,15 @@
             } else if (hasVariants) {
                 variantsContainer.classList.remove('hidden');
                 if (optionsBadge) {
-                    optionsBadge.textContent = isJanamazProd ? '5 Colors Available' : `${p.variants.length} Package Options`;
+                    optionsBadge.textContent = (isJanamazProd || isTasbihProd) ? '5 Colors Available' : `${p.variants.length} Package Options`;
                 }
 
                 const variantHeaderLabel = document.querySelector('#pdp-variants-container label span');
                 if (variantHeaderLabel) {
-                    variantHeaderLabel.textContent = isJanamazProd ? 'Select Janamaz Color:' : 'Select Package Option:';
+                    variantHeaderLabel.textContent = isJanamazProd ? 'Select Janamaz Color:' : (isTasbihProd ? 'Select Tasbih Color:' : 'Select Package Option:');
                 }
 
-                variantsSlider.className = isJanamazProd ? 'grid grid-cols-5 gap-1.5 sm:gap-2.5' : 'grid grid-cols-2 gap-2 sm:gap-2.5';
+                variantsSlider.className = (isJanamazProd || isTasbihProd) ? 'grid grid-cols-5 gap-1.5 sm:gap-2.5' : 'grid grid-cols-2 gap-2 sm:gap-2.5';
 
                 variantsSlider.innerHTML = p.variants.map((v, idx) => {
                     const isSelected = idx === currentVariantIndex;
@@ -3957,6 +4031,43 @@
                     else if (v.price === 799) tagClass = 'bg-indigo-900 text-gold-300 ring-1 ring-gold-400/40';
                     else if (v.tag === 'Best Value' || v.tag === 'Most Popular') tagClass = 'bg-amber-100 text-amber-900';
                     else if (v.tag) tagClass = 'bg-sand text-onyx border border-gray-300';
+
+                    if (isTasbihProd) {
+                        const tasbihColors = {
+                            fati_tasbih_green: '#059669',
+                            fati_tasbih_red: '#DC2626',
+                            fati_tasbih_hotpink: '#DB2777',
+                            fati_tasbih_pearl: '#FBCFE8',
+                            fati_tasbih_purple: '#7C3AED'
+                        };
+                        const colorHex = tasbihColors[v.sku] || '#059669';
+                        return `
+                            <div onclick="selectPdpVariant(${idx})" 
+                                 class="cursor-pointer rounded-xl p-1.5 sm:p-2 transition-all border-2 relative flex flex-col justify-between items-center text-center col-span-1 ${
+                                     isSelected 
+                                        ? 'border-gold-500 bg-gold-50/95 shadow-md ring-2 ring-gold-400/50 scale-[1.02]' 
+                                        : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/20'
+                                 }">
+                                <div class="w-full flex items-center justify-between gap-0.5 mb-1">
+                                    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/20 shrink-0 shadow-2xs" style="background-color: ${colorHex};"></span>
+                                    <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center border shrink-0 ${
+                                        isSelected ? 'bg-gold-500 border-gold-600 text-onyx shadow-xs' : 'border-gray-300 bg-white'
+                                    }">
+                                        ${isSelected ? '<i class="fa-solid fa-check text-[7px] sm:text-[8px] font-black"></i>' : ''}
+                                    </div>
+                                </div>
+                                <div class="w-full aspect-square rounded-lg overflow-hidden my-0.5 bg-pearl flex items-center justify-center p-0.5 border border-gray-100">
+                                    <img src="${v.image}" alt="${v.shortName}" class="w-full h-full object-contain pointer-events-none">
+                                </div>
+                                <div class="my-0.5 w-full">
+                                    <div class="text-[9.5px] sm:text-[11px] font-bold text-onyx truncate leading-tight">${v.shortName}</div>
+                                </div>
+                                <div class="pt-0.5 border-t border-gray-200/80 w-full flex items-center justify-center mt-0.5">
+                                    <span class="font-extrabold text-[10px] sm:text-xs text-onyx">Rs. ${v.price}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
 
                     if (isJanamazProd) {
                         const colorHex = janamazColors.find(c => c.id === v.colorId)?.hex || '#D4AF37';
@@ -4027,7 +4138,31 @@
                     renderComboInlineSwatches();
                 }
 
-                if (isJanamazProd) {
+                if (isTasbihProd) {
+                    inclusionsBox.innerHTML = `
+                        <div class="font-bold text-[10px] sm:text-[11px] text-onyx mb-1 flex items-center gap-1">
+                            <i class="fa-solid fa-box-open text-emerald-600"></i> Included with Order:
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[10px] sm:text-xs text-gray-700">
+                            <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="font-semibold truncate">Crystal Digital Tasbih (<b>${activeVariant ? activeVariant.shortName : 'Selected Color'}</b>)</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="font-medium truncate">5-Digit Digital Display + Reset Button</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-emerald-50 px-2 py-0.5 sm:py-1 rounded-lg border border-emerald-200 text-emerald-900 font-bold">
+                                <i class="fa-solid fa-truck-fast text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="truncate">Prepaid 100% FREE Delivery</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-sand/80 px-2 py-0.5 sm:py-1 rounded-lg border border-gray-200">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-[10px] sm:text-xs flex-shrink-0"></i>
+                                <span class="font-medium truncate">Cash on Delivery Available (+₹100)</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (isJanamazProd) {
                     inclusionsBox.innerHTML = `
                         <div class="font-bold text-[10px] sm:text-[11px] text-onyx mb-1 flex items-center gap-1">
                             <i class="fa-solid fa-box-open text-emerald-600"></i> Included in Selected Package:
@@ -5218,11 +5353,17 @@
             const isOnline = (selectedPaymentMethod === 'razorpay');
 
             // Shipping Rule (3-Tier Structure):
-            // 1. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
-            // 2. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
-            // 3. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+            // 1. Single items promo: Miswak (₹199 prep / ₹299 COD) or Tasbih (₹249 prep / ₹349 COD)
+            // 2. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
+            // 3. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
+            // 4. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+            const hasMiswak = cart.some(i => i.sku === 'fati_siwak_01' || i.id === 15);
+            const hasTasbih = cart.some(i => (i.sku && String(i.sku).startsWith('fati_tasbih_')) || i.id === 19);
+
             let effectiveFee = 100;
-            if (subtotalPrice < 299) {
+            if ((hasMiswak || hasTasbih) && cart.length === 1) {
+                effectiveFee = isOnline ? 0 : 100;
+            } else if (subtotalPrice < 299) {
                 effectiveFee = isOnline ? 50 : 100;
             } else if (subtotalPrice < 599) {
                 effectiveFee = 100;

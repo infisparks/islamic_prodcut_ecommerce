@@ -2,6 +2,9 @@ const axios = require('axios');
 const config = require('../config/env');
 const logger = require('../utils/logger');
 
+// Global switch: WhatsApp messaging disabled per user request
+const WHATSAPP_ENABLED = false;
+
 // Strict Idempotency / De-duplication Sets to guarantee Admin & Customer never receive duplicate messages
 const adminNotifiedOrderIds = new Set();
 const customerNotifiedOrderIds = new Set();
@@ -39,6 +42,11 @@ function formatEstimatedDeliveryDate(baseDate) {
  * Send a raw text message via WhatsApp Evolution API.
  */
 async function sendTextMessage(phone, text) {
+  if (!WHATSAPP_ENABLED) {
+    logger.info('WHATSAPP_DISABLED_SKIPPED', { phone });
+    return false;
+  }
+
   const formattedNumber = sanitizePhone(phone);
   if (!formattedNumber) {
     logger.warn('WHATSAPP_INVALID_PHONE', { phone });

@@ -99,11 +99,12 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   let shipping = 100;
 
   const hasMiswak = items.some(i => i.sku === 'fati_siwak_01' || i.id === 15);
+  const hasTasbih = items.some(i => (i.sku && i.sku.startsWith('fati_tasbih_')) || i.productId === 19);
 
   if (isLocalFreeShipping) {
     shipping = 0;
-  } else if (hasMiswak && items.length === 1) {
-    // Miswak Pre-Order special: ₹199 Prepaid (Free Delivery), ₹299 COD (₹100 COD Delivery)
+  } else if ((hasMiswak || hasTasbih) && items.length === 1) {
+    // Single-item special promo: Prepaid Free Delivery (₹0), COD Delivery (+₹100)
     shipping = isOnlinePayment ? 0 : 100;
   } else if (subtotal < 299) {
     shipping = isOnlinePayment ? 50 : 100;

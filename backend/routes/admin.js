@@ -861,7 +861,7 @@ router.post('/orders/:orderId/confirm-cod', async (req, res, next) => {
         provider: 'COD',
         status: 'COD_CONFIRMED'
       },
-      status: 'PAYMENT_CAPTURED', // Ready for courier booking
+      status: 'COD_CONFIRMED', // Ready for courier booking
       events
     });
 
