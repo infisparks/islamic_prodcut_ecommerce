@@ -70,29 +70,55 @@ router.post('/razorpay', async (req, res) => {
   (async () => {
     try {
       if (['payment.captured', 'order.paid'].includes(eventType)) {
+        const orderEntity = (payload.payload && payload.payload.order && payload.payload.order.entity) || {};
         const paymentEntity = (payload.payload && payload.payload.payment && payload.payload.payment.entity) || {};
-        const razorpayOrderId = paymentEntity.order_id || (payload.payload && payload.payload.order && payload.payload.order.entity && payload.payload.order.entity.id);
+
+        const razorpayOrderId = paymentEntity.order_id || orderEntity.id;
         const razorpayPaymentId = paymentEntity.id;
 
-        if (!razorpayOrderId) return;
+        // Instant O(1) direct internal Order ID extraction from receipt, notes, or description
+        let internalOrderId = orderEntity.receipt ||
+                              (orderEntity.notes && orderEntity.notes.internalOrderId) ||
+                              (paymentEntity.notes && paymentEntity.notes.internalOrderId) ||
+                              null;
 
-        const order = await firebaseService.findOrderByRazorpayOrderId(razorpayOrderId);
+        if (!internalOrderId && paymentEntity.description && paymentEntity.description.startsWith('Order #')) {
+          internalOrderId = paymentEntity.description.replace('Order #', '').trim();
+        }
+
+        // 1. Direct O(1) Instant Firebase Lookup via internal Order ID (5ms)
+        let order = null;
+        if (internalOrderId) {
+          order = await firebaseService.getOrder(internalOrderId);
+          if (order) {
+            logger.info('WEBHOOK_ORDER_FOUND_DIRECT_O1', { internalOrderId, razorpayOrderId, razorpayPaymentId });
+          }
+        }
+
+        // 2. Fallback lookup via Razorpay Order ID if internalOrderId was missing or not found
+        if (!order && razorpayOrderId) {
+          order = await firebaseService.findOrderByRazorpayOrderId(razorpayOrderId);
+        }
+
         if (!order) {
-          logger.warn('WEBHOOK_ORDER_NOT_FOUND', { razorpayOrderId });
+          logger.warn('WEBHOOK_ORDER_NOT_FOUND', { razorpayOrderId, internalOrderId, razorpayPaymentId });
           return;
         }
 
         const orderId = order.orderId;
         await withLock(`order_fulfillment_${orderId}`, async () => {
           const freshOrder = await firebaseService.getOrder(orderId);
+          if (!freshOrder) return;
           const now = new Date().toISOString();
+
+          if (!freshOrder.payment) freshOrder.payment = {};
 
           // Update Payment status if not captured
           if (freshOrder.payment.status !== 'CAPTURED') {
-            if (!freshOrder.payment) freshOrder.payment = {};
             freshOrder.payment.provider = 'razorpay';
             freshOrder.payment.status = 'CAPTURED';
-            freshOrder.payment.razorpayPaymentId = razorpayPaymentId;
+            freshOrder.payment.razorpayOrderId = razorpayOrderId || freshOrder.payment.razorpayOrderId;
+            freshOrder.payment.razorpayPaymentId = razorpayPaymentId || freshOrder.payment.razorpayPaymentId;
             freshOrder.payment.paidAt = now;
             freshOrder.paymentMethod = 'razorpay';
             freshOrder.status = 'PAYMENT_CAPTURED';
@@ -109,6 +135,12 @@ router.post('/razorpay', async (req, res) => {
               paymentMethod: 'razorpay',
               status: freshOrder.status,
               events: freshOrder.events
+            });
+
+            logger.info('WEBHOOK_ORDER_PAYMENT_CAPTURED_SUCCESS', {
+              orderId,
+              razorpayPaymentId,
+              razorpayOrderId
             });
 
             whatsappService.sendOrderConfirmationWhatsApp(freshOrder).catch(err => {
@@ -131,16 +163,33 @@ router.post('/razorpay', async (req, res) => {
           }
         });
       } else if (eventType === 'payment.failed') {
+        const orderEntity = (payload.payload && payload.payload.order && payload.payload.order.entity) || {};
         const paymentEntity = (payload.payload && payload.payload.payment && payload.payload.payment.entity) || {};
-        const razorpayOrderId = paymentEntity.order_id;
-        if (razorpayOrderId) {
-          const order = await firebaseService.findOrderByRazorpayOrderId(razorpayOrderId);
-          if (order && order.payment.status !== 'CAPTURED') {
-            await firebaseService.updateOrder(order.orderId, {
-              'payment/status': 'FAILED',
-              status: 'PAYMENT_FAILED'
-            });
-          }
+
+        const razorpayOrderId = paymentEntity.order_id || orderEntity.id;
+        let internalOrderId = orderEntity.receipt ||
+                              (orderEntity.notes && orderEntity.notes.internalOrderId) ||
+                              (paymentEntity.notes && paymentEntity.notes.internalOrderId) ||
+                              null;
+
+        if (!internalOrderId && paymentEntity.description && paymentEntity.description.startsWith('Order #')) {
+          internalOrderId = paymentEntity.description.replace('Order #', '').trim();
+        }
+
+        let order = null;
+        if (internalOrderId) {
+          order = await firebaseService.getOrder(internalOrderId);
+        }
+        if (!order && razorpayOrderId) {
+          order = await firebaseService.findOrderByRazorpayOrderId(razorpayOrderId);
+        }
+
+        if (order && order.payment && order.payment.status !== 'CAPTURED') {
+          await firebaseService.updateOrder(order.orderId, {
+            'payment/status': 'FAILED',
+            status: 'PAYMENT_FAILED'
+          });
+          logger.info('ORDER_PAYMENT_FAILED_WEBHOOK', { orderId: order.orderId, razorpayOrderId });
         }
       }
     } catch (bgErr) {

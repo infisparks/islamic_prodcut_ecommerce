@@ -392,6 +392,8 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         orderRecord.status = 'PENDING_PAYMENT';
 
         await firebaseService.saveOrder(internalOrderId, orderRecord);
+        // Fast direct O(1) index mapping: razorpayOrderId -> internalOrderId
+        firebaseService.saveSettings(`razorpayOrders/${rzpOrder.id}`, { orderId: internalOrderId }).catch(() => {});
         logger.info('ORDER_CREATED', { internalOrderId, paymentMethod: 'razorpay', amountPaise });
 
         return res.status(201).json({

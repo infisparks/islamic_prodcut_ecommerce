@@ -914,7 +914,9 @@
                         <option value="fati_tasbih_purple" data-price="249">Crystal Digital Tasbih (Royal Purple) [Rs. 249]</option>
                     </optgroup>
                     <optgroup label="Ihram Essentials">
-                        <option value="fati_siwak_01" data-price="199">Siwak Miswak Starter Kit [Rs. 199]</option>
+                        <option value="fati_siwak_01" data-price="179">Siwak Miswak Starter Kit [Rs. 179]</option>
+                        <option value="fati_siwak_pack3" data-price="437">Siwak Miswak (Pack of 3) [Rs. 437]</option>
+                        <option value="fati_siwak_pack5" data-price="760">Siwak Miswak (Pack of 5) [Rs. 760]</option>
                     </optgroup>
                 </select>
             </div>
@@ -1661,8 +1663,8 @@
             } else if (sku.includes('siwak') || sku.includes('miswak') || nameLower.includes('siwak') || nameLower.includes('miswak')) {
                 baseName = 'Siwak Miswak Starter Kit';
                 icon = '🪥';
-                tag = 'Pre-Order • 1+5 Refills';
-                tagClass = 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
+                tag = sku.includes('pack5') ? 'Pack of 5 (₹760)' : (sku.includes('pack3') ? 'Pack of 3 (₹437)' : 'Single Pack (₹179)');
+                tagClass = 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold';
             } else if (sku.includes('cards_ihram') || sku.includes('offer_2') || nameLower.includes('cards + complete ihram') || nameLower.includes('cards + ihram')) {
                 baseName = 'Cards + Ihram Kit';
                 icon = '🎁';
@@ -3945,7 +3947,9 @@
             fati_tasbih_hotpink: { name: 'Crystal Digital Tasbih (Hot Pink)', price: 249, weight: '50gm' },
             fati_tasbih_pearl: { name: 'Crystal Digital Tasbih (Pearl Baby Pink)', price: 249, weight: '50gm' },
             fati_tasbih_purple: { name: 'Crystal Digital Tasbih (Royal Purple)', price: 249, weight: '50gm' },
-            fati_siwak_01: { name: 'Siwak Natural Miswak Starter Kit', price: 199, weight: '60gm' }
+            fati_siwak_01: { name: 'Siwak Natural Miswak Starter Kit (Single)', price: 179, weight: '60gm' },
+            fati_siwak_pack3: { name: 'Siwak Natural Miswak (Pack of 3)', price: 437, weight: '180gm' },
+            fati_siwak_pack5: { name: 'Siwak Natural Miswak (Pack of 5)', price: 760, weight: '300gm' }
         };
 
         function onProductDropdownChanged() {

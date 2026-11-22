@@ -38,10 +38,13 @@ router.post(['/razorpay/verify', '/verify'], validatePaymentVerification, async 
       });
     }
 
-    // 2. Find internal order in database by Razorpay Order ID or provided Order ID
-    let order = await firebaseService.findOrderByRazorpayOrderId(razorpay_order_id);
-    if (!order && reqOrderId) {
+    // 2. Instant O(1) internal order lookup by provided Order ID, with fallback to Razorpay Order ID
+    let order = null;
+    if (reqOrderId) {
       order = await firebaseService.getOrder(reqOrderId);
+    }
+    if (!order && razorpay_order_id) {
+      order = await firebaseService.findOrderByRazorpayOrderId(razorpay_order_id);
     }
 
     if (!order) {

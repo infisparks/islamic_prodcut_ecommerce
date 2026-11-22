@@ -115,10 +115,12 @@ app.use(
           "https://fonts.gstatic.com",
           "https://cdnjs.cloudflare.com"
         ],
-        imgSrc: ["'self'", "data:", "blob:", "https:", "https://www.facebook.com"],
-        mediaSrc: ["'self'", "https:", "https://commondatastorage.googleapis.com"]
+        imgSrc: ["'self'", "data:", "blob:", "https:", "http:", "https://www.facebook.com"],
+        mediaSrc: ["'self'", "https:", "http:", "https://commondatastorage.googleapis.com"],
+        upgradeInsecureRequests: null
       }
     },
+    hsts: false,
     crossOriginResourcePolicy: { policy: "cross-origin" },
     crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
     crossOriginEmbedderPolicy: false
@@ -194,6 +196,7 @@ const staticCacheOptions = {
   }
 };
 
+app.use('/product/product', express.static(path.join(rootDir, 'product'), staticCacheOptions));
 app.use('/product', express.static(path.join(rootDir, 'product'), staticCacheOptions));
 app.use(express.static(rootDir, staticCacheOptions));
 

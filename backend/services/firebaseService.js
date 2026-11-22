@@ -208,6 +208,17 @@ const firebaseService = {
       }
     }
 
+    // Direct O(1) index map lookup via razorpayOrders
+    try {
+      if (useDatabaseSecret) {
+        const resMap = await axios.get(getDbUrl(`settings/razorpayOrders/${razorpayOrderId}`), { timeout: 4000 });
+        if (resMap.data && resMap.data.orderId) {
+          const directOrder = await firebaseService.getOrder(resMap.data.orderId);
+          if (directOrder) return directOrder;
+        }
+      }
+    } catch (_) {}
+
     if (useDatabaseSecret) {
       try {
         const res = await axios.get(getDbUrl('orders'), { timeout: 10000 });

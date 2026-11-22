@@ -348,17 +348,22 @@ const catalog = [
   {
     id: 15,
     name: "Siwak Natural Miswak Toothbrush Starter Kit (1 Handle + 5 Refills)",
-    category: "essentials",
+    category: "siwak",
     hsn: "9603",
     sku: "fati_siwak_01",
     dimensions: { length: 18, breadth: 6, height: 2.5 },
-    price: 199,
-    codPrice: 299,
-    isBackorder: true,
-    backorderNotice: "Currently Out of Stock. Fresh stock arrives in 5 to 7 days and will be dispatched immediately.",
+    price: 179,
+    codPrice: 279,
+    oldPrice: 599,
     weightKg: 0.06,
     weightLabel: "Starter Kit (1 Handle + 5 Refills)",
-    image: "product/miswak/box.webp"
+    image: "product/miswak/box.webp",
+    freeShipping: true,
+    variants: [
+      { sku: "fati_siwak_01", name: "Single Pack (1 Starter Kit)", price: 179, oldPrice: 599, codPrice: 279, weightKg: 0.06, freeShipping: true },
+      { sku: "fati_siwak_pack3", name: "Pack of 3 Starter Kits (15% OFF)", price: 437, oldPrice: 1198, codPrice: 537, weightKg: 0.18, freeShipping: true },
+      { sku: "fati_siwak_pack5", name: "Pack of 5 Family Pack (25% OFF)", price: 760, oldPrice: 1998, codPrice: 860, weightKg: 0.30, freeShipping: true }
+    ]
   },
   {
     id: 18,
