@@ -328,6 +328,30 @@
                             </div>
                         </label>
 
+                        <!-- NOTICE UNDER PREPAID WHEN SUBTOTAL < 599 -->
+                        <div id="prepaid-cod-notice" class="hidden -mt-1 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-amber-50 via-orange-50 to-amber-100/70 border-2 border-amber-400 text-xs shadow-sm transition-all">
+                            <div class="flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
+                                <div class="flex items-start gap-3 min-w-0">
+                                    <div class="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                                        <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="font-black text-amber-950 text-xs sm:text-sm leading-tight uppercase tracking-tight">
+                                            Cash on Delivery Below Rs. 599 is NOT Available
+                                        </p>
+                                        <p id="prepaid-cod-notice-sub" class="text-[11px] sm:text-xs text-amber-900 leading-snug mt-1 font-medium">
+                                            Only Prepaid accepted for small orders. Add items worth Rs. 599+ to unlock Cash on Delivery!
+                                        </p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="openAddProductsModal()" 
+                                    class="shrink-0 w-full sm:w-auto px-4 py-2.5 rounded-xl gold-bg-gradient text-onyx font-black text-xs shadow-gold-glow flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border border-amber-400 ring-2 ring-amber-300/40">
+                                    <i class="fa-solid fa-cart-plus text-xs"></i>
+                                    <span>+ Add More Products</span>
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- CASH ON DELIVERY (Clean Secondary Option) -->
                         <label id="payment-label-cod" onclick="selectPaymentMethod('cod')" 
                             class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50/50 cursor-pointer transition-all">
@@ -507,6 +531,57 @@
                     <span id="mobile-cod-price" class="text-[10.5px] font-bold text-amber-300 font-mono">Rs. 699.00</span>
                 </div>
             </button>
+
+        </div>
+    </div>
+
+    <!-- ADD MORE PRODUCTS MODAL (In-Checkout Catalog Drawer) -->
+    <div id="add-products-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-2xl border border-gold-300/40 shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] overflow-hidden" onclick="event.stopPropagation()">
+            
+            <!-- Modal Header -->
+            <div class="p-2.5 sm:p-3 border-b border-gray-100 flex items-center justify-between gap-2 bg-sand/40 shrink-0">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-800 flex items-center justify-center font-bold text-xs shrink-0">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-xs sm:text-sm text-onyx leading-tight">Add Products to Order</h3>
+                        <p class="text-[9.5px] sm:text-[10px] text-gray-500 leading-none mt-0.5">Pick any product with 1-click & unlock Cash on Delivery</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeAddProductsModal()" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-onyx flex items-center justify-center transition-colors cursor-pointer text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Dynamic COD Progress Banner -->
+            <div id="modal-cod-banner" class="shrink-0">
+                <!-- Populated dynamically by JS -->
+            </div>
+
+            <!-- Toast alert inside modal on item addition -->
+            <div id="modal-added-notification" class="hidden px-4 py-2 bg-emerald-600 text-white text-xs font-bold flex items-center justify-between shrink-0 shadow-xs">
+                <span id="modal-added-text" class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> Item added!</span>
+                <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded">Cart Updated ✓</span>
+            </div>
+
+            <!-- Scrollable Catalog Items List -->
+            <div id="modal-catalog-list" class="p-2.5 sm:p-3.5 overflow-y-auto space-y-3 flex-1 divide-y divide-gray-100">
+                <!-- Populated dynamically by JS with Miswak at Top -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3.5 sm:p-4 border-t border-gray-200 bg-white flex items-center justify-between gap-3 shrink-0 shadow-xs">
+                <div>
+                    <div class="text-[10.5px] text-gray-500 font-semibold uppercase tracking-wider">Cart Subtotal:</div>
+                    <div id="modal-cart-subtotal" class="font-black text-onyx text-base sm:text-lg font-mono leading-tight">Rs. 0.00</div>
+                </div>
+                <button type="button" onclick="closeAddProductsModal()" class="px-5 py-2.5 rounded-xl gold-bg-gradient text-onyx font-black text-xs shadow-gold-glow hover:opacity-95 active:scale-95 transition-all cursor-pointer flex items-center gap-2 border border-amber-400">
+                    <span>Back to Checkout</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+            </div>
 
         </div>
     </div>
@@ -1048,6 +1123,9 @@
                 }];
 
                 localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
+                try {
+                    window.history.replaceState({}, '', window.location.pathname);
+                } catch (_) {}
             } else {
                 // If still empty, default to English Card Standard Kit (Rs. 599)
                 if (!Array.isArray(checkoutCart) || checkoutCart.length === 0) {
@@ -1291,6 +1369,9 @@
                 if (totalEl) totalEl.textContent = `Rs. ${codTotal.toFixed(2)}`;
             }
 
+            // Enforce COD availability threshold (COD unavailable for subtotal < 599)
+            const isCodAllowed = (subtotal >= 599);
+
             // Update Desktop CTA
             const btnSubmitText = document.getElementById('btn-submit-text');
             const btnSubmitSub = document.getElementById('btn-submit-sub');
@@ -1324,8 +1405,6 @@
                 }
             }
 
-            // Enforce COD availability threshold (COD unavailable for subtotal < 599)
-            const isCodAllowed = (subtotal >= 599);
             const codRestrictionBox = document.getElementById('cod-restriction-box');
             const codNormalInfo = document.getElementById('cod-normal-info');
             const radioCod = document.getElementById('radio-cod');
@@ -1333,6 +1412,8 @@
             const mobileBtnCod = document.getElementById('mobile-btn-cod');
             const mobileBtnOnline = document.getElementById('mobile-btn-online');
             const badgeCodPill = document.getElementById('badge-cod-pill');
+            const prepaidNoticeEl = document.getElementById('prepaid-cod-notice');
+            const prepaidNoticeSub = document.getElementById('prepaid-cod-notice-sub');
 
             if (!isCodAllowed) {
                 if (selectedPaymentMethod === 'cod') {
@@ -1343,18 +1424,22 @@
                     radioCod.checked = false;
                 }
                 if (codNormalInfo) codNormalInfo.classList.add('hidden');
+                const neededAmount = Math.max(0, 599 - subtotal);
+                if (prepaidNoticeEl) prepaidNoticeEl.classList.remove('hidden');
+                if (prepaidNoticeSub) {
+                    prepaidNoticeSub.innerHTML = `Cash on Delivery starts at Rs. 599. Add <b class="font-extrabold text-amber-950">Rs. ${neededAmount}</b> more to unlock COD!`;
+                }
                 if (codRestrictionBox) {
                     codRestrictionBox.classList.remove('hidden');
-                    const neededAmount = Math.max(0, 599 - subtotal);
                     codRestrictionBox.innerHTML = `
                         <div class="flex items-start gap-2 text-amber-900">
                             <i class="fa-solid fa-circle-exclamation text-amber-600 mt-0.5 text-xs shrink-0"></i>
                             <div class="space-y-1">
                                 <p class="font-bold text-[11px] sm:text-xs text-amber-900 leading-tight">Cash on Delivery unavailable for orders below Rs. 599</p>
                                 <p class="text-[10px] sm:text-[11px] text-amber-800 leading-snug">Only Prepaid (UPI / Cards / Net Banking) accepted for small orders. Add <b class="font-extrabold text-amber-950">Rs. ${neededAmount}</b> more to unlock Cash on Delivery!</p>
-                                <a href="index.html#products-grid" class="inline-flex items-center gap-1.5 font-black text-[11px] text-amber-950 hover:text-black underline mt-1 pt-0.5">
-                                    <i class="fa-solid fa-plus-circle text-amber-700"></i> + Add More Items
-                                </a>
+                                <button type="button" onclick="openAddProductsModal()" class="inline-flex items-center gap-1.5 font-black text-[11px] text-amber-950 hover:text-black underline mt-1 pt-0.5 cursor-pointer">
+                                    <i class="fa-solid fa-plus-circle text-amber-700"></i> + Add More Products
+                                </button>
                             </div>
                         </div>
                     `;
@@ -1372,6 +1457,7 @@
                     mobileBtnOnline.className = "col-span-5 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30";
                 }
             } else {
+                if (prepaidNoticeEl) prepaidNoticeEl.classList.add('hidden');
                 if (radioCod) radioCod.disabled = false;
                 if (codNormalInfo) codNormalInfo.classList.remove('hidden');
                 if (codRestrictionBox) codRestrictionBox.classList.add('hidden');
@@ -1386,6 +1472,11 @@
                 if (mobileBtnOnline) {
                     mobileBtnOnline.className = "col-span-3 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30";
                 }
+            }
+
+            // Sync modal progress banner if open
+            if (typeof updateModalCodProgress === 'function') {
+                updateModalCodProgress(subtotal);
             }
 
             // Update Mobile Sticky Buttons
@@ -1462,6 +1553,238 @@
             }
             localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
             renderCheckoutSummary();
+        }
+
+        // IN-CHECKOUT ADD MORE PRODUCTS MODAL LOGIC
+        function openAddProductsModal() {
+            const modal = document.getElementById('add-products-modal');
+            if (!modal) return;
+            renderAddProductsCatalog();
+            const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+            updateModalCodProgress(subtotal);
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddProductsModal() {
+            const modal = document.getElementById('add-products-modal');
+            if (modal) modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function updateModalCodProgress(subtotal) {
+            const banner = document.getElementById('modal-cod-banner');
+            const modalTotal = document.getElementById('modal-cart-subtotal');
+            if (modalTotal) modalTotal.textContent = `Rs. ${subtotal.toFixed(2)}`;
+            if (!banner) return;
+
+            if (subtotal < 599) {
+                const remaining = Math.max(0, 599 - subtotal);
+                const pct = Math.min(100, Math.round((subtotal / 599) * 100));
+                banner.className = "py-2 px-3 sm:px-4 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-100/90 border-b border-amber-300 text-xs shrink-0";
+                banner.innerHTML = `
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="w-5 h-5 rounded-md bg-amber-600 text-white flex items-center justify-center text-[10px] shrink-0 font-black shadow-2xs">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <div class="min-w-0 flex items-center gap-1.5 flex-wrap">
+                                <span class="text-[10.5px] sm:text-xs font-black text-amber-950 uppercase tracking-tight">COD Below ₹599 Not Available:</span>
+                                <span class="text-[11px] sm:text-xs font-medium text-amber-900">Add <b class="font-black text-amber-950 font-mono bg-amber-200/80 px-1 py-0.2 rounded">₹${remaining}</b> to unlock COD</span>
+                            </div>
+                        </div>
+                        <span class="shrink-0 text-[10px] font-black text-amber-900 bg-white/95 px-2 py-0.5 rounded-full border border-amber-300 font-mono shadow-2xs">
+                            ${pct}%
+                        </span>
+                    </div>
+                    <div class="w-full bg-amber-200/80 rounded-full h-1.5 overflow-hidden mt-1.5 border border-amber-300/60 shadow-inner">
+                        <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-1.5 rounded-full transition-all duration-300 shadow" style="width: ${pct}%"></div>
+                    </div>
+                `;
+            } else {
+                banner.className = "py-2 px-3 sm:px-4 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-100/90 border-b border-emerald-300 text-xs shrink-0";
+                banner.innerHTML = `
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="w-5 h-5 rounded-md bg-emerald-600 text-white flex items-center justify-center text-[10px] shrink-0 shadow-2xs">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                            <span class="text-[11px] sm:text-xs font-black text-emerald-950 truncate">
+                                ⚡ Cash on Delivery UNLOCKED! <span class="font-normal text-emerald-800 text-[10.5px]">(Cart is ₹${subtotal.toFixed(0)})</span>
+                            </span>
+                        </div>
+                        <span class="shrink-0 text-[9px] font-black text-white bg-emerald-700 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            Ready ✓
+                        </span>
+                    </div>
+                `;
+            }
+        }
+
+        // ADD TO CART WITH IMMEDIATE LIVE FEEDBACK
+        function quickAddToCart(productId, sku, customProps = {}) {
+            const p = catalogProducts.find(item => item.id === productId);
+            if (!p) return;
+
+            let variant = null;
+            if (p.variants && Array.isArray(p.variants)) {
+                variant = p.variants.find(v => v.sku === sku) || p.variants[0];
+            }
+
+            const targetSku = variant ? variant.sku : (sku || p.sku);
+            const cartKey = `${p.id}_${targetSku}`;
+
+            const existing = checkoutCart.find(i => i.cartKey === cartKey);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                const itemPrice = variant ? variant.price : p.price;
+                const itemImage = (variant && variant.image) ? variant.image : p.image;
+                const itemWeight = (variant && variant.weightKg) ? variant.weightKg : (p.weightKg || 0.10);
+                const itemVariantName = variant ? (variant.shortName || variant.name) : '';
+
+                checkoutCart.push({
+                    cartKey: cartKey,
+                    id: p.id,
+                    name: p.name,
+                    sku: targetSku,
+                    variantName: itemVariantName,
+                    price: itemPrice,
+                    image: itemImage,
+                    weightKg: itemWeight,
+                    qty: 1,
+                    cardLanguage: customProps.cardLanguage || (p.language || undefined),
+                    janamazColor: customProps.janamazColor || undefined,
+                    freeShipping: p.freeShipping || (variant && variant.freeShipping) || false
+                });
+            }
+
+            localStorage.setItem('fc_cart_items', JSON.stringify(checkoutCart));
+            renderCheckoutSummary();
+            renderAddProductsCatalog();
+
+            // Show vibrant alert notification inside modal
+            const toastEl = document.getElementById('modal-added-notification');
+            const toastText = document.getElementById('modal-added-text');
+            if (toastEl && toastText) {
+                const addedName = variant ? (variant.shortName || variant.name) : p.name;
+                toastText.innerHTML = `<i class="fa-solid fa-circle-check"></i> Added "${addedName}" to order!`;
+                toastEl.classList.remove('hidden');
+                clearTimeout(window.__modalToastTimer);
+                window.__modalToastTimer = setTimeout(() => {
+                    if (toastEl) toastEl.classList.add('hidden');
+                }, 2500);
+            }
+        }
+
+        // RENDER PRODUCTS IN THE MODAL CATALOG (Miswak on top priority)
+        function renderAddProductsCatalog() {
+            const container = document.getElementById('modal-catalog-list');
+            if (!container) return;
+
+            // Group 1: Sunnah Miswak Toothbrush Kits (TOP PRIORITY)
+            const miswakProd = catalogProducts.find(p => p.id === 15);
+            const miswakVariants = (miswakProd && miswakProd.variants) ? miswakProd.variants : [
+                { sku: 'fati_siwak_01', name: 'Single Pack (1 Starter Kit)', price: 179, oldPrice: 599 },
+                { sku: 'fati_siwak_pack3', name: 'Pack of 3 Starter Kits (15% OFF)', price: 437, oldPrice: 1198 },
+                { sku: 'fati_siwak_pack5', name: 'Pack of 5 Family Pack (25% OFF)', price: 760, oldPrice: 1998 }
+            ];
+
+            let miswakHtml = `
+                <div class="space-y-2 pb-1.5">
+                    <div class="flex items-center justify-between gap-2 pb-1 border-b border-emerald-200">
+                        <span class="font-black text-xs text-emerald-900 uppercase tracking-wide flex items-center gap-1.5">
+                            <i class="fa-solid fa-leaf text-emerald-600"></i> Sunnah Miswak Kits (Top Recommended)
+                        </span>
+                        <span class="text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.2 rounded-full">100% Free Shipping</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            `;
+
+            miswakVariants.forEach(v => {
+                const cartItem = checkoutCart.find(i => i.sku === v.sku);
+                const inCartQty = cartItem ? cartItem.qty : 0;
+                const isSpecial = v.sku === 'fati_siwak_pack5';
+                const badgeText = v.sku === 'fati_siwak_pack5' ? '⚡ UNLOCKS COD' : (v.sku === 'fati_siwak_pack3' ? '15% OFF' : 'STARTER');
+                miswakHtml += `
+                    <div class="p-2 sm:p-2.5 rounded-xl border ${inCartQty > 0 ? 'border-emerald-300 bg-emerald-50/20' : (isSpecial ? 'border-amber-300 bg-amber-50/30 ring-1 ring-amber-300/40' : 'border-gray-200 bg-white hover:border-emerald-300')} flex items-center justify-between gap-2 transition-all shadow-2xs">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <img src="product/miswak/box.webp" alt="${v.name}" class="w-11 h-11 object-contain bg-sand/30 rounded-lg p-0.5 shrink-0 border border-gray-100">
+                            <div class="min-w-0">
+                                <span class="text-[8px] font-extrabold uppercase ${isSpecial ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800'} px-1.5 py-0.2 rounded tracking-wide">${badgeText}</span>
+                                <h4 class="font-bold text-[11.5px] text-onyx truncate mt-0.5 leading-snug">${v.name}</h4>
+                                <div class="flex items-baseline gap-1.5 mt-0.5">
+                                    <span class="font-extrabold text-xs text-onyx font-mono">Rs. ${v.price}</span>
+                                    <span class="text-[10px] text-gray-400 line-through font-mono">Rs. ${v.oldPrice}</span>
+                                    ${inCartQty > 0 ? `<span class="text-[8.5px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 px-1 py-0.2 rounded">✓ ${inCartQty} in cart</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="add-btn-${v.sku}" onclick="quickAddToCart(15, '${v.sku}')" 
+                            class="shrink-0 py-1.5 px-2.5 rounded-lg ${inCartQty > 0 ? 'bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold shadow-2xs' : (isSpecial ? 'gold-bg-gradient text-onyx font-extrabold shadow-gold-glow border border-amber-400' : 'bg-onyx hover:bg-black text-white font-bold')} text-[11px] flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer">
+                            <i class="fa-solid ${inCartQty > 0 ? 'fa-check' : 'fa-plus'} text-[9px]"></i>
+                            <span>${inCartQty > 0 ? `+1 (${inCartQty})` : 'Add'}</span>
+                        </button>
+                    </div>
+                `;
+            });
+            miswakHtml += `</div></div>`;
+
+            // Group 2: Other Store Essentials
+            const otherItems = [
+                { id: 8, sku: 'fati_jnm_01', name: 'Pocket Travel Janamaz (Prayer Mat)', badge: 'PRAYER MAT', price: 349, oldPrice: 698, image: 'product/janamaz/golden.webp', color: 'Royal Gold' },
+                { id: 19, sku: 'fati_tasbih_green', name: 'Crystal Digital Tasbih (Tally Counter)', badge: 'DIGITAL TASBIH', price: 249, oldPrice: 499, image: 'product/tasbih/green.webp', color: 'Emerald Green' },
+                { id: 9, sku: 'fati_ess_soap', name: 'Herbal Ihram Friendly Soap (80g)', badge: 'FRAGRANCE-FREE', price: 99, oldPrice: 198, image: 'product/essentials/soap-nobg.webp' },
+                { id: 10, sku: 'fati_ess_oil', name: 'Pure Coconut Oil (60ml)', badge: 'IHRAM SAFE', price: 149, oldPrice: 298, image: 'product/essentials/coconut-oil-nobg.webp' },
+                { id: 13, sku: 'fati_ess_facewash', name: 'Herbal Face Wash (80ml)', badge: 'IHRAM ESSENTIAL', price: 299, oldPrice: 598, image: 'product/essentials/face-wash-nobg.webp' },
+                { id: 11, sku: 'fati_ess_shampoo', name: 'Herbal Hair Shampoo (120ml)', badge: 'IHRAM ESSENTIAL', price: 399, oldPrice: 798, image: 'product/essentials/shampoo-nobg.webp' },
+                { id: 12, sku: 'fati_ess_wash', name: 'Hand & Body Wash (120ml)', badge: 'IHRAM ESSENTIAL', price: 399, oldPrice: 798, image: 'product/essentials/hand-body-wash-nobg.webp' },
+                { id: 2, sku: 'fati_005', name: 'Umrah Dua Cards Companion Kit (English)', badge: 'ENGLISH CARDS', price: 599, oldPrice: 1198, image: 'product/card/699-1.webp' },
+                { id: 1, sku: 'fati_002', name: 'Umrah Dua Cards Companion Kit (Urdu)', badge: 'URDU CARDS', price: 599, oldPrice: 1198, image: 'product/card/699-1.webp' },
+                { id: 3, sku: 'fati_008', name: 'Umrah Dua Cards Companion Kit (Hindi)', badge: 'HINDI CARDS', price: 599, oldPrice: 1198, image: 'product/card/699-1.webp' },
+                { id: 4, sku: 'fati_011', name: 'Umrah Dua Cards Companion Kit (Roman)', badge: 'ROMAN CARDS', price: 599, oldPrice: 1198, image: 'product/card/699-1.webp' },
+                { id: 5, sku: 'fati_stk_01', name: 'Dua Sticker Waterproof (English)', badge: 'STICKER', price: 199, oldPrice: 398, image: 'product/umrah_Sticker_English.webp' }
+            ];
+
+            let othersHtml = `
+                <div class="space-y-2 pt-1.5">
+                    <div class="flex items-center justify-between gap-2 pb-1 border-b border-gray-200">
+                        <span class="font-black text-xs text-onyx uppercase tracking-wide flex items-center gap-1.5">
+                            <i class="fa-solid fa-gift text-gold-600"></i> Sacred Umrah & Travel Essentials
+                        </span>
+                        <span class="text-[9px] text-gray-500">Pick any to add</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            `;
+
+            otherItems.forEach(item => {
+                const cartItem = checkoutCart.find(i => i.sku === item.sku);
+                const inCartQty = cartItem ? cartItem.qty : 0;
+                othersHtml += `
+                    <div class="p-2 sm:p-2.5 rounded-xl border ${inCartQty > 0 ? 'border-emerald-300 bg-emerald-50/20' : 'border-gray-200 bg-white hover:border-gold-300'} flex items-center justify-between gap-2 transition-all shadow-2xs">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <img src="${item.image}" alt="${item.name}" class="w-11 h-11 object-contain bg-sand/30 rounded-lg p-0.5 shrink-0 border border-gray-100">
+                            <div class="min-w-0">
+                                <span class="text-[8px] font-extrabold uppercase bg-gray-100 text-gray-600 px-1.5 py-0.2 rounded tracking-wide">${item.badge}</span>
+                                <h4 class="font-bold text-[11.5px] text-onyx truncate mt-0.5 leading-snug">${item.name}</h4>
+                                <div class="flex items-baseline gap-1.5 mt-0.5">
+                                    <span class="font-extrabold text-xs text-onyx font-mono">Rs. ${item.price}</span>
+                                    <span class="text-[10px] text-gray-400 line-through font-mono">Rs. ${item.oldPrice}</span>
+                                    ${inCartQty > 0 ? `<span class="text-[8.5px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 px-1 py-0.2 rounded">✓ ${inCartQty} in cart</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="add-btn-${item.sku}" onclick="quickAddToCart(${item.id}, '${item.sku}'${item.color ? `, {janamazColor: '${item.color}'}` : ''})" 
+                            class="shrink-0 py-1.5 px-2.5 rounded-lg ${inCartQty > 0 ? 'bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold shadow-2xs' : 'bg-onyx hover:bg-black text-white font-bold'} text-[11px] flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer">
+                            <i class="fa-solid ${inCartQty > 0 ? 'fa-check' : 'fa-plus'} text-[9px]"></i>
+                            <span>${inCartQty > 0 ? `+1 (${inCartQty})` : 'Add'}</span>
+                        </button>
+                    </div>
+                `;
+            });
+            othersHtml += `</div></div>`;
+
+            container.innerHTML = miswakHtml + othersHtml;
         }
 
         // PINCODE LIVE LOOKUP & SHIPPING CALCULATION
@@ -1624,12 +1947,8 @@
         function selectPaymentMethod(method) {
             const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
             if (method === 'cod' && subtotal < 599) {
-                if (typeof showToast === 'function') {
-                    showToast(`COD unavailable for orders below Rs. 599. Please pay online or add Rs. ${599 - subtotal} more items!`, 'warning');
-                } else if (typeof showErrorModal === 'function') {
-                    showErrorModal("Cash on Delivery Unavailable", `Cash on Delivery is only available for orders of Rs. 599 or above.<br><br>Please select <b>Pay Online (UPI / Card)</b> or add <b>Rs. ${599 - subtotal}</b> more items to your cart.`);
-                }
-                method = 'razorpay';
+                openAddProductsModal();
+                return;
             }
 
             selectedPaymentMethod = (method === 'cod') ? 'cod' : 'razorpay';
@@ -1658,12 +1977,7 @@
         function submitWithPaymentMethod(method) {
             const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
             if (method === 'cod' && subtotal < 599) {
-                if (typeof showToast === 'function') {
-                    showToast(`COD unavailable for orders below Rs. 599. Please pay online or add Rs. ${599 - subtotal} more items!`, 'warning');
-                } else if (typeof showErrorModal === 'function') {
-                    showErrorModal("Cash on Delivery Unavailable", `Cash on Delivery is only available for orders of Rs. 599 or above.<br><br>Please select <b>Pay Online (UPI / Card)</b> or add <b>Rs. ${599 - subtotal}</b> more items to your cart.`);
-                }
-                selectPaymentMethod('razorpay');
+                openAddProductsModal();
                 return;
             }
             selectPaymentMethod(method);
@@ -1739,8 +2053,8 @@
             if (selectedPaymentMethod === 'cod') {
                 const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
                 if (subtotal < 599) {
-                    showErrorModal("Cash on Delivery Unavailable", `Cash on Delivery is only available for orders of Rs. 599 or above.<br><br>Please select <b>Pay Online (UPI / Card)</b> or add <b>Rs. ${599 - subtotal}</b> more items to your cart.`);
                     selectPaymentMethod('razorpay');
+                    openAddProductsModal();
                     return;
                 }
                 initiateDirectCodOrder(customer, items);
@@ -2159,7 +2473,7 @@
 
         function showErrorModal(title, msg) {
             document.getElementById('error-modal-title').textContent = title;
-            document.getElementById('error-modal-message').textContent = msg;
+            document.getElementById('error-modal-message').innerHTML = msg;
             document.getElementById('error-feedback-modal').classList.remove('hidden');
         }
 
