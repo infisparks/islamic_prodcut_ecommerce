@@ -334,24 +334,31 @@
                             <input type="radio" name="payment_method" value="cod" id="radio-cod" class="mt-0.5 text-onyx focus:ring-onyx accent-onyx w-4 h-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-1.5 flex-wrap">
-                                    <span class="font-bold text-xs sm:text-sm text-onyx">
-                                        Cash on Delivery (COD)
+                                    <span class="font-bold text-xs sm:text-sm text-onyx flex items-center gap-1.5">
+                                        <span>Cash on Delivery (COD)</span>
                                     </span>
-                                    <span class="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                                    <span id="badge-cod-pill" class="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
                                         Standard Dispatch
                                     </span>
                                 </div>
-                                <p class="text-[11px] text-gray-500 mt-1">
-                                    Pay with cash upon delivery at your doorstep.
-                                </p>
-                                <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
-                                    <span id="badge-cod-price" class="font-bold text-gray-700">
-                                        Pay Rs. 699.00 <span class="font-normal text-gray-500 text-[11px] ml-1">(Delivery: Rs. 100)</span>
-                                    </span>
-                                    <span class="text-[10px] font-medium text-gray-400 shrink-0">
-                                        Standard Delivery
-                                    </span>
+
+                                <!-- Normal COD Info (shown when subtotal >= 599) -->
+                                <div id="cod-normal-info">
+                                    <p class="text-[11px] text-gray-500 mt-1">
+                                        Pay with cash upon delivery at your doorstep.
+                                    </p>
+                                    <div class="mt-2.5 flex items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
+                                        <span id="badge-cod-price" class="font-bold text-gray-700">
+                                            Pay Rs. 699.00 <span class="font-normal text-gray-500 text-[11px] ml-1">(Delivery: Rs. 100)</span>
+                                        </span>
+                                        <span class="text-[10px] font-medium text-gray-400 shrink-0">
+                                            Standard Delivery
+                                        </span>
+                                    </div>
                                 </div>
+
+                                <!-- Restriction Box (shown when subtotal < 599) -->
+                                <div id="cod-restriction-box" class="hidden mt-2 p-2.5 rounded-lg bg-amber-50 border border-amber-300 text-xs"></div>
                             </div>
                         </label>
                     </div>
@@ -474,7 +481,7 @@
         <div class="grid grid-cols-5 gap-2 max-w-md mx-auto">
             
             <!-- Online Button (Left: 60% Width - Dominant Hero with Live Savings) -->
-            <button type="button" onclick="submitWithPaymentMethod('razorpay')" 
+            <button id="mobile-btn-online" type="button" onclick="submitWithPaymentMethod('razorpay')" 
                 class="col-span-3 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30">
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="font-black text-[11px] text-onyx tracking-tight flex items-center gap-1">
@@ -489,7 +496,7 @@
             </button>
 
             <!-- COD Button (Right: 40% Width - Clean Secondary Cash Option) -->
-            <button type="button" onclick="submitWithPaymentMethod('cod')" 
+            <button id="mobile-btn-cod" type="button" onclick="submitWithPaymentMethod('cod')" 
                 class="col-span-2 w-full flex flex-col justify-between px-2 py-1.5 rounded-xl bg-onyx hover:bg-black text-white shadow-2xs active:scale-[0.98] transition-all border border-gray-700/80 cursor-pointer h-[48px]">
                 <div class="flex items-center justify-between w-full leading-none">
                     <span class="font-bold text-[10px] text-white tracking-tight">PAY COD</span>
@@ -1307,11 +1314,77 @@
                 }
             }
             if (btnSubmitSub) {
-                if (selectedPaymentMethod === 'razorpay') {
+                if (!isCodAllowed) {
+                    btnSubmitSub.innerHTML = `<span class="text-amber-800 font-semibold text-[11px]"><i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> 100% Safe & Secure Online Checkout • COD available from Rs. 599</span>`;
+                } else if (selectedPaymentMethod === 'razorpay') {
                     btnSubmitSub.innerHTML = `<span class="cursor-pointer text-gray-500 hover:text-onyx transition-colors" onclick="selectPaymentMethod('cod')">Or choose <b>Cash on Delivery</b>: Rs. ${codTotal.toFixed(2)} ${codShipping > 0 ? `(Delivery: Rs. ${codShipping})` : '(FREE Delivery)'}</span>`;
                 } else {
                     const savePart = totalPrepaidSavings > 0 ? ` & Save Rs. ${totalPrepaidSavings.toFixed(2)} (${offBreakdown})` : '';
                     btnSubmitSub.innerHTML = `<span class="cursor-pointer text-emerald-700 hover:text-emerald-800 font-bold transition-colors" onclick="selectPaymentMethod('razorpay')">⚡ Switch to Online${savePart} • Pay Rs. ${onlineTotal.toFixed(2)}</span>`;
+                }
+            }
+
+            // Enforce COD availability threshold (COD unavailable for subtotal < 599)
+            const isCodAllowed = (subtotal >= 599);
+            const codRestrictionBox = document.getElementById('cod-restriction-box');
+            const codNormalInfo = document.getElementById('cod-normal-info');
+            const radioCod = document.getElementById('radio-cod');
+            const labelCod = document.getElementById('payment-label-cod');
+            const mobileBtnCod = document.getElementById('mobile-btn-cod');
+            const mobileBtnOnline = document.getElementById('mobile-btn-online');
+            const badgeCodPill = document.getElementById('badge-cod-pill');
+
+            if (!isCodAllowed) {
+                if (selectedPaymentMethod === 'cod') {
+                    selectedPaymentMethod = 'razorpay';
+                }
+                if (radioCod) {
+                    radioCod.disabled = true;
+                    radioCod.checked = false;
+                }
+                if (codNormalInfo) codNormalInfo.classList.add('hidden');
+                if (codRestrictionBox) {
+                    codRestrictionBox.classList.remove('hidden');
+                    const neededAmount = Math.max(0, 599 - subtotal);
+                    codRestrictionBox.innerHTML = `
+                        <div class="flex items-start gap-2 text-amber-900">
+                            <i class="fa-solid fa-circle-exclamation text-amber-600 mt-0.5 text-xs shrink-0"></i>
+                            <div class="space-y-1">
+                                <p class="font-bold text-[11px] sm:text-xs text-amber-900 leading-tight">Cash on Delivery unavailable for orders below Rs. 599</p>
+                                <p class="text-[10px] sm:text-[11px] text-amber-800 leading-snug">Only Prepaid (UPI / Cards / Net Banking) accepted for small orders. Add <b class="font-extrabold text-amber-950">Rs. ${neededAmount}</b> more to unlock Cash on Delivery!</p>
+                                <a href="index.html#products-grid" class="inline-flex items-center gap-1.5 font-black text-[11px] text-amber-950 hover:text-black underline mt-1 pt-0.5">
+                                    <i class="fa-solid fa-plus-circle text-amber-700"></i> + Add More Items
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+                if (badgeCodPill) {
+                    badgeCodPill.className = "text-[10px] font-bold text-amber-800 bg-amber-100/90 px-2 py-0.5 rounded-full border border-amber-300";
+                    badgeCodPill.innerHTML = '<i class="fa-solid fa-lock text-[9px] mr-1"></i> Prepaid Only';
+                }
+                if (labelCod) {
+                    labelCod.classList.add('opacity-85', 'border-amber-200', 'bg-amber-50/40', 'cursor-not-allowed');
+                    labelCod.classList.remove('hover:bg-gray-50/50', 'border-2', 'border-onyx');
+                }
+                if (mobileBtnCod) mobileBtnCod.classList.add('hidden');
+                if (mobileBtnOnline) {
+                    mobileBtnOnline.className = "col-span-5 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30";
+                }
+            } else {
+                if (radioCod) radioCod.disabled = false;
+                if (codNormalInfo) codNormalInfo.classList.remove('hidden');
+                if (codRestrictionBox) codRestrictionBox.classList.add('hidden');
+                if (badgeCodPill) {
+                    badgeCodPill.className = "text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full";
+                    badgeCodPill.textContent = "Standard Dispatch";
+                }
+                if (labelCod) {
+                    labelCod.classList.remove('opacity-85', 'border-amber-200', 'bg-amber-50/40', 'cursor-not-allowed');
+                }
+                if (mobileBtnCod) mobileBtnCod.classList.remove('hidden');
+                if (mobileBtnOnline) {
+                    mobileBtnOnline.className = "col-span-3 w-full flex flex-col justify-between px-3 py-1.5 rounded-xl gold-bg-gradient text-onyx shadow-gold-glow hover:opacity-95 active:scale-[0.98] transition-all border border-amber-400/60 cursor-pointer h-[48px] ring-2 ring-amber-400/30";
                 }
             }
 
@@ -1549,6 +1622,16 @@
 
         // PAYMENT METHOD SELECTOR
         function selectPaymentMethod(method) {
+            const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+            if (method === 'cod' && subtotal < 599) {
+                if (typeof showToast === 'function') {
+                    showToast(`COD unavailable for orders below Rs. 599. Please pay online or add Rs. ${599 - subtotal} more items!`, 'warning');
+                } else if (typeof showErrorModal === 'function') {
+                    showErrorModal("Cash on Delivery Unavailable", `Cash on Delivery is only available for orders of Rs. 599 or above.<br><br>Please select <b>Pay Online (UPI / Card)</b> or add <b>Rs. ${599 - subtotal}</b> more items to your cart.`);
+                }
+                method = 'razorpay';
+            }
+
             selectedPaymentMethod = (method === 'cod') ? 'cod' : 'razorpay';
             
             const radioCod = document.getElementById('radio-cod');
@@ -1573,6 +1656,16 @@
 
         // QUICK SUBMIT WITH SPECIFIC PAYMENT METHOD
         function submitWithPaymentMethod(method) {
+            const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+            if (method === 'cod' && subtotal < 599) {
+                if (typeof showToast === 'function') {
+                    showToast(`COD unavailable for orders below Rs. 599. Please pay online or add Rs. ${599 - subtotal} more items!`, 'warning');
+                } else if (typeof showErrorModal === 'function') {
+                    showErrorModal("Cash on Delivery Unavailable", `Cash on Delivery is only available for orders of Rs. 599 or above.<br><br>Please select <b>Pay Online (UPI / Card)</b> or add <b>Rs. ${599 - subtotal}</b> more items to your cart.`);
+                }
+                selectPaymentMethod('razorpay');
+                return;
+            }
             selectPaymentMethod(method);
             const form = document.getElementById('checkout-form');
             if (form) form.requestSubmit();
@@ -1644,6 +1737,12 @@
 
             // COD FLOW: Direct Order Booking (No OTP required)
             if (selectedPaymentMethod === 'cod') {
+                const subtotal = checkoutCart.reduce((s, i) => s + (i.price * i.qty), 0);
+                if (subtotal < 599) {
+                    showErrorModal("Cash on Delivery Unavailable", `Cash on Delivery is only available for orders of Rs. 599 or above.<br><br>Please select <b>Pay Online (UPI / Card)</b> or add <b>Rs. ${599 - subtotal}</b> more items to your cart.`);
+                    selectPaymentMethod('razorpay');
+                    return;
+                }
                 initiateDirectCodOrder(customer, items);
                 return;
             }

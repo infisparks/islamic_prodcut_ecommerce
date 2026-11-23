@@ -91,6 +91,15 @@ router.post('/send-cod-otp', async (req, res, next) => {
     if (customer && Array.isArray(items) && items.length > 0) {
       try {
         const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode, 'cod');
+        if (trustedOrderData.pricing.subtotal < 599) {
+          return res.status(400).json({
+            success: false,
+            error: {
+              code: 'COD_BELOW_599_UNAVAILABLE',
+              message: 'Cash on Delivery (COD) is only available for orders of ₹599 or above. Please choose Online Payment (Prepaid) or add more items to your cart.'
+            }
+          });
+        }
         if (!draftOrderId) {
           draftOrderId = generateOrderId();
         }
@@ -277,6 +286,8 @@ router.post('/quote', async (req, res, next) => {
     }
 
     const quoteData = await buildTrustedOrderItems(items, pincode, couponCode, paymentMethod);
+    quoteData.pricing.isCodAllowed = (quoteData.pricing.subtotal >= 599);
+    quoteData.pricing.minCodAmount = 599;
     res.json({
       success: true,
       data: {
@@ -321,6 +332,17 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
     return await withLock(`order_create_${cleanPhone}`, async () => {
       // 1. Calculate trusted cart pricing, weights, dimensions with dynamic pincode shipping
       const trustedOrderData = await buildTrustedOrderItems(items, customer.pincode, couponCode || req.body.couponCode, paymentMethod);
+
+      if (paymentMethod === 'cod' && trustedOrderData.pricing.subtotal < 599) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            code: 'COD_BELOW_599_UNAVAILABLE',
+            message: 'Cash on Delivery (COD) is only available for orders of ₹599 or above. Please choose Online Payment (Prepaid) or add more items to your cart.'
+          }
+        });
+      }
+
       const internalOrderId = reqDraftOrderId || (record && record.draftOrderId) || generateOrderId();
       const LOCAL_FREE_PINCODES = ['421305', '421302', '421308'];
       const custPincode = String(customer.pincode || '').trim();
