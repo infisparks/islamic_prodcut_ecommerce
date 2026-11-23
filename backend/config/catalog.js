@@ -341,7 +341,7 @@ const catalog = [
     price: 2198,
     weightKg: 0.95,
     weightLabel: "Mega Luxury Combo (9 Items)",
-    image: "product/offer/offer_3_mega_combo_2198.webp?v=2",
+    image: "product/offer/offer_3_mega_combo_2198_launch.webp",
     hasJanamaz: true,
     freeShipping: true
   },

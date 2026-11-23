@@ -184,8 +184,8 @@ const staticCacheOptions = {
   lastModified: true,
   setHeaders: (res, filePath) => {
     if (/\.(webp|png|jpe?g|gif|svg|ico|mp4|webm)$/i.test(filePath)) {
-      // 30 days immutable cache for product media
-      res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+      // Fast caching with stale-while-revalidate for product media
+      res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
     } else if (/\.(css|js|woff2?|ttf|eot)$/i.test(filePath)) {
       // 7 days with stale-while-revalidate for stylesheets and scripts
       res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
