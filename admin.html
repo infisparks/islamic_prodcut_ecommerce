@@ -1775,14 +1775,14 @@
                 const qty = item.quantity || item.qty || 1;
                 const isExtra = idx >= 3 && !isExpanded;
                 return `
-                    <div class="${idx >= 3 ? 'extra-item' : ''} ${isExtra ? 'hidden' : ''} flex items-center justify-between gap-1.5 text-[11px] bg-white hover:bg-slate-50/80 p-1.5 px-2 rounded-lg border border-slate-200/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors">
-                        <div class="flex items-center gap-2 min-w-0">
+                    <div class="${idx >= 3 ? 'extra-item' : ''} ${isExtra ? 'hidden' : ''} flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 text-[11px] bg-white hover:bg-slate-50/80 p-1.5 px-2 rounded-lg border border-slate-200/90 shadow-[0_1px_2px_rgba(0,0,0,0.03)] transition-colors">
+                        <div class="flex items-center gap-1.5 min-w-0 flex-1">
                             <span class="w-5 h-5 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-xs shrink-0">${meta.icon}</span>
-                            <span class="font-bold text-slate-900 truncate text-[11.5px]">${meta.baseName}</span>
+                            <span class="font-bold text-slate-900 text-[11.5px] whitespace-normal leading-tight">${meta.baseName}</span>
                         </div>
-                        <div class="flex items-center gap-1.5 shrink-0">
-                            ${meta.tag ? `<span class="text-[9px] px-1.5 py-0.5 rounded border ${meta.tagClass}">${meta.tag}</span>` : ''}
-                            <span class="text-[9.5px] font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded font-mono">x${qty}</span>
+                        <div class="flex items-center gap-1.5 shrink-0 ml-auto">
+                            ${meta.tag ? `<span class="text-[9px] sm:text-[9.5px] font-bold px-1.5 py-0.5 rounded border ${meta.tagClass} whitespace-nowrap">${meta.tag}</span>` : ''}
+                            <span class="text-[9.5px] font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded font-mono border border-slate-200">x${qty}</span>
                         </div>
                     </div>
                 `;
