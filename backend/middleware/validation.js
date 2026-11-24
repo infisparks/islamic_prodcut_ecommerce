@@ -1,6 +1,7 @@
 /**
  * Request Validation & Sanitization Middleware
  */
+const config = require('../config/env');
 
 function sanitizeString(str, maxLen = 200) {
   if (typeof str !== 'string') return '';
@@ -135,13 +136,14 @@ function validateOrderCreation(req, res, next) {
   }
 
   // Validate payment method if supplied
-  const method = (paymentMethod || 'razorpay').toLowerCase();
-  if (!['razorpay', 'cod'].includes(method)) {
+  const defaultMethod = (config.defaultPaymentGateway || 'cashfree').toLowerCase();
+  const method = (paymentMethod || defaultMethod).toLowerCase();
+  if (!['cashfree', 'razorpay', 'cod', 'online'].includes(method)) {
     return res.status(400).json({
       success: false,
       error: {
         code: 'INVALID_PAYMENT_METHOD',
-        message: 'Payment method must be either razorpay or cod.'
+        message: 'Payment method must be cashfree, razorpay, or cod.'
       }
     });
   }

@@ -6,9 +6,11 @@ const { orderCreateLimiter } = require('../middleware/rateLimit');
 const { buildTrustedOrderItems } = require('../services/catalogService');
 const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
+const cashfreeService = require('../services/cashfreeService');
 const shiprocketService = require('../services/shiprocketService');
 const whatsappService = require('../services/whatsappService');
 const metaCapiService = require('../services/metaCapiService');
+const config = require('../config/env');
 const { generateOrderId } = require('../utils/crypto');
 const { withLock } = require('../utils/idempotency');
 const logger = require('../utils/logger');
@@ -307,7 +309,10 @@ router.post('/quote', async (req, res, next) => {
  */
 router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, res, next) => {
   try {
-    const { customer, items, paymentMethod = 'razorpay', couponCode, verificationToken: reqVerificationToken, draftOrderId: reqDraftOrderId } = req.body;
+    const defaultGateway = (config.defaultPaymentGateway || 'cashfree').toLowerCase();
+    const reqMethod = (req.body.paymentMethod || defaultGateway).toLowerCase();
+    const paymentMethod = reqMethod === 'cod' ? 'cod' : (reqMethod === 'razorpay' ? 'razorpay' : defaultGateway);
+    const { customer, items, couponCode, verificationToken: reqVerificationToken, draftOrderId: reqDraftOrderId } = req.body;
     const cleanPhone = customer.phone.replace(/\D/g, '');
 
     // For COD: Direct order booking (OTP verification disabled per user request)
@@ -399,7 +404,53 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
         });
       }
 
-      // 2. Handle Razorpay flow
+      // 2. Handle Cashfree flow (Default Online Gateway)
+      if (paymentMethod === 'cashfree') {
+        const amountRupees = trustedOrderData.pricing.total;
+
+        const cfSession = await cashfreeService.createOrder({
+          internalOrderId,
+          amountInRupees: amountRupees,
+          customer
+        });
+
+        orderRecord.payment = {
+          provider: 'cashfree',
+          status: 'CREATED',
+          amountPaise: Math.round(amountRupees * 100),
+          amount: amountRupees,
+          currency: 'INR',
+          cashfreeOrderId: cfSession.orderId,
+          cfOrderId: cfSession.cfOrderId,
+          paymentSessionId: cfSession.paymentSessionId,
+          paidAt: null
+        };
+        orderRecord.paymentMethod = 'cashfree';
+        orderRecord.status = 'PENDING_PAYMENT';
+
+        await firebaseService.saveOrder(internalOrderId, orderRecord);
+        // Fast direct O(1) index mapping: cfOrderId -> internalOrderId
+        firebaseService.saveSettings(`cashfreeOrders/${cfSession.cfOrderId}`, { orderId: internalOrderId }).catch(() => {});
+        logger.info('ORDER_CREATED', { internalOrderId, paymentMethod: 'cashfree', amountRupees, cfOrderId: cfSession.cfOrderId });
+
+        return res.status(201).json({
+          success: true,
+          data: {
+            orderId: internalOrderId,
+            paymentProvider: 'cashfree',
+            paymentSessionId: cfSession.paymentSessionId,
+            cfOrderId: cfSession.cfOrderId,
+            cashfreeAppId: cashfreeService.getAppId(),
+            environment: cashfreeService.getEnv(),
+            amount: amountRupees,
+            currency: 'INR',
+            pricing: trustedOrderData.pricing,
+            itemsCount: trustedOrderData.items.reduce((s, i) => s + i.quantity, 0)
+          }
+        });
+      }
+
+      // 3. Handle Razorpay flow (Backup Gateway)
       if (paymentMethod === 'razorpay') {
         const amountPaise = trustedOrderData.pricing.total * 100;
 
@@ -422,6 +473,7 @@ router.post('/create', orderCreateLimiter, validateOrderCreation, async (req, re
           success: true,
           data: {
             orderId: internalOrderId,
+            paymentProvider: 'razorpay',
             razorpayOrderId: rzpOrder.id,
             razorpayKeyId: razorpayService.getKeyId(),
             amount: amountPaise,

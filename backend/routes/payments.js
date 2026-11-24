@@ -4,6 +4,7 @@ const router = express.Router();
 const { validatePaymentVerification } = require('../middleware/validation');
 const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
+const cashfreeService = require('../services/cashfreeService');
 const shiprocketService = require('../services/shiprocketService');
 const whatsappService = require('../services/whatsappService');
 const metaCapiService = require('../services/metaCapiService');
@@ -174,6 +175,124 @@ router.post(['/razorpay/verify', '/verify'], validatePaymentVerification, async 
       });
     }
     next(err);
+  }
+});
+
+/**
+ * POST /api/payments/cashfree/verify
+ * Server-side Cashfree order verification and fulfillment trigger
+ */
+router.post('/cashfree/verify', async (req, res, next) => {
+  try {
+    const orderId = req.body.orderId || req.body.order_id;
+    if (!orderId) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'ORDER_ID_REQUIRED', message: 'Order ID is required.' }
+      });
+    }
+
+    const order = await firebaseService.getOrder(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'ORDER_NOT_FOUND', message: 'Associated order was not found.' }
+      });
+    }
+
+    // If already captured, return immediate success
+    if (order.payment && order.payment.status === 'CAPTURED') {
+      return res.json({
+        success: true,
+        message: 'Payment already verified.',
+        data: order
+      });
+    }
+
+    // Verify order status directly from Cashfree PG API
+    const cfOrder = await cashfreeService.getOrder(orderId);
+    if (!cfOrder) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'CASHFREE_ORDER_NOT_FOUND', message: 'Order not found in Cashfree.' }
+      });
+    }
+
+    if (cfOrder.order_status === 'PAID') {
+      const payments = await cashfreeService.getOrderPayments(orderId);
+      const successfulPayment = payments.find(p => p.payment_status === 'SUCCESS') || payments[0] || {};
+      const now = new Date().toISOString();
+
+      await withLock(`order_fulfillment_${orderId}`, async () => {
+        const freshOrder = await firebaseService.getOrder(orderId);
+        if (!freshOrder) return;
+        if (freshOrder.payment?.status === 'CAPTURED') return;
+
+        freshOrder.payment = {
+          ...(freshOrder.payment || {}),
+          provider: 'cashfree',
+          status: 'CAPTURED',
+          cfOrderId: cfOrder.cf_order_id,
+          cfPaymentId: successfulPayment.cf_payment_id || null,
+          paymentMethod: successfulPayment.payment_group || 'cashfree',
+          paidAt: now
+        };
+        freshOrder.paymentMethod = 'cashfree';
+        freshOrder.status = 'PAYMENT_CAPTURED';
+
+        if (!freshOrder.events) freshOrder.events = [];
+        freshOrder.events.push({
+          event: 'PAYMENT_CAPTURED_VIA_CLIENT_VERIFY',
+          timestamp: now,
+          details: `Cashfree payment verified. CF Payment ID: ${successfulPayment.cf_payment_id || 'SUCCESS'}`
+        });
+
+        await firebaseService.updateOrder(orderId, {
+          payment: freshOrder.payment,
+          paymentMethod: 'cashfree',
+          status: freshOrder.status,
+          events: freshOrder.events
+        });
+
+        logger.info('CASHFREE_PAYMENT_VERIFIED_SUCCESS', {
+          orderId,
+          cfOrderId: cfOrder.cf_order_id,
+          cfPaymentId: successfulPayment.cf_payment_id
+        });
+
+        // Trigger WhatsApp confirmation
+        whatsappService.sendOrderConfirmationWhatsApp(freshOrder).catch(err => {
+          logger.error('CASHFREE_WHATSAPP_CONFIRM_FAIL', { orderId, error: err.message });
+        });
+      });
+
+      const updatedOrder = await firebaseService.getOrder(orderId);
+      return res.json({
+        success: true,
+        message: 'Payment verified and order confirmed successfully!',
+        data: updatedOrder
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'PAYMENT_NOT_PAID',
+          message: `Order status is ${cfOrder.order_status}. Payment is not completed.`
+        }
+      });
+    }
+  } catch (err) {
+    if (err.code === 'CONCURRENT_REQUEST') {
+      return res.status(409).json({
+        success: false,
+        error: { code: 'CONCURRENT_OPERATION', message: 'Order is being processed. Please wait.' }
+      });
+    }
+    logger.error('CASHFREE_VERIFICATION_ERROR', { error: err.message });
+    return res.status(500).json({
+      success: false,
+      error: { code: 'VERIFICATION_FAILED', message: err.message || 'Payment verification failed.' }
+    });
   }
 });
 

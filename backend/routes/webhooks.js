@@ -3,6 +3,7 @@ const router = express.Router();
 
 const firebaseService = require('../services/firebaseService');
 const razorpayService = require('../services/razorpayService');
+const cashfreeService = require('../services/cashfreeService');
 const shiprocketService = require('../services/shiprocketService');
 const whatsappService = require('../services/whatsappService');
 const config = require('../config/env');
@@ -283,6 +284,123 @@ router.post('/shiprocket', async (req, res) => {
       logger.info('SHIPROCKET_STATUS_UPDATED', { orderId: order.orderId, currentStatus });
     } catch (err) {
       logger.error('SHIPROCKET_WEBHOOK_UPDATE_ERROR', { error: err.message });
+    }
+  })();
+
+  return res.status(200).json({ success: true, received: true });
+});
+
+/**
+ * GET /api/webhooks/cashfree
+ * Status check
+ */
+router.get('/cashfree', (req, res) => {
+  res.json({
+    status: 'ACTIVE',
+    provider: 'Cashfree',
+    allowedMethod: 'POST',
+    message: 'Cashfree webhook endpoint is active and listening for POST events.'
+  });
+});
+
+/**
+ * POST /api/webhooks/cashfree
+ * Cashfree Webhook Handler (API version 2023-08-01)
+ */
+router.post('/cashfree', async (req, res) => {
+  const signature = req.headers['x-webhook-signature'];
+  const timestamp = req.headers['x-webhook-timestamp'];
+  const rawBody = req.rawBody || JSON.stringify(req.body);
+
+  // 1. Verify Webhook Signature (if signature provided)
+  if (signature && timestamp && !cashfreeService.verifyWebhookSignature(rawBody, signature, timestamp)) {
+    logger.warn('CASHFREE_WEBHOOK_SIGNATURE_INVALID', { signature, timestamp });
+    return res.status(400).json({ success: false, error: 'Invalid webhook signature' });
+  }
+
+  const payload = req.body || {};
+  const eventType = payload.type || payload.event;
+  const eventData = payload.data || {};
+  const orderEntity = eventData.order || {};
+  const paymentEntity = eventData.payment || {};
+
+  const orderId = orderEntity.order_id || payload.order_id;
+  const eventId = `cf_${orderId}_${eventType}_${timestamp || Date.now()}`;
+
+  logger.info('CASHFREE_WEBHOOK_RECEIVED', { eventType, orderId, eventId });
+
+  // 2. Check Idempotency
+  const alreadyProcessed = await firebaseService.isWebhookEventProcessed('cashfree', eventId);
+  if (alreadyProcessed) {
+    logger.info('CASHFREE_WEBHOOK_DUPLICATE_IGNORED', { eventId });
+    return res.status(200).json({ success: true, message: 'Event already processed.' });
+  }
+
+  await firebaseService.markWebhookEventProcessed('cashfree', eventId, { eventType });
+
+  // 3. Process event asynchronously in background
+  (async () => {
+    try {
+      if (!orderId) {
+        logger.warn('CASHFREE_WEBHOOK_NO_ORDER_ID', { payload });
+        return;
+      }
+
+      if (['PAYMENT_SUCCESS_WEBHOOK', 'ORDER_PAID', 'payment.success'].includes(eventType)) {
+        await withLock(`order_fulfillment_${orderId}`, async () => {
+          const freshOrder = await firebaseService.getOrder(orderId);
+          if (!freshOrder) {
+            logger.warn('CASHFREE_WEBHOOK_ORDER_NOT_FOUND', { orderId });
+            return;
+          }
+
+          if (freshOrder.payment?.status !== 'CAPTURED') {
+            const now = new Date().toISOString();
+            freshOrder.payment = {
+              ...(freshOrder.payment || {}),
+              provider: 'cashfree',
+              status: 'CAPTURED',
+              cfOrderId: orderEntity.cf_order_id || freshOrder.payment?.cfOrderId,
+              cfPaymentId: paymentEntity.cf_payment_id || freshOrder.payment?.cfPaymentId,
+              paymentMethod: paymentEntity.payment_group || 'cashfree',
+              paidAt: now
+            };
+            freshOrder.paymentMethod = 'cashfree';
+            freshOrder.status = 'PAYMENT_CAPTURED';
+
+            if (!freshOrder.events) freshOrder.events = [];
+            freshOrder.events.push({
+              event: 'PAYMENT_CAPTURED_VIA_WEBHOOK',
+              timestamp: now,
+              details: `Cashfree webhook confirmed payment: ${paymentEntity.cf_payment_id || 'SUCCESS'}`
+            });
+
+            await firebaseService.updateOrder(orderId, {
+              payment: freshOrder.payment,
+              paymentMethod: 'cashfree',
+              status: freshOrder.status,
+              events: freshOrder.events
+            });
+
+            logger.info('CASHFREE_WEBHOOK_ORDER_CAPTURED_SUCCESS', { orderId });
+
+            whatsappService.sendOrderConfirmationWhatsApp(freshOrder).catch(err => {
+              logger.error('CASHFREE_WEBHOOK_WHATSAPP_CONFIRM_FAIL', { orderId, error: err.message });
+            });
+          }
+        });
+      } else if (['PAYMENT_FAILED_WEBHOOK', 'PAYMENT_USER_DROPPED'].includes(eventType)) {
+        const order = await firebaseService.getOrder(orderId);
+        if (order && order.payment?.status !== 'CAPTURED') {
+          await firebaseService.updateOrder(orderId, {
+            'payment/status': 'FAILED',
+            status: 'PAYMENT_FAILED'
+          });
+          logger.info('CASHFREE_ORDER_PAYMENT_FAILED_WEBHOOK', { orderId, eventType });
+        }
+      }
+    } catch (err) {
+      logger.error('CASHFREE_WEBHOOK_PROCESSING_ERROR', { error: err.message, orderId });
     }
   })();
 

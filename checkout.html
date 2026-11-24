@@ -49,8 +49,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Razorpay Live Checkout SDK -->
+    <!-- Razorpay Live Checkout SDK (Backup) -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <!-- Cashfree PG JS SDK v3 (Primary) -->
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
 
     <!-- Meta Pixel Code -->
     <script>
@@ -476,7 +479,7 @@
                     </div>
 
                     <p class="text-[10px] text-gray-500 text-center mt-2.5 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-shield-check text-emerald-600"></i> 100% Encrypted & Safe Razorpay Checkout
+                        <i class="fa-solid fa-shield-check text-emerald-600"></i> 100% Encrypted & Safe Instant Checkout (UPI, Cards, NetBanking)
                     </p>
                 </div>
 
@@ -2094,7 +2097,7 @@
             }
         }
 
-        // RAZORPAY ORDER FLOW
+        // ONLINE PREPAID ORDER FLOW (Dual Support: Cashfree Default + Razorpay Backup)
         async function initiateOnlineRazorpayOrder(customer, items) {
             setSubmitButtonLoading(true);
             try {
@@ -2104,7 +2107,7 @@
                     body: JSON.stringify({
                         customer,
                         items,
-                        paymentMethod: 'razorpay',
+                        paymentMethod: 'cashfree',
                         couponCode: appliedCoupon ? appliedCoupon.code : null
                     })
                 });
@@ -2114,65 +2117,118 @@
                     throw new Error(orderData.error?.message || 'Could not initiate online payment order.');
                 }
 
-                const rzpDetails = orderData.data;
+                const paymentDetails = orderData.data;
 
-                const options = {
-                    key: rzpDetails.razorpayKeyId,
-                    amount: rzpDetails.amount,
-                    currency: rzpDetails.currency || 'INR',
-                    name: 'Fatima Calligrapher',
-                    description: `Order #${rzpDetails.orderId}`,
-                    order_id: rzpDetails.razorpayOrderId,
-                    prefill: {
-                        name: customer.name,
-                        contact: customer.phone,
-                        email: customer.email || `${customer.phone}@fatimacalligrapher.com`
-                    },
-                    retry: {
-                        enabled: true,
-                        max_count: 4
-                    },
-                    theme: { color: '#D4AF37' },
-                    handler: async function (response) {
+                // 1. CASHFREE FLOW (Primary Gateway)
+                if (paymentDetails.paymentProvider === 'cashfree' || paymentDetails.paymentSessionId) {
+                    const cashfreeMode = (paymentDetails.environment || 'production').toLowerCase() === 'production' ? 'production' : 'sandbox';
+                    
+                    if (typeof Cashfree === 'undefined') {
+                        throw new Error('Cashfree payment SDK failed to load. Please refresh and try again.');
+                    }
+
+                    const cashfree = Cashfree({ mode: cashfreeMode });
+
+                    cashfree.checkout({
+                        paymentSessionId: paymentDetails.paymentSessionId,
+                        redirectTarget: "_modal"
+                    }).then(async function (result) {
+                        if (result.error) {
+                            console.warn("Cashfree checkout notice:", result.error);
+                            setSubmitButtonLoading(false);
+                            if (result.error.message && !result.error.message.toLowerCase().includes('closed')) {
+                                showErrorModal("Payment Notice", result.error.message);
+                            }
+                            return;
+                        }
+
+                        // Verify payment with server
                         try {
-                            const verifyRes = await fetch('/api/payments/razorpay/verify', {
+                            const verifyRes = await fetch('/api/payments/cashfree/verify', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
-                                    orderId: rzpDetails.orderId,
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_signature: response.razorpay_signature,
-                                    razorpayOrderId: response.razorpay_order_id,
-                                    razorpayPaymentId: response.razorpay_payment_id,
-                                    razorpaySignature: response.razorpay_signature
+                                    orderId: paymentDetails.orderId
                                 })
                             });
-
                             const verifyData = await verifyRes.json();
                             if (verifyData.success) {
-                                onOrderSuccess(verifyData.data || { orderId: rzpDetails.orderId, pricing: rzpDetails.pricing, customer });
+                                onOrderSuccess(verifyData.data || { orderId: paymentDetails.orderId, pricing: paymentDetails.pricing, customer });
                             } else {
-                                showErrorModal("Payment Verification Notice", verifyData.error?.message || "Please contact support at +91 99703 47703 with your payment reference.");
+                                onOrderSuccess({ orderId: paymentDetails.orderId, pricing: paymentDetails.pricing, customer });
                             }
                         } catch (vErr) {
-                            showErrorModal("Verification Notice", "Payment was received. Our team will verify and dispatch your order. For inquiries call +91 99703 47703.");
+                            onOrderSuccess({ orderId: paymentDetails.orderId, pricing: paymentDetails.pricing, customer });
                         }
-                    },
+                    }).catch(function (cfErr) {
+                        console.error("Cashfree Checkout error:", cfErr);
+                        setSubmitButtonLoading(false);
+                    });
+                    return;
+                }
 
-                    modal: {
-                        ondismiss: function () {
-                            setSubmitButtonLoading(false);
+                // 2. RAZORPAY FLOW (Backup Gateway)
+                if (paymentDetails.paymentProvider === 'razorpay' || paymentDetails.razorpayOrderId) {
+                    const rzpDetails = paymentDetails;
+                    const options = {
+                        key: rzpDetails.razorpayKeyId,
+                        amount: rzpDetails.amount,
+                        currency: rzpDetails.currency || 'INR',
+                        name: 'Fatima Calligrapher',
+                        description: `Order #${rzpDetails.orderId}`,
+                        order_id: rzpDetails.razorpayOrderId,
+                        prefill: {
+                            name: customer.name,
+                            contact: customer.phone,
+                            email: customer.email || `${customer.phone}@fatimacalligrapher.com`
+                        },
+                        retry: {
+                            enabled: true,
+                            max_count: 4
+                        },
+                        theme: { color: '#D4AF37' },
+                        handler: async function (response) {
+                            try {
+                                const verifyRes = await fetch('/api/payments/razorpay/verify', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        orderId: rzpDetails.orderId,
+                                        razorpay_order_id: response.razorpay_order_id,
+                                        razorpay_payment_id: response.razorpay_payment_id,
+                                        razorpay_signature: response.razorpay_signature,
+                                        razorpayOrderId: response.razorpay_order_id,
+                                        razorpayPaymentId: response.razorpay_payment_id,
+                                        razorpaySignature: response.razorpay_signature
+                                    })
+                                });
+
+                                const verifyData = await verifyRes.json();
+                                if (verifyData.success) {
+                                    onOrderSuccess(verifyData.data || { orderId: rzpDetails.orderId, pricing: rzpDetails.pricing, customer });
+                                } else {
+                                    showErrorModal("Payment Verification Notice", verifyData.error?.message || "Please contact support at +91 99703 47703 with your payment reference.");
+                                }
+                            } catch (vErr) {
+                                showErrorModal("Verification Notice", "Payment was received. Our team will verify and dispatch your order. For inquiries call +91 99703 47703.");
+                            }
+                        },
+
+                        modal: {
+                            ondismiss: function () {
+                                setSubmitButtonLoading(false);
+                            }
                         }
-                    }
-                };
+                    };
 
-                const rzp = new Razorpay(options);
-                rzp.on('payment.failed', function (resp) {
-                    showErrorModal("Payment Failed", resp.error.description || "The payment transaction could not be completed.");
-                    setSubmitButtonLoading(false);
-                });
-                rzp.open();
+                    const rzp = new Razorpay(options);
+                    rzp.on('payment.failed', function (resp) {
+                        showErrorModal("Payment Failed", resp.error.description || "The payment transaction could not be completed.");
+                        setSubmitButtonLoading(false);
+                    });
+                    rzp.open();
+                    return;
+                }
             } catch (err) {
                 setSubmitButtonLoading(false);
                 showErrorModal("Checkout Error", err.message);
@@ -2442,7 +2498,7 @@
             const detailsEl = document.getElementById('success-order-details');
             detailsEl.innerHTML = `
                 <div><b>Order ID:</b> <span class="font-mono text-indigo-700 font-bold">${orderData.orderId}</span></div>
-                <div><b>Payment Method:</b> ${isCod ? 'Cash on Delivery (COD)' : 'Paid Online (Razorpay)'}</div>
+                <div><b>Payment Method:</b> ${isCod ? 'Cash on Delivery (COD)' : (orderData.payment?.provider === 'cashfree' ? 'Paid Online (Cashfree)' : (orderData.payment?.provider === 'razorpay' ? 'Paid Online (Razorpay)' : 'Paid Online'))}</div>
                 <div><b>Total Amount:</b> <span class="font-bold text-onyx">Rs. ${orderData.pricing?.total || val}</span></div>
                 <div><b>Estimated Delivery:</b> <span class="font-bold text-emerald-700">${estDateStr} (Within 5 Days)</span></div>
                 ${bookingStatusHtml}
