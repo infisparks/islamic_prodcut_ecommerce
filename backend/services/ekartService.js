@@ -80,7 +80,10 @@ const ekartService = {
 
     // Detect Payment mode: Prepaid vs COD
     const prov = (order.payment?.provider || order.paymentMethod || '').toLowerCase();
-    const isAlreadyPaid = prov === 'razorpay' && order.payment?.status === 'CAPTURED';
+    const isAlreadyPaid = (prov === 'razorpay' && order.payment?.status === 'CAPTURED') ||
+      order.paymentStatus === 'PAID' ||
+      order.payment?.status === 'PAID' ||
+      order.payment?.status === 'captured';
     const isCod = options.convertToCod ? true : (!isAlreadyPaid || prov === 'cod');
 
     // Customer info sanitization (with multi-field fallbacks)
@@ -104,7 +107,13 @@ const ekartService = {
 
     const addressLine1 = customer.address1 || customer.address || customer.addressLine1 || shippingAddr.address1 || shippingAddr.address || shippingAddr.addressLine1 || '';
     const addressLine2 = customer.address2 || customer.addressLine2 || shippingAddr.address2 || shippingAddr.addressLine2 || '';
-    const fullAddress = [addressLine1, addressLine2].filter(Boolean).join(', ') || 'Address Provided on Checkout';
+    let fullAddress = [addressLine1, addressLine2].filter(Boolean).join(', ').trim() || 'Address Provided on Checkout';
+    if (fullAddress.length < 10) {
+      fullAddress = `${fullAddress}, ${city}, ${state}`.trim();
+      if (fullAddress.length < 10) {
+        fullAddress = `${fullAddress} - Delivery Address`;
+      }
+    }
     const city = customer.city || shippingAddr.city || 'City';
     const state = customer.state || shippingAddr.state || 'State';
 
@@ -138,7 +147,7 @@ const ekartService = {
         mobile: cleanPhone
       },
       payments: {
-        payment_mode: isCod ? 'COD' : 'Prepaid',
+        payment_mode: isCod ? 'COD' : 'PREPAID',
         amount: totalAmount
       },
       items: mappedItems
@@ -188,7 +197,7 @@ const ekartService = {
         courierName: 'Ekart Logistics',
         subOrderStatus: subOrderStatus,
         totalAmount: totalAmount,
-        paymentMode: isCod ? 'COD' : 'Prepaid',
+        paymentMode: isCod ? 'COD' : 'PREPAID',
         trackingUrl: subOrderId ? `https://app.elite.ekartlogistics.in/track/${encodeURIComponent(subOrderId)}` : 'https://app.elite.ekartlogistics.in/track',
         bookedAt: new Date().toISOString()
       };
