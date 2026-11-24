@@ -2097,7 +2097,7 @@
             }
         }
 
-        // ONLINE PREPAID ORDER FLOW (Dual Support: Cashfree Default + Razorpay Backup)
+        // ONLINE PREPAID ORDER FLOW (Dual Support: Razorpay Active + Cashfree Ready)
         async function initiateOnlineRazorpayOrder(customer, items) {
             setSubmitButtonLoading(true);
             try {
@@ -2107,7 +2107,7 @@
                     body: JSON.stringify({
                         customer,
                         items,
-                        paymentMethod: 'cashfree',
+                        paymentMethod: 'razorpay',
                         couponCode: appliedCoupon ? appliedCoupon.code : null
                     })
                 });

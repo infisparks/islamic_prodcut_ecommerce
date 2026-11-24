@@ -49,7 +49,7 @@ const config = {
     baseUrl: process.env.EKART_BASE_URL || 'https://app.elite.ekartlogistics.in'
   },
 
-  defaultPaymentGateway: (process.env.DEFAULT_PAYMENT_GATEWAY || 'cashfree').toLowerCase().trim(),
+  defaultPaymentGateway: (process.env.DEFAULT_PAYMENT_GATEWAY || 'razorpay').toLowerCase().trim(),
 
   cashfree: {
     appId: process.env.CASHFREE_APP_ID || '',
