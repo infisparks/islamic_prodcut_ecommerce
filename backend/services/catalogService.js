@@ -111,12 +111,8 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   } else if (subtotal < 599) {
     shipping = 100;
   } else {
-    // subtotal >= 599
-    if (subtotal >= 999 || isOnlinePayment) {
-      shipping = 0;
-    } else {
-      shipping = 100;
-    }
+    // subtotal >= 599: Online Prepaid is FREE (₹0), COD is always +₹100
+    shipping = isOnlinePayment ? 0 : 100;
   }
 
   const hasFreeShipping = (shipping === 0);
@@ -124,18 +120,9 @@ async function buildTrustedOrderItems(rawItems, deliveryPincode, couponCode = nu
   let discount = 0;
   let appliedCoupon = null;
 
-  // Payment Method Discounts:
-  // - 10% OFF on prepaid for Combo sets (₹898+) or orders >= ₹898
-  // - 0% discount on ₹599 kit (Free delivery only, no extra 10% off)
+  // Payment Method Discounts: 10% prepaid discount removed (Online Prepaid gets FREE shipping vs ₹100 COD)
   let onlineDiscount = 0;
   let codCharge = 0;
-
-  if (isOnlinePayment) {
-    const hasCombo = items.some(i => i.hasJanamaz || i.sku === 'fati_ess_combo' || i.sku === 'fati_combo_cards_ihram' || i.sku === 'fati_combo_mega_2198');
-    const isComboOr898 = (hasCombo || subtotal >= 898);
-    const prepaidDiscountRate = isComboOr898 ? 0.10 : 0;
-    onlineDiscount = Math.round(subtotal * prepaidDiscountRate);
-  }
 
   const total = Math.max(0, subtotal - discount - onlineDiscount + codCharge + shipping);
 

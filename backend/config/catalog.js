@@ -15,7 +15,7 @@ const catalog = [
       {
         sku: "fati_002",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 599,
+        price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/card/699-1.webp",
@@ -25,7 +25,7 @@ const catalog = [
       {
         sku: "fati_003",
         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
-        price: 898,
+        price: 999,
         weightKg: 0.26,
         weightLabel: "260gm",
         image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
@@ -44,7 +44,7 @@ const catalog = [
       {
         sku: "fati_005",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 599,
+        price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/offer/offer_5_cards_only_599.webp?v=2",
@@ -54,7 +54,7 @@ const catalog = [
       {
         sku: "fati_006",
         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
-        price: 898,
+        price: 999,
         weightKg: 0.26,
         weightLabel: "260gm",
         image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
@@ -73,7 +73,7 @@ const catalog = [
       {
         sku: "fati_008",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 599,
+        price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/offer/offer_5_cards_only_599.webp?v=2",
@@ -83,7 +83,7 @@ const catalog = [
       {
         sku: "fati_009",
         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
-        price: 898,
+        price: 999,
         weightKg: 0.26,
         weightLabel: "260gm",
         image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
@@ -102,7 +102,7 @@ const catalog = [
       {
         sku: "fati_011",
         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
-        price: 599,
+        price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/offer/offer_5_cards_only_599.webp?v=2",
@@ -112,7 +112,7 @@ const catalog = [
       {
         sku: "fati_012",
         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
-        price: 898,
+        price: 999,
         weightKg: 0.26,
         weightLabel: "260gm",
         image: "product/offer/offer_1_cards_janamaz_898.webp?v=2",
@@ -312,7 +312,7 @@ const catalog = [
     hsn: "3304",
     sku: "fati_ess_combo",
     dimensions: { length: 24, breadth: 18, height: 8 },
-    price: 1299,
+    price: 1499,
     weightKg: 0.65,
     weightLabel: "Family Box (7 Items)",
     image: "product/offer/offer_6_ihram_kit_1299.webp?v=2",
@@ -325,7 +325,7 @@ const catalog = [
     hsn: "3304",
     sku: "fati_combo_cards_ihram",
     dimensions: { length: 24, breadth: 18, height: 10 },
-    price: 1848,
+    price: 1999,
     weightKg: 0.80,
     weightLabel: "Combo Box (8 Items)",
     image: "product/offer/offer_2_cards_ihram_1848.webp?v=2",
@@ -338,7 +338,7 @@ const catalog = [
     hsn: "3304",
     sku: "fati_combo_mega_2198",
     dimensions: { length: 26, breadth: 20, height: 12 },
-    price: 2198,
+    price: 2499,
     weightKg: 0.95,
     weightLabel: "Mega Luxury Combo (9 Items)",
     image: "product/offer/offer_3_mega_combo_2198_launch.webp",
@@ -375,7 +375,7 @@ const catalog = [
       {
         sku: "fati_kids_001",
         name: "Kids Full Companion Kit (Cards + Tasbih + Lanyard + Velvet Pouch)",
-        price: 599,
+        price: 699,
         weightKg: 0.15,
         weightLabel: "150gm",
         image: "product/offer/offer_kids_cards_599.webp?v=2",
@@ -385,7 +385,7 @@ const catalog = [
       {
         sku: "fati_kids_002",
         name: "Kids Mega Combo Kit (Kids Cards + Travel Janamaz + Pouch + Lanyard)",
-        price: 898,
+        price: 999,
         weightKg: 0.26,
         weightLabel: "260gm",
         image: "product/offer/offer_kids_cards_599.webp?v=2",

@@ -879,19 +879,19 @@
                 </label>
                 <select id="change-product-select" onchange="onProductDropdownChanged()" class="w-full px-3 py-2.5 text-xs bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium text-gray-900 cursor-pointer shadow-2xs">
                     <optgroup label="Urdu / اردو Kits">
-                        <option value="fati_002" data-price="599">Umrah Dua Cards (Urdu) - Full Companion Kit (+ Zipper Pouch) [Rs. 599]</option>
+                        <option value="fati_002" data-price="699">Umrah Dua Cards (Urdu) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
                         <option value="fati_003" data-price="899">Umrah Dua Cards (Urdu) - Mega Combo Kit (+ Pouch & Janamaz) [Rs. 899]</option>
                     </optgroup>
                     <optgroup label="English Kits">
-                        <option value="fati_005" data-price="599">Umrah Dua Cards (English) - Full Companion Kit (+ Zipper Pouch) [Rs. 599]</option>
+                        <option value="fati_005" data-price="699">Umrah Dua Cards (English) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
                         <option value="fati_006" data-price="899">Umrah Dua Cards (English) - Mega Combo Kit (+ Pouch & Janamaz) [Rs. 899]</option>
                     </optgroup>
                     <optgroup label="Hindi / हिंदी Kits">
-                        <option value="fati_008" data-price="599">Umrah Dua Cards (Hindi) - Full Companion Kit (+ Zipper Pouch) [Rs. 599]</option>
+                        <option value="fati_008" data-price="699">Umrah Dua Cards (Hindi) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
                         <option value="fati_009" data-price="899">Umrah Dua Cards (Hindi) - Mega Combo Kit (+ Pouch & Janamaz) [Rs. 899]</option>
                     </optgroup>
                     <optgroup label="Roman English Kits">
-                        <option value="fati_011" data-price="599">Umrah Dua Cards (Roman English) - Full Companion Kit (+ Zipper Pouch) [Rs. 599]</option>
+                        <option value="fati_011" data-price="699">Umrah Dua Cards (Roman English) - Full Companion Kit (+ Zipper Pouch) [Rs. 699]</option>
                         <option value="fati_012" data-price="899">Umrah Dua Cards (Roman English) - Mega Combo Kit (+ Pouch & Janamaz) [Rs. 899]</option>
                     </optgroup>
                     <optgroup label="Dua Stickers">
@@ -1669,7 +1669,7 @@
                 baseName = 'Cards + Ihram Kit';
                 icon = '🎁';
                 const lang = item.cardLanguage || (item.variantName && item.variantName.match(/Cards \((.*?)\)/) ? item.variantName.match(/Cards \((.*?)\)/)[1] : (item.variantName && item.variantName.match(/\((.*?)\)/) ? item.variantName.match(/\((.*?)\)/)[1] : ''));
-                tag = lang ? ('₹1848 • ' + lang) : 'Offer 2 (₹1848)';
+                tag = lang ? ('₹1999 • ' + lang) : 'Offer 2 (₹1999)';
                 tagClass = 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
             } else if (sku.includes('combo_mega') || sku.includes('offer_3') || nameLower.includes('mega combo')) {
                 baseName = 'Mega Umrah Combo';
@@ -1677,12 +1677,12 @@
                 const lang = item.cardLanguage || (item.variantName && item.variantName.match(/Cards \((.*?)\)/) ? item.variantName.match(/Cards \((.*?)\)/)[1] : '');
                 const jnm = item.janamazColor || (item.variantName && item.variantName.match(/Janamaz \((.*?)\)/) ? item.variantName.match(/Janamaz \((.*?)\)/)[1] : '');
                 const sub = [lang, jnm].filter(Boolean).join(' • ');
-                tag = sub ? ('₹2198 • ' + sub) : 'Offer 3 (₹2198)';
+                tag = sub ? ('₹2499 • ' + sub) : 'Offer 3 (₹2499)';
                 tagClass = 'bg-gold-100 text-amber-950 border-gold-400 font-black';
             } else if (sku === 'fati_ess_combo' || nameLower.includes('family combo') || nameLower.includes('ihram essentials kit')) {
                 baseName = 'Umrah Ihram Kit';
                 icon = '📦';
-                tag = 'Offer 6 (₹1299)';
+                tag = 'Offer 6 (₹1499)';
                 tagClass = 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold';
             } else if (sku.includes('jnm') || nameLower.includes('janamaz') || item.janamazColor) {
                 baseName = 'Pocket Janamaz';
@@ -3930,13 +3930,13 @@
         let currentChangeProductOrderId = null;
 
         const CATALOG_PRICE_MAP = {
-            fati_002: { name: 'Umrah Dua Cards (Urdu) - Full Companion Kit', price: 599, weight: '150gm' },
+            fati_002: { name: 'Umrah Dua Cards (Urdu) - Full Companion Kit', price: 699, weight: '150gm' },
             fati_003: { name: 'Umrah Dua Cards (Urdu) - Mega Combo Kit', price: 899, weight: '260gm' },
-            fati_005: { name: 'Umrah Dua Cards (English) - Full Companion Kit', price: 599, weight: '150gm' },
+            fati_005: { name: 'Umrah Dua Cards (English) - Full Companion Kit', price: 699, weight: '150gm' },
             fati_006: { name: 'Umrah Dua Cards (English) - Mega Combo Kit', price: 899, weight: '260gm' },
-            fati_008: { name: 'Umrah Dua Cards (Hindi) - Full Companion Kit', price: 599, weight: '150gm' },
+            fati_008: { name: 'Umrah Dua Cards (Hindi) - Full Companion Kit', price: 699, weight: '150gm' },
             fati_009: { name: 'Umrah Dua Cards (Hindi) - Mega Combo Kit', price: 899, weight: '260gm' },
-            fati_011: { name: 'Umrah Dua Cards (Roman English) - Full Companion Kit', price: 599, weight: '150gm' },
+            fati_011: { name: 'Umrah Dua Cards (Roman English) - Full Companion Kit', price: 699, weight: '150gm' },
             fati_012: { name: 'Umrah Dua Cards (Roman English) - Mega Combo Kit', price: 899, weight: '260gm' },
             fati_001: { name: 'Umrah Dua Cards (Urdu) - Full Companion Kit (Legacy)', price: 699, weight: '150gm' },
             fati_004: { name: 'Umrah Dua Cards (English) - Full Companion Kit (Legacy)', price: 699, weight: '150gm' },
