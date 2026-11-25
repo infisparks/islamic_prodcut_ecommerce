@@ -43,7 +43,7 @@
                     16: "product/offer/offer_2_cards_ihram_1848.webp?v=3",
                     17: "product/offer/offer_3_mega_combo_2198_launch.webp?v=3",
                     18: "product/offer/offer_kids_cards_599.webp?v=3",
-                    19: ["product/tasbih/green.webp", "product/tasbih/red.webp", "product/tasbih/hotpink.webp", "product/tasbih/pearl.webp", "product/tasbih/purple.webp"][vIdx] || "product/tasbih/green.webp"
+                    19: rawVar ? (["product/tasbih/green.webp", "product/tasbih/red.webp", "product/tasbih/hotpink.webp", "product/tasbih/pearl.webp", "product/tasbih/purple.webp"][vIdx] || "product/tasbih/hero.webp") : "product/tasbih/hero.webp"
                 };
                 var prodMeta = {
                     1: { title: "Umrah Dua & Guide Cards (Urdu / اردو)", price: (vIdx === 1 ? "Rs. 999" : "Rs. 699"), oldPrice: (vIdx === 1 ? "MRP Rs. 1106" : "MRP Rs. 1198"), discount: "-50% OFF" },
@@ -2957,16 +2957,21 @@
 
             if (p.category === 'tasbih' || p.id === 19) {
                 const activeVariant = (p.variants && p.variants[currentVariantIndex]) || (p.variants && p.variants[0]);
-                if (activeVariant && activeVariant.image) {
-                    items.push({
-                        type: 'image',
-                        url: activeVariant.image,
-                        title: `${activeVariant.name}`
-                    });
-                }
+                const firstImg = window.userSelectedTasbihColor && activeVariant && activeVariant.image
+                    ? activeVariant.image
+                    : (p.image || "product/tasbih/hero.webp");
+                const firstTitle = window.userSelectedTasbihColor && activeVariant
+                    ? `${activeVariant.name}`
+                    : `${p.name} - All 5 Crystal Colors`;
+
+                items.push({
+                    type: 'image',
+                    url: firstImg,
+                    title: firstTitle
+                });
                 if (p.images && Array.isArray(p.images)) {
                     p.images.forEach((imgUrl, index) => {
-                        if (activeVariant && imgUrl === activeVariant.image) return;
+                        if (imgUrl === firstImg) return;
                         items.push({
                             type: 'image',
                             url: imgUrl,
@@ -3155,7 +3160,11 @@
         }
 
         function selectPdpVariant(idx) {
-            if (currentVariantIndex === idx) return;
+            const isTasbihInit = (currentProduct && (currentProduct.category === 'tasbih' || currentProduct.id === 19) && !window.userSelectedTasbihColor);
+            if (currentVariantIndex === idx && !isTasbihInit) return;
+            if (currentProduct && (currentProduct.category === 'tasbih' || currentProduct.id === 19)) {
+                window.userSelectedTasbihColor = true;
+            }
             currentVariantIndex = idx;
             if (currentProduct.category === 'janamaz' || currentProduct.id === 8) {
                 const v = currentProduct.variants && currentProduct.variants[idx];
