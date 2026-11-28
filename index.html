@@ -42,8 +42,8 @@
 
     <!-- Ultra-Fast Preload for Critical Above-the-Fold WebP Assets -->
     <link rel="preload" as="image" href="product/hero.webp" fetchpriority="high">
-    <link rel="preload" as="image" href="product/offer/offer_5_cards_only_599.webp?v=3" fetchpriority="high">
-    <link rel="preload" as="image" href="product/offer/offer_kids_cards_599.webp?v=3" fetchpriority="high">
+    <link rel="preload" as="image" href="product/offer/offer_5_cards_only_599.webp?v=4" fetchpriority="high">
+    <link rel="preload" as="image" href="product/offer/offer_kids_cards_599.webp?v=4" fetchpriority="high">
 
     <!-- Meta Pixel Code -->
     <script>
@@ -270,7 +270,7 @@
 
 
     <!-- HERO HOOK SECTION (Optimized ~65% Viewport Height on Mobile, Spacious Dual-View on Desktop) -->
-    <section class="relative bg-onyx text-white py-2 xs:py-2.5 sm:pt-10 sm:pb-12 px-2.5 sm:px-4 overflow-hidden border-b border-gold-500/30">
+    <section class="relative bg-onyx text-white py-0 sm:pt-10 sm:pb-12 px-0 sm:px-4 overflow-hidden border-b border-gold-500/30">
         <!-- Background Image with Clear Visibility & Soft Overlay -->
         <div class="absolute inset-0 z-0">
             <picture>
@@ -283,89 +283,123 @@
         <!-- Glow accents -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-gold-500/10 rounded-full blur-3xl pointer-events-none z-0"></div>
 
-        <div class="max-w-6xl mx-auto text-center relative z-10 px-1 sm:px-4">
+        <div class="w-full max-w-none text-center relative z-10 px-2 sm:px-4 lg:px-6">
             
             <h1 class="sr-only">Authentic Umrah Dua Cards & Companion Kit | Fatima Calligrapher</h1>
 
             <!-- HERO SPECIAL OFFER SHOWCASE (Desktop: 4-Banner Line | Mobile: 8-Slide Auto-Carousel) -->
-            <div class="w-full mx-auto my-1.5 sm:my-3.5 select-none">
+            <div class="w-full mx-auto my-0 sm:my-3.5 select-none">
                 
-                <!-- DESKTOP / PC VIEW: Show 6 Official Offer Banners side-by-side in a line (Sorted by Increasing Price: ₹699 (Adult & Kids) -> ₹999 -> ₹1499 -> ₹1999 -> ₹2499) -->
-                <div class="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-2.5 lg:gap-3 items-stretch max-w-7xl mx-auto">
-                    <!-- 1. Offer 5: Umrah Cards Only Gift Set (₹699) -->
-                    <div onclick="window.location.href='product.html?id=2'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/offer_5_cards_only_599.webp?v=3" 
-                             alt="Offer No.5: Umrah Card Gift Set - ₹699" 
-                             fetchpriority="high" decoding="async" 
-                             width="850" height="850" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
-                    </div>
+                                <!-- DESKTOP / PC VIEW: Continuous 4-Card Auto-Moving Track (6 Top Products, Seamless Infinite Loop) -->
+                <div class="hidden md:block w-full max-w-none px-2 sm:px-4 lg:px-6 my-2 select-none relative overflow-hidden group/toptrack" id="hero-top-products-wrapper">
+                    <!-- Left / Right Desktop Scroll Chevrons -->
+                    <button type="button" onclick="scrollHeroTopTrack(-400)" aria-label="Previous Products" 
+                            class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/80 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/60 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer opacity-0 group-hover/toptrack:opacity-100 hover:scale-110 active:scale-95 shadow-xl">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </button>
+                    <button type="button" onclick="scrollHeroTopTrack(400)" aria-label="Next Products" 
+                            class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/80 hover:bg-gold-500 text-gold-300 hover:text-onyx border border-gold-500/60 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer opacity-0 group-hover/toptrack:opacity-100 hover:scale-110 active:scale-95 shadow-xl">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
+                    </button>
 
-                    <!-- 2. Offer 5 (KIDS): Umrah Card Gift Set for KIDS (₹699) -->
-                    <div onclick="window.location.href='product.html?id=18'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-amber-950/90 border border-amber-400/80 text-amber-300 text-[9px] sm:text-[11px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                            <i class="fa-solid fa-child text-amber-400 text-[9px] sm:text-[10px]"></i>
-                            <span>Kids Edition</span>
-                        </span>
-                        <img src="product/offer/offer_kids_cards_599.webp?v=3" 
-                             alt="Offer No.5: Umrah Card Gift Set for KIDS - ₹699" 
-                             fetchpriority="high" decoding="async" 
-                             width="850" height="850" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
-                    </div>
+                    <!-- Auto-Moving Track (4 Products visible at a time on desktop, 100% Seamless Infinite Loop) -->
+                    <div id="hero-top-products-track" class="flex items-stretch gap-4 lg:gap-5 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing py-1" style="-webkit-overflow-scrolling: touch; scroll-behavior: auto;">
+                        <!-- SET A: 6 Top Products -->
+                        <!-- 1. Offer 5: Umrah Cards Only Gift Set (₹699) -->
+                        <div onclick="window.location.href='product.html?id=2'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_5_cards_only_599.webp?v=4" alt="Offer No.5: Umrah Card Gift Set - ₹699" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
 
-                    <!-- 3. Offer 1: Umrah Cards + Travel Janamaz (₹999) -->
-                    <div onclick="window.location.href='product.html?id=2&variant=1'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <img src="product/offer/offer_1_cards_janamaz_898.webp?v=3" 
-                             alt="Offer No.1: Umrah Cards + Travel Janamaz Combo - ₹999" 
-                             fetchpriority="high" decoding="async" 
-                             width="850" height="850" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
-                    </div>
+                        <!-- 2. Offer 5 (KIDS): Umrah Card Gift Set for KIDS (₹699) -->
+                        <div onclick="window.location.href='product.html?id=18'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_kids_cards_599.webp?v=4" alt="Offer No.5: Umrah Card Gift Set for KIDS - ₹699" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
 
-                    <!-- 3. Offer 6: Ihram Kit Only (₹1499) -->
-                    <div onclick="window.location.href='product.html?id=14'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-950/90 border border-emerald-400/80 text-emerald-300 text-[9px] sm:text-[11px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                            <i class="fa-solid fa-leaf text-emerald-400 text-[9px] sm:text-[10px]"></i>
-                            <span>100% Fragrance-Free</span>
-                        </span>
-                        <img src="product/offer/offer_6_ihram_kit_1299.webp?v=3" 
-                             alt="Offer No.6: Complete Ihram Kit Only - ₹1499" 
-                             decoding="async" 
-                             width="850" height="850" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
-                    </div>
+                        <!-- 3. Offer 1: Umrah Cards + Travel Janamaz (₹999) -->
+                        <div onclick="window.location.href='product.html?id=2&variant=1'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_1_cards_janamaz_898.webp?v=4" alt="Offer No.1: Umrah Cards + Travel Janamaz Combo - ₹999" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
 
-                    <!-- 4. Offer 2: Umrah Cards + Ihram Kit (₹1999) -->
-                    <div onclick="window.location.href='product.html?id=16'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-950/90 border border-emerald-400/80 text-emerald-300 text-[9px] sm:text-[11px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                            <i class="fa-solid fa-leaf text-emerald-400 text-[9px] sm:text-[10px]"></i>
-                            <span>100% Fragrance-Free</span>
-                        </span>
-                        <img src="product/offer/offer_2_cards_ihram_1848.webp?v=3" 
-                             alt="Offer No.2: Umrah Cards + Ihram Kit Combo - ₹1999" 
-                             decoding="async" 
-                             width="850" height="850" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
-                    </div>
+                        <!-- 4. Offer 6: Ihram Kit Only (₹1499) -->
+                        <div onclick="window.location.href='product.html?id=14'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_6_ihram_kit_1299.webp?v=4" alt="Offer No.6: Complete Ihram Kit Only - ₹1499" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
 
-                    <!-- 5. Offer 3: Umrah Mega Combo (₹2499) -->
-                    <div onclick="window.location.href='product.html?id=17'" class="group relative rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer">
-                        <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-950/90 border border-emerald-400/80 text-emerald-300 text-[9px] sm:text-[11px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                            <i class="fa-solid fa-leaf text-emerald-400 text-[9px] sm:text-[10px]"></i>
-                            <span>100% Fragrance-Free</span>
-                        </span>
-                        <img src="product/offer/offer_3_mega_combo_2198_launch.webp?v=3" 
-                             alt="Offer No.3: Umrah Mega Combo (Cards + Janamaz + Ihram Kit) - ₹2499" 
-                             decoding="async" 
-                             width="850" height="850" 
-                             class="w-full h-auto object-contain rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        <!-- 5. Offer 2: Umrah Cards + Ihram Kit (₹1999) -->
+                        <div onclick="window.location.href='product.html?id=16'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_2_cards_ihram_1848.webp?v=4" alt="Offer No.2: Umrah Cards + Ihram Kit Combo - ₹1999" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 6. Offer 3: Umrah Mega Combo (₹2499) -->
+                        <div onclick="window.location.href='product.html?id=17'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_3_mega_combo_2198_launch.webp?v=4" alt="Offer No.3: Umrah Mega Combo (Cards + Janamaz + Ihram Kit) - ₹2499" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <!-- SET B: 6 Top Products (Identical Clone for Zero-Stutter Loop) -->
+                        <!-- 1. Offer 5: Umrah Cards Only Gift Set (₹699) -->
+                        <div onclick="window.location.href='product.html?id=2'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_5_cards_only_599.webp?v=4" alt="Offer No.5: Umrah Card Gift Set - ₹699" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 2. Offer 5 (KIDS): Umrah Card Gift Set for KIDS (₹699) -->
+                        <div onclick="window.location.href='product.html?id=18'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_kids_cards_599.webp?v=4" alt="Offer No.5: Umrah Card Gift Set for KIDS - ₹699" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 3. Offer 1: Umrah Cards + Travel Janamaz (₹999) -->
+                        <div onclick="window.location.href='product.html?id=2&variant=1'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_1_cards_janamaz_898.webp?v=4" alt="Offer No.1: Umrah Cards + Travel Janamaz Combo - ₹999" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 4. Offer 6: Ihram Kit Only (₹1499) -->
+                        <div onclick="window.location.href='product.html?id=14'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_6_ihram_kit_1299.webp?v=4" alt="Offer No.6: Complete Ihram Kit Only - ₹1499" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 5. Offer 2: Umrah Cards + Ihram Kit (₹1999) -->
+                        <div onclick="window.location.href='product.html?id=16'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_2_cards_ihram_1848.webp?v=4" alt="Offer No.2: Umrah Cards + Ihram Kit Combo - ₹1999" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 6. Offer 3: Umrah Mega Combo (₹2499) -->
+                        <div onclick="window.location.href='product.html?id=17'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_3_mega_combo_2198_launch.webp?v=4" alt="Offer No.3: Umrah Mega Combo (Cards + Janamaz + Ihram Kit) - ₹2499" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+                        <!-- SET C: 6 Top Products (Identical Clone for Zero-Stutter Loop) -->
+                        <!-- 1. Offer 5: Umrah Cards Only Gift Set (₹699) -->
+                        <div onclick="window.location.href='product.html?id=2'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_5_cards_only_599.webp?v=4" alt="Offer No.5: Umrah Card Gift Set - ₹699" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 2. Offer 5 (KIDS): Umrah Card Gift Set for KIDS (₹699) -->
+                        <div onclick="window.location.href='product.html?id=18'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_kids_cards_599.webp?v=4" alt="Offer No.5: Umrah Card Gift Set for KIDS - ₹699" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 3. Offer 1: Umrah Cards + Travel Janamaz (₹999) -->
+                        <div onclick="window.location.href='product.html?id=2&variant=1'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_1_cards_janamaz_898.webp?v=4" alt="Offer No.1: Umrah Cards + Travel Janamaz Combo - ₹999" fetchpriority="high" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 4. Offer 6: Ihram Kit Only (₹1499) -->
+                        <div onclick="window.location.href='product.html?id=14'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_6_ihram_kit_1299.webp?v=4" alt="Offer No.6: Complete Ihram Kit Only - ₹1499" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 5. Offer 2: Umrah Cards + Ihram Kit (₹1999) -->
+                        <div onclick="window.location.href='product.html?id=16'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_2_cards_ihram_1848.webp?v=4" alt="Offer No.2: Umrah Cards + Ihram Kit Combo - ₹1999" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
+
+                        <!-- 6. Offer 3: Umrah Mega Combo (₹2499) -->
+                        <div onclick="window.location.href='product.html?id=17'" class="flex-shrink-0 w-[calc(25%-12px)] lg:w-[calc(25%-15px)] aspect-square rounded-2xl overflow-hidden border border-gold-500/40 bg-black/40 shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gold-400 hover:shadow-[0_12px_35px_rgba(197,154,63,0.35)] transition-all duration-300 cursor-pointer group">
+                            <img src="product/offer/offer_3_mega_combo_2198_launch.webp?v=4" alt="Offer No.3: Umrah Mega Combo (Cards + Janamaz + Ihram Kit) - ₹2499" decoding="async" width="850" height="850" class="w-full h-full object-cover rounded-2xl block group-hover:scale-[1.02] transition-transform duration-500">
+                        </div>
                     </div>
                 </div>
 
-                <!-- MOBILE VIEW: Premium Auto-Slidable Carousel (5 Official Offer Slides in Increasing Price Order) -->
-                <div class="block md:hidden w-full max-w-[390px] xs:max-w-[420px] sm:max-w-xl mx-auto">
-                    <div id="hero-offer-mobile-carousel" class="group relative rounded-2xl overflow-hidden border-2 border-gold-400 bg-black/60 shadow-[0_12px_45px_rgba(212,175,55,0.35)] hover:border-gold-300 hover:shadow-[0_16px_55px_rgba(197,154,63,0.5)] transition-all duration-300">
+                <!-- MOBILE VIEW: Full-Width Edge-to-Edge 1:1 Screen Fit (No Card Wrapper) -->
+                <div class="block md:hidden w-full max-w-none mx-0 px-0">
+                    <div id="hero-offer-mobile-carousel" class="group relative w-full overflow-hidden transition-all duration-300">
                         
                         <!-- Left / Right Navigation Chevrons -->
                         <button type="button" onclick="prevHeroSlide(event)" aria-label="Previous Slide" 
@@ -381,73 +415,57 @@
                         <div id="hero-carousel-track" class="flex transition-transform duration-500 ease-out" style="transform: translateX(0%);">
                             
                             <!-- Slide 1: Offer 5 - Cards Only Gift Set (₹699) -->
-                            <div onclick="window.location.href='product.html?id=2'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <img src="product/offer/offer_5_cards_only_599.webp?v=3" 
+                            <div onclick="window.location.href='product.html?id=2'" class="w-full aspect-square flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                                <img src="product/offer/offer_5_cards_only_599.webp?v=4" 
                                      alt="Offer No.5: Umrah Cards Gift Set - ₹699" 
                                      fetchpriority="high" decoding="async" 
                                      width="850" height="850" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                                     class="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
                             <!-- Slide 2: Offer 5 (KIDS) - Umrah Card Gift Set for KIDS (₹699) -->
-                            <div onclick="window.location.href='product.html?id=18'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-950/90 border border-amber-400/80 text-amber-300 text-[10px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                                    <i class="fa-solid fa-child text-amber-400 text-[10px]"></i>
-                                    <span>Kids Edition</span>
-                                </span>
-                                <img src="product/offer/offer_kids_cards_599.webp?v=3" 
+                            <div onclick="window.location.href='product.html?id=18'" class="w-full aspect-square flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                        <img src="product/offer/offer_kids_cards_599.webp?v=4" 
                                      alt="Offer No.5: Umrah Card Gift Set for KIDS - ₹699" 
                                      fetchpriority="high" decoding="async" 
                                      width="850" height="850" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                                     class="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
                             <!-- Slide 2: Offer 1 - Cards + Travel Janamaz (₹999) -->
-                            <div onclick="window.location.href='product.html?id=2&variant=1'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <img src="product/offer/offer_1_cards_janamaz_898.webp?v=3" 
+                            <div onclick="window.location.href='product.html?id=2&variant=1'" class="w-full aspect-square flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                                <img src="product/offer/offer_1_cards_janamaz_898.webp?v=4" 
                                      alt="Offer No.1: Umrah Cards + Travel Janamaz - ₹999" 
                                      loading="lazy" decoding="async" 
                                      width="850" height="850" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                                     class="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
                             <!-- Slide 3: Offer 6 - Ihram Kit Only (₹1499) -->
-                            <div onclick="window.location.href='product.html?id=14'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-400/80 text-emerald-300 text-[10px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                                    <i class="fa-solid fa-leaf text-emerald-400 text-[10px]"></i>
-                                    <span>100% Fragrance-Free</span>
-                                </span>
-                                <img src="product/offer/offer_6_ihram_kit_1299.webp?v=3" 
+                            <div onclick="window.location.href='product.html?id=14'" class="w-full aspect-square flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                        <img src="product/offer/offer_6_ihram_kit_1299.webp?v=4" 
                                      alt="Offer No.6: Umrah Family Ihram Kit - ₹1499" 
                                      loading="lazy" decoding="async" 
                                      width="850" height="850" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                                     class="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
                             <!-- Slide 4: Offer 2 - Cards + Ihram Kit (₹1999) -->
-                            <div onclick="window.location.href='product.html?id=16'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-400/80 text-emerald-300 text-[10px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                                    <i class="fa-solid fa-leaf text-emerald-400 text-[10px]"></i>
-                                    <span>100% Fragrance-Free</span>
-                                </span>
-                                <img src="product/offer/offer_2_cards_ihram_1848.webp?v=3" 
+                            <div onclick="window.location.href='product.html?id=16'" class="w-full aspect-square flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                        <img src="product/offer/offer_2_cards_ihram_1848.webp?v=4" 
                                      alt="Offer No.2: Umrah Cards + Ihram Kit - ₹1999" 
                                      loading="lazy" decoding="async" 
                                      width="850" height="850" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                                     class="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
                             <!-- Slide 5: Offer 3 - Mega Combo (₹2499) -->
-                            <div onclick="window.location.href='product.html?id=17'" class="w-full flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
-                                <span class="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/90 border border-emerald-400/80 text-emerald-300 text-[10px] font-extrabold tracking-wide shadow-lg backdrop-blur-sm pointer-events-none">
-                                    <i class="fa-solid fa-leaf text-emerald-400 text-[10px]"></i>
-                                    <span>100% Fragrance-Free</span>
-                                </span>
-                                <img src="product/offer/offer_3_mega_combo_2198_launch.webp?v=3" 
+                            <div onclick="window.location.href='product.html?id=17'" class="w-full aspect-square flex-shrink-0 relative cursor-pointer overflow-hidden group/slide">
+                        <img src="product/offer/offer_3_mega_combo_2198_launch.webp?v=4" 
                                      alt="Offer No.3: Mega Umrah Combo - ₹2499" 
                                      loading="lazy" decoding="async" 
                                      width="850" height="850" 
-                                     class="w-full h-auto object-contain block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
+                                     class="w-full h-full object-cover block pointer-events-none transition-transform duration-500 group-hover/slide:scale-[1.015]">
                             </div>
 
                         </div>
@@ -460,7 +478,7 @@
             </div>
 
             <!-- UMRAH ZAIREEN ESSENTIALS STRIP (2 Products Per View | Continuous Auto-Scroll | Full-Screen Fit) -->
-            <div id="umrah-zaireen-section" class="w-full max-w-full sm:max-w-5xl md:max-w-6xl mx-auto mt-2 sm:mt-3 mb-1 px-1.5 sm:px-4 select-none">
+            <div id="umrah-zaireen-section" class="w-full max-w-7xl mx-auto mt-3 sm:mt-5 mb-2 px-4 sm:px-8 select-none">
                 <!-- Section Header (Single Clean Row, Never Wraps) -->
                 <div class="flex items-center justify-between mb-1.5 px-1 whitespace-nowrap overflow-hidden">
                     <div class="flex items-center gap-1.5 min-w-0">
@@ -472,9 +490,20 @@
                             <i class="fa-solid fa-leaf text-[7px] text-emerald-400"></i> Fragrance Free
                         </span>
                     </div>
-                    <span class="text-[9px] sm:text-[10px] text-gray-400 font-medium shrink-0 flex items-center gap-1 ml-2">
-                        <i class="fa-solid fa-hand-pointer text-gold-400 text-[8px]"></i> Tap to view
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9.5px] sm:text-[11px] text-gray-400 font-medium shrink-0 flex items-center gap-1">
+                            <i class="fa-solid fa-hand-pointer text-gold-400 text-[8px] sm:text-[9px]"></i> <span class="hidden md:inline">Click to view</span><span class="md:hidden">Tap to view</span>
+                        </span>
+                        <!-- Desktop Track Arrow Navigation -->
+                        <div class="hidden md:flex items-center gap-1 ml-2">
+                            <button onclick="scrollZaireenTrack(-300)" class="w-7 h-7 rounded-lg bg-onyx/80 hover:bg-gold-500 hover:text-onyx text-gold-400 border border-gold-500/40 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95" title="Previous Products">
+                                <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                            </button>
+                            <button onclick="scrollZaireenTrack(300)" class="w-7 h-7 rounded-lg bg-onyx/80 hover:bg-gold-500 hover:text-onyx text-gold-400 border border-gold-500/40 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95" title="Next Products">
+                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Auto-Scrolling Track (2 Products visible at a time on mobile, 100% Seamless Infinite Loop) -->
@@ -483,107 +512,95 @@
                         
                         <!-- SET A: 1. Herbal Ihram Soap -->
                         <div onclick="window.location.href='product.html?id=9'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/soap-nobg.webp" alt="Herbal Ihram Soap" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">80GM</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Ihram Soap</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Herbal Ihram Soap</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹99</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹198</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹99</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹198</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET A: 2. Pure Coconut Oil -->
                         <div onclick="window.location.href='product.html?id=10'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/coconut-oil-nobg.webp" alt="Pure Coconut Oil" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">50ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Pure Coconut Oil</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Pure Coconut Oil</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹149</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹298</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹149</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹298</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET A: 3. Herbal Hair Shampoo -->
                         <div onclick="window.location.href='product.html?id=11'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/shampoo-nobg.webp" alt="Herbal Hair Shampoo" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-teal-600 text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hair Shampoo</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Hair Shampoo</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹798</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET A: 4. Hand & Body Wash -->
                         <div onclick="window.location.href='product.html?id=12'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/hand-body-wash-nobg.webp" alt="Hand & Body Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hand & Body Wash</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Hand & Body Wash</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹798</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET A: 5. Herbal Face Wash -->
                         <div onclick="window.location.href='product.html?id=13'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/face-wash-nobg.webp" alt="Herbal Face Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">50ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Face Wash</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Niacinamide • Licorice Infused</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Herbal Face Wash</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-amber-800 font-semibold mt-0.5 truncate">Niacinamide • Licorice Infused</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹299</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹598</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹299</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹598</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET A: 6. Siwak Miswak Toothbrush Starter Kit -->
                         <div onclick="window.location.href='product.html?id=15'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/miswak/box.webp" alt="Siwak Miswak Toothbrush Starter Kit" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">OFFER</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#f59e0b] text-onyx text-[7px] xs:text-[7.5px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">₹179 ONLY</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Siwak Miswak Kit</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-emerald-800 font-semibold mt-0.5 truncate">Sunnah Revival • Free Delivery</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Siwak Miswak Kit</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-emerald-800 font-semibold mt-0.5 truncate">Sunnah Revival • Free Delivery</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5 flex-wrap">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹179 <span class="text-[8.5px] font-normal text-emerald-700">Prepaid Free</span></span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹179 <span class="text-[8.5px] font-normal text-emerald-700">Prepaid Free</span></span>
                                     <span class="text-[10px] text-gray-500 font-bold">COD +₹100</span>
                                 </div>
                             </div>
@@ -591,107 +608,95 @@
 
                         <!-- SET B: 1. Herbal Ihram Soap (Identical Clone for Infinite Loop) -->
                         <div onclick="window.location.href='product.html?id=9'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/soap-nobg.webp" alt="Herbal Ihram Soap" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">80GM</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Ihram Soap</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Herbal Ihram Soap</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹99</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹198</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹99</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹198</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET B: 2. Pure Coconut Oil (Identical Clone for Infinite Loop) -->
                         <div onclick="window.location.href='product.html?id=10'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/coconut-oil-nobg.webp" alt="Pure Coconut Oil" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">50ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Pure Coconut Oil</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Pure Coconut Oil</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹149</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹298</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹149</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹298</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET B: 3. Herbal Hair Shampoo (Identical Clone for Infinite Loop) -->
                         <div onclick="window.location.href='product.html?id=11'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/shampoo-nobg.webp" alt="Herbal Hair Shampoo" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-teal-600 text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hair Shampoo</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Hair Shampoo</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹798</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET B: 4. Hand & Body Wash (Identical Clone for Infinite Loop) -->
                         <div onclick="window.location.href='product.html?id=12'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/hand-body-wash-nobg.webp" alt="Hand & Body Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hand & Body Wash</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Hand & Body Wash</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹798</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET B: 5. Herbal Face Wash -->
                         <div onclick="window.location.href='product.html?id=13'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/face-wash-nobg.webp" alt="Herbal Face Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">50ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Face Wash</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Niacinamide • Licorice Infused</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Herbal Face Wash</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-amber-800 font-semibold mt-0.5 truncate">Niacinamide • Licorice Infused</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹299</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹598</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹299</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹598</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET B: 6. Siwak Miswak Toothbrush Starter Kit -->
                         <div onclick="window.location.href='product.html?id=15'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/miswak/box.webp" alt="Siwak Miswak Toothbrush Starter Kit" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">OFFER</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#f59e0b] text-onyx text-[7px] xs:text-[7.5px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">₹179 ONLY</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Siwak Miswak Kit</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-emerald-800 font-semibold mt-0.5 truncate">Sunnah Revival • Free Delivery</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Siwak Miswak Kit</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-emerald-800 font-semibold mt-0.5 truncate">Sunnah Revival • Free Delivery</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5 flex-wrap">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹179 <span class="text-[8.5px] font-normal text-emerald-700">Prepaid Free</span></span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹179 <span class="text-[8.5px] font-normal text-emerald-700">Prepaid Free</span></span>
                                     <span class="text-[10px] text-gray-500 font-bold">COD +₹100</span>
                                 </div>
                             </div>
@@ -699,107 +704,95 @@
 
                         <!-- SET C: 1. Herbal Ihram Soap (Identical Clone for Zero-Stutter Loop) -->
                         <div onclick="window.location.href='product.html?id=9'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/soap-nobg.webp" alt="Herbal Ihram Soap" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">80GM</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Ihram Soap</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Herbal Ihram Soap</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-[#8C6D1F] font-semibold mt-0.5 truncate">Shea Butter • Sidr • Aloe</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹99</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹198</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹99</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹198</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET C: 2. Pure Coconut Oil (Identical Clone for Zero-Stutter Loop) -->
                         <div onclick="window.location.href='product.html?id=10'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/coconut-oil-nobg.webp" alt="Pure Coconut Oil" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">50ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Pure Coconut Oil</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Pure Coconut Oil</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-emerald-700 font-semibold mt-0.5 truncate">Fragrance Free • Anti-Chafing</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹149</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹298</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹149</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹298</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET C: 3. Herbal Hair Shampoo (Identical Clone for Zero-Stutter Loop) -->
                         <div onclick="window.location.href='product.html?id=11'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/shampoo-nobg.webp" alt="Herbal Hair Shampoo" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-teal-600 text-white text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hair Shampoo</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Hair Shampoo</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-teal-700 font-semibold mt-0.5 truncate">Sidr • Aloe • Fragrance Free</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹798</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET C: 4. Hand & Body Wash (Identical Clone for Zero-Stutter Loop) -->
                         <div onclick="window.location.href='product.html?id=12'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/hand-body-wash-nobg.webp" alt="Hand & Body Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">100ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Hand & Body Wash</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Hand & Body Wash</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-amber-800 font-semibold mt-0.5 truncate">Ihram Friendly • Aloe & Honey</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹399</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹798</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹399</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹798</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET C: 5. Herbal Face Wash -->
                         <div onclick="window.location.href='product.html?id=13'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/essentials/face-wash-nobg.webp" alt="Herbal Face Wash" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#f59e0b] text-onyx text-[8px] xs:text-[8.5px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">50ML</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">50% OFF</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Herbal Face Wash</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-amber-800 font-semibold mt-0.5 truncate">Niacinamide • Licorice Infused</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Herbal Face Wash</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-amber-800 font-semibold mt-0.5 truncate">Niacinamide • Licorice Infused</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹299</span>
-                                    <span class="text-[10px] text-gray-400 line-through">₹598</span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹299</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through">₹598</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- SET C: 6. Siwak Miswak Toothbrush Starter Kit -->
                         <div onclick="window.location.href='product.html?id=15'" 
-                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-2 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-lg transition-all cursor-pointer group">
-                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1.5 flex items-center justify-center overflow-hidden border border-gray-100">
+                             class="flex-shrink-0 w-[calc(50%-6px)] xs:w-[calc(50%-6px)] sm:w-[220px] md:w-[240px] bg-white rounded-2xl border border-gray-200 hover:border-gold-400 p-1.5 sm:p-2 flex flex-col justify-between shadow-sm hover:shadow-md transition-all cursor-pointer group">
+                            <div class="relative w-full aspect-square bg-[#f8f9fa] rounded-xl p-1 flex items-center justify-center overflow-hidden border border-gray-100">
                                 <img src="product/miswak/box.webp" alt="Siwak Miswak Toothbrush Starter Kit" width="400" height="400" class="w-full h-full object-contain pointer-events-none group-hover:scale-105 transition-transform duration-300">
-                                <span class="absolute top-1.5 left-1.5 bg-[#10b981] text-white text-[7.5px] xs:text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs">OFFER</span>
-                                <span class="absolute top-1.5 right-1.5 bg-[#f59e0b] text-onyx text-[7px] xs:text-[7.5px] font-black px-1.5 py-0.5 rounded-md uppercase shadow-xs">₹179 ONLY</span>
                             </div>
-                            <div class="mt-2 text-center flex-grow flex flex-col justify-between">
-                                <h4 class="font-extrabold text-xs sm:text-sm text-gray-900 leading-tight">Siwak Miswak Kit</h4>
-                                <p class="text-[9px] xs:text-[9.5px] text-emerald-800 font-semibold mt-0.5 truncate">Sunnah Revival • Free Delivery</p>
+                            <div class="mt-1 text-center flex-grow flex flex-col justify-between">
+                                <h4 class="font-bold text-[11px] sm:text-xs text-gray-900 leading-tight truncate">Siwak Miswak Kit</h4>
+                                <p class="text-[8px] xs:text-[8.5px] text-emerald-800 font-semibold mt-0.5 truncate">Sunnah Revival • Free Delivery</p>
                                 <div class="mt-1 flex items-baseline justify-center gap-1.5 flex-wrap">
-                                    <span class="text-sm sm:text-base font-black text-[#8C6D1F]">₹179 <span class="text-[8.5px] font-normal text-emerald-700">Prepaid Free</span></span>
+                                    <span class="text-xs sm:text-sm font-black text-[#8C6D1F]">₹179 <span class="text-[8.5px] font-normal text-emerald-700">Prepaid Free</span></span>
                                     <span class="text-[10px] text-gray-500 font-bold">COD +₹100</span>
                                 </div>
                             </div>
@@ -848,7 +841,7 @@
         <!-- SECTION TITLE: UMRAH DUA CARDS & STICKERS COLLECTION -->
 
         <!-- SECTION TITLE: UMRAH DUA CARDS & STICKERS COLLECTION -->
-    <section id="products-grid" class="pt-6 pb-2 px-4 max-w-6xl mx-auto">
+    <section id="products-grid" class="pt-6 pb-4 px-2 sm:px-4 lg:px-6 xl:px-8 w-full max-w-none">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-gold-200 pb-2.5 mb-3">
             <div>
                 <span class="text-[10px] uppercase tracking-widest text-gold-700 font-extrabold block">Authentic Collection</span>
@@ -881,15 +874,15 @@
     </section>
 
     <!-- PRODUCT CATALOG GRID -->
-    <section class="px-3 sm:px-4 max-w-6xl mx-auto pb-10">
-        <div id="products-catalog-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
+    <section class="px-2 sm:px-4 lg:px-6 xl:px-8 w-full max-w-none pb-12">
+        <div id="products-catalog-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
             <!-- Dynamic 7 products rendered by JavaScript -->
         </div>
     </section>
 
     <!-- POCKET & TRAVEL FRIENDLY SHOWCASE -->
     <section class="bg-sand/80 py-8 px-4 border-y border-gold-200">
-        <div class="max-w-4xl mx-auto">
+        <div class="w-full max-w-[1400px] mx-auto px-4 sm:px-8">
             <div class="text-center mb-6">
                 <span class="text-[10px] uppercase tracking-widest text-gold-700 font-bold block mb-0.5">Ultra Portable Design</span>
                 <h2 class="font-cinzel text-xl sm:text-2xl font-bold text-onyx">Pocket Friendly & Easy To Carry</h2>
@@ -937,7 +930,7 @@
         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold-500/15 via-transparent to-transparent pointer-events-none"></div>
         <div class="absolute -top-24 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="max-w-6xl mx-auto relative z-10">
+        <div class="w-full max-w-7xl mx-auto relative z-10 px-4 sm:px-8">
             <!-- Header Banner (Compact Mobile Responsive) -->
             <div class="text-center max-w-3xl mx-auto mb-3.5 sm:mb-5 px-1">
                 <div class="inline-flex items-center gap-2 bg-gold-500/20 text-gold-300 border border-gold-500/40 px-3.5 py-1 rounded-full text-[10px] sm:text-[11px] font-extrabold shadow-sm mb-1.5">
@@ -1156,7 +1149,7 @@
         <div class="absolute top-0 right-0 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="max-w-6xl mx-auto relative z-10">
+        <div class="w-full max-w-7xl mx-auto relative z-10 px-4 sm:px-8">
             <!-- Header Banner -->
             <div class="text-center max-w-3xl mx-auto mb-5">
                 <div class="inline-flex items-center gap-2 bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1 rounded-full text-xs font-extrabold shadow-sm mb-2.5">
@@ -1408,7 +1401,7 @@
         <div class="absolute -top-32 -left-32 w-80 h-80 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="max-w-6xl mx-auto relative z-10">
+        <div class="w-full max-w-7xl mx-auto relative z-10 px-4 sm:px-8">
             <!-- Section Header -->
             <div class="text-center max-w-3xl mx-auto mb-4 sm:mb-8">
                 <div class="inline-flex items-center gap-2 bg-onyx text-gold-400 border border-gold-500/40 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-extrabold shadow-sm mb-2">
@@ -1474,7 +1467,7 @@
 
     <!-- PILGRIM REVIEWS -->
     <section id="reviews" class="py-8 px-4 bg-pearl border-t border-gold-200">
-        <div class="max-w-4xl mx-auto">
+        <div class="w-full max-w-[1400px] mx-auto px-4 sm:px-8">
 
             <!-- Verified Pilgrim Photo Reviews Slider (Moved from hero to bottom reviews) -->
             <div class="mb-6 pb-6 border-b border-gold-200">
@@ -2207,14 +2200,7 @@
         </div>
     </div>
 
-    <!-- FLOATING RIGHT-SIDE "OUR REVIEWS" BADGE -->
-    <a href="#reviews" onclick="scrollToReviewsSection(event)" id="floating-reviews-tab" aria-label="Customer Reviews" 
-       class="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-[#121316]/95 hover:bg-black text-[#FAF7F2] border-l-2 border-t-2 border-b-2 border-gold-500 shadow-[0_4px_22px_rgba(212,175,55,0.45)] rounded-l-2xl py-3 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1 active:scale-95 group backdrop-blur-md select-none">
-        <div class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 transition-transform shadow-xs">
-            <i class="fa-solid fa-star text-gold-400"></i>
-        </div>
-        <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FAF7F2] [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Our Reviews</span>
-    </a>
+    <!-- Floating reviews button removed for clean official layout -->
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
@@ -2246,7 +2232,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_urdu.webp",
                     "product/prodcut_more/umrahcard_urdu_1.webp",
@@ -2261,7 +2247,8 @@
                     "product/prodcut_more/umrahcard_urdu_10.webp",
                     "product/prodcut_more/umrahcard_urdu_11.webp",
                     "product/prodcut_more/umrahcard_urdu_12.webp",
-                    "product/prodcut_more/umrahcard_urdu_13.webp"
+                    "product/prodcut_more/umrahcard_urdu_13.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • URDU",
@@ -2278,11 +2265,12 @@
                         oldPrice: 1198,
                         weight: "150gm",
                         tag: "Popular",
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     },
                     {
@@ -2295,11 +2283,12 @@
                         tag: "Mega Combo 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
@@ -2316,7 +2305,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_english.webp",
                     "product/prodcut_more/umrahcard_english_1.webp",
@@ -2325,7 +2314,8 @@
                     "product/prodcut_more/umrahcard_english_4.webp",
                     "product/prodcut_more/umrahcard_english_5.webp",
                     "product/prodcut_more/umrahcard_english_6.webp",
-                    "product/prodcut_more/umrahcard_english_7.webp"
+                    "product/prodcut_more/umrahcard_english_7.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ENGLISH",
@@ -2342,11 +2332,12 @@
                         oldPrice: 1198,
                         weight: "150gm",
                         tag: "Popular",
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     },
                     {
@@ -2359,11 +2350,12 @@
                         tag: "Mega Combo 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
@@ -2380,7 +2372,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_hindi.webp",
                     "product/prodcut_more/umrahcard_hindi_1.webp",
@@ -2404,7 +2396,8 @@
                     "product/prodcut_more/umrahcard_hindi_19.webp",
                     "product/prodcut_more/umrahcard_hindi_20.webp",
                     "product/prodcut_more/umrahcard_hindi_21.webp",
-                    "product/prodcut_more/umrahcard_hindi_22.webp"
+                    "product/prodcut_more/umrahcard_hindi_22.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • HINDI",
@@ -2421,11 +2414,12 @@
                         oldPrice: 1198,
                         weight: "150gm",
                         tag: "Popular",
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     },
                     {
@@ -2438,11 +2432,12 @@
                         tag: "Mega Combo 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
@@ -2459,7 +2454,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_roman.webp",
                     "product/prodcut_more/umrahcard_roman_1.webp",
@@ -2472,7 +2467,8 @@
                     "product/prodcut_more/umrahcard_roman_8.webp",
                     "product/prodcut_more/umrahcard_roman_9.webp",
                     "product/prodcut_more/umrahcard_roman_10.webp",
-                    "product/prodcut_more/umrahcard_roman_11.webp"
+                    "product/prodcut_more/umrahcard_roman_11.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ROMAN",
@@ -2489,11 +2485,12 @@
                         oldPrice: 1198,
                         weight: "150gm",
                         tag: "Popular",
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch"]
                     },
                     {
@@ -2506,11 +2503,12 @@
                         tag: "Mega Combo 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/card/699-1.webp",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag"]
                     }
                 ]
@@ -2527,9 +2525,9 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "100% Waterproof Laminated, Neck Lanyard & Tasbih",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/offer_kids_cards_599.webp?v=3",
+                image: "product/offer/offer_kids_cards_599.webp?v=4",
                 images: [
-                    "product/offer/offer_kids_cards_599.webp?v=3",
+                    "product/offer/offer_kids_cards_599.webp?v=4",
                     "product/kids/kids_cover.webp",
                     "product/kids/kids_card_7.webp",
                     "product/kids/kids_card_1.webp",
@@ -2538,7 +2536,8 @@
                     "product/kids/kids_card_4.webp",
                     "product/kids/kids_card_5.webp",
                     "product/kids/kids_card_6.webp",
-                    "product/kids/kids_card_8.webp"
+                    "product/kids/kids_card_8.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "KIDS SPECIAL • ₹699",
@@ -2555,11 +2554,12 @@
                         oldPrice: 698,
                         weight: "150gm",
                         tag: "Popular 🌟",
-                        image: "product/offer/offer_kids_cards_599.webp?v=3",
+                        image: "product/offer/offer_kids_cards_599.webp?v=4",
                         images: [
-                            "product/offer/offer_kids_cards_599.webp?v=3",
-                            "product/kids/kids_cover.webp"
-                        ],
+                            "product/offer/offer_kids_cards_599.webp?v=4",
+                            "product/kids/kids_cover.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Illustrated Waterproof Kids Dua Cards", "Official Umrah Certificate Card", "Kids Neck Lanyard (Ribbon)", "Tawaf Tasbih Counter Beads", "Protective Umrah Mubarak Velvet Pouch"]
                     },
                     {
@@ -2572,11 +2572,12 @@
                         tag: "Mega Combo 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/offer/offer_kids_cards_599.webp?v=3",
+                        image: "product/offer/offer_kids_cards_599.webp?v=4",
                         images: [
-                            "product/offer/offer_kids_cards_599.webp?v=3",
-                            "product/kids/kids_cover.webp"
-                        ],
+                            "product/offer/offer_kids_cards_599.webp?v=4",
+                            "product/kids/kids_cover.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Illustrated Waterproof Kids Dua Cards", "Pocket Foldable Travel Janamaz with Bag", "Kids Neck Lanyard (Ribbon)", "Tawaf Tasbih Counter Beads", "Protective Umrah Mubarak Velvet Pouch"]
                     }
                 ]
@@ -2599,7 +2600,9 @@
                 oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
-                images: ["product/umrah_Sticker_English.webp"],
+                images: ["product/umrah_Sticker_English.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • ENGLISH",
                 rating: "(453)",
@@ -2624,7 +2627,9 @@
                 oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
-                images: ["product/umrah_Sticker_hindi.webp"],
+                images: ["product/umrah_Sticker_hindi.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • HINDI",
                 rating: "(427)",
@@ -2649,7 +2654,9 @@
                 oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_urdu.webp",
-                images: ["product/umrah_Sticker_urdu.webp"],
+                images: ["product/umrah_Sticker_urdu.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • URDU",
                 rating: "(498)",
@@ -2678,7 +2685,8 @@
                     "product/janamaz/green.webp",
                     "product/janamaz/pink.webp",
                     "product/janamaz/black.webp",
-                    "product/janamaz/gray.webp"
+                    "product/janamaz/gray.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "TRAVEL JANAMAZ",
                 rating: "(734)",
@@ -2713,7 +2721,7 @@
                     "product/essentials/soap-hero.webp",
                     "product/essentials/soap-badges.webp",
                     "product/essentials/soap-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(586)",
@@ -2741,7 +2749,7 @@
                     "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/coconut-oil-badges.webp",
                     "product/essentials/coconut-oil-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(442)",
@@ -2769,7 +2777,7 @@
                     "product/essentials/shampoo-hero.webp",
                     "product/essentials/shampoo-badges.webp",
                     "product/essentials/shampoo-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(389)",
@@ -2796,8 +2804,7 @@
                 images: [
                     "product/essentials/hand-body-wash-hero.webp",
                     "product/essentials/hand-body-wash-badges.webp",
-                    "product/essentials/hand-body-wash-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                                        "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(512)",
@@ -2825,7 +2832,7 @@
                     "product/essentials/face-wash-hero.webp",
                     "product/essentials/face-wash-badges.webp",
                     "product/essentials/face-wash-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(428)",
@@ -2849,9 +2856,9 @@
                 oldPrice: 2300,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/offer_6_ihram_kit_1299.webp?v=3",
+                image: "product/offer/offer_6_ihram_kit_1299.webp?v=4",
                 images: [
-                              "product/offer/offer_6_ihram_kit_1299.webp?v=3",
+                              "product/offer/offer_6_ihram_kit_1299.webp?v=4",
                               "product/essentials/combo-box-open.webp",
                               "product/essentials/combo-whats-inside.webp",
                               "product/essentials/soap-hero.webp",
@@ -2862,8 +2869,8 @@
                               "product/miswak/box.webp",
                               "product/essentials/family-zaireen-combo.webp",
                               "product/essentials/fragrance-free-ihram.webp",
-                              "product/essentials/certified-trusted.webp"
-                    ],
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 badge: "OFFER NO.6 • SAVE ₹1001 (44% OFF)",
                 rating: "(620)",
                 desc: "Complete Umrah Family Care Combo for all family members in Ihram. Includes 5 full-size fragrance-free essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Toothbrush + Natural Loofah Scrubber). 100% Halal & Lab Certified.",
@@ -2886,12 +2893,12 @@
                 oldPrice: 2156,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/offer_2_cards_ihram_1848.webp?v=3",
+                image: "product/offer/offer_2_cards_ihram_1848.webp?v=4",
                 images: [
-                              "product/offer/offer_2_cards_ihram_1848.webp?v=3",
-                              "product/card/699-1.webp",
+                              "product/offer/offer_2_cards_ihram_1848.webp?v=4",
+                              "product/offer/offer_5_cards_only_599.webp",
                               "product/card/699-2.webp",
-                              "product/offer/offer_5_cards_only_599.webp?v=3",
+                              "product/offer/offer_5_cards_only_599.webp?v=4",
                               "product/essentials/combo-box-open.webp",
                               "product/essentials/combo-whats-inside.webp",
                               "product/essentials/soap-hero.webp",
@@ -2902,8 +2909,8 @@
                               "product/miswak/box.webp",
                               "product/essentials/family-zaireen-combo.webp",
                               "product/essentials/fragrance-free-ihram.webp",
-                              "product/essentials/certified-trusted.webp"
-                    ],
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 badge: "OFFER NO.2 • SAVE ₹308",
                 rating: "(580)",
                 desc: "Complete Umrah Essentials Combo for Zaireen. Includes Waterproof Umrah Dua Cards + 5 Full-Size Fragrance-Free Ihram Care Essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Brush + Loofah Scrubber) + Tasbih & Velvet Pouch. 100% Halal & Lab Certified.",
@@ -2927,14 +2934,14 @@
                 hasJanamaz: true,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/offer_3_mega_combo_2198_launch.webp?v=3",
+                image: "product/offer/offer_3_mega_combo_2198_launch.webp?v=4",
                 images: [
-                              "product/offer/offer_3_mega_combo_2198_launch.webp?v=3",
-                              "product/card/699-1.webp",
+                              "product/offer/offer_3_mega_combo_2198_launch.webp?v=4",
+                              "product/offer/offer_5_cards_only_599.webp",
                               "product/janamaz/golden.webp",
                               "product/janamaz/green.webp",
                               "product/card/699-2.webp",
-                              "product/offer/offer_1_cards_janamaz_898.webp?v=3",
+                              "product/offer/offer_1_cards_janamaz_898.webp?v=4",
                               "product/essentials/combo-box-open.webp",
                               "product/essentials/combo-whats-inside.webp",
                               "product/essentials/soap-hero.webp",
@@ -2945,8 +2952,8 @@
                               "product/miswak/box.webp",
                               "product/essentials/family-zaireen-combo.webp",
                               "product/essentials/fragrance-free-ihram.webp",
-                              "product/essentials/certified-trusted.webp"
-                    ],
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 badge: "OFFER NO.3 • SAVE ₹408",
                 rating: "(740)",
                 desc: "The Ultimate All-in-One Umrah Mega Combo for Pilgrims. Includes Waterproof Umrah Dua Cards + Pocket Travel Janamaz + 5 Full-Size Ihram Essentials + 2 FREE Gifts worth ₹299 (Siwak Miswak Toothbrush Starter Kit + Loofah Scrubber) + Tasbih & Velvet Pouch.",
@@ -2973,9 +2980,11 @@
                 image: "product/miswak/box.webp",
                 images: [
                     "product/miswak/box.webp",
+                    "product/miswak/box-badges.webp",
                     "product/miswak/benefits.webp",
                     "product/miswak/comparison.webp",
-                    "product/miswak/how_to_use.webp"
+                    "product/miswak/how_to_use.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "OFFER • ₹179 PREPAID FREE SHIPPING",
                 rating: "(485)",
@@ -3058,7 +3067,8 @@
                     "product/tasbih/red.webp",
                     "product/tasbih/hotpink.webp",
                     "product/tasbih/pearl.webp",
-                    "product/tasbih/purple.webp"
+                    "product/tasbih/purple.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "DIGITAL TASBIH • ₹249 PREPAID FREE DELIVERY",
                 rating: "(524)",
@@ -3229,66 +3239,46 @@
                      onmouseenter="prefetchProductMedia(${p.id})" 
                      ontouchstart="prefetchProductMedia(${p.id})" 
                      class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 shadow-sm hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group cursor-pointer">
-                    <div class="relative bg-pearl p-2 sm:p-3 text-center border-b border-gray-100 overflow-hidden rounded-t-2xl">
-                        <span class="absolute top-2.5 left-2.5 z-10 ${p.category === 'card' ? 'bg-onyx text-gold-400 border border-gold-500/40' : 'bg-emerald-800 text-white'} text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shadow-xs">
-                            ${p.badge}
-                        </span>
-
-                        <!-- Watch Video Badge Button -->
-                        <button onclick="event.stopPropagation(); window.location.href='product.html?id=${p.id}&media=video';" class="absolute top-2.5 right-2.5 z-20 bg-onyx/90 hover:bg-gold-500 hover:text-onyx text-gold-400 text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-gold-500/40 shadow-sm transition-all active:scale-95">
-                            <i class="fa-solid fa-circle-play text-gold-400"></i>
-                            <span>Video</span>
-                        </button>
-
-                        <!-- Product Image Showcase with Proper Smooth Curved Corners -->
-                        <div class="aspect-square rounded-2xl bg-sand/40 p-1.5 flex items-center justify-center overflow-hidden my-1 border border-gray-200/70 group-hover:border-gold-300 transition-colors shadow-inner">
-                            <img src="${p.image}" alt="${p.name}" 
-                                 class="w-full h-full object-contain rounded-xl group-hover:scale-105 transition-transform duration-300" 
-                                 width="280" height="280"
-                                 ${isAboveFold ? 'loading="eager" fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"'}>
-                        </div>
+                    
+                    <!-- FULL PRODUCT IMAGE SHOWCASE (Edge-to-Edge for Banners, Uncropped Fit for Bottles/Boxes) -->
+                    <div class="relative w-full aspect-square bg-[#fbfbfa] overflow-hidden flex items-center justify-center border-b border-gray-100 ${(p.category === 'card' || p.category === 'combo' || p.id === 18) ? 'p-0' : 'p-3'}">
+                        <img src="${p.image}" alt="${p.name}" 
+                             class="w-full h-full ${(p.category === 'card' || p.category === 'combo' || p.id === 18) ? 'object-cover' : 'object-contain'} group-hover:scale-105 transition-transform duration-500 block" 
+                             width="350" height="350"
+                             ${isAboveFold ? 'loading="eager" fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"'}>
                     </div>
                     
-                    <div class="p-2 sm:p-3 flex-grow flex flex-col justify-between">
+                    <!-- COMPACT PRODUCT DETAILS -->
+                    <div class="p-2 sm:p-2.5 flex-grow flex flex-col justify-between">
                         <div>
-                            <div class="flex items-center justify-between text-[9px] text-amber-600 mb-1.5 flex-wrap gap-1">
-                                <div class="flex items-center gap-1.5">
-                                    <span>★★★★★ ${p.rating}</span>
-                                    <span class="text-amber-800 font-bold bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-300 flex items-center gap-0.5"><i class="fa-solid fa-fire text-amber-500 text-[8px]"></i> ${p.soldCount || '250 sold'}</span>
-                                </div>
-                                <span class="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-200">${hasVariants ? (p.category === 'tasbih' || p.category === 'janamaz' ? `${p.variants.length} Colors Available` : `${p.variants.length} Kit Options`) : 'In Stock'}</span>
+                            <div class="flex items-center justify-between text-[9px] text-amber-700 mb-1">
+                                <span class="font-bold flex items-center gap-1">
+                                    <i class="fa-solid fa-star text-amber-500 text-[8px]"></i> ${p.rating}
+                                    ${p.soldCount ? `<span class="text-gray-400 font-normal">(${p.soldCount})</span>` : ''}
+                                </span>
+                                <span class="text-[8px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">${hasVariants ? `${p.variants.length} Options` : 'In Stock'}</span>
                             </div>
-                            <h3 class="font-bold text-xs sm:text-sm text-onyx line-clamp-2 min-h-[2.25rem] leading-snug group-hover:text-gold-600 transition-colors">
+                            <h3 class="font-bold text-xs sm:text-sm text-onyx line-clamp-1 leading-snug group-hover:text-gold-600 transition-colors">
                                 ${p.name}
                             </h3>
-                            <p class="text-[10px] text-gray-500 line-clamp-2 mt-1">
-                                ${p.desc}
-                            </p>
                         </div>
 
-                        <div class="mt-2.5 pt-2 border-t border-gray-100">
-                            <div class="flex items-center justify-between gap-1 mb-2 flex-wrap">
-                                <div class="flex items-baseline gap-1">
-                                    ${hasVariants ? (minPrice === maxPrice ? `
-                                        <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${minPrice}</span>
-                                        <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${minOldPrice}</span>
-                                    ` : `
-                                        <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${minPrice} – ${maxPrice}</span>
-                                        <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${minOldPrice} – ${maxOldPrice}</span>
-                                    `) : `
-                                        <span class="font-extrabold text-xs sm:text-sm text-onyx">Rs. ${p.price}</span>
-                                        <span class="text-[9px] sm:text-[10px] text-gray-400 line-through">Rs. ${p.price * 2}</span>
-                                    `}
-                                </div>
+                        <div class="mt-2 pt-1.5 border-t border-gray-100 flex items-center justify-between gap-1.5">
+                            <div class="flex items-baseline gap-1 min-w-0">
+                                ${hasVariants ? (minPrice === maxPrice ? `
+                                    <span class="font-black text-xs sm:text-sm text-onyx truncate">Rs. ${minPrice}</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through shrink-0">Rs. ${minOldPrice}</span>
+                                ` : `
+                                    <span class="font-black text-xs sm:text-sm text-onyx truncate">Rs. ${minPrice}–${maxPrice}</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through shrink-0">Rs. ${minOldPrice}</span>
+                                `) : `
+                                    <span class="font-black text-xs sm:text-sm text-onyx truncate">Rs. ${p.price}</span>
+                                    <span class="text-[8.5px] text-gray-400 line-through shrink-0">Rs. ${p.price * 2}</span>
+                                `}
                             </div>
-                            <div class="grid grid-cols-2 gap-1.5">
-                                <button onclick="event.stopPropagation(); window.location.href='product.html?id=${p.id}';" class="bg-gray-100 hover:bg-gold-100 text-onyx font-bold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 transition-all border border-gray-300">
-                                    <i class="fa-solid fa-sliders text-[9px]"></i> ${hasVariants ? 'Options' : 'View'}
-                                </button>
-                                <button onclick="event.stopPropagation(); quickAddToCartOrBuy(${p.id});" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-2 px-1 rounded-xl flex items-center justify-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-sm">
-                                    <i class="fa-solid fa-bolt text-[9px]"></i> Buy Now
-                                </button>
-                            </div>
+                            <button onclick="event.stopPropagation(); window.location.href='product.html?id=${p.id}';" class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-1 px-2.5 rounded-lg flex items-center gap-1 hover:opacity-95 active:scale-95 transition-all shadow-xs shrink-0">
+                                <i class="fa-solid fa-bolt text-[9px]"></i> Buy
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -3353,6 +3343,17 @@
             }
         }
 
+                function finalizeQuickViewMediaList(items) {
+            if (!items.some(it => it.url && it.url.includes('certificate_ayurvedic_mastery.webp'))) {
+                items.push({
+                    type: 'image',
+                    url: 'product/certificate_ayurvedic_mastery.webp',
+                    title: 'Founder Training & Credentials — Diploma in Ayurvedic Cosmetics'
+                });
+            }
+            return items;
+        }
+
         function getMediaItems(product, variantIdx = currentSelectedVariant) {
             if (!product) return [];
             const items = [];
@@ -3389,6 +3390,15 @@
             } else if (product.image && !items.some(it => it.url === product.image)) {
                 items.push({ type: 'image', url: product.image, title: 'Full Product View' });
             }
+
+            // Official Founder Credentials & Training Certificate as the final slide
+            if (!items.some(it => it.url === 'product/certificate_ayurvedic_mastery.webp')) {
+                items.push({
+                    type: 'image',
+                    url: 'product/certificate_ayurvedic_mastery.webp',
+                    title: 'Founder Training & Credentials — Diploma in Ayurvedic Cosmetics'
+                });
+            }
             
             const hasCards = (product.category === 'card' || product.id === 1 || product.id === 2 || product.id === 3 || product.id === 4 || product.id === 18 || product.id === 14 || product.id === 16 || product.id === 17);
             if (hasCards) {
@@ -3398,7 +3408,7 @@
                 items.push({ type: 'video', url: product.video, title: 'Product Demonstration Video' });
             }
             
-            return items;
+            return finalizeQuickViewMediaList(items);
         }
 
         function quickView(id, targetType = 'image') {
@@ -3436,7 +3446,7 @@
             // Populate Main Scrollable Content (Starts directly from the top image)
             document.getElementById('quickview-content').innerHTML = `
                 <!-- MAIN MEDIA DISPLAY (Starts at top with Smooth Curved Corners, Safe Inner Padding & Overlay Badges) -->
-                <div class="relative w-full aspect-square sm:aspect-[4/3] max-h-[290px] sm:max-h-[360px] rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border border-gold-500/30 mb-3 shadow-2xl flex items-center justify-center select-none group mt-1">
+                <div class="relative w-full aspect-square max-h-[290px] sm:max-h-[360px] rounded-2xl overflow-hidden bg-gradient-to-b from-neutral-900 via-stone-900 to-onyx border border-gold-500/30 mb-3 shadow-2xl flex items-center justify-center select-none group mt-1">
                     
                     <!-- Floating Badges on Top-Left of Image -->
                     <div class="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5 flex-wrap max-w-[70%] pointer-events-none">
@@ -7201,6 +7211,7 @@ function addToCart(productId, variantIndex = 0) {
 
             initHeroOfferCarousel();
             initHeroReviews();
+            initHeroTopProductsTrack();
             initZaireenTrack();
             renderProducts('all');
             renderDuas('all');
@@ -7257,6 +7268,69 @@ function addToCart(productId, variantIndex = 0) {
         let zaireenAnimFrame = null;
         let isZaireenTouching = false;
         let zaireenResumeTimeout = null;
+
+        function scrollZaireenTrack(offset) {
+            const track = document.getElementById('zaireen-products-track');
+            if (track) {
+                track.scrollBy({ left: offset, behavior: 'smooth' });
+            }
+        }
+
+                // ==========================================
+        // HERO TOP 6 PRODUCTS DESKTOP AUTO-SCROLLER (4 Products per view, Continuous Loop)
+        // ==========================================
+        let heroTopPos = 0;
+        let isHeroTopTouching = false;
+        let heroTopAnimFrame = null;
+        let heroTopResumeTimeout = null;
+
+        function scrollHeroTopTrack(offset) {
+            const track = document.getElementById('hero-top-products-track');
+            if (track) {
+                track.scrollBy({ left: offset, behavior: 'smooth' });
+                heroTopPos = track.scrollLeft + offset;
+            }
+        }
+
+        function initHeroTopProductsTrack() {
+            const track = document.getElementById('hero-top-products-track');
+            if (!track) return;
+
+            heroTopPos = track.scrollLeft || 0;
+            const scrollSpeed = 1.2;
+
+            function step() {
+                if (!isHeroTopTouching) {
+                    heroTopPos += scrollSpeed;
+                    const singleSetWidth = track.scrollWidth / 3;
+                    if (singleSetWidth > 50 && heroTopPos >= singleSetWidth) {
+                        heroTopPos -= singleSetWidth;
+                        track.scrollLeft -= singleSetWidth;
+                    } else {
+                        track.scrollLeft = heroTopPos;
+                    }
+
+                    if (track.scrollLeft >= (track.scrollWidth - track.clientWidth - 4)) {
+                        heroTopPos = 0;
+                        track.scrollLeft = 0;
+                    }
+                }
+                heroTopAnimFrame = requestAnimationFrame(step);
+            }
+
+            if (heroTopAnimFrame) cancelAnimationFrame(heroTopAnimFrame);
+            heroTopAnimFrame = requestAnimationFrame(step);
+
+            track.addEventListener('mouseenter', () => {
+                isHeroTopTouching = true;
+                if (heroTopResumeTimeout) clearTimeout(heroTopResumeTimeout);
+            });
+
+            track.addEventListener('mouseleave', () => {
+                heroTopPos = track.scrollLeft;
+                isHeroTopTouching = false;
+            });
+        }
 
         function initZaireenTrack() {
             const track = document.getElementById('zaireen-products-track');

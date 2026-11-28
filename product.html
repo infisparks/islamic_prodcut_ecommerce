@@ -25,10 +25,10 @@
                 var rawVar = params.get('variant');
                 var vIdx = rawVar ? parseInt(rawVar, 10) : 0;
                 var prodImages = {
-                    1: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp?v=3" : "product/offer/offer_5_cards_only_599.webp?v=3",
-                    2: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp?v=3" : "product/offer/offer_5_cards_only_599.webp?v=3",
-                    3: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp?v=3" : "product/offer/offer_5_cards_only_599.webp?v=3",
-                    4: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp?v=3" : "product/offer/offer_5_cards_only_599.webp?v=3",
+                    1: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp" : "product/offer/offer_5_cards_only_599.webp",
+                    2: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp" : "product/offer/offer_5_cards_only_599.webp",
+                    3: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp" : "product/offer/offer_5_cards_only_599.webp",
+                    4: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp" : "product/offer/offer_5_cards_only_599.webp",
                     5: "product/umrah_Sticker_English.webp",
                     6: "product/umrah_Sticker_hindi.webp",
                     7: "product/umrah_Sticker_Urdu.webp",
@@ -38,11 +38,11 @@
                     11: "product/essentials/shampoo-hero.webp",
                     12: "product/essentials/hand-body-wash-hero.webp",
                     13: "product/essentials/face-wash-hero.webp",
-                    14: "product/offer/offer_6_ihram_kit_1299.webp?v=3",
+                    14: "product/offer/offer_6_ihram_kit_1299.webp",
                     15: "product/miswak/box.webp",
-                    16: "product/offer/offer_2_cards_ihram_1848.webp?v=3",
-                    17: "product/offer/offer_3_mega_combo_2198_launch.webp?v=3",
-                    18: "product/offer/offer_kids_cards_599.webp?v=3",
+                    16: "product/offer/offer_2_cards_ihram_1848.webp",
+                    17: "product/offer/offer_3_mega_combo_2198_launch.webp",
+                    18: (vIdx === 1) ? "product/offer/offer_1_cards_janamaz_898.webp" : "product/offer/offer_kids_cards_599.webp",
                     19: rawVar ? (["product/tasbih/green.webp", "product/tasbih/red.webp", "product/tasbih/hotpink.webp", "product/tasbih/pearl.webp", "product/tasbih/purple.webp"][vIdx] || "product/tasbih/hero.webp") : "product/tasbih/hero.webp"
                 };
                 var prodMeta = {
@@ -56,17 +56,17 @@
                     8: { title: "Pocket Travel Janamaz with Zipper Pouch", price: "Rs. 349", oldPrice: "MRP Rs. 698", discount: "-50% OFF" },
                     9: { title: "Herbal Ihram Friendly Soap (Fragrance Free)", price: "Rs. 199", oldPrice: "MRP Rs. 399", discount: "-50% OFF" },
                     10: { title: "Pure Coconut Oil (Fragrance Free & Ihram Safe)", price: "Rs. 249", oldPrice: "MRP Rs. 499", discount: "-50% OFF" },
-                    11: { title: "Herbal Ihram Friendly Shampoo (Fragrance Free)", price: "Rs. 299", oldPrice: "MRP Rs. 699", discount: "-50% OFF" },
-                    12: { title: "Herbal Ihram Hand & Body Wash (Fragrance Free)", price: "Rs. 299", oldPrice: "MRP Rs. 699", discount: "-50% OFF" },
+                    11: { title: "Herbal Ihram Friendly Shampoo (Fragrance Free)", price: "Rs. 299", oldPrice: "MRP Rs. 599", discount: "-50% OFF" },
+                    12: { title: "Herbal Ihram Hand & Body Wash (Fragrance Free)", price: "Rs. 299", oldPrice: "MRP Rs. 599", discount: "-50% OFF" },
                     13: { title: "Herbal Ihram Friendly Face Wash (Fragrance Free)", price: "Rs. 249", oldPrice: "MRP Rs. 499", discount: "-50% OFF" },
                     14: { title: "Umrah Family Combo - Complete Ihram Essentials Kit", price: "Rs. 1499", oldPrice: "MRP Rs. 2300", discount: "-44% OFF" },
                     15: { title: "Authentic Siwak Miswak Toothbrush Starter Kit", price: "Rs. 199", oldPrice: "MRP Rs. 699", discount: "Prepaid ₹199 / COD ₹299" },
-                    16: { title: "All-in-One Hajj & Umrah Protection Kit (Dua Cards + Ihram Care)", price: "Rs. 1999", oldPrice: "MRP Rs. 3499", discount: "-47% OFF" },
-                    17: { title: "Mega Umrah Super Combo (Cards + Janamaz + Essentials)", price: "Rs. 2499", oldPrice: "MRP Rs. 4198", discount: "-48% OFF" },
+                    16: { title: "All-in-One Hajj & Umrah Protection Kit (Dua Cards + Ihram Care)", price: "Rs. 1999", oldPrice: "MRP Rs. 2999", discount: "-33% OFF" },
+                    17: { title: "Mega Umrah Super Combo (Cards + Janamaz + Essentials)", price: "Rs. 2499", oldPrice: "MRP Rs. 3499", discount: "-29% OFF" },
                     18: { title: "Umrah Dua Cards - Special Kids Edition", price: (vIdx === 1 ? "Rs. 999" : "Rs. 699"), oldPrice: "MRP Rs. 1198", discount: "-50% OFF" },
                     19: { title: "Crystal Beaded Digital Tasbih (Tally Counter)", price: "Rs. 249", oldPrice: "MRP Rs. 498", discount: "Prepaid ₹249 / COD ₹349" }
                 };
-                var targetImg = prodImages[pid] || "product/offer/offer_5_cards_only_599.webp?v=3";
+                var targetImg = prodImages[pid] || "product/offer/offer_5_cards_only_599.webp";
                 window.__INITIAL_PDP_IMAGE__ = targetImg;
                 window.__INITIAL_PDP_META__ = prodMeta[pid] || null;
                 var link = document.createElement('link');
@@ -132,6 +132,13 @@
             background-color: #F8F9FA;
             color: #111827;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF1B0 0%, #D4AF37 40%, #AA8518 70%, #F5C832 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .gold-bg-gradient {
@@ -263,45 +270,117 @@
             47703</a>
     </div>
 
-    <!-- MAIN HEADER (Desktop Only - On Mobile, Floating Overlays are used directly over top hero) -->
-    <header class="hidden sm:block sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-xs">
-        <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
-            <!-- Left: Back to Home Link -->
-            <a href="index.html"
-                class="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-gray-700 hover:text-gold-700 bg-sand hover:bg-gold-50 px-3 py-1.5 rounded-xl border border-gray-300 transition-colors"
-                title="Back to All Products">
-                <i class="fa-solid fa-arrow-left text-gold-600"></i>
-                <i class="fa-solid fa-house text-gold-600 ml-0.5"></i>
-                <span class="hidden xs:inline">Back to Store</span>
-                <span class="xs:hidden">Back</span>
-            </a>
+    <!-- UNIFIED PROFESSIONAL HEADER (Mobile & Desktop) -->
+    <header class="sticky top-0 z-40 bg-[#121214]/95 backdrop-blur-md border-b border-gold-500/25 text-white">
+        <div class="w-full max-w-[1600px] 2xl:max-w-[1800px] mx-auto px-3.5 sm:px-8 lg:px-12 py-2.5 flex items-center justify-between gap-2">
+            <!-- Left: Back + Brand Logo -->
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <a href="index.html"
+                    class="w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-gold-300 border border-gold-500/25 flex items-center justify-center gap-1.5 text-xs font-bold shrink-0 transition-colors"
+                    title="Back to All Products">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                    <span class="hidden sm:inline">Store</span>
+                </a>
+                <a href="index.html" class="flex items-center gap-2 min-w-0">
+                    <div
+                        class="w-7 h-7 sm:w-8 sm:h-8 rounded-full gold-bg-gradient flex items-center justify-center text-onyx font-cinzel font-bold text-xs sm:text-sm shrink-0">
+                        FC
+                    </div>
+                    <div class="text-left min-w-0">
+                        <span
+                            class="font-cinzel text-xs sm:text-sm font-bold tracking-wider gold-gradient-text block leading-none truncate">FATIMA
+                            CALLIGRAPHER</span>
+                        <span
+                            class="text-[8px] sm:text-[9px] text-gray-400 font-medium tracking-widest block uppercase mt-0.5 truncate">Authentic
+                            Umrah Duas</span>
+                    </div>
+                </a>
+            </div>
 
-            <!-- Center: Brand Logo -->
-            <a href="index.html" class="flex items-center gap-2 group">
-                <div
-                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-onyx border border-gold-500/60 flex items-center justify-center text-gold-400 font-cinzel font-bold text-xs sm:text-sm shadow-xs group-hover:scale-105 transition-transform">
-                    FC
-                </div>
-                <div class="text-left">
-                    <span
-                        class="font-cinzel text-xs sm:text-sm font-bold tracking-wider text-onyx block group-hover:text-gold-700 transition-colors">FATIMA
-                        CALLIGRAPHER</span>
-                    <span
-                        class="text-[8.5px] sm:text-[9.5px] text-gold-600 font-semibold tracking-widest block uppercase -mt-0.5">Authentic
-                        Umrah Duas</span>
-                </div>
-            </a>
+            <!-- Desktop Clean Nav Links -->
+            <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-gray-200">
+                <a href="index.html#products-grid" class="hover:text-gold-400 transition-colors">Top Products</a>
+                <a href="product.html?id=17" class="hover:text-gold-400 transition-colors">Combos</a>
+                <a href="#reviews" onclick="scrollToReviewsSection(event)"
+                    class="hover:text-gold-400 transition-colors">Reviews</a>
+                <a href="tel:+919970347703" class="hover:text-gold-400 transition-colors">Support</a>
+            </nav>
 
-            <!-- Right: Cart Trigger Button -->
-            <a href="checkout.html"
-                class="relative flex items-center gap-1.5 bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx px-3 py-1.5 rounded-xl border border-gold-500/40 text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span class="hidden sm:inline">Cart</span>
-                <span id="cart-count"
-                    class="bg-gold-500 text-onyx font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
-            </a>
+            <!-- Right: Cart + Mobile Menu Trigger -->
+            <div class="flex items-center gap-2 shrink-0">
+                <a href="checkout.html"
+                    class="relative p-2 text-gold-400 hover:text-white transition-colors cursor-pointer"
+                    aria-label="Open Cart / Checkout">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="cart-count"
+                        class="absolute -top-0.5 -right-0.5 bg-red-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-onyx">0</span>
+                </a>
+                <button type="button" onclick="toggleSiteMenu(true)"
+                    class="md:hidden w-9 h-9 rounded-xl bg-white/10 hover:bg-white/15 border border-gold-500/30 text-gold-300 flex items-center justify-center transition-colors cursor-pointer"
+                    aria-label="Open Menu">
+                    <i class="fa-solid fa-bars text-sm"></i>
+                </button>
+            </div>
         </div>
     </header>
+
+    <!-- SLIDE-OUT NAVIGATION MENU DRAWER -->
+    <div id="site-menu-drawer" onclick="if(event.target === this) toggleSiteMenu(false)"
+        class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs hidden justify-end">
+        <div
+            class="w-72 max-w-[85vw] h-full bg-[#121214] text-white border-l border-gold-500/30 flex flex-col justify-between p-5 shadow-2xl">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-gold-500/20">
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="w-7 h-7 rounded-full gold-bg-gradient flex items-center justify-center text-onyx font-cinzel font-bold text-xs">
+                            FC</div>
+                        <span class="font-cinzel text-xs font-bold tracking-wider text-gold-300">MENU</span>
+                    </div>
+                    <button type="button" onclick="toggleSiteMenu(false)"
+                        class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 flex items-center justify-center cursor-pointer">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+                <nav class="mt-4 flex flex-col gap-1.5 text-sm font-semibold">
+                    <a href="index.html"
+                        class="px-3 py-2.5 rounded-xl hover:bg-white/10 text-gray-100 flex items-center gap-3"><i
+                            class="fa-solid fa-house text-gold-400 w-4"></i> Home</a>
+                    <a href="index.html#products-grid"
+                        class="px-3 py-2.5 rounded-xl hover:bg-white/10 text-gray-100 flex items-center gap-3"><i
+                            class="fa-solid fa-bag-shopping text-gold-400 w-4"></i> Top Products</a>
+                    <a href="product.html?id=2"
+                        class="px-3 py-2.5 rounded-xl hover:bg-white/10 text-gray-100 flex items-center gap-3"><i
+                            class="fa-solid fa-book-open text-gold-400 w-4"></i> Umrah Dua Cards</a>
+                    <a href="product.html?id=17"
+                        class="px-3 py-2.5 rounded-xl hover:bg-white/10 text-gray-100 flex items-center gap-3"><i
+                            class="fa-solid fa-gift text-gold-400 w-4"></i> Value Combos</a>
+                    <a href="product.html?id=19"
+                        class="px-3 py-2.5 rounded-xl hover:bg-white/10 text-gray-100 flex items-center gap-3"><i
+                            class="fa-solid fa-circle-dot text-gold-400 w-4"></i> Digital Tasbih</a>
+                    <a href="#reviews" onclick="toggleSiteMenu(false); scrollToReviewsSection(event);"
+                        class="px-3 py-2.5 rounded-xl hover:bg-white/10 text-gray-100 flex items-center gap-3"><i
+                            class="fa-solid fa-star text-amber-400 w-4"></i> Customer Reviews</a>
+                    <a href="checkout.html"
+                        class="px-3 py-2.5 rounded-xl hover:bg-white/10 text-gray-100 flex items-center gap-3"><i
+                            class="fa-solid fa-cart-shopping text-gold-400 w-4"></i> Cart &amp; Checkout</a>
+                </nav>
+            </div>
+            <div class="pt-4 border-t border-gold-500/20 space-y-2 text-xs text-gray-400">
+                <a href="tel:+919970347703" class="flex items-center gap-2 text-gold-300 font-bold hover:underline"><i
+                        class="fa-solid fa-phone"></i> +91 99703 47703</a>
+                <p class="text-[11px]">100% Free Prepaid Shipping across India</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSiteMenu(open) {
+            const d = document.getElementById('site-menu-drawer');
+            if (!d) return;
+            if (open) { d.classList.remove('hidden'); d.classList.add('flex'); }
+            else { d.classList.add('hidden'); d.classList.remove('flex'); }
+        }
+    </script>
 
     <!-- BREADCRUMB (Desktop Only) -->
     <div class="hidden sm:block bg-white border-b border-gray-200 text-[11px] text-gray-500 py-2 px-4 sm:px-6">
@@ -330,30 +409,12 @@
 
                 <!-- Main Media Frame (Flat top, rounded bottom on mobile with swipe gesture support) -->
                 <div id="pdp-main-media-frame"
-                    class="relative w-full aspect-square max-h-[460px] sm:max-h-[520px] rounded-t-none rounded-b-3xl sm:rounded-3xl overflow-hidden bg-white shadow-sm flex items-center justify-center select-none group border-b sm:border border-gray-200/90 touch-pan-y">
+                    class="relative w-full aspect-square max-h-[520px] sm:max-h-[620px] rounded-t-none rounded-b-3xl sm:rounded-3xl overflow-hidden bg-white shadow-sm flex items-center justify-center select-none group border-b sm:border border-gray-200/90 touch-pan-y">
 
-                    <!-- Mobile Floating Top Bar (Back Button + Cart) -->
-                    <div
-                        class="absolute top-3 left-3 right-3 z-30 flex items-center justify-between pointer-events-auto sm:hidden">
-                        <!-- Left: Back Button -->
-                        <a href="index.html"
-                            class="w-10 h-10 rounded-full bg-white/95 hover:bg-white text-gray-800 backdrop-blur-md shadow-md border border-gray-200/90 flex items-center justify-center transition-transform active:scale-90"
-                            title="Back to Store">
-                            <i class="fa-solid fa-chevron-left text-sm"></i>
-                        </a>
-
-                        <!-- Right: Cart Button -->
-                        <a href="checkout.html"
-                            class="w-10 h-10 rounded-full bg-onyx text-gold-400 hover:bg-gold-500 hover:text-onyx shadow-md border border-gold-500/40 flex items-center justify-center relative transition-transform active:scale-90"
-                            title="View Cart">
-                            <i class="fa-solid fa-cart-shopping text-xs"></i>
-                            <span id="floating-cart-count"
-                                class="bg-gold-500 text-onyx font-extrabold text-[9px] w-4 h-4 rounded-full flex items-center justify-center absolute -top-1 -right-1">0</span>
-                        </a>
-                    </div>
+                    <!-- Mobile image top stays 100% clean and unobstructed (nav & cart are in sticky header) -->
 
                     <!-- Slide Counter Badge on Top-Right -->
-                    <div class="absolute top-16 sm:top-3 right-3 z-20 pointer-events-none">
+                    <div class="absolute top-3 right-3 z-20 pointer-events-none">
                         <span id="pdp-media-counter"
                             class="bg-black/75 backdrop-blur-md text-gold-300 font-mono text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-gold-500/30 shadow-xs">
                             1 / 1
@@ -387,7 +448,7 @@
                                         class="absolute top-2 left-2 z-20 bg-onyx/85 backdrop-blur-xs text-gold-300 text-[8px] sm:text-[9px] font-extrabold px-1.5 py-0.5 rounded-md border border-gold-500/40 shadow-xs flex items-center gap-1">
                                         <i class="fa-solid fa-star text-gold-400 text-[6.5px]"></i> Main Kit
                                     </span>
-                                    <img id="pdp-combo-card-img" src="product/card/699-1.webp" alt="Umrah Cards Kit"
+                                    <img id="pdp-combo-card-img" src="product/offer/offer_5_cards_only_599.webp" alt="Umrah Cards Kit"
                                         class="w-full h-full object-contain object-center pointer-events-none">
                                 </div>
 
@@ -544,7 +605,7 @@
                                     document.write('<span class="inline-block w-24 h-7 bg-amber-100/70 animate-pulse rounded-lg"></span>');
                                 }
                             </script>
-                            <noscript>Rs. 699</noscript>
+                            <noscript>Rs. 599</noscript>
                         </span>
                         <span id="pdp-old-price" class="text-xs sm:text-base text-gray-400 line-through">
                             <script>
@@ -1484,7 +1545,7 @@
                     </div>
                 </div>
 
-                <!-- Janamaz Color Selection Section (Visible for Mega Combo ₹2,499 or Janamaz Kits) -->
+                <!-- Janamaz Color Selection Section (Visible for Mega Combo ₹2198 or Janamaz Kits) -->
                 <div id="modal-janamaz-color-section" class="hidden pt-1 border-t border-gold-200">
                     <div class="flex items-center justify-between text-xs font-bold text-slate-800 mb-1">
                         <span class="text-emerald-800 flex items-center gap-1">
@@ -1526,7 +1587,7 @@
                             </div>
                             <div class="w-full pt-1 border-t border-white/10 mt-0.5">
                                 <div class="font-black text-xs sm:text-sm text-white">₹179</div>
-                                <div class="text-[8px] text-gray-500 line-through">₹699</div>
+                                <div class="text-[8px] text-gray-500 line-through">₹599</div>
                                 <div class="text-[7.5px] text-emerald-400 font-bold mt-0.5">Free Del</div>
                             </div>
                             <div id="modal-miswak-radio-0"
@@ -1623,7 +1684,7 @@
                 <button type="button" onclick="confirmLanguageAndProceed()" id="modal-confirm-btn"
                     class="w-full bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600 hover:from-gold-500 hover:to-gold-600 text-onyx font-black py-3 px-4 rounded-xl shadow-md border border-gold-500 flex items-center justify-center gap-2 text-xs sm:text-sm transition-all cursor-pointer active:scale-98">
                     <i class="fa-solid fa-circle-check text-sm"></i>
-                    <span id="modal-confirm-btn-text">Confirm & Proceed (Rs. 699)</span>
+                    <span id="modal-confirm-btn-text">Confirm & Proceed (Rs. 599)</span>
                 </button>
             </div>
         </div>
@@ -1706,36 +1767,7 @@
         </div>
     </footer>
 
-    <!-- FLOATING RIGHT-SIDE ACTIONS CONTAINER (Reviews & Top Products/Store) -->
-    <div
-        class="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-end gap-2.5 sm:gap-3 pointer-events-none select-none">
-
-        <!-- 1. OUR REVIEWS TAB -->
-        <a href="#reviews" onclick="scrollToReviewsSection(event)" id="floating-reviews-tab"
-            aria-label="Customer Reviews"
-            class="pointer-events-auto bg-[#121316]/95 hover:bg-black text-[#FAF7F2] border-l-2 border-t-2 border-b-2 border-gold-500 shadow-[0_4px_22px_rgba(212,175,55,0.45)] rounded-l-2xl py-2.5 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-1.5 sm:gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1 active:scale-95 group backdrop-blur-md">
-            <div
-                class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 transition-transform shadow-xs">
-                <i class="fa-solid fa-star text-gold-400"></i>
-            </div>
-            <span
-                class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#FAF7F2] [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Our
-                Reviews</span>
-        </a>
-
-        <!-- 2. TOP PRODUCTS / EXPLORE STORE TAB -->
-        <a href="index.html" id="floating-store-tab" aria-label="Explore Top Products & Combos"
-            class="pointer-events-auto gold-bg-gradient hover:brightness-110 text-onyx border-l-2 border-t-2 border-b-2 border-gold-300 shadow-[0_6px_25px_rgba(212,175,55,0.6)] rounded-l-2xl py-2.5 px-1.5 sm:py-3.5 sm:px-2 flex flex-col items-center gap-1.5 sm:gap-2 cursor-pointer transition-all duration-300 hover:-translate-x-1.5 active:scale-95 group backdrop-blur-md">
-            <div
-                class="w-6 h-6 rounded-full bg-onyx text-gold-400 flex items-center justify-center text-xs group-hover:scale-125 group-hover:rotate-12 transition-transform shadow-sm">
-                <i class="fa-solid fa-bag-shopping text-gold-400"></i>
-            </div>
-            <span
-                class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-onyx [writing-mode:vertical-rl] select-none font-sans drop-shadow-xs">Top
-                Products</span>
-        </a>
-
-    </div>
+    <!-- Floating side tabs moved to top header for clean unobstructed product imagery -->
 
     <!-- PRODUCT CATALOG & JAVASCRIPT ENGINE -->
     <script>
@@ -1775,7 +1807,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_urdu.webp",
                     "product/prodcut_more/umrahcard_urdu_1.webp",
@@ -1790,7 +1822,8 @@
                     "product/prodcut_more/umrahcard_urdu_10.webp",
                     "product/prodcut_more/umrahcard_urdu_11.webp",
                     "product/prodcut_more/umrahcard_urdu_12.webp",
-                    "product/prodcut_more/umrahcard_urdu_13.webp"
+                    "product/prodcut_more/umrahcard_urdu_13.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • URDU",
@@ -1804,16 +1837,17 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 698,
+                        oldPrice: 1299,
                         weight: "150gm",
                         tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/offer/offer_5_cards_only_599.webp?v=3",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/offer/offer_5_cards_only_599.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
@@ -1821,17 +1855,18 @@
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
                         price: 999,
-                        oldPrice: 1106,
+                        oldPrice: 1699,
                         weight: "260gm",
                         tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/offer/offer_1_cards_janamaz_898.webp?v=3",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
-                            "product/offer/offer_1_cards_janamaz_898.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_1_cards_janamaz_898.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on All Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
@@ -1848,7 +1883,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_english.webp",
                     "product/prodcut_more/umrahcard_english_1.webp",
@@ -1857,7 +1892,8 @@
                     "product/prodcut_more/umrahcard_english_4.webp",
                     "product/prodcut_more/umrahcard_english_5.webp",
                     "product/prodcut_more/umrahcard_english_6.webp",
-                    "product/prodcut_more/umrahcard_english_7.webp"
+                    "product/prodcut_more/umrahcard_english_7.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ENGLISH",
@@ -1871,16 +1907,17 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 698,
+                        oldPrice: 1299,
                         weight: "150gm",
                         tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/offer/offer_5_cards_only_599.webp?v=3",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/offer/offer_5_cards_only_599.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
@@ -1888,17 +1925,18 @@
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
                         price: 999,
-                        oldPrice: 1106,
+                        oldPrice: 1699,
                         weight: "260gm",
                         tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/offer/offer_1_cards_janamaz_898.webp?v=3",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
-                            "product/offer/offer_1_cards_janamaz_898.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_1_cards_janamaz_898.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on All Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
@@ -1915,7 +1953,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_hindi.webp",
                     "product/prodcut_more/umrahcard_hindi_1.webp",
@@ -1939,7 +1977,8 @@
                     "product/prodcut_more/umrahcard_hindi_19.webp",
                     "product/prodcut_more/umrahcard_hindi_20.webp",
                     "product/prodcut_more/umrahcard_hindi_21.webp",
-                    "product/prodcut_more/umrahcard_hindi_22.webp"
+                    "product/prodcut_more/umrahcard_hindi_22.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • HINDI",
@@ -1953,16 +1992,17 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 698,
+                        oldPrice: 1299,
                         weight: "150gm",
                         tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/offer/offer_5_cards_only_599.webp?v=3",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/offer/offer_5_cards_only_599.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
@@ -1970,17 +2010,18 @@
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
                         price: 999,
-                        oldPrice: 1106,
+                        oldPrice: 1699,
                         weight: "260gm",
                         tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/offer/offer_1_cards_janamaz_898.webp?v=3",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
-                            "product/offer/offer_1_cards_janamaz_898.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_1_cards_janamaz_898.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on All Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
@@ -1997,7 +2038,7 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "Laminated paper, ribbon & beads",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/card/699-1.webp",
+                image: "product/offer/offer_5_cards_only_599.webp",
                 images: [
                     "product/umrah_card_roman.webp",
                     "product/prodcut_more/umrahcard_roman_1.webp",
@@ -2010,7 +2051,8 @@
                     "product/prodcut_more/umrahcard_roman_8.webp",
                     "product/prodcut_more/umrahcard_roman_9.webp",
                     "product/prodcut_more/umrahcard_roman_10.webp",
-                    "product/prodcut_more/umrahcard_roman_11.webp"
+                    "product/prodcut_more/umrahcard_roman_11.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
                 badge: "CARD • ROMAN",
@@ -2024,16 +2066,17 @@
                         name: "Full Companion Kit (Cards + Tasbih + Lanyard + Zipper Pouch)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 698,
+                        oldPrice: 1299,
                         weight: "150gm",
                         tag: "Offer No.5",
                         freeShipping: false,
-                        image: "product/offer/offer_5_cards_only_599.webp?v=3",
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/offer/offer_5_cards_only_599.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "100% FREE Shipping on Prepaid Orders"]
                     },
                     {
@@ -2041,17 +2084,18 @@
                         name: "Mega Combo Kit (Cards + Tasbih + Lanyard + Pouch + Travel Janamaz)",
                         shortName: "Cards + Tasbih + Lanyard + Pouch + Travel Janamaz",
                         price: 999,
-                        oldPrice: 1106,
+                        oldPrice: 1699,
                         weight: "260gm",
                         tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/offer/offer_1_cards_janamaz_898.webp?v=3",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
-                            "product/offer/offer_1_cards_janamaz_898.webp?v=3",
-                            "product/card/699-1.webp",
-                            "product/card/699-2.webp"
-                        ],
+                            "product/offer/offer_1_cards_janamaz_898.webp",
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/card/699-2.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["35+ Waterproof Dua Cards", "Tawaf Tasbih Counter (Beads)", "Premium Neck Lanyard (Ribbon)", "Protective Travel Zipper Pouch", "Pocket Foldable Travel Janamaz with Bag", "FREE Express Delivery on All Orders", "Extra 10% OFF on Prepaid"]
                     }
                 ]
@@ -2068,9 +2112,9 @@
                 dimensions: "4 * 6 * 1 inch",
                 material: "100% Waterproof Laminated, Neck Lanyard & Tasbih",
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/offer_kids_cards_599.webp?v=3",
+                image: "product/offer/offer_kids_cards_599.webp",
                 images: [
-                    "product/offer/offer_kids_cards_599.webp?v=3",
+                    "product/offer/offer_kids_cards_599.webp",
                     "product/kids/kids_cover.webp",
                     "product/kids/kids_card_7.webp",
                     "product/kids/kids_card_1.webp",
@@ -2079,10 +2123,11 @@
                     "product/kids/kids_card_4.webp",
                     "product/kids/kids_card_5.webp",
                     "product/kids/kids_card_6.webp",
-                    "product/kids/kids_card_8.webp"
+                    "product/kids/kids_card_8.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 video: "product/mantasha_card.mp4",
-                badge: "KIDS SPECIAL • ₹699",
+                badge: "KIDS SPECIAL • ₹599",
                 soldCount: "940 sold",
                 rating: "(380)",
                 desc: "Specially designed Umrah Dua & Guide Cards for Kids. Child-friendly cute illustrations, authentic Duas with easy transliteration & meaning, Umrah Certificate, Neck Lanyard and Tawaf Tasbih counter.",
@@ -2093,14 +2138,16 @@
                         name: "Kids Full Companion Kit (Cards + Tasbih + Lanyard + Velvet Pouch)",
                         shortName: "Kids Cards + Tasbih + Lanyard + Pouch",
                         price: 699,
-                        oldPrice: 698,
+                        oldPrice: 1299,
                         weight: "150gm",
-                        tag: "Popular 🌟",
-                        image: "product/offer/offer_kids_cards_599.webp?v=3",
+                        tag: "Offer No.5",
+                        freeShipping: false,
+                        image: "product/offer/offer_5_cards_only_599.webp",
                         images: [
-                            "product/offer/offer_kids_cards_599.webp?v=3",
-                            "product/kids/kids_cover.webp"
-                        ],
+                            "product/offer/offer_5_cards_only_599.webp",
+                            "product/kids/kids_cover.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Illustrated Waterproof Kids Dua Cards", "Official Umrah Certificate Card", "Kids Neck Lanyard (Ribbon)", "Tawaf Tasbih Counter Beads", "Protective Umrah Mubarak Velvet Pouch", "FREE Shipping on Prepaid Orders"]
                     },
                     {
@@ -2108,16 +2155,17 @@
                         name: "Kids Mega Combo Kit (Kids Cards + Travel Janamaz + Pouch + Lanyard)",
                         shortName: "Kids Cards + Travel Janamaz + Pouch",
                         price: 999,
-                        oldPrice: 1106,
+                        oldPrice: 1699,
                         weight: "260gm",
-                        tag: "Mega Combo 🔥",
+                        tag: "Offer No.1 🔥",
                         hasJanamaz: true,
                         freeShipping: true,
-                        image: "product/offer/offer_kids_cards_599.webp?v=3",
+                        image: "product/offer/offer_1_cards_janamaz_898.webp",
                         images: [
-                            "product/offer/offer_kids_cards_599.webp?v=3",
-                            "product/kids/kids_cover.webp"
-                        ],
+                            "product/offer/offer_1_cards_janamaz_898.webp",
+                            "product/kids/kids_cover.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Illustrated Waterproof Kids Dua Cards", "Pocket Foldable Travel Janamaz with Bag", "Kids Neck Lanyard (Ribbon)", "Tawaf Tasbih Counter Beads", "Protective Umrah Mubarak Velvet Pouch", "FREE Shipping on Prepaid Orders"]
                     }
                 ]
@@ -2140,7 +2188,9 @@
                 oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_English.webp",
-                images: ["product/umrah_Sticker_English.webp"],
+                images: ["product/umrah_Sticker_English.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • ENGLISH",
                 rating: "(453)",
@@ -2165,7 +2215,9 @@
                 oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_hindi.webp",
-                images: ["product/umrah_Sticker_hindi.webp"],
+                images: ["product/umrah_Sticker_hindi.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • HINDI",
                 rating: "(427)",
@@ -2190,7 +2242,9 @@
                 oldPrice: 398,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/umrah_Sticker_Urdu.webp",
-                images: ["product/umrah_Sticker_Urdu.webp"],
+                images: ["product/umrah_Sticker_Urdu.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                 video: "product/mantasha_sticker.mp4",
                 badge: "STICKER • URDU",
                 rating: "(498)",
@@ -2214,7 +2268,8 @@
                     "product/janamaz/green.webp",
                     "product/janamaz/pink.webp",
                     "product/janamaz/black.webp",
-                    "product/janamaz/gray.webp"
+                    "product/janamaz/gray.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "TRAVEL JANAMAZ",
                 soldCount: "2,150 sold",
@@ -2236,7 +2291,9 @@
                         weight: "150gm",
                         tag: "Most Popular",
                         image: "product/janamaz/golden.webp",
-                        images: ["product/janamaz/golden.webp"],
+                        images: ["product/janamaz/golden.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Pocket Foldable Travel Janamaz Mat (Royal Gold)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
                     },
                     {
@@ -2250,7 +2307,9 @@
                         weight: "150gm",
                         tag: "Classic Green",
                         image: "product/janamaz/green.webp",
-                        images: ["product/janamaz/green.webp"],
+                        images: ["product/janamaz/green.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Pocket Foldable Travel Janamaz Mat (Emerald Green)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
                     },
                     {
@@ -2264,7 +2323,9 @@
                         weight: "150gm",
                         tag: "Special Edition",
                         image: "product/janamaz/pink.webp",
-                        images: ["product/janamaz/pink.webp"],
+                        images: ["product/janamaz/pink.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Pocket Foldable Travel Janamaz Mat (Rose Pink)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
                     },
                     {
@@ -2278,7 +2339,9 @@
                         weight: "150gm",
                         tag: "Sleek Black",
                         image: "product/janamaz/black.webp",
-                        images: ["product/janamaz/black.webp"],
+                        images: ["product/janamaz/black.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Pocket Foldable Travel Janamaz Mat (Midnight Black)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
                     },
                     {
@@ -2292,7 +2355,9 @@
                         weight: "150gm",
                         tag: "Modern Gray",
                         image: "product/janamaz/gray.webp",
-                        images: ["product/janamaz/gray.webp"],
+                        images: ["product/janamaz/gray.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
+                ],
                         includes: ["Pocket Foldable Travel Janamaz Mat (Slate Gray)", "Compact Zipper Carrying Pouch", "Corner Weighted Wind Protection"]
                     }
                 ]
@@ -2318,7 +2383,7 @@
                     "product/essentials/soap-hero.webp",
                     "product/essentials/soap-badges.webp",
                     "product/essentials/soap-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(586)",
@@ -2351,7 +2416,7 @@
                     "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/coconut-oil-badges.webp",
                     "product/essentials/coconut-oil-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(442)",
@@ -2384,7 +2449,7 @@
                     "product/essentials/shampoo-hero.webp",
                     "product/essentials/shampoo-badges.webp",
                     "product/essentials/shampoo-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(389)",
@@ -2416,8 +2481,7 @@
                 images: [
                     "product/essentials/hand-body-wash-hero.webp",
                     "product/essentials/hand-body-wash-badges.webp",
-                    "product/essentials/hand-body-wash-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                                        "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(512)",
@@ -2450,7 +2514,7 @@
                     "product/essentials/face-wash-hero.webp",
                     "product/essentials/face-wash-badges.webp",
                     "product/essentials/face-wash-benefits.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "IHRAM ESSENTIAL",
                 rating: "(428)",
@@ -2479,20 +2543,16 @@
                 oldPrice: 2300,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/offer_6_ihram_kit_1299.webp?v=3",
+                image: "product/offer/offer_6_ihram_kit_1299.webp",
                 images: [
-                    "product/offer/offer_6_ihram_kit_1299.webp?v=3",
-                    "product/essentials/combo-box-open.webp",
-                    "product/essentials/combo-whats-inside.webp",
+                    "product/offer/offer_6_ihram_kit_1299.webp",
                     "product/essentials/soap-hero.webp",
-                    "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/shampoo-hero.webp",
-                    "product/essentials/hand-body-wash-hero.webp",
+                    "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/face-wash-hero.webp",
+                    "product/essentials/hand-body-wash-hero.webp",
                     "product/miswak/box.webp",
-                    "product/essentials/family-zaireen-combo.webp",
-                    "product/essentials/fragrance-free-ihram.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "OFFER NO.6 • SAVE ₹1001 (44% OFF)",
                 rating: "(620)",
@@ -2518,26 +2578,20 @@
                 sku: "fati_combo_cards_ihram",
                 soldCount: "1,520 sold",
                 price: 1999,
-                oldPrice: 2156,
+                oldPrice: 2999,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
-                image: "product/offer/offer_2_cards_ihram_1848.webp?v=3",
+                image: "product/offer/offer_2_cards_ihram_1848.webp",
                 images: [
-                    "product/offer/offer_2_cards_ihram_1848.webp?v=3",
-                    "product/card/699-1.webp",
-                    "product/card/699-2.webp",
-                    "product/offer/offer_5_cards_only_599.webp?v=3",
-                    "product/essentials/combo-box-open.webp",
-                    "product/essentials/combo-whats-inside.webp",
+                    "product/offer/offer_2_cards_ihram_1848.webp",
                     "product/essentials/soap-hero.webp",
-                    "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/shampoo-hero.webp",
-                    "product/essentials/hand-body-wash-hero.webp",
+                    "product/essentials/coconut-oil-hero.webp",
                     "product/essentials/face-wash-hero.webp",
+                    "product/essentials/hand-body-wash-hero.webp",
                     "product/miswak/box.webp",
-                    "product/essentials/family-zaireen-combo.webp",
-                    "product/essentials/fragrance-free-ihram.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/offer/offer_5_cards_only_599.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "OFFER NO.2 • SAVE ₹308",
                 rating: "(580)",
@@ -2563,18 +2617,18 @@
                 sku: "fati_combo_mega_2198",
                 soldCount: "2,840 sold",
                 price: 2499,
-                oldPrice: 2606,
+                oldPrice: 3499,
                 hasJanamaz: true,
                 freeShipping: true,
                 manufacturer: "fatimacalligrapher27",
                 image: "product/offer/offer_3_mega_combo_2198_launch.webp",
                 images: [
                     "product/offer/offer_3_mega_combo_2198_launch.webp",
-                    "product/card/699-1.webp",
+                    "product/offer/offer_5_cards_only_599.webp",
                     "product/janamaz/golden.webp",
                     "product/janamaz/green.webp",
                     "product/card/699-2.webp",
-                    "product/offer/offer_1_cards_janamaz_898.webp?v=3",
+                    "product/offer/offer_1_cards_janamaz_898.webp",
                     "product/essentials/combo-box-open.webp",
                     "product/essentials/combo-whats-inside.webp",
                     "product/essentials/soap-hero.webp",
@@ -2585,7 +2639,7 @@
                     "product/miswak/box.webp",
                     "product/essentials/family-zaireen-combo.webp",
                     "product/essentials/fragrance-free-ihram.webp",
-                    "product/essentials/certified-trusted.webp"
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "OFFER NO.3 • SAVE ₹408",
                 rating: "(740)",
@@ -2618,9 +2672,11 @@
                 image: "product/miswak/box.webp",
                 images: [
                     "product/miswak/box.webp",
+                    "product/miswak/box-badges.webp",
                     "product/miswak/benefits.webp",
                     "product/miswak/comparison.webp",
-                    "product/miswak/how_to_use.webp"
+                    "product/miswak/how_to_use.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "OFFER • ₹179 PREPAID FREE SHIPPING",
                 rating: "(485)",
@@ -2708,7 +2764,8 @@
                     "product/tasbih/red.webp",
                     "product/tasbih/hotpink.webp",
                     "product/tasbih/pearl.webp",
-                    "product/tasbih/purple.webp"
+                    "product/tasbih/purple.webp",
+                    "product/certificate_ayurvedic_mastery.webp"
                 ],
                 badge: "DIGITAL TASBIH • ₹249 PREPAID FREE DELIVERY",
                 rating: "(524)",
@@ -2755,7 +2812,7 @@
         let isDragging = false;
         let startX = 0, startY = 0, currentPanX = 0, currentPanY = 0;
 
-        // Active personalization state for Combo packages (Offer 2 ₹1,999 & Offer 3 ₹2,499)
+        // Active personalization state for Combo packages (Offer 2 ₹1848 & Offer 3 ₹2198)
         let selectedComboCardLanguage = 'Urdu';
         let selectedComboJanamazColor = 'Royal Gold';
 
@@ -2935,7 +2992,7 @@
         }
 
         const POUCH_SHOWCASE_IMAGES = [
-            'product/card/699-1.webp',
+            'product/offer/offer_5_cards_only_599.webp',
             'product/card/699-2.webp',
             'product/prodcut_more/umrahcard_urdu_1.webp',
             'product/prodcut_more/umrahcard_urdu_6.webp',
@@ -2949,6 +3006,17 @@
         function isPouchShowcaseImage(url) {
             if (!url) return false;
             return POUCH_SHOWCASE_IMAGES.some(pImg => url.includes(pImg) || pImg.includes(url));
+        }
+
+                function finalizePdpMediaList(items) {
+            if (!items.some(it => it.url && it.url.includes('certificate_ayurvedic_mastery.webp'))) {
+                items.push({
+                    type: 'image',
+                    url: 'product/certificate_ayurvedic_mastery.webp',
+                    title: 'Founder Training & Credentials — Diploma in Ayurvedic Cosmetics'
+                });
+            }
+            return items;
         }
 
         function getPdpMediaList() {
@@ -2979,7 +3047,7 @@
                         });
                     });
                 }
-                return items;
+                return finalizePdpMediaList(items);
             }
 
             if (p.category === 'janamaz' || p.id === 8) {
@@ -2998,7 +3066,7 @@
                         });
                     }
                 });
-                return items;
+                return finalizePdpMediaList(items);
             }
 
             if (p.category === 'essentials' || p.id === 14 || p.id === 16 || p.id === 17) {
@@ -3029,7 +3097,7 @@
                 } else if (p.video) {
                     items.push({ type: 'video', url: p.video, title: 'Product Demo Video', shortTitle: 'Demo' });
                 }
-                return items;
+                return finalizePdpMediaList(items);
             }
 
             const hasVariants = p.variants && p.variants.length > 0;
@@ -3039,7 +3107,7 @@
             const hasPouch = activeVariant && (activeVariant.price === 599 || activeVariant.price === 699 || activeVariant.price === 899 || (activeVariant.includes && activeVariant.includes.some(inc => inc.includes('Pouch'))));
 
             const curColorObj = janamazColors.find(c => c.id === currentJanamazColor) || janamazColors[0];
-            const leadCardImg = (activeVariant && activeVariant.images && activeVariant.images[0]) || (activeVariant && activeVariant.image) || (p.id === 18 ? 'product/offer/offer_kids_cards_599.webp?v=3' : (hasPouch ? 'product/card/699-1.webp' : 'product/card/559-1.webp'));
+            const leadCardImg = (activeVariant && activeVariant.images && activeVariant.images[0]) || (activeVariant && activeVariant.image) || (p.id === 18 ? 'product/offer/offer_kids_cards_599.webp' : (hasPouch ? 'product/offer/offer_5_cards_only_599.webp' : 'product/card/559-1.webp'));
 
             // 1. ON STARTING / SELECTING: If Janamaz combo is chosen, show Duo Split View & Janamaz photo
             if (isCombo) {
@@ -3135,7 +3203,15 @@
                 items.push({ type: 'video', url: p.video, title: 'Product Demo Video', shortTitle: 'Demo' });
             }
 
-            return items;
+            // Official Founder Credentials & Training Certificate as the final slide for all products
+            if (!items.some(it => it.url === 'product/certificate_ayurvedic_mastery.webp')) {
+                items.push({
+                    type: 'image',
+                    url: 'product/certificate_ayurvedic_mastery.webp',
+                    title: 'Founder Training & Credentials — Diploma in Ayurvedic Cosmetics'
+                });
+            }
+            return finalizePdpMediaList(items);
         }
 
         function getFormattedEstimatedDelivery(daysToAdd = 5) {
@@ -3184,7 +3260,7 @@
                 id: 1,
                 name: 'Umrah Dua Cards Companion Kit',
                 desc: '35+ Laminated Cards + Tasbih + Lanyard + Zipper Pouch',
-                price: 699,
+                price: 599,
                 mrp: 1198,
                 image: 'product/umrah_card_english.webp',
                 checked: true,
@@ -3547,7 +3623,7 @@
                                 <div class="font-extrabold text-[11px] sm:text-xs leading-tight text-gold-200">Family Kit</div>
                                 <div class="text-[8.5px] text-emerald-300 font-medium">Skincare Essentials</div>
                                 <div class="pt-1 mt-1 border-t border-gold-400/40 flex items-baseline justify-between">
-                                    <span class="font-black text-xs sm:text-sm text-gold-300">₹1,499</span>
+                                    <span class="font-black text-xs sm:text-sm text-gold-300">₹1,299</span>
                                     <span class="text-[8.5px] text-gray-400 line-through">₹1,548</span>
                                 </div>
                             </a>
@@ -3559,7 +3635,7 @@
                                 <div class="font-extrabold text-[11px] sm:text-xs leading-tight text-white">Cards + Kit</div>
                                 <div class="text-[8.5px] text-gray-400">+ Dua Cards</div>
                                 <div class="pt-1 mt-1 border-t border-white/10 flex items-baseline justify-between">
-                                    <span class="font-black text-xs sm:text-sm text-white">₹1,999</span>
+                                    <span class="font-black text-xs sm:text-sm text-white">₹1,848</span>
                                     <span class="text-[8.5px] text-gray-400 line-through">₹2,156</span>
                                 </div>
                             </a>
@@ -3572,7 +3648,7 @@
                                 <div class="font-extrabold text-[11px] sm:text-xs leading-tight text-white">Mega Combo</div>
                                 <div class="text-[8.5px] text-gray-400">+ Mat & Cards</div>
                                 <div class="pt-1 mt-1 border-t border-white/10 flex items-baseline justify-between">
-                                    <span class="font-black text-xs sm:text-sm text-white">₹2,499</span>
+                                    <span class="font-black text-xs sm:text-sm text-white">₹2,198</span>
                                     <span class="text-[8.5px] text-gray-400 line-through">₹2,606</span>
                                 </div>
                             </a>
@@ -3586,7 +3662,7 @@
                                 <span class="w-5 h-5 rounded-full bg-white/10 text-gold-400 flex items-center justify-center text-[10px]">
                                     <i class="fa-solid fa-crown text-[10px]"></i>
                                 </span>
-                                <span class="tracking-tight">Complete Family Kit (₹1,499)</span>
+                                <span class="tracking-tight">Complete Family Kit (₹1,299)</span>
                             </button>
                             <button type="button" onclick="setComboMode('custom')" class="relative py-2.5 px-2 rounded-xl text-xs font-black transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 text-white shadow-md border border-emerald-300 ring-1 ring-emerald-400/50">
                                 <span class="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center text-[10px] shadow-xs">
@@ -3681,7 +3757,7 @@
                     </div>
                     
                     <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
-                        <!-- Tier 1: Offer 6 (₹1,499) -->
+                        <!-- Tier 1: Offer 6 (₹1299) -->
                         <a href="product.html?id=14" class="p-2 sm:p-2.5 rounded-xl border-2 transition-all flex flex-col justify-between text-left ${is14
                     ? 'border-gold-400 bg-gradient-to-br from-gold-500/30 to-amber-600/20 text-white shadow-md ring-2 ring-gold-400/50 scale-[1.02]'
                     : 'border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:border-gold-400/50'
@@ -3693,12 +3769,12 @@
                             <div class="font-extrabold text-[11px] sm:text-xs leading-tight ${is14 ? 'text-gold-200' : 'text-white'}">Family Kit</div>
                             <div class="text-[8.5px] ${is14 ? 'text-emerald-300 font-medium' : 'text-gray-400'}">Skincare Essentials</div>
                             <div class="pt-1 mt-1 border-t ${is14 ? 'border-gold-400/40' : 'border-white/10'} flex items-baseline justify-between">
-                                <span class="font-black text-xs sm:text-sm ${is14 ? 'text-gold-300' : 'text-white'}">₹1,499</span>
+                                <span class="font-black text-xs sm:text-sm ${is14 ? 'text-gold-300' : 'text-white'}">₹1,299</span>
                                 <span class="text-[8.5px] text-gray-400 line-through">₹1,548</span>
                             </div>
                         </a>
 
-                        <!-- Tier 2: Offer 2 (₹1,999) -->
+                        <!-- Tier 2: Offer 2 (₹1848) -->
                         <a href="product.html?id=16" class="p-2 sm:p-2.5 rounded-xl border-2 transition-all flex flex-col justify-between text-left ${is16
                     ? 'border-gold-400 bg-gradient-to-br from-gold-500/30 to-amber-600/20 text-white shadow-md ring-2 ring-gold-400/50 scale-[1.02]'
                     : 'border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:border-gold-400/50'
@@ -3710,12 +3786,12 @@
                             <div class="font-extrabold text-[11px] sm:text-xs leading-tight ${is16 ? 'text-gold-200' : 'text-white'}">Cards + Kit</div>
                             <div class="text-[8.5px] ${is16 ? 'text-emerald-300 font-medium' : 'text-gray-400'}">+ Dua Cards</div>
                             <div class="pt-1 mt-1 border-t ${is16 ? 'border-gold-400/40' : 'border-white/10'} flex items-baseline justify-between">
-                                <span class="font-black text-xs sm:text-sm ${is16 ? 'text-gold-300' : 'text-white'}">₹1,999</span>
+                                <span class="font-black text-xs sm:text-sm ${is16 ? 'text-gold-300' : 'text-white'}">₹1,848</span>
                                 <span class="text-[8.5px] text-gray-400 line-through">₹2,156</span>
                             </div>
                         </a>
 
-                        <!-- Tier 3: Offer 3 (₹2,499) -->
+                        <!-- Tier 3: Offer 3 (₹2198) -->
                         <a href="product.html?id=17" class="p-2 sm:p-2.5 rounded-xl border-2 transition-all flex flex-col justify-between text-left relative ${is17
                     ? 'border-amber-400 bg-gradient-to-br from-amber-500/30 to-emerald-600/20 text-white shadow-md ring-2 ring-amber-400/60 scale-[1.02]'
                     : 'border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:border-amber-400/50'
@@ -3728,7 +3804,7 @@
                             <div class="font-extrabold text-[11px] sm:text-xs leading-tight ${is17 ? 'text-amber-200' : 'text-white'}">Mega Combo</div>
                             <div class="text-[8.5px] ${is17 ? 'text-emerald-300 font-medium' : 'text-gray-400'}">+ Mat & Cards</div>
                             <div class="pt-1 mt-1 border-t ${is17 ? 'border-amber-400/40' : 'border-white/10'} flex items-baseline justify-between">
-                                <span class="font-black text-xs sm:text-sm ${is17 ? 'text-amber-300' : 'text-white'}">₹2,499</span>
+                                <span class="font-black text-xs sm:text-sm ${is17 ? 'text-amber-300' : 'text-white'}">₹2,198</span>
                                 <span class="text-[8.5px] text-gray-400 line-through">₹2,606</span>
                             </div>
                         </a>
@@ -3766,7 +3842,7 @@
                             </div>
                         </div>
 
-                        <!-- Janamaz Color Selector (For Offer 3 ₹2,499 Mega Combo) -->
+                        <!-- Janamaz Color Selector (For Offer 3 ₹2198 Mega Combo) -->
                         ${is17 ? `
                             <div class="bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 p-3 sm:p-3.5 rounded-2xl border-2 border-emerald-300 shadow-2xs">
                                 <div class="flex items-center justify-between mb-2">
@@ -3808,7 +3884,7 @@
                                 <span class="w-5 h-5 rounded-full bg-onyx/90 text-gold-300 flex items-center justify-center text-[10px] shadow-xs">
                                     <i class="fa-solid fa-crown text-[10px]"></i>
                                 </span>
-                                <span class="tracking-tight">Complete Family Kit (₹1,499)</span>
+                                <span class="tracking-tight">Complete Family Kit (₹1,299)</span>
                             </button>
                             <button type="button" onclick="setComboMode('custom')" class="relative py-2.5 px-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer bg-white/10 text-white/90 hover:bg-white/15 border border-white/10 hover:border-gold-400/40 backdrop-blur-xs">
                                 <span class="w-5 h-5 rounded-full bg-white/10 text-gold-400 flex items-center justify-center text-[10px]">
@@ -3856,7 +3932,7 @@
                         ${(is16 || is17) ? `
                             <div class="group flex items-center gap-2.5 bg-white/95 hover:bg-white p-2 sm:p-2.5 rounded-xl border border-gold-300 hover:border-gold-500 shadow-xs hover:shadow-sm transition-all duration-200">
                                 <div class="w-11 h-11 rounded-lg bg-pearl p-0.5 border border-gold-300/60 overflow-hidden shrink-0 flex items-center justify-center">
-                                    <img src="product/card/699-1.webp" alt="Umrah Dua Cards" class="w-full h-full object-contain pointer-events-none">
+                                    <img src="product/offer/offer_5_cards_only_599.webp" alt="Umrah Dua Cards" class="w-full h-full object-contain pointer-events-none">
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <div class="font-extrabold text-onyx text-[11.5px] sm:text-xs flex items-center gap-1.5 truncate">
@@ -4054,7 +4130,7 @@
                                 <i class="fa-solid fa-triangle-exclamation text-[10px]"></i>
                             </div>
                             <div class="flex-1">
-                                <div class="font-black text-xs text-rose-950 uppercase tracking-tight">⚠️ What is NOT Included in Offer 6 (₹1,499):</div>
+                                <div class="font-black text-xs text-rose-950 uppercase tracking-tight">⚠️ What is NOT Included in Offer 6 (₹1,299):</div>
                                 <div class="text-[10px] text-rose-800 font-medium">Please verify: Dua Cards & Janamaz are NOT included in this kit.</div>
                             </div>
                         </div>
@@ -4063,7 +4139,7 @@
                             <!-- Missing Item 1: Dua Cards -->
                             <div class="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-rose-200/90 shadow-2xs">
                                 <div class="w-10 h-10 rounded-lg bg-pearl p-0.5 border border-rose-200 overflow-hidden shrink-0 relative flex items-center justify-center">
-                                    <img src="product/card/699-1.webp" alt="Dua Cards" class="w-full h-full object-contain grayscale opacity-60">
+                                    <img src="product/offer/offer_5_cards_only_599.webp" alt="Dua Cards" class="w-full h-full object-contain grayscale opacity-60">
                                     <span class="absolute inset-0 flex items-center justify-center bg-rose-900/20 font-black text-rose-600 text-sm">❌</span>
                                 </div>
                                 <div class="flex-1 min-w-0">
@@ -4071,7 +4147,7 @@
                                         <span>Umrah Dua & Ritual Cards Kit</span>
                                         <span class="text-[8.5px] font-black text-rose-700 bg-rose-100 px-1.5 py-0.2 rounded">NOT INCLUDED</span>
                                     </div>
-                                    <div class="text-[10px] text-gray-500">Need Dua Cards? Upgrade to Offer 2 (₹1,999)</div>
+                                    <div class="text-[10px] text-gray-500">Need Dua Cards? Upgrade to Offer 2 (₹1,848)</div>
                                 </div>
                                 <a href="product.html?id=16" class="px-2.5 py-1.5 rounded-lg bg-onyx hover:bg-gold-600 text-gold-400 hover:text-white font-extrabold text-[10px] whitespace-nowrap shadow-xs transition-all flex items-center gap-1">
                                     <span>Get with Cards</span>
@@ -4128,7 +4204,7 @@
                                     <div class="text-[10px] text-gray-500">Want Janamaz + Cards + Full Skincare? Upgrade to Offer 3!</div>
                                 </div>
                                 <a href="product.html?id=17" class="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-gold-600 text-onyx font-extrabold text-[10px] whitespace-nowrap shadow-xs transition-all flex items-center gap-1">
-                                    <span>Upgrade to ₹2,499</span>
+                                    <span>Upgrade to ₹2,198</span>
                                     <i class="fa-solid fa-arrow-right text-[8.5px]"></i>
                                 </a>
                             </div>
@@ -4185,9 +4261,9 @@
                             <thead>
                                 <tr class="border-b border-gray-200 text-gray-600">
                                     <th class="text-left py-1.5 px-2 font-bold">Item / Inclusion</th>
-                                    <th class="py-1.5 px-1 font-bold ${is14 ? 'text-onyx bg-gold-100/90 rounded-t border-t-2 border-gold-500' : ''}">₹1,499</th>
-                                    <th class="py-1.5 px-1 font-bold ${is16 ? 'text-onyx bg-gold-100/90 rounded-t border-t-2 border-gold-500' : ''}">₹1,999</th>
-                                    <th class="py-1.5 px-1 font-bold ${is17 ? 'text-onyx bg-gold-100/90 rounded-t border-t-2 border-gold-500' : ''}">₹2,499</th>
+                                    <th class="py-1.5 px-1 font-bold ${is14 ? 'text-onyx bg-gold-100/90 rounded-t border-t-2 border-gold-500' : ''}">₹1,299</th>
+                                    <th class="py-1.5 px-1 font-bold ${is16 ? 'text-onyx bg-gold-100/90 rounded-t border-t-2 border-gold-500' : ''}">₹1,848</th>
+                                    <th class="py-1.5 px-1 font-bold ${is17 ? 'text-onyx bg-gold-100/90 rounded-t border-t-2 border-gold-500' : ''}">₹2,198</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -4217,9 +4293,9 @@
                                 </tr>
                                 <tr class="font-extrabold text-onyx border-t border-gray-200">
                                     <td class="text-left py-1.5 px-2">Total Items & Pricing</td>
-                                    <td class="py-1.5 px-1 ${is14 ? 'bg-gold-100/90 rounded-b font-black text-onyx' : 'text-gray-700'}">7 Items • ₹1,499</td>
-                                    <td class="py-1.5 px-1 ${is16 ? 'bg-gold-100/90 rounded-b font-black text-onyx' : 'text-gray-700'}">8 Items • ₹1,999</td>
-                                    <td class="py-1.5 px-1 ${is17 ? 'bg-gold-100/90 rounded-b font-black text-onyx' : 'text-gray-700'}">9 Items • ₹2,499</td>
+                                    <td class="py-1.5 px-1 ${is14 ? 'bg-gold-100/90 rounded-b font-black text-onyx' : 'text-gray-700'}">7 Items • ₹1,299</td>
+                                    <td class="py-1.5 px-1 ${is16 ? 'bg-gold-100/90 rounded-b font-black text-onyx' : 'text-gray-700'}">8 Items • ₹1,848</td>
+                                    <td class="py-1.5 px-1 ${is17 ? 'bg-gold-100/90 rounded-b font-black text-onyx' : 'text-gray-700'}">9 Items • ₹2,198</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -4236,7 +4312,7 @@
             const isAnyCombo = (p.id === 14 || p.id === 16 || p.id === 17);
             const isComboPack = (p.id === 14);
             const activePrice = isComboPack
-                ? (currentComboMode === 'custom' ? getCustomComboTotal() : (p.price || 1499))
+                ? (currentComboMode === 'custom' ? getCustomComboTotal() : (p.price || 1299))
                 : (activeVariant ? activeVariant.price : p.price);
             const activeOldPrice = isComboPack
                 ? (currentComboMode === 'custom' ? getCustomComboMrp() : (p.oldPrice || 2300))
@@ -4552,7 +4628,7 @@
                         </div>
                     </div>
 
-                    <!-- 2. Janamaz Color Selector (For Offer 3 ₹2,499 Mega Combo) -->
+                    <!-- 2. Janamaz Color Selector (For Offer 3 ₹2198 Mega Combo) -->
                     ${p.id === 17 ? `
                         <div class="bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 p-3 sm:p-3.5 rounded-2xl border-2 border-emerald-300 shadow-2xs">
                             <div class="flex items-center justify-between mb-2">
@@ -4859,7 +4935,7 @@
                         ? 'border-gold-500 bg-gold-100/95 shadow-md ring-2 ring-gold-400/60 scale-[1.04]'
                         : 'border-gray-200 bg-white hover:border-gold-300 hover:bg-gold-50/50'
                     }" title="${c.name}">
-                        <div class="w-full aspect-[4/5] min-h-12 sm:min-h-16 rounded-lg overflow-hidden flex items-center justify-center p-0.5">
+                        <div class="w-full aspect-square min-h-12 sm:min-h-16 rounded-lg overflow-hidden flex items-center justify-center p-0.5">
                             <img src="${c.image}" alt="${c.name}" class="w-full h-full object-contain pointer-events-none">
                         </div>
                         ${isColorSelected ? `
@@ -5169,7 +5245,7 @@
                 if (modalZoomControls) modalZoomControls.classList.remove('hidden');
                 if (modalImg) {
                     modalImg.classList.remove('hidden');
-                    modalImg.src = activeMedia.url || activeMedia.cardImg || 'product/card/699-1.webp';
+                    modalImg.src = activeMedia.url || activeMedia.cardImg || 'product/offer/offer_5_cards_only_599.webp';
                 }
                 updateModalTransform();
             }
@@ -5351,17 +5427,17 @@
                 const maxPrice = hasVariants ? p.variants[0].price : p.price;
 
                 return `
-                    <a href="product.html?id=${p.id}" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 p-2.5 flex flex-col justify-between group shadow-xs hover:shadow-gold-glow transition-all">
-                        <div>
-                            <div class="aspect-square bg-sand/40 rounded-xl p-1.5 mb-2 flex items-center justify-center overflow-hidden border border-gray-200">
-                                <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain group-hover:scale-105 transition-transform">
-                            </div>
-                            <span class="text-[8px] font-bold bg-onyx text-gold-400 px-1.5 py-0.5 rounded-full uppercase">${p.badge}</span>
-                            <h4 class="font-bold text-xs text-onyx line-clamp-2 mt-1 group-hover:text-gold-600 transition-colors">${p.name}</h4>
+                    <a href="product.html?id=${p.id}" class="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-gold-400 flex flex-col justify-between group shadow-xs hover:shadow-gold-glow transition-all">
+                        <div class="relative w-full aspect-square bg-[#fbfbfa] overflow-hidden flex items-center justify-center border-b border-gray-100">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 block">
+                            
                         </div>
-                        <div class="mt-2 pt-1.5 border-t border-gray-100 flex items-center justify-between">
-                            <span class="font-extrabold text-xs text-onyx">${hasVariants ? `Rs. ${minPrice}–${maxPrice}` : `Rs. ${p.price}`}</span>
-                            <span class="text-[10px] font-bold text-gold-700 bg-gold-50 px-2 py-0.5 rounded-lg border border-gold-200">View</span>
+                        <div class="p-2 sm:p-2.5 flex-grow flex flex-col justify-between">
+                            <h4 class="font-bold text-xs sm:text-sm text-onyx line-clamp-1 leading-snug group-hover:text-gold-600 transition-colors">${p.name}</h4>
+                            <div class="mt-2 pt-1.5 border-t border-gray-100 flex items-center justify-between gap-1.5">
+                                <span class="font-black text-xs sm:text-sm text-onyx truncate">${hasVariants ? `Rs. ${minPrice}–${maxPrice}` : `Rs. ${p.price}`}</span>
+                                <span class="gold-bg-gradient text-onyx font-extrabold text-[10px] sm:text-xs py-1 px-2.5 rounded-lg flex items-center gap-1 hover:opacity-95 transition-all shadow-xs shrink-0">View</span>
+                            </div>
                         </div>
                     </a>
                 `;
@@ -5472,7 +5548,7 @@
                 return;
             }
 
-            // 2. Handle Combos (ID 14: Ihram Kit Only ₹1,499, ID 16: Cards+Ihram ₹1,999, ID 17: Mega Combo ₹2,499)
+            // 2. Handle Combos (ID 14: Ihram Kit Only ₹1299, ID 16: Cards+Ihram ₹1848, ID 17: Mega Combo ₹2198)
             if (p.id === 14 || p.id === 16 || p.id === 17) {
                 const itemLang = (p.id === 16 || p.id === 17) ? selectedComboCardLanguage : undefined;
                 const itemJnm = (p.id === 17) ? selectedComboJanamazColor : undefined;
@@ -5613,7 +5689,7 @@
                 return;
             }
 
-            // 2. If Combos (ID 14: Ihram Kit Only ₹1,499, ID 16: Cards+Ihram ₹1,999, ID 17: Mega Combo ₹2,499)
+            // 2. If Combos (ID 14: Ihram Kit Only ₹1299, ID 16: Cards+Ihram ₹1848, ID 17: Mega Combo ₹2198)
             if (p.id === 14 || p.id === 16 || p.id === 17) {
                 const itemLang = (p.id === 16 || p.id === 17) ? selectedComboCardLanguage : undefined;
                 const itemJnm = (p.id === 17) ? selectedComboJanamazColor : undefined;
@@ -6556,8 +6632,8 @@
             // Shipping Rule (3-Tier Structure):
             // 1. Single items promo: Miswak (₹199 prep / ₹299 COD) or Tasbih (₹249 prep / ₹349 COD)
             // 2. Below ₹299 (< 299): Prepaid ₹50, COD ₹100
-            // 3. ₹299 to ₹699 (299 <= subtotal < 599): Both Prepaid & COD ₹100
-            // 4. ₹699 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
+            // 3. ₹299 to ₹599 (299 <= subtotal < 599): Both Prepaid & COD ₹100
+            // 4. ₹599 and Above (subtotal >= 599): Prepaid 100% FREE (₹0), COD ₹100 (Free if subtotal >= 999)
             const hasMiswak = cart.some(i => i.sku === 'fati_siwak_01' || i.id === 15);
             const hasTasbih = cart.some(i => (i.sku && String(i.sku).startsWith('fati_tasbih_')) || i.id === 19);
 

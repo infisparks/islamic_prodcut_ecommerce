@@ -14,3 +14,8 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Scratch scripts and local archive
+scratch/
+purane photo/
+*.jpg
