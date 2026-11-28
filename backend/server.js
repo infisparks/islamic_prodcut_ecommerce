@@ -179,19 +179,21 @@ app.get(['/admin.html', '/admin'], (req, res) => {
 const rootDir = path.resolve(__dirname, '..');
 
 const staticCacheOptions = {
-  maxAge: '30d',
+  maxAge: 0,
   etag: true,
   lastModified: true,
   setHeaders: (res, filePath) => {
     if (/\.(webp|png|jpe?g|gif|svg|ico|mp4|webm)$/i.test(filePath)) {
-      // Fast caching with stale-while-revalidate for product media
-      res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+      // Immediate fresh fetch for product media so users never get stale photos
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
     } else if (/\.(css|js|woff2?|ttf|eot)$/i.test(filePath)) {
       // 7 days with stale-while-revalidate for stylesheets and scripts
       res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
     } else if (/\.html$/i.test(filePath)) {
       // Ensure HTML is always verified fresh
       res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
     }
   }
 };
